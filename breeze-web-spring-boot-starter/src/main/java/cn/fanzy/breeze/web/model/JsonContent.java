@@ -1,6 +1,6 @@
 package cn.fanzy.breeze.web.model;
 
-import cn.fanzy.breeze.web.model.utils.BreezeModelContext;
+import cn.fanzy.breeze.web.model.context.BreezeModelContext;
 import cn.hutool.core.date.DateUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.AllArgsConstructor;

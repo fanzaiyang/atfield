@@ -9,7 +9,7 @@
     <version>${revision}</version>
     <modules>
         <module>breeze-core</module>
-        <module>breeze-web</module>
+        <module>breeze-web-spring-boot-starter</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

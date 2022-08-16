@@ -6,6 +6,8 @@ import cn.fanzy.breeze.web.code.model.BreezeEmailCode;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,7 +27,8 @@ import java.time.format.DateTimeFormatter;
  * @since 1.0.0
  */
 @Slf4j
-@AllArgsConstructor
+@Getter
+@Setter
 public class BreezeEmailCodeSender implements BreezeCodeSender<BreezeEmailCode> {
 
     private JavaMailSender javaMailSender;
@@ -43,7 +46,7 @@ public class BreezeEmailCodeSender implements BreezeCodeSender<BreezeEmailCode> 
 
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             // 发送方邮箱
-            helper.setFrom(codeProperties.getEmail().getSenderAddress());
+            helper.setFrom(emailSender);
             // 接收方邮箱
             helper.setTo(target);
             // 主题
