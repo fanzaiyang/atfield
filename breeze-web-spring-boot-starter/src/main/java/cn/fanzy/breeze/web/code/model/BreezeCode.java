@@ -46,6 +46,7 @@ public class BreezeCode implements Serializable {
      *
      * @param expireTimeInSeconds 验证码的有效时间，单位 秒
      * @param code                验证码内容
+     * @param retryCount          重试计数
      */
     public BreezeCode(long expireTimeInSeconds, String code, int retryCount) {
         this.expireTime = LocalDateTime.now().plusSeconds(expireTimeInSeconds);

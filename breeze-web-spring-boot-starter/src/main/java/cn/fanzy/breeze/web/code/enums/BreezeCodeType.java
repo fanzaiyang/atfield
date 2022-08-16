@@ -18,24 +18,15 @@ public enum BreezeCodeType {
     /**
      * 短信验证码
      */
-    SMS("短信验证码"),
+    SMS,
     /**
      * 图片验证码
      */
-    IMAGE("图片验证码"),
+    IMAGE,
     /**
      * 邮件验证码
      */
-    EMAIL("邮件验证码");
-
-    /**
-     * 类型名称
-     */
-    private final String name;
-
-    private BreezeCodeType(String name) {
-        this.name = name;
-    }
+    EMAIL;
 
     /**
      * 根据名字解析出验证码类型
@@ -61,14 +52,4 @@ public enum BreezeCodeType {
         }
         return type;
     }
-
-    /**
-     * 获取类型名称
-     *
-     * @return 类型名称
-     */
-    public String getName() {
-        return name;
-    }
-
 }

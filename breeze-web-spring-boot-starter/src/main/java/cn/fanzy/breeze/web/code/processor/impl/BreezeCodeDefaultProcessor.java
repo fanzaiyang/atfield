@@ -12,18 +12,25 @@ import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Map;
 
 @Slf4j
-@AllArgsConstructor
 public class BreezeCodeDefaultProcessor implements BreezeCodeProcessor {
 
     private final Map<String, BreezeCodeGenerator> codeGenerators;
     private final Map<String, BreezeCodeSender> codeSenders;
     private final BreezeCodeRepository repository;
     private final BreezeCodeProperties codeProperties;
+
+    public BreezeCodeDefaultProcessor(Map<String, BreezeCodeGenerator> codeGenerators, Map<String, BreezeCodeSender> codeSenders, BreezeCodeRepository repository, BreezeCodeProperties codeProperties) {
+        this.codeGenerators = codeGenerators;
+        this.codeSenders = codeSenders;
+        this.repository = repository;
+        this.codeProperties = codeProperties;
+    }
 
     @Override
     public BreezeCode create(ServletWebRequest request, String codeType) {

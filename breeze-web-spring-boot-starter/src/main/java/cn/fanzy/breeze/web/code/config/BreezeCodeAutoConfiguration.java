@@ -9,22 +9,19 @@ import cn.fanzy.breeze.web.code.processor.BreezeCodeProcessor;
 import cn.fanzy.breeze.web.code.processor.impl.BreezeCodeDefaultProcessor;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
-import cn.fanzy.breeze.web.code.repository.impl.BreezeRedisCodeRepository;
+import cn.fanzy.breeze.web.code.repository.impl.BreezeSimpleCodeRepository;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeImageCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -51,10 +48,9 @@ public class BreezeCodeAutoConfiguration {
      */
 
     @Bean
-    @ConditionalOnClass(RedisOperations.class)
     @ConditionalOnMissingBean(name = {"redisTemplate"}, value = {BreezeCodeRepository.class})
-    public BreezeCodeRepository codeRepository(BreezeCodeProperties codeProperties, RedisTemplate<String, Object> redisTemplate) {
-        return new BreezeRedisCodeRepository(redisTemplate, codeProperties);
+    public BreezeCodeRepository repository() {
+        return new BreezeSimpleCodeRepository();
     }
 
     /**
@@ -116,19 +112,13 @@ public class BreezeCodeAutoConfiguration {
     /**
      * 注入一个验证码处理器
      *
-     * @param codeProperties 验证码属性配置
-     * @param codeGenerators 系统中所有的 {@link BreezeCodeGenerator} 验证码生成器接口的实现。key为bean的名字
-     * @param codeSenders    系统中所有的 {@link BreezeCodeSender } 验证码发送器接口的实现，。key为bean的名字
-     * @param repository     验证码存储器
      * @return 验证码处理器
      */
     @Bean
     @ConditionalOnMissingBean({BreezeCodeProcessor.class})
-    public BreezeCodeProcessor codeProcessor(BreezeCodeProperties codeProperties, Map<String, BreezeCodeGenerator> codeGenerators,
-                                             Map<String, BreezeCodeSender> codeSenders, BreezeCodeRepository repository) {
-        BreezeCodeDefaultProcessor simpleCodeProcessor = new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository,
-                codeProperties);
-        return simpleCodeProcessor;
+    public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators,Map<String, BreezeCodeSender> codeSenders,
+                                             BreezeCodeProperties codeProperties) {
+        return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository(), codeProperties);
     }
 
     /**
@@ -136,7 +126,7 @@ public class BreezeCodeAutoConfiguration {
      */
     @PostConstruct
     public void init() {
-        log.info("【微风组件】: 开启 <验证码支持> 相关的配置");
+        log.info("「微风组件」: 开启 <验证码支持> 相关的配置");
     }
 
 }

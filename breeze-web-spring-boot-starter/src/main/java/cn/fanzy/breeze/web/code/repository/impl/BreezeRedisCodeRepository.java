@@ -5,6 +5,9 @@ import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.LocalDateTime;
@@ -18,7 +21,6 @@ import java.util.concurrent.TimeUnit;
  * @author fanzaiyang
  * @date 2021/09/07
  */
-@AllArgsConstructor
 public class BreezeRedisCodeRepository implements BreezeCodeRepository {
 
     /**
@@ -30,6 +32,15 @@ public class BreezeRedisCodeRepository implements BreezeCodeRepository {
      * 验证码属性配置
      */
     private BreezeCodeProperties codeProperties;
+
+    public BreezeRedisCodeRepository(BreezeCodeProperties codeProperties) {
+        this.codeProperties = codeProperties;
+    }
+
+    public BreezeRedisCodeRepository(RedisTemplate<String, Object> redisTemplate, BreezeCodeProperties codeProperties) {
+        this.redisTemplate = redisTemplate;
+        this.codeProperties = codeProperties;
+    }
 
     /**
      * 存储验证码

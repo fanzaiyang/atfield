@@ -24,7 +24,7 @@ import javax.annotation.PostConstruct;
  */
 @Slf4j
 @Configuration
-@ConditionalOnClass(RedisTemplate.class)
+@ConditionalOnClass(RedisOperations.class)
 @ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true", matchIfMissing = false)
 public class BreezeRedisExtendAutoConfiguration {
 
@@ -38,9 +38,10 @@ public class BreezeRedisExtendAutoConfiguration {
     @ConditionalOnBean(name = "redisTemplate")
     @ConditionalOnMissingBean({BreezeCodeRepository.class})
     @Bean
-    public BreezeCodeRepository redisRepository(RedisTemplate<String, Object> redisTemplate, BreezeCodeProperties codeProperties) {
-        return new BreezeRedisCodeRepository(redisTemplate, codeProperties);
+    public BreezeCodeRepository repository(BreezeCodeProperties codeProperties) {
+        return new BreezeRedisCodeRepository(codeProperties);
     }
+
     @PostConstruct
     public void init() {
         log.info("【微风组件】: 开启 <验证码-redis> 相关的配置");
