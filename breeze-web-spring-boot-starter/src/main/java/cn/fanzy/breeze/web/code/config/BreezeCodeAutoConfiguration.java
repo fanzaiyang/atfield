@@ -16,12 +16,16 @@ import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
@@ -37,6 +41,7 @@ import java.util.Map;
 @EnableConfigurationProperties({BreezeCodeProperties.class})
 @Import({BreezeMailExtendAutoConfiguration.class, BreezeRedisExtendAutoConfiguration.class})
 @AutoConfigureAfter(value = {BreezeRedisExtendAutoConfiguration.class})
+@ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true", matchIfMissing = false)
 public class BreezeCodeAutoConfiguration {
 
     /**
@@ -44,8 +49,10 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 名为codeRepository的验证码存储器
      */
-    @ConditionalOnMissingBean(name = {"redisTemplate"}, value = {BreezeCodeRepository.class})
+
     @Bean
+    @ConditionalOnClass(RedisOperations.class)
+    @ConditionalOnMissingBean(name = {"redisTemplate"}, value = {BreezeCodeRepository.class})
     public BreezeCodeRepository codeRepository(BreezeCodeProperties codeProperties, RedisTemplate<String, Object> redisTemplate) {
         return new BreezeRedisCodeRepository(redisTemplate, codeProperties);
     }

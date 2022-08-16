@@ -20,10 +20,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.code")
 public class BreezeCodeProperties {
+    private Boolean enable=false;
     /**
      * 将验证码存储到Redis时的key的前缀，默认值为 validate_code_
      */
-    protected String prefix = "validate_code_";
+    private String prefix = "validate_code_";
 
     /**
      * 是否显示加载日志，默认为false
@@ -98,7 +99,7 @@ public class BreezeCodeProperties {
      * @author fanzaiyang
      */
     @Data
-    public static class EmailCodeProperties{
+    public static class EmailCodeProperties {
 
         /**
          * 验证码邮箱的内容模板
