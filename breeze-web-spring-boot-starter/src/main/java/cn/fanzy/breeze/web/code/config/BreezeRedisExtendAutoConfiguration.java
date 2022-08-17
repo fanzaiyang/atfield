@@ -35,15 +35,10 @@ public class BreezeRedisExtendAutoConfiguration {
      * @param codeProperties 验证码属性配置
      * @return 名字为codeRepository验证码存储器
      */
-    @ConditionalOnBean(name = "redisTemplate")
-    @ConditionalOnMissingBean({BreezeCodeRepository.class})
     @Bean
-    public BreezeCodeRepository repository(BreezeCodeProperties codeProperties) {
-        return new BreezeRedisCodeRepository(codeProperties);
-    }
-
-    @PostConstruct
-    public void init() {
-        log.info("【微风组件】: 开启 <验证码-redis> 相关的配置");
+    @ConditionalOnBean(RedisTemplate.class)
+    public BreezeCodeRepository repository(RedisTemplate<String, Object> redisTemplate,BreezeCodeProperties codeProperties) {
+        log.info("「微风组件」开启 <验证码-redis> 相关的配置");
+        return new BreezeRedisCodeRepository(redisTemplate,codeProperties);
     }
 }

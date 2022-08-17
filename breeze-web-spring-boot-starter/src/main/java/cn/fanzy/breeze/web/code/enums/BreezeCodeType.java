@@ -4,52 +4,42 @@
 package cn.fanzy.breeze.web.code.enums;
 
 
-import org.springframework.util.Assert;
-
-
 /**
  * 验证码类型
  *
  * @author fanzaiyang
  * @date 2021/09/07
  */
-public enum BreezeCodeType {
+public enum BreezeCodeType implements IBreezeCodeTypeEnum {
 
     /**
      * 短信验证码
      */
-    SMS,
+    SMS("breezeSmsCodeGenerator","breezeSmsCodeSender"),
     /**
      * 图片验证码
      */
-    IMAGE,
+    IMAGE("breezeImageCodeGenerator","breezeImageCodeSender"),
     /**
      * 邮件验证码
      */
-    EMAIL;
+    EMAIL("breezeEmailCodeGenerator","breezeEmailCodeSender");
 
-    /**
-     * 根据名字解析出验证码类型
-     *
-     * @param code 名字
-     * @return 验证码类型
-     */
-    public static BreezeCodeType parse(String code) {
-        Assert.notNull(code, "参数不能为空");
-        BreezeCodeType type = null;
-        switch (code.trim()) {
-            case "SMS":
-                type = BreezeCodeType.SMS;
-                break;
-            case "IMAGE":
-                type = BreezeCodeType.IMAGE;
-                break;
-            case "EMAIL":
-                type = BreezeCodeType.EMAIL;
-                break;
-            default:
-                break;
-        }
-        return type;
+    private final String generator;
+    private final String sender;
+
+    BreezeCodeType(String generator, String sender) {
+        this.generator = generator;
+        this.sender = sender;
+    }
+
+    @Override
+    public String getGenerator() {
+        return generator;
+    }
+
+    @Override
+    public String getSender() {
+        return sender;
     }
 }

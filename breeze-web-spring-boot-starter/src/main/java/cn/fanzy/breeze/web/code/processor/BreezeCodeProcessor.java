@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.code.processor;
 
+import cn.fanzy.breeze.web.code.enums.IBreezeCodeTypeEnum;
 import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.hutool.core.exceptions.ValidateException;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -12,7 +13,7 @@ public interface BreezeCodeProcessor {
      * @param codeType 验证码的类型
      * @return 创建并发送的验证码
      */
-    BreezeCode create(ServletWebRequest request, String codeType);
+    BreezeCode create(ServletWebRequest request, IBreezeCodeTypeEnum codeType);
 
     /**
      * <p>
@@ -31,7 +32,7 @@ public interface BreezeCodeProcessor {
      * @param codeType 验证码的类型
      * @return 创建并发送的验证码
      */
-    BreezeCode create(ServletWebRequest request, String key, String codeType) throws ValidateException;
+    BreezeCode create(ServletWebRequest request, String key, IBreezeCodeTypeEnum codeType) throws ValidateException;
 
     /**
      * 创建校验码并发送验证码
@@ -40,7 +41,7 @@ public interface BreezeCodeProcessor {
      * @param codeType 验证码的类型
      * @return 创建并发送的验证码
      */
-    BreezeCode createAndSend(ServletWebRequest request, String codeType) throws ValidateException;
+    BreezeCode createAndSend(ServletWebRequest request, IBreezeCodeTypeEnum codeType) throws ValidateException;
 
     /**
      * <p>
@@ -59,7 +60,7 @@ public interface BreezeCodeProcessor {
      * @param codeType 验证码的类型
      * @return 创建并发送的验证码
      */
-    BreezeCode createAndSend(ServletWebRequest request, String key, String codeType);
+    BreezeCode createAndSend(ServletWebRequest request, String key, IBreezeCodeTypeEnum codeType);
 
     /**
      * <p>
@@ -75,7 +76,7 @@ public interface BreezeCodeProcessor {
      * @param request  用户请求
      * @param codeType 验证码类型
      */
-    void validate(ServletWebRequest request, String codeType);
+    void validate(ServletWebRequest request, IBreezeCodeTypeEnum codeType);
 
     /**
      * <p>

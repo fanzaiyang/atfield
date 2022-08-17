@@ -2,4 +2,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 cn.fanzy.breeze.web.model.context.BreezeModelContext,\
   cn.fanzy.breeze.web.ip.aop.BreezeIpCheckAop,\
-cn.fanzy.breeze.web.code.config.BreezeCodeAutoConfiguration
+cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration,\
+  cn.fanzy.breeze.web.redis.RedisCoreConfiguration

@@ -1,6 +1,8 @@
 package cn.fanzy.breeze.web.code.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +17,13 @@ import java.awt.image.BufferedImage;
 @Getter
 @Setter
 public class BreezeImageCode extends BreezeCode{
+    @JsonIgnore
     private transient BufferedImage image;
     private transient String imageBase64;
 
     public BreezeImageCode(long expireTimeInSeconds, String code, int retryCount) {
         super(expireTimeInSeconds, code, retryCount);
     }
+
+
 }

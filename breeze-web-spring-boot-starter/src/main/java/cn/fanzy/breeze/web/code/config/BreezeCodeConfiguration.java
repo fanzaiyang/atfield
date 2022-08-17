@@ -38,8 +38,8 @@ import java.util.Map;
 @EnableConfigurationProperties({BreezeCodeProperties.class})
 @Import({BreezeMailExtendAutoConfiguration.class, BreezeRedisExtendAutoConfiguration.class})
 @AutoConfigureAfter(value = {BreezeRedisExtendAutoConfiguration.class})
-@ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true", matchIfMissing = false)
-public class BreezeCodeAutoConfiguration {
+@ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true")
+public class BreezeCodeConfiguration {
 
     /**
      * 注入一个名为codeRepository的验证码存储器
@@ -48,8 +48,9 @@ public class BreezeCodeAutoConfiguration {
      */
 
     @Bean
-    @ConditionalOnMissingBean(name = {"redisTemplate"}, value = {BreezeCodeRepository.class})
+    @ConditionalOnMissingBean(BreezeCodeRepository.class)
     public BreezeCodeRepository repository() {
+        log.info("「微风组件」开启 <验证码-内存> 相关的配置");
         return new BreezeSimpleCodeRepository();
     }
 
@@ -58,9 +59,9 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 图形验证码生成器
      */
-    @ConditionalOnMissingBean(name = "imageCodeGenerator")
-    @Bean("imageCodeGenerator")
-    public BreezeCodeGenerator imageCodeGenerator() {
+    @Bean
+    @ConditionalOnMissingBean(name = "breezeImageCodeGenerator")
+    public BreezeCodeGenerator breezeImageCodeGenerator() {
         return new BreezeImageCodeGenerator();
     }
 
@@ -69,9 +70,9 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 图像验证码发送器
      */
-    @ConditionalOnMissingBean(name = "imageCodeSender")
-    @Bean("imageCodeSender")
-    public BreezeCodeSender imageCodeSender() {
+    @Bean
+    @ConditionalOnMissingBean(name = "breezeImageCodeSender")
+    public BreezeCodeSender breezeImageCodeSender() {
         return new BreezeImageCodeSender();
     }
 
@@ -80,9 +81,9 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 短信验证码发送器
      */
-    @ConditionalOnMissingBean(name = "smsCodeSender")
-    @Bean("smsCodeSender")
-    public BreezeCodeSender smsCodeSender() {
+    @Bean
+    @ConditionalOnMissingBean(name = "breezeSmsCodeSender")
+    public BreezeCodeSender breezeSmsCodeSender() {
         return new BreezeSmsCodeSender();
     }
 
@@ -91,9 +92,9 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 短信验证码生成器
      */
-    @ConditionalOnMissingBean(name = "smsCodeGenerator")
-    @Bean("smsCodeGenerator")
-    public BreezeCodeGenerator smsCodeGenerator() {
+    @Bean
+    @ConditionalOnMissingBean(name = "breezeSmsCodeGenerator")
+    public BreezeCodeGenerator breezeSmsCodeGenerator() {
         return new BreezeSmsCodeGenerator();
     }
 
@@ -102,10 +103,10 @@ public class BreezeCodeAutoConfiguration {
      *
      * @return 邮件验证码生成器
      */
-    @ConditionalOnMissingBean(name = "emailCodeGenerator")
-    @Bean("emailCodeGenerator")
-    @ConditionalOnBean(name = "emailCodeSender")
-    public BreezeCodeGenerator emailCodeGenerator() {
+    @Bean
+    @ConditionalOnMissingBean(name = "breezeEmailCodeGenerator")
+    @ConditionalOnBean(name = "breezeEmailCodeGenerator")
+    public BreezeCodeGenerator breezeEmailCodeGenerator() {
         return new BreezeEmailCodeGenerator();
     }
 
@@ -116,9 +117,9 @@ public class BreezeCodeAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean({BreezeCodeProcessor.class})
-    public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators,Map<String, BreezeCodeSender> codeSenders,
-                                             BreezeCodeProperties codeProperties) {
-        return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository(), codeProperties);
+    public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators, Map<String, BreezeCodeSender> codeSenders,
+                                             BreezeCodeProperties codeProperties, BreezeCodeRepository repository) {
+        return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository, codeProperties);
     }
 
     /**
