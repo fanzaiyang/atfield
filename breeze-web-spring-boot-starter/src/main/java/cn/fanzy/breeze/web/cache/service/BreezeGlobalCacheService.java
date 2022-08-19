@@ -15,7 +15,7 @@ public interface BreezeGlobalCacheService {
      *
      * @param key          唯一标识符
      * @param value        需要存储的内容
-     * @param expireSecond 过期时间，单位：秒，小于1表示不设置过期时间
+     * @param expireSecond 过期时间，单位：秒，大于0
      */
     void save(String key, Object value, int expireSecond);
 

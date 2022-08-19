@@ -83,7 +83,7 @@ public final class LocalScheduledStorage {
      *
      * @param key          信息的键
      * @param value        信息的值
-     * @param expireSecond 过期时间，单位：秒，小于1则不过期。
+     * @param expireSecond 过期时间，单位：秒，大于0。
      */
     public synchronized static void put(String key, Object value, int expireSecond) {
         Assert.notNull(key, "key值不能为空");
