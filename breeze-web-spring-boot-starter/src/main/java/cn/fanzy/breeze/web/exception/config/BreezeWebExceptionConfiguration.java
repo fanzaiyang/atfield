@@ -370,7 +370,7 @@ public class BreezeWebExceptionConfiguration {
     }
 
     @PostConstruct
-    public void checkConfig() {
-        log.info("「微风组件」开启 <全局异常拦截> 相关的配置");
+    public void init() {
+        log.info("「微风组件」开启 <全局异常拦截> 相关的配置。");
     }
 }

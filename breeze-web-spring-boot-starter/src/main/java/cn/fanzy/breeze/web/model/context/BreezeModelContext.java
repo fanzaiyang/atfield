@@ -23,6 +23,6 @@ public class BreezeModelContext {
     @PostConstruct
     public void init() {
         properties = breezeModelProperties;
-        log.info("「微风组件」开启<Json响应>相关的配置。");
+        log.info("「微风组件」开启 <Json响应> 相关的配置。");
     }
 }

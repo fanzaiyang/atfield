@@ -40,7 +40,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties({BreezeCodeProperties.class})
-@AutoConfigureAfter(value = {BreezeMemoryCacheConfiguration.class,BreezeRedisCacheConfiguration.class})
+@AutoConfigureAfter(value = {BreezeMemoryCacheConfiguration.class, BreezeRedisCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
 public class BreezeCodeConfiguration {
 
@@ -128,7 +128,7 @@ public class BreezeCodeConfiguration {
      */
     @PostConstruct
     public void init() {
-        log.info("「微风组件」开启 <验证码支持> 相关的配置");
+        log.info("「微风组件」开启 <验证码支持> 相关的配置。");
     }
 
 }

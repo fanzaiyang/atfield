@@ -8,6 +8,7 @@ import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
 import cn.hutool.core.lang.Assert;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0.0
  * @since 1.0.0
  */
+@Slf4j
 @AllArgsConstructor
 public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
 
@@ -33,6 +35,10 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void save(String key, BreezeCode code) {
+        if(breezeCacheService==null){
+            log.warn("未正确开启缓存，无法保存验证码！");
+            return;
+        }
         breezeCacheService.save(key, code, code.getExpireTimeInSeconds());
     }
 
@@ -44,6 +50,10 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized BreezeCode get(String key) {
+        if(breezeCacheService==null){
+            log.warn("未正确开启缓存，无法获取验证码！");
+            return null;
+        }
         Object obj = breezeCacheService.get(key);
         Assert.notNull(obj, "未找到key为「{}」的数据！", key);
         return (BreezeCode) obj;
@@ -56,6 +66,10 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void remove(String key) {
+        if(breezeCacheService==null){
+            log.warn("未正确开启缓存，无法删除验证码！");
+            return;
+        }
         breezeCacheService.remove(key);
     }
 }

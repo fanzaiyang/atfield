@@ -35,7 +35,7 @@ public class BreezeRedisCacheConfiguration {
     @Bean
     @ConditionalOnBean(RedisTemplate.class)
     public BreezeCacheService breezeCacheService(RedisTemplate<String, Object> redisTemplate) {
-        log.info("「微风组件」开启 <缓存Redis> 相关的配置.");
+        log.info("「微风组件」开启 <全局缓存Redis> 相关的配置。");
         return new BreezeRedisCacheService(redisTemplate);
     }
 }

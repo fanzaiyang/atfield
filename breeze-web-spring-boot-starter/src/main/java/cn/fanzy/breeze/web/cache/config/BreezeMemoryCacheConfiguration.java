@@ -27,7 +27,7 @@ public class BreezeMemoryCacheConfiguration {
 
     @Bean
     public BreezeCacheService breezeCacheService() {
-        log.info("「微风组件」开启 <缓存Memory> 相关的配置。");
+        log.info("「微风组件」开启 <全局缓存Memory> 相关的配置。");
         return new BreezeMemoryCacheService();
     }
 }

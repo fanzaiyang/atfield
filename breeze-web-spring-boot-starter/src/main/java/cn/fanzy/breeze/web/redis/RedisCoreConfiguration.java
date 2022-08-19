@@ -142,7 +142,7 @@ public class RedisCoreConfiguration extends CachingConfigurerSupport {
      */
     @PostConstruct
     public void init() {
-        log.info("「微风组件」开启 <Redis扩展支持> 相关的配置");
+        log.info("「微风组件」开启 <Redis扩展支持> 相关的配置。");
     }
 
 }

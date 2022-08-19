@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.View;
 
+import javax.annotation.PostConstruct;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -55,5 +56,11 @@ public class BreezeBeanDefinitionRegistryPostProcessor implements BeanDefinition
     @Bean(name = "breezeView")
     public View defaultErrorView() {
         return new BreezeStaticView();
+    }
+
+
+    @PostConstruct
+    public void init() {
+        log.info("「微风组件」开启 <重写BasicError> 相关的配置。");
     }
 }
