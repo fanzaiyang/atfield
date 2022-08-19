@@ -64,7 +64,7 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
                 .unmodifiableMap(getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.TEXT_HTML)));
         response.setStatus(status.value());
         ModelAndView modelAndView = resolveErrorView(request, response, status, model);
-        return (modelAndView != null) ? modelAndView : new ModelAndView("error", model);
+        return (modelAndView != null) ? modelAndView : new ModelAndView("breezeView", model);
     }
 
     @RequestMapping

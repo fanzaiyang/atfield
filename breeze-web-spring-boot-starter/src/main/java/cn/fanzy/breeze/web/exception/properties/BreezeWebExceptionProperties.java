@@ -16,7 +16,7 @@ public class BreezeWebExceptionProperties {
     private Boolean enable;
 
     /**
-     * 是否基本错误拦截，默认：true启用
+     * 是否替换SpringBoot的BasicError，默认：true启用
      */
-    private Boolean enableBasicError;
+    private Boolean replaceBasicError;
 }
