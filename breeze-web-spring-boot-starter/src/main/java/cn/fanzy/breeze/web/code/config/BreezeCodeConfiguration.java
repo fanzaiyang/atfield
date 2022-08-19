@@ -38,7 +38,7 @@ import java.util.Map;
 @EnableConfigurationProperties({BreezeCodeProperties.class})
 @Import({BreezeMailExtendAutoConfiguration.class, BreezeRedisExtendAutoConfiguration.class})
 @AutoConfigureAfter(value = {BreezeRedisExtendAutoConfiguration.class})
-@ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true")
+@ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
 public class BreezeCodeConfiguration {
 
     /**

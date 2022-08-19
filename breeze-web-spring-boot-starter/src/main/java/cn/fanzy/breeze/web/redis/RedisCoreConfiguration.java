@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,7 +49,17 @@ import java.time.Duration;
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore(value = {BreezeCodeConfiguration.class})
 public class RedisCoreConfiguration extends CachingConfigurerSupport {
-
+    @Bean
+    public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
+        RedisSerializationContext.SerializationPair serializationPair =
+                RedisSerializationContext.SerializationPair.fromSerializer(redisValueSerializer());
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofSeconds(30))
+                .serializeValuesWith(serializationPair);
+        return RedisCacheManager
+                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory))
+                .cacheDefaults(redisCacheConfiguration).build();
+    }
     /**
      * 注入一个Redis序列化器
      *

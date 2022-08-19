@@ -18,7 +18,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ConfigurationProperties(prefix = "breeze.code")
+@ConfigurationProperties(prefix = "breeze.web.code")
 public class BreezeCodeProperties {
     private Boolean enable=false;
     /**

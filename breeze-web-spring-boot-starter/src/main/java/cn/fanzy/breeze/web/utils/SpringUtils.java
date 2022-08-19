@@ -67,6 +67,12 @@ public class SpringUtils extends SpringUtil {
         return ip.contains("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
     }
 
+    /**
+     * 是否是json请求
+     *
+     * @param request 请求
+     * @return boolean
+     */
     public static boolean isJson(HttpServletRequest request) {
         if (request.getContentType() != null) {
             return request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE) ||

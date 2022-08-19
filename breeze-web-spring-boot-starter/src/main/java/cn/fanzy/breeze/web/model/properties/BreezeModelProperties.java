@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2022-08-16
  */
 @Data
-@ConfigurationProperties(prefix = "breeze.model")
+@ConfigurationProperties(prefix = "breeze.web.model")
 public class BreezeModelProperties {
     /**
      * 成功代码，默认：200

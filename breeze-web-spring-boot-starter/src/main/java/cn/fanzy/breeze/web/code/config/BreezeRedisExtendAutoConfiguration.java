@@ -25,7 +25,7 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Configuration
 @ConditionalOnClass(RedisOperations.class)
-@ConditionalOnProperty(prefix = "breeze.code", name = {"enable"}, havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true", matchIfMissing = false)
 public class BreezeRedisExtendAutoConfiguration {
 
     /**

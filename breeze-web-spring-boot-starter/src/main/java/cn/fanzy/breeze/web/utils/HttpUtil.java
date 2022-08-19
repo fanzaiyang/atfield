@@ -131,7 +131,7 @@ public class HttpUtil {
         // 设置强制下载打开
         response.setContentType("application/force-download");
         // 文件名乱码, 使用new String() 进行反编码
-        String fName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+        String fName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name());
         response.addHeader("Content-Disposition", "attachment;fileName=" + fName);
         IoUtil.copy(inputStream, response.getOutputStream());
     }
