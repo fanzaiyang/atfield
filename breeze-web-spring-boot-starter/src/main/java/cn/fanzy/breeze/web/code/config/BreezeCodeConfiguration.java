@@ -4,6 +4,7 @@ package cn.fanzy.breeze.web.code.config;
 import cn.fanzy.breeze.web.cache.config.BreezeMemoryCacheConfiguration;
 import cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.web.code.aop.BreezeCodeCheckAop;
 import cn.fanzy.breeze.web.code.generator.BreezeCodeGenerator;
 import cn.fanzy.breeze.web.code.generator.impl.BreezeEmailCodeGenerator;
 import cn.fanzy.breeze.web.code.generator.impl.BreezeImageCodeGenerator;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -49,8 +51,8 @@ public class BreezeCodeConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(BreezeCodeRepository.class)
-    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService) {
-        return new BreezeSimpleCodeRepository(breezeCacheService);
+    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService,BreezeCodeProperties properties) {
+        return new BreezeSimpleCodeRepository(breezeCacheService,properties);
     }
 
     /**
@@ -119,6 +121,11 @@ public class BreezeCodeConfiguration {
     public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators, Map<String, BreezeCodeSender> codeSenders,
                                              BreezeCodeProperties codeProperties, BreezeCodeRepository repository) {
         return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository, codeProperties);
+    }
+
+    @Bean
+    public BreezeCodeCheckAop breezeCodeCheckAop(BreezeCodeProperties codeProperties, BreezeCodeProcessor codeProcessor, HttpServletRequest request) {
+        return new BreezeCodeCheckAop(codeProperties, codeProcessor,request);
     }
 
     /**

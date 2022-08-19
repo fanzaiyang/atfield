@@ -1,5 +1,6 @@
 package com.example.breeze.web.code;
 
+import cn.fanzy.breeze.web.code.annotation.BreezeCodeChecker;
 import cn.fanzy.breeze.web.code.enums.BreezeCodeType;
 import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.fanzy.breeze.web.code.model.BreezeImageCode;
@@ -32,9 +33,9 @@ public class CodeController {
         log.info(code.getCode());
         return JsonContent.success(code.getImageBase64());
     }
+    @BreezeCodeChecker(BreezeCodeType.IMAGE)
     @GetMapping("/image/valid")
     public JsonContent<String> imageValid(HttpServletRequest request,String clientId,String code) {
-        processor.validate(clientId,code);
         return JsonContent.success();
     }
 }

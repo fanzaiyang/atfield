@@ -42,7 +42,7 @@ public class BreezeCodeDefaultProcessor implements BreezeCodeProcessor {
         BreezeCode validateCode = generator(codeType).generate(request, codeProperties);
         log.info("【公共组件】生成的验证码的类型为 {}, 标识符为{}，内容为 {}", codeType, key, validateCode);
         // 保存验证码
-        repository.save(key, new BreezeCode(validateCode.getCode(), validateCode.getExpireTime(), validateCode.getMaxRetryCode()));
+        repository.save(key, new BreezeCode(validateCode.getCode(), validateCode.getMaxRetryCode(), validateCode.getExpireTimeInSeconds()));
         return validateCode;
     }
 
@@ -86,7 +86,7 @@ public class BreezeCodeDefaultProcessor implements BreezeCodeProcessor {
         if (!StrUtil.equalsIgnoreCase(codeInSession.getCode(), codeInRequest)) {
             // 添加一次重试次数
             codeInSession.setRetryCount(codeInSession.getRetryCount() + 1);
-            repository.save(key,codeInSession);
+            repository.save(key, codeInSession);
             if (codeInSession.getRetryCount() >= codeInSession.getMaxRetryCode()) {
                 repository.remove(key);
                 throw new RuntimeException("验证码不匹配，请重新生成验证码后重试!");

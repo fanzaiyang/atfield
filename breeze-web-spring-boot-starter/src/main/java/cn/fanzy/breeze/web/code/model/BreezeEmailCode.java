@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BreezeEmailCode extends BreezeCode{
-    public BreezeEmailCode(long expireTimeInSeconds, String code, int retryCount) {
-        super(expireTimeInSeconds, code, retryCount);
+    public BreezeEmailCode(String code, int maxRetryCode, long expireTimeInSeconds) {
+        super(code, maxRetryCode, expireTimeInSeconds);
     }
 }

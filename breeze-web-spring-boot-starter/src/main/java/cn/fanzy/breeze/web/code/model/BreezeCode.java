@@ -1,9 +1,12 @@
 package cn.fanzy.breeze.web.code.model;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 
 /**
  * 验证码实体类
@@ -18,7 +21,7 @@ public class BreezeCode implements Serializable {
      */
     private String code;
 
-    private int expireTimeInSeconds;
+    private long expireTimeInSeconds;
     /**
      * 验证码的失效时间
      */
@@ -48,15 +51,10 @@ public class BreezeCode implements Serializable {
      * @param code                验证码内容
      * @param maxRetryCode          最大重试计数
      */
-    public BreezeCode(long expireTimeInSeconds, String code, int maxRetryCode) {
+    public BreezeCode(String code, int maxRetryCode,long expireTimeInSeconds) {
         this.expireTime = LocalDateTime.now().plusSeconds(expireTimeInSeconds);
         this.code = code;
-        this.maxRetryCode = maxRetryCode;
-    }
-
-    public BreezeCode(String code, LocalDateTime expireTime, int maxRetryCode) {
-        this.code = code;
-        this.expireTime = expireTime;
+        this.expireTimeInSeconds=expireTimeInSeconds;
         this.maxRetryCode = maxRetryCode;
     }
 

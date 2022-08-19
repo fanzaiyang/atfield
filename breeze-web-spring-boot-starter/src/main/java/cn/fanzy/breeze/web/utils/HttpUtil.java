@@ -2,8 +2,11 @@ package cn.fanzy.breeze.web.utils;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yomahub.tlog.context.TLogContext;
+import com.yomahub.tlog.web.wrapper.RequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -143,12 +146,27 @@ public class HttpUtil {
         if (StrUtil.isNotBlank(value)) {
             return value;
         }
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        String[] strings = parameterMap.get(key);
+        if (strings != null && strings.length > 0) {
+            return strings[0];
+        }
         // 请求头中获取
         value = request.getHeader(key);
         if (StrUtil.isNotBlank(value)) {
             return value;
         }
-        throw new RuntimeException("请求参数中未包含验证码！");
+        // 请求body中获取
+        if (SpringUtils.isJson(request.getRequest())) {
+            String jsonParam = new RequestWrapper(request.getRequest()).getBodyString();
+            if (!JSONUtil.isTypeJSONObject(jsonParam)) {
+                return null;
+            }
+            JSONObject entries = JSONUtil.parseObj(jsonParam);
+            return entries.getObj(key);
+        }
+
+        return null;
 
     }
 

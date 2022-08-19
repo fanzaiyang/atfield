@@ -25,7 +25,7 @@ public class BreezeImageCodeGenerator implements BreezeCodeGenerator<BreezeImage
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(image.getWidth(), image.getHeight(), image.getLength(), 2);
         String code = RandomStringUtils.random(image.getLength(), image.getContainLetter(), image.getContainNumber());
         Image captchaImage = lineCaptcha.createImage(code);
-        BreezeImageCode imageCode = new BreezeImageCode(image.getExpireIn(), code, image.getRetryCount() == null ? properties.getRetryCount() : image.getRetryCount());
+        BreezeImageCode imageCode = new BreezeImageCode(code, image.getRetryCount() == null ? properties.getRetryCount() : image.getRetryCount(),image.getExpireIn());
         imageCode.setImage(ImgUtil.copyImage(captchaImage,BufferedImage.TYPE_INT_RGB));
         imageCode.setImageBase64(ImgUtil.toBase64DataUri(captchaImage,ImgUtil.IMAGE_TYPE_PNG));
         imageCode.setCode(code);

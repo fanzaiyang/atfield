@@ -14,18 +14,18 @@ public class BreezeSmsCodeGenerator implements BreezeCodeGenerator<BreezeSmsCode
     public BreezeSmsCode generate(ServletWebRequest servletWebRequest, BreezeCodeProperties properties) {
         BreezeCodeProperties.SmsCodeProperties sms = properties.getSms();
         String code = RandomStringUtils.random(sms.getLength(), sms.getContainLetter(), sms.getContainNumber());
-        return new BreezeSmsCode(sms.getExpireIn(), code, sms.getRetryCount() == null ? properties.getRetryCount() : sms.getRetryCount());
+        return new BreezeSmsCode(code, sms.getRetryCount() == null ? properties.getRetryCount() : sms.getRetryCount(), sms.getExpireIn());
     }
 
     @Override
     public String generateKey(ServletWebRequest request, BreezeCodeProperties properties) {
         BreezeCodeProperties.SmsCodeProperties sms = properties.getSms();
-        return HttpUtil.extract(request,sms.getCodeKey())+"";
+        return HttpUtil.extract(request, sms.getCodeKey()) + "";
     }
 
     @Override
     public String getCodeInRequest(ServletWebRequest request, BreezeCodeProperties properties) {
         BreezeCodeProperties.SmsCodeProperties sms = properties.getSms();
-        return HttpUtil.extract(request,sms.getCodeValue())+"";
+        return HttpUtil.extract(request, sms.getCodeValue()) + "";
     }
 }

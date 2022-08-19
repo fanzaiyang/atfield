@@ -19,8 +19,8 @@ public class BreezeImageCode extends BreezeCode{
     private transient BufferedImage image;
     private transient String imageBase64;
 
-    public BreezeImageCode(long expireTimeInSeconds, String code, int retryCount) {
-        super(expireTimeInSeconds, code, retryCount);
+    public BreezeImageCode(String code, int maxRetryCode, long expireTimeInSeconds) {
+        super(code, maxRetryCode, expireTimeInSeconds);
     }
 
 

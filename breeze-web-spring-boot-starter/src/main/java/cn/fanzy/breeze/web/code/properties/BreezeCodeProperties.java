@@ -84,7 +84,7 @@ public class BreezeCodeProperties {
         /**
          * 请求中获取短信验证码对应的短信内容的参数，默认值为 phone_code
          */
-        private String codeValue = "phoneCode";
+        private String codeValue = "code";
 
         /**
          * 重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
@@ -118,7 +118,7 @@ public class BreezeCodeProperties {
         /**
          * 请求中获取邮件验证码对应的值的参数，默认值为 emailCode
          */
-        protected String codeValue = "emailCode";
+        protected String codeValue = "code";
         /**
          * 验证码的长度,默认为4
          */
@@ -159,7 +159,7 @@ public class BreezeCodeProperties {
         /**
          * 请求中获取邮件验证码对应的值的参数，默认值为 imageCode
          */
-        protected String codeValue = "imageCode";
+        protected String codeValue = "code";
         /**
          * 验证码的长度,默认为4
          */

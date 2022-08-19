@@ -14,7 +14,7 @@ public class BreezeEmailCodeGenerator implements BreezeCodeGenerator<BreezeEmail
     public BreezeEmailCode generate(ServletWebRequest servletWebRequest, BreezeCodeProperties properties) {
         BreezeCodeProperties.SmsCodeProperties sms = properties.getSms();
         String code = RandomStringUtils.random(sms.getLength(), sms.getContainLetter(), sms.getContainNumber());
-        return new BreezeEmailCode(sms.getExpireIn(), code, sms.getRetryCount() == null ? properties.getRetryCount() : sms.getRetryCount());
+        return new BreezeEmailCode(code, sms.getRetryCount() == null ? properties.getRetryCount() : sms.getRetryCount(),sms.getExpireIn());
     }
 
     @Override
