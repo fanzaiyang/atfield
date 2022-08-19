@@ -1,7 +1,5 @@
 package cn.fanzy.breeze.web.code.enums;
 
-import java.io.Serializable;
-
 public interface IBreezeCodeTypeEnum{
     /**
      * 获取验证码生成器

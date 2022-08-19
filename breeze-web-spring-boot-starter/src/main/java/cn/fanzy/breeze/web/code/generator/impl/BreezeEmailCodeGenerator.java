@@ -2,7 +2,6 @@ package cn.fanzy.breeze.web.code.generator.impl;
 
 import cn.fanzy.breeze.web.code.generator.BreezeCodeGenerator;
 import cn.fanzy.breeze.web.code.model.BreezeEmailCode;
-import cn.fanzy.breeze.web.code.model.BreezeSmsCode;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.utils.HttpUtil;
 import lombok.AllArgsConstructor;

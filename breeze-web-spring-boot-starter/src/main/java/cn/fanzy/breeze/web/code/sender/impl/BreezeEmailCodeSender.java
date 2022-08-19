@@ -5,7 +5,6 @@ import cn.fanzy.breeze.core.exception.CustomException;
 import cn.fanzy.breeze.web.code.model.BreezeEmailCode;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

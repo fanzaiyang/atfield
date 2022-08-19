@@ -2,11 +2,7 @@ package cn.fanzy.breeze.web.exception.view;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import com.sun.mail.imap.Rights;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.View;
 import org.springframework.web.util.HtmlUtils;
@@ -76,7 +72,7 @@ public class BreezeStaticView implements View {
         builder.append("</div>");
         builder.append("</div>");
         int year = DateUtil.year(new Date());
-        builder.append("<div class=\"absolute bottom-0 w-full text-center pb-5 text-sm\" style=\"color:#999\">Copyright &copy; "+year +" Powered by <a target=\"_blank\" href=\"https://gitee.com/it-xiaofan\" class=\"underline\">小范同学</a> All Rights Reserved.</div>");
+        builder.append("<div class=\"absolute bottom-0 w-full text-center pb-5 text-sm\" style=\"color:#999\">Copyright &copy; " + year + " Powered by <a target=\"_blank\" href=\"https://gitee.com/it-xiaofan\" class=\"underline\">小范同学</a> All Rights Reserved.</div>");
         builder.append("</body></html>");
         response.getWriter().append(builder.toString());
     }
