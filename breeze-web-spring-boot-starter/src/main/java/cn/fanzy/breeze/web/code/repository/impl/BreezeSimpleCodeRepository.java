@@ -10,10 +10,6 @@ import cn.hutool.core.lang.Assert;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * 基于内存实现的验证码存储器
  *

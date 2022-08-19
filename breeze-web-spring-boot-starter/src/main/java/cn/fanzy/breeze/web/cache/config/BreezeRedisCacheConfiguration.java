@@ -3,8 +3,6 @@ package cn.fanzy.breeze.web.cache.config;
 import cn.fanzy.breeze.web.cache.properties.BreezeCacheProperties;
 import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.cache.service.impl.BreezeRedisCacheService;
-import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
-import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
 import cn.fanzy.breeze.web.redis.RedisCoreConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

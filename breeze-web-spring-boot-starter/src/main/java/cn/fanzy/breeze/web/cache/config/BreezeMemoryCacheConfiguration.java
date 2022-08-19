@@ -1,6 +1,5 @@
 package cn.fanzy.breeze.web.cache.config;
 
-import cn.fanzy.breeze.web.cache.enums.BreezeCacheEnum;
 import cn.fanzy.breeze.web.cache.properties.BreezeCacheProperties;
 import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.cache.service.impl.BreezeMemoryCacheService;
