@@ -32,10 +32,7 @@ public class BreezeStaticView implements View {
         }
         response.setContentType(TEXT_HTML_UTF8.toString());
         StringBuilder builder = new StringBuilder();
-        Object message = model.get("message");
         Object trace = model.get("trace");
-        log.info("message：{}", message);
-        log.info("trace：{}", trace);
         if (response.getContentType() == null) {
             response.setContentType(getContentType());
         }
