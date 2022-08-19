@@ -3,8 +3,11 @@
  */
 package cn.fanzy.breeze.web.code.repository.impl;
 
+import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
+import cn.hutool.core.lang.Assert;
+import lombok.AllArgsConstructor;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -17,9 +20,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @version 1.0.0
  * @since 1.0.0
  */
+@AllArgsConstructor
 public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
 
-    private final static Map<String, BreezeCode> MAP = new ConcurrentHashMap<>();
+    private final BreezeCacheService breezeCacheService;
 
     /**
      * 存储验证码
@@ -29,8 +33,7 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void save(String key, BreezeCode code) {
-        MAP.put(key, code);
-
+        breezeCacheService.save(key, code, code.getExpireTimeInSeconds());
     }
 
     /**
@@ -41,8 +44,9 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized BreezeCode get(String key) {
-        BreezeCode code = MAP.get(key);
-        return code;
+        Object obj = breezeCacheService.get(key);
+        Assert.notNull(obj, "未找到key为「{}」的数据！", key);
+        return (BreezeCode) obj;
     }
 
     /**
@@ -52,15 +56,6 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void remove(String key) {
-        Iterator<String> it = MAP.keySet().iterator();
-        synchronized (BreezeSimpleCodeRepository.class) {
-            while (it.hasNext()) {
-                String currentKey = it.next();
-                MAP.keySet().remove(currentKey);
-            }
-
-        }
-
+        breezeCacheService.remove(key);
     }
-
 }

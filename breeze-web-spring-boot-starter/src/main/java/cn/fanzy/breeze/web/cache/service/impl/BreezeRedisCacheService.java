@@ -1,16 +1,11 @@
 package cn.fanzy.breeze.web.cache.service.impl;
 
 
-import ch.qos.logback.core.util.TimeUtil;
-import cn.fanzy.breeze.web.cache.service.BreezeGlobalCacheService;
-import cn.fanzy.breeze.web.code.model.BreezeCode;
-import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
-import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
+import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.hutool.core.lang.Assert;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 
@@ -21,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2021/09/07
  */
 @AllArgsConstructor
-public class BreezeGlobalRedisCacheService implements BreezeGlobalCacheService {
+public class BreezeRedisCacheService implements BreezeCacheService {
 
     /**
      * 简化Redis数据访问代码的Helper类。
@@ -30,16 +25,20 @@ public class BreezeGlobalRedisCacheService implements BreezeGlobalCacheService {
 
     @Override
     public void save(String key, Object value, int expireSecond) {
+        Assert.notBlank(key, "唯一标识不能为空！");
+        Assert.notNull(value, "存储值不能为空！");
         redisTemplate.opsForValue().set(key, value, expireSecond, TimeUnit.SECONDS);
     }
 
     @Override
     public Object get(String key) {
+        Assert.notBlank(key, "唯一标识不能为空！");
         return redisTemplate.opsForValue().get(key);
     }
 
     @Override
     public void remove(String key) {
+        Assert.notBlank(key, "唯一标识不能为空！");
         redisTemplate.delete(key);
     }
 }

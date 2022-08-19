@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.PostConstruct;
+
 @Slf4j
 @Configuration
 @AllArgsConstructor
@@ -38,5 +40,9 @@ public class BreezeIpGlobalCheckConfiguration implements WebMvcConfigurer {
         }
         registry.addInterceptor(new BreezeIpGlobalCheckInterceptor(breezeIpGlobalCheckService()))
                 .addPathPatterns(path);
+    }
+    @PostConstruct
+    public void init() {
+        log.info("「微风组件」开启<IP全局校验>相关的配置。");
     }
 }

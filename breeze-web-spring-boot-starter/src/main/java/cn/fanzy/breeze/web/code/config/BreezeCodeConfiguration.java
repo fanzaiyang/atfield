@@ -1,6 +1,9 @@
 package cn.fanzy.breeze.web.code.config;
 
 
+import cn.fanzy.breeze.web.cache.config.BreezeMemoryCacheConfiguration;
+import cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration;
+import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.generator.BreezeCodeGenerator;
 import cn.fanzy.breeze.web.code.generator.impl.BreezeEmailCodeGenerator;
 import cn.fanzy.breeze.web.code.generator.impl.BreezeImageCodeGenerator;
@@ -15,6 +18,7 @@ import cn.fanzy.breeze.web.code.sender.impl.BreezeImageCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,8 +40,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties({BreezeCodeProperties.class})
-@Import({BreezeMailExtendAutoConfiguration.class, BreezeRedisExtendAutoConfiguration.class})
-@AutoConfigureAfter(value = {BreezeRedisExtendAutoConfiguration.class})
+@AutoConfigureAfter(value = {BreezeMemoryCacheConfiguration.class,BreezeRedisCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
 public class BreezeCodeConfiguration {
 
@@ -46,12 +49,10 @@ public class BreezeCodeConfiguration {
      *
      * @return 名为codeRepository的验证码存储器
      */
-
     @Bean
     @ConditionalOnMissingBean(BreezeCodeRepository.class)
-    public BreezeCodeRepository repository() {
-        log.info("「微风组件」开启 <验证码-内存> 相关的配置");
-        return new BreezeSimpleCodeRepository();
+    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService) {
+        return new BreezeSimpleCodeRepository(breezeCacheService);
     }
 
     /**
@@ -127,7 +128,7 @@ public class BreezeCodeConfiguration {
      */
     @PostConstruct
     public void init() {
-        log.info("「微风组件」: 开启 <验证码支持> 相关的配置");
+        log.info("「微风组件」开启 <验证码支持> 相关的配置");
     }
 
 }

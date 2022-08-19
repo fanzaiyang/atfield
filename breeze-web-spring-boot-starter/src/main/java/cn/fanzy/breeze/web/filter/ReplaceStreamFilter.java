@@ -101,6 +101,6 @@ public class ReplaceStreamFilter implements Filter {
 
     @PostConstruct
     public void init() {
-        log.info("「微风组件」: 开启 <ReplaceStreamFilter> 相关的配置");
+        log.info("「微风组件」开启 <ReplaceStreamFilter> 相关的配置");
     }
 }

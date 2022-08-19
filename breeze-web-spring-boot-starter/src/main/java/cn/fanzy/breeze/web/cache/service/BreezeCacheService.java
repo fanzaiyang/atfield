@@ -7,7 +7,7 @@ package cn.fanzy.breeze.web.cache.service;
  * @author fanzaiyang
  * @date 2022-08-19
  */
-public interface BreezeGlobalCacheService {
+public interface BreezeCacheService {
 
     /**
      * 保存

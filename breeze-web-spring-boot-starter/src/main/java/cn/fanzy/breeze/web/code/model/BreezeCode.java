@@ -17,6 +17,8 @@ public class BreezeCode implements Serializable {
      * 验证码内容
      */
     private String code;
+
+    private int expireTimeInSeconds;
     /**
      * 验证码的失效时间
      */

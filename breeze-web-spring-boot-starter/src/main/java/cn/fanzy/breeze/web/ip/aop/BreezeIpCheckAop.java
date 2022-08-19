@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.ip.aop;
 
+import cn.fanzy.breeze.web.exception.config.BreezeWebExceptionConfiguration;
 import cn.fanzy.breeze.web.ip.annotation.BreezeIpCheck;
 import cn.fanzy.breeze.web.ip.service.BreezeIpCheckService;
 import cn.fanzy.breeze.web.utils.SpringUtils;
@@ -10,6 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,6 +20,7 @@ import java.lang.reflect.Method;
 @Slf4j
 @Aspect
 @Component
+@AutoConfigureBefore(BreezeWebExceptionConfiguration.class)
 public class BreezeIpCheckAop {
     @Pointcut("@annotation(cn.fanzy.breeze.web.ip.annotation.BreezeIpCheck)")
     public void cut() {
@@ -54,6 +57,6 @@ public class BreezeIpCheckAop {
 
     @PostConstruct
     public void init() {
-        log.info("「微风组件」开启IP校验增强组件。");
+        log.info("「微风组件」开启<AOP校验IP>相关的配置。");
     }
 }
