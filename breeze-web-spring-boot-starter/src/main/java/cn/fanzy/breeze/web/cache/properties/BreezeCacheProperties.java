@@ -18,7 +18,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "breeze.web.cache")
 public class BreezeCacheProperties {
     /**
-     * 缓存方式，默认：内存，若使用redis，需要引入redis依赖。
+     * 缓存方式，默认：自动选择
      */
-    private BreezeCacheEnum type = BreezeCacheEnum.memory;
+    private BreezeCacheEnum type = BreezeCacheEnum.auto;
 }

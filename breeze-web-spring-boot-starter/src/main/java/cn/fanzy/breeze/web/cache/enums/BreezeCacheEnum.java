@@ -8,5 +8,9 @@ public enum BreezeCacheEnum {
     /**
      * 内存，默认。
      */
-    memory;
+    memory,
+    /**
+     * 自动选择redis或memory，有限redis
+     */
+    auto;
 }

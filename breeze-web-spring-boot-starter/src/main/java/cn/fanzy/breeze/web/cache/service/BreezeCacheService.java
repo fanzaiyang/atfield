@@ -17,7 +17,7 @@ public interface BreezeCacheService {
      * @param value        需要存储的内容
      * @param expireSecond 过期时间，单位：秒，大于0
      */
-    void save(String key, Object value, int expireSecond);
+    default void save(String key, Object value, int expireSecond){};
 
     /**
      * 根据唯一标识符获取存储的内容
@@ -25,14 +25,14 @@ public interface BreezeCacheService {
      * @param key 唯一标识符
      * @return 存储的内容
      */
-    Object get(String key);
+    default Object get(String key){return null;};
 
     /**
      * 根据唯一标识符移除存储的内容
      *
      * @param key 唯一标识符
      */
-    void remove(String key);
+    default void remove(String key){};
 
 
 }

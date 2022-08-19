@@ -8,5 +8,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.fanzy.breeze.web.exception.config.BreezeWebExceptionConfiguration,\
   cn.fanzy.breeze.web.filter.ReplaceStreamFilter,\
   cn.fanzy.breeze.web.exception.config.BreezeBeanDefinitionRegistryPostProcessor,\
-  cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration,\
-  cn.fanzy.breeze.web.cache.config.BreezeMemoryCacheConfiguration
+  cn.fanzy.breeze.web.cache.config.BreezeCacheConfiguration

@@ -1,7 +1,7 @@
 package cn.fanzy.breeze.web.code.config;
 
 
-import cn.fanzy.breeze.web.cache.config.BreezeMemoryCacheConfiguration;
+import cn.fanzy.breeze.web.cache.config.BreezeCacheConfiguration;
 import cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.aop.BreezeCodeCheckAop;
@@ -17,6 +17,7 @@ import cn.fanzy.breeze.web.code.repository.impl.BreezeSimpleCodeRepository;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeImageCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -25,6 +26,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -38,12 +41,15 @@ import java.util.Map;
  * @date 2021/09/07
  */
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE+20)
 @Configuration
+@AllArgsConstructor
 @EnableConfigurationProperties({BreezeCodeProperties.class})
-@AutoConfigureAfter(value = {BreezeMemoryCacheConfiguration.class, BreezeRedisCacheConfiguration.class})
+@AutoConfigureAfter(value = {BreezeCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
 public class BreezeCodeConfiguration {
 
+    private final BreezeCacheService breezeCacheService;
     /**
      * 注入一个名为codeRepository的验证码存储器
      *
@@ -51,7 +57,7 @@ public class BreezeCodeConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(BreezeCodeRepository.class)
-    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService,BreezeCodeProperties properties) {
+    public BreezeCodeRepository repository(BreezeCodeProperties properties) {
         return new BreezeSimpleCodeRepository(breezeCacheService,properties);
     }
 
