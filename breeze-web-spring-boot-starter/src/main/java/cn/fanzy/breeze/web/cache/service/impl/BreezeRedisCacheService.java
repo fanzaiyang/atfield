@@ -18,10 +18,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor
 public class BreezeRedisCacheService implements BreezeCacheService {
 
-    /**
-     * 简化Redis数据访问代码的Helper类。
-     */
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String,Object> redisTemplate;
 
     @Override
     public void save(String key, Object value, int expireSecond) {

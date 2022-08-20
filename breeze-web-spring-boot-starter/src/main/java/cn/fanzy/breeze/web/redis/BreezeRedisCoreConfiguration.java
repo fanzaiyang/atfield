@@ -39,12 +39,11 @@ import java.time.Duration;
  * @date 2021/09/07
  */
 @Slf4j
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableCaching
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore(value = {BreezeCodeConfiguration.class})
-public class RedisCoreConfiguration extends CachingConfigurerSupport {
+public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
     @Bean
     public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
         RedisSerializationContext.SerializationPair serializationPair =

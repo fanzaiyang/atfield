@@ -8,6 +8,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -38,6 +40,8 @@ import java.sql.SQLSyntaxErrorException;
  * @date 2022-08-18
  */
 @Slf4j
+@Order()
+@Configuration(proxyBeanMethods = false)
 @RestControllerAdvice
 @EnableConfigurationProperties({BreezeWebExceptionProperties.class})
 @ConditionalOnProperty(prefix = "breeze.web.exception", name = {"enable"}, havingValue = "true", matchIfMissing = true)

@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
 
-    private final BreezeCacheService breezeCacheService;
     private final BreezeCodeProperties properties;
 
+    private final BreezeCacheService breezeCacheService;
     /**
      * 存储验证码
      *

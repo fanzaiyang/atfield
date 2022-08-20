@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AllArgsConstructor
 @EnableConfigurationProperties({BreezeModelProperties.class})
 public class BreezeModelContext {
