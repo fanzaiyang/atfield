@@ -22,7 +22,6 @@ import java.util.Map;
 public class BreezeCacheConfiguration {
     private final BreezeCacheProperties properties;
 
-
     @Bean
     public BreezeCacheService breezeCacheService(Map<String, BreezeCacheService> breezeCacheServiceMap) {
         if (BreezeCacheEnum.auto.equals(properties.getType()) || BreezeCacheEnum.redis.equals(properties.getType())) {
