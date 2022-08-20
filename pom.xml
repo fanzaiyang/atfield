@@ -11,6 +11,7 @@
         <module>breeze-core</module>
         <module>breeze-web-spring-boot-starter</module>
         <module>breeze-web-demo</module>
+        <module>breeze-minio-spring-boot-starter</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
@@ -19,6 +20,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0</revision>
+        <hutool.version>5.8.5</hutool.version>
     </properties>
     <dependencyManagement>
         <dependencies>
