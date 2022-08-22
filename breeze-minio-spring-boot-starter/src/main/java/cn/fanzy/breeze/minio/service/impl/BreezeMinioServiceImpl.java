@@ -12,6 +12,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.minio.*;
+import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,9 +35,12 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
 
     private MinioClient innerClient;
 
+    private String bucket;
+
     @Override
     public void setConfig(BreezeMinIOProperties.MinioServerConfig config) {
         this.config = config;
+        this.bucket = config.getBucket();
         Assert.notNull(config, "未找到的配置！");
         client = MinioClient.builder()
                 .endpoint(config.getEndpoint())
@@ -54,6 +60,16 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     @Override
     public MinioClient innerClient() {
         return innerClient;
+    }
+
+    @Override
+    public BreezeMinioServiceImpl bucket(String bucket) {
+        if (StrUtil.isBlank(bucket)) {
+            log.warn("参数为空，使用默认存储桶。");
+            return this;
+        }
+        this.bucket = bucket;
+        return this;
     }
 
     @Override
@@ -80,58 +96,10 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public BreezeMinioResponse upload(String bucket, InputStream inputStream, String objectName, String fileName, String contentType) {
-        Assert.notBlank(fileName, "文件名不为空！");
-        Assert.notBlank(bucket, "存储桶不能为空！");
-        Assert.notBlank(objectName, "objectName不能为空！");
-        Assert.notBlank(contentType, "contentType不能为空！");
-        Assert.notNull(inputStream, "文件流不能为空！");
-        if (StrUtil.endWithIgnoreCase(contentType, "jpeg")) {
-            contentType = contentType.replaceAll("jpeg", "jpg");
-        }
-        bucketExistsAndCreate(config.getBucket());
-        try {
-            int available = inputStream.available();
-            BigDecimal decimal = new BigDecimal(available).divide(new BigDecimal(1048576));
-            ObjectWriteResponse response = innerClient.putObject(PutObjectArgs.builder()
-                    .bucket(bucket)
-                    .contentType(contentType)
-                    .object(objectName)
-                    .stream(inputStream, inputStream.available(), -1)
-                    .build());
-            return BreezeMinioResponse.builder()
-                    .etag(response.etag())
-                    .bucket(bucket)
-                    .endpoint(config.getEndpoint())
-                    .objectName(objectName)
-                    .fileName(fileName)
-                    .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
-                    .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    @Override
-    public BreezeMinioResponse upload(InputStream inputStream, String objectName, String fileName, String contentType) {
-        return upload(config.getBucket(), inputStream, objectName, fileName, contentType);
-    }
-
-    @Override
     public BreezeMinioResponse upload(MultipartFile file) {
         try {
             String type = BreezeFileTypeUtil.getFileType(file);
             return upload(file.getInputStream(), BreezeObjectGenerate.objectName(type), file.getOriginalFilename(), file.getContentType());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public BreezeMinioResponse upload(String bucket, MultipartFile file) {
-        try {
-            String type = BreezeFileTypeUtil.getFileType(file);
-            return upload(bucket, file.getInputStream(), BreezeObjectGenerate.objectName(type), file.getOriginalFilename(), file.getContentType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -145,19 +113,6 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                 objectName = BreezeObjectGenerate.objectName(type);
             }
             return upload(file.getInputStream(), objectName, file.getOriginalFilename(), file.getContentType());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public BreezeMinioResponse upload(String bucket, MultipartFile file, String objectName) {
-        try {
-            if (StrUtil.isBlank(objectName)) {
-                String type = BreezeFileTypeUtil.getFileType(file);
-                objectName = BreezeObjectGenerate.objectName(type);
-            }
-            return upload(bucket, file.getInputStream(), objectName, file.getOriginalFilename(), file.getContentType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -180,22 +135,6 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public BreezeMinioResponse upload(String bucket, MultipartFile file, String objectName, String contentType) {
-        try {
-            if (StrUtil.isBlank(objectName)) {
-                String type = BreezeFileTypeUtil.getFileType(file);
-                objectName = BreezeObjectGenerate.objectName(type);
-            }
-            if (StrUtil.isBlank(contentType)) {
-                contentType = file.getContentType();
-            }
-            return upload(bucket, file.getInputStream(), objectName, file.getOriginalFilename(), contentType);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public BreezeMinioResponse upload(File file) {
         String fileType = BreezeFileTypeUtil.getFileType(file);
         String objectName = BreezeObjectGenerate.objectName(fileType);
@@ -203,13 +142,6 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         return upload(FileUtil.getInputStream(file), objectName, file.getName(), contentType);
     }
 
-    @Override
-    public BreezeMinioResponse upload(String bucket, File file) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
-        String objectName = BreezeObjectGenerate.objectName(fileType);
-        String contentType = BreezeFileContentType.getContentType(fileType);
-        return upload(bucket, FileUtil.getInputStream(file), objectName, file.getName(), contentType);
-    }
 
     @Override
     public BreezeMinioResponse upload(File file, String objectName) {
@@ -219,16 +151,6 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         }
         String contentType = BreezeFileContentType.getContentType(fileType);
         return upload(FileUtil.getInputStream(file), objectName, file.getName(), contentType);
-    }
-
-    @Override
-    public BreezeMinioResponse upload(String bucket, File file, String objectName) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
-        if (StrUtil.isBlank(objectName)) {
-            objectName = BreezeObjectGenerate.objectName(fileType);
-        }
-        String contentType = BreezeFileContentType.getContentType(fileType);
-        return upload(bucket, FileUtil.getInputStream(file), objectName, file.getName(), contentType);
     }
 
     @Override
@@ -244,15 +166,35 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public BreezeMinioResponse upload(String bucket, File file, String objectName, String contentType) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
-        if (StrUtil.isBlank(objectName)) {
-            objectName = BreezeObjectGenerate.objectName(fileType);
+    public BreezeMinioResponse upload(InputStream inputStream, String objectName, String fileName, String contentType) {
+        Assert.notBlank(fileName, "文件名不为空！");
+        Assert.notBlank(objectName, "objectName不能为空！");
+        Assert.notBlank(contentType, "contentType不能为空！");
+        Assert.notNull(inputStream, "文件流不能为空！");
+        if (StrUtil.endWithIgnoreCase(contentType, "jpeg")) {
+            contentType = contentType.replaceAll("jpeg", "jpg");
         }
-        if (StrUtil.isBlank(contentType)) {
-            contentType = BreezeFileContentType.getContentType(fileType);
+        bucketExistsAndCreate(this.bucket);
+        try {
+            int available = inputStream.available();
+            BigDecimal decimal = new BigDecimal(available).divide(new BigDecimal(1048576));
+            ObjectWriteResponse response = innerClient.putObject(PutObjectArgs.builder()
+                    .bucket(this.bucket)
+                    .contentType(contentType)
+                    .object(objectName)
+                    .stream(inputStream, inputStream.available(), -1)
+                    .build());
+            return BreezeMinioResponse.builder()
+                    .etag(response.etag())
+                    .bucket(bucket)
+                    .endpoint(config.getEndpoint())
+                    .objectName(objectName)
+                    .fileName(fileName)
+                    .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return upload(bucket, FileUtil.getInputStream(file), objectName, file.getName(), contentType);
     }
 
     @Override
@@ -313,23 +255,22 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public void setBucketPolicy(String objectPrefix, BreezeBucketEffectEnum policy) {
-        if (!objectPrefix.startsWith("/")) {
-            objectPrefix = "/" + objectPrefix;
-        }
-        setBucketPolicy(config.getBucket(), objectPrefix, policy);
-    }
-
-    @Override
-    public void setBucketPolicy(String bucket, String objectPrefix, BreezeBucketEffectEnum policy) {
+    public void setBucketPolicy(String objectPrefix, BreezeBucketEffectEnum effect) {
         try {
             if (!objectPrefix.startsWith("/")) {
                 objectPrefix = "/" + objectPrefix;
             }
-            String resource = StrUtil.format("arn:aws:s3:::{}{}", bucket, objectPrefix);
-            String bucketPolicy = getBucketPolicy(bucket);
+            String resource = StrUtil.format("arn:aws:s3:::{}{}", this.bucket, objectPrefix);
+            String bucketPolicy = getBucketPolicy(this.bucket);
             BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
             List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
+            // 查看该文件是够已经设置为该策略
+            Optional<BreezeBucketPolicy.Statement> any = statementList.stream().filter(item -> item.getAction().contains(BreezeBucketPolicyEnum.GetObject.getAction()) &&
+                    item.getResource().contains(resource)).findAny();
+            if (any.isPresent()) {
+                log.debug("该文件已设置该策略，忽略设置。");
+                return;
+            }
             boolean exist = false;
             for (BreezeBucketPolicy.Statement item : statementList) {
                 if (item.getAction().contains(BreezeBucketPolicyEnum.GetObject.getAction())) {
@@ -343,21 +284,21 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
             }
             if (!exist) {
                 statementList.add(BreezeBucketPolicy.Statement.builder()
-                        .Effect(policy.name())
+                        .Effect(effect.name())
                         .Principal(MapUtil.of("AWS", new String[]{"*"}))
                         .Resource(CollUtil.newArrayList(resource))
                         .Action(CollUtil.newArrayList(BreezeBucketPolicyEnum.GetObject.getAction()))
                         .build());
             }
             bean.setStatement(statementList);
-            setBucketPolicy(bucket, bean);
+            setBucketPolicy(bean);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void setBucketPolicy(String bucket, BreezeBucketPolicy args) {
+    public void setBucketPolicy(BreezeBucketPolicy args) {
         try {
             String config = JSONUtil.toJsonStr(args);
             innerClient.setBucketPolicy(SetBucketPolicyArgs.builder()
@@ -370,7 +311,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public void removeBucketPolicy(String bucket, String objectPrefix) {
+    public void removeBucketPolicy(String objectPrefix) {
         String bucketPolicy = getBucketPolicy(config.getBucket());
         if (!objectPrefix.startsWith("/")) {
             objectPrefix = "/" + objectPrefix;
@@ -387,11 +328,26 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         List<BreezeBucketPolicy.Statement> collect = statementList.stream().filter(item -> CollUtil.isNotEmpty(item.getResource()))
                 .collect(Collectors.toList());
         bean.setStatement(collect);
-        setBucketPolicy(bucket, bean);
+        setBucketPolicy(bean);
     }
 
     @Override
-    public void removeBucketPolicy(String objectPrefix) {
-        removeBucketPolicy(this.config.getBucket(), objectPrefix);
+    public String getPreviewUrl(String objectName) {
+        try {
+            return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucket)
+                    .object(objectName)
+                    .build());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getPublicPreviewUrl(String objectName) {
+        setBucketPolicy(objectName, BreezeBucketEffectEnum.Allow);
+        return config.getEndpoint().endsWith("/") ? config.getEndpoint() : (config.getEndpoint() + '/')
+                + bucket +
+                (objectName.startsWith("/") ? objectName : ("/" + objectName));
     }
 }
