@@ -29,7 +29,7 @@ public interface BreezeMinioService {
      *
      * @param bucket 桶
      */
-    void bucketExistsAndCreate(String bucket) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
+    void bucketExistsAndCreate(String bucket);
 
     /**
      * 上传
@@ -40,5 +40,5 @@ public interface BreezeMinioService {
      * @param contentType 内容类型
      * @return {@link BreezeMinioResponse}
      */
-    BreezeMinioResponse upload(String bucket, String objectName, InputStream inputStream, String contentType);
+    BreezeMinioResponse upload(String fileName, String objectName, InputStream inputStream, String contentType, String bucket);
 }

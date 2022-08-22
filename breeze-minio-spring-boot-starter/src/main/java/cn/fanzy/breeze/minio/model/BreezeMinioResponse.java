@@ -1,9 +1,19 @@
 package cn.fanzy.breeze.minio.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BreezeMinioResponse {
+    /**
+     * 标识
+     */
+    private String etag;
     /**
      * MinIO地址
      */

@@ -47,7 +47,7 @@ public class BreezeMinIOProperties {
          */
         private String bucket;
         /**
-         * 内网地址
+         * 内网地址，空则使用公网地址
          */
         private String innerEndpoint;
 
