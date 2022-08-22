@@ -12,6 +12,7 @@
         <module>breeze-web-spring-boot-starter</module>
         <module>breeze-web-demo</module>
         <module>breeze-minio-spring-boot-starter</module>
+        <module>breeze-auth-spring-boot-starter</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
