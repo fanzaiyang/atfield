@@ -371,30 +371,11 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
 
     @Override
     public void removeBucketPolicy(String bucket, String objectPrefix) {
-        if (!objectPrefix.startsWith("/")) {
-            objectPrefix = "/" + objectPrefix;
-        }
-        String resource = StrUtil.format("arn:aws:s3:::{}{}", bucket, objectPrefix);
-        String bucketPolicy = getBucketPolicy(bucket);
-        BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
-        List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
-        statementList.forEach(item -> {
-            if (item.getResource().contains(resource)) {
-                item.getResource().remove(resource);
-                item.setResource(item.getResource());
-            }
-        });
-        bean.setStatement(statementList);
-        setBucketPolicy(bucket, bean);
-    }
-
-    @Override
-    public void removeBucketPolicy(String objectPrefix) {
         String bucketPolicy = getBucketPolicy(config.getBucket());
         if (!objectPrefix.startsWith("/")) {
             objectPrefix = "/" + objectPrefix;
         }
-        String resource = StrUtil.format("arn:aws:s3:::{}{}", config.getBucket(), objectPrefix);
+        String resource = StrUtil.format("arn:aws:s3:::{}{}", bucket, objectPrefix);
         BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
         List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
         statementList.forEach(item -> {
@@ -406,6 +387,11 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         List<BreezeBucketPolicy.Statement> collect = statementList.stream().filter(item -> CollUtil.isNotEmpty(item.getResource()))
                 .collect(Collectors.toList());
         bean.setStatement(collect);
-        setBucketPolicy(config.getBucket(), bean);
+        setBucketPolicy(bucket, bean);
+    }
+
+    @Override
+    public void removeBucketPolicy(String objectPrefix) {
+        removeBucketPolicy(this.config.getBucket(), objectPrefix);
     }
 }
