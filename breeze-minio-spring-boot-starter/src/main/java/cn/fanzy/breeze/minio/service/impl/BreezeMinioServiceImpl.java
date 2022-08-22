@@ -8,6 +8,7 @@ import cn.fanzy.breeze.minio.utils.*;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.minio.*;
@@ -21,16 +22,18 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class BreezeMinioServiceImpl implements BreezeMinioService {
-    private final BreezeMinIOProperties.MinioServerConfig config;
-    private final MinioClient client;
+    private BreezeMinIOProperties.MinioServerConfig config;
+    private MinioClient client;
 
-    private final MinioClient innerClient;
+    private MinioClient innerClient;
 
-    public BreezeMinioServiceImpl(BreezeMinIOProperties.MinioServerConfig config) {
+    @Override
+    public void setConfig(BreezeMinIOProperties.MinioServerConfig config) {
         this.config = config;
         Assert.notNull(config, "未找到的配置！");
         client = MinioClient.builder()
@@ -326,12 +329,27 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
             String resource = StrUtil.format("arn:aws:s3:::{}{}", bucket, objectPrefix);
             String bucketPolicy = getBucketPolicy(bucket);
             BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
-            bean.getStatement().add(BreezeBucketPolicy.Statement.builder()
-                    .effect(policy.name())
-                    .principal("*")
-                    .resource(resource)
-                    .action(CollUtil.newArrayList(BreezeBucketPolicyEnum.GetObject.getAction()))
-                    .build());
+            List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
+            boolean exist = false;
+            for (BreezeBucketPolicy.Statement item : statementList) {
+                if (item.getAction().contains(BreezeBucketPolicyEnum.GetObject.getAction())) {
+                    exist = true;
+                    if (!item.getResource().contains(resource)) {
+                        item.getResource().add(resource);
+                        item.setResource(item.getResource());
+                    }
+                    break;
+                }
+            }
+            if (!exist) {
+                statementList.add(BreezeBucketPolicy.Statement.builder()
+                        .Effect(policy.name())
+                        .Principal(MapUtil.of("AWS", new String[]{"*"}))
+                        .Resource(CollUtil.newArrayList(resource))
+                        .Action(CollUtil.newArrayList(BreezeBucketPolicyEnum.GetObject.getAction()))
+                        .build());
+            }
+            bean.setStatement(statementList);
             setBucketPolicy(bucket, bean);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -341,9 +359,10 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     @Override
     public void setBucketPolicy(String bucket, BreezeBucketPolicy args) {
         try {
+            String config = JSONUtil.toJsonStr(args);
             innerClient.setBucketPolicy(SetBucketPolicyArgs.builder()
-                    .bucket(StrUtil.blankToDefault(bucket, config.getBucket()))
-                    .config(JSONUtil.toJsonStr(args))
+                    .bucket(StrUtil.blankToDefault(bucket, this.config.getBucket()))
+                    .config(config)
                     .build());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -358,9 +377,13 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         String resource = StrUtil.format("arn:aws:s3:::{}{}", bucket, objectPrefix);
         String bucketPolicy = getBucketPolicy(bucket);
         BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
-        List<BreezeBucketPolicy.Statement> statementList = bean.getStatement().stream()
-                .filter(item -> !item.getResource().equals(resource))
-                .collect(Collectors.toList());
+        List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
+        statementList.forEach(item -> {
+            if (item.getResource().contains(resource)) {
+                item.getResource().remove(resource);
+                item.setResource(item.getResource());
+            }
+        });
         bean.setStatement(statementList);
         setBucketPolicy(bucket, bean);
     }
@@ -373,10 +396,16 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         }
         String resource = StrUtil.format("arn:aws:s3:::{}{}", config.getBucket(), objectPrefix);
         BreezeBucketPolicy bean = JSONUtil.toBean(bucketPolicy, BreezeBucketPolicy.class);
-        List<BreezeBucketPolicy.Statement> statementList = bean.getStatement().stream()
-                .filter(item -> !item.getResource().equals(resource))
+        List<BreezeBucketPolicy.Statement> statementList = bean.getStatement();
+        statementList.forEach(item -> {
+            if (item.getResource().contains(resource)) {
+                item.getResource().remove(resource);
+                item.setResource(item.getResource());
+            }
+        });
+        List<BreezeBucketPolicy.Statement> collect = statementList.stream().filter(item -> CollUtil.isNotEmpty(item.getResource()))
                 .collect(Collectors.toList());
-        bean.setStatement(statementList);
+        bean.setStatement(collect);
         setBucketPolicy(config.getBucket(), bean);
     }
 }

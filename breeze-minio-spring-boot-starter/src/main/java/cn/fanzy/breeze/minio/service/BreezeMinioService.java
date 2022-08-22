@@ -2,6 +2,7 @@ package cn.fanzy.breeze.minio.service;
 
 import cn.fanzy.breeze.minio.model.BreezeBucketPolicy;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
+import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
 import io.minio.MinioClient;
 import io.minio.errors.*;
@@ -15,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 
 public interface BreezeMinioService {
 
+    void setConfig(BreezeMinIOProperties.MinioServerConfig config);
     /**
      * 公网客户端
      * <pre>主要用于查询类</pre>

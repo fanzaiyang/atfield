@@ -3,7 +3,9 @@ package cn.fanzy.breeze.minio.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 微风桶政策
@@ -17,9 +19,9 @@ import java.util.List;
 @AllArgsConstructor
 public class BreezeBucketPolicy {
     @JsonProperty(value = "Version")
-    private String version;
+    private String Version;
     @JsonProperty(value = "Statement")
-    private List<Statement> statement;
+    private List<Statement> Statement;
 
 
     @Data
@@ -28,12 +30,12 @@ public class BreezeBucketPolicy {
     @AllArgsConstructor
     public static class Statement {
         @JsonProperty(value = "Effect")
-        private String effect;
+        private String Effect;
         @JsonProperty(value = "Principal")
-        private String principal;
+        private Map<String,Object> Principal=new HashMap<>();
         @JsonProperty(value = "Resource")
-        private String resource;
+        private List<String> Resource;
         @JsonProperty(value = "Action")
-        private List<String> action;
+        private List<String> Action;
     }
 }
