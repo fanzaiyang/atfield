@@ -25,7 +25,7 @@ import java.util.List;
 @Configuration
 @EnableConfigurationProperties(BreezeAuthProperties.class)
 @ConditionalOnProperty(prefix = "breeze.auth.route", name = {"enable"}, havingValue = "true")
-public class BreezeRouteConfiguration implements WebMvcConfigurer {
+public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
 
     private final BreezeAuthProperties properties;
 
@@ -39,7 +39,6 @@ public class BreezeRouteConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        log.info("拦截白名单：{}", JSONUtil.toJsonStr(properties.getRoute().getExcludePathPatterns()));
         registry.addInterceptor(new SaRouteInterceptor(saRouteFunction()))
                 .addPathPatterns(properties.getRoute().getPathPatterns())
                 .excludePathPatterns(properties.getRoute().getExcludePathPatterns());

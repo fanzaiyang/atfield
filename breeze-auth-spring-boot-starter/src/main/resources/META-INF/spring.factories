@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.fanzy.breeze.auth.config.BreezeAuthAnnotationConfiguration,\
+  cn.fanzy.breeze.auth.config.BreezeAuthRouteConfiguration,\
+  cn.fanzy.breeze.auth.config.BreezeAuthExceptionConfiguration
