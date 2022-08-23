@@ -38,23 +38,41 @@ public class BreezeAuthExceptionConfiguration {
     @ExceptionHandler(NotLoginException.class)
     public Object handleRuntimeException(HttpServletRequest request, NotLoginException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(),ssid);
-        log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotLoginException异常：{}", ssid, e.getMessage()), e);
+        String type = e.getType();
+        String message = "";
+        if (NotLoginException.NOT_TOKEN.equals(type)) {
+            message = "未提供token，请重新登录！";
+        } else if (NotLoginException.INVALID_TOKEN.equals(type)) {
+            message = "令牌无效，请重新登录！";
+        } else if (NotLoginException.TOKEN_TIMEOUT.equals(type)) {
+            message = "登录已过期，请重新登录！";
+        } else if (NotLoginException.BE_REPLACED.equals(type)) {
+            message = "当前账号已被其他客户端登录！";
+        } else if (NotLoginException.KICK_OUT.equals(type)) {
+            message = "您已被强制下线！";
+        } else {
+            message = e.getMessage();
+        }
+
+        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
+        log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotLoginException异常：{}", ssid, message), e);
         return response;
     }
+
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NotBasicAuthException.class)
     public Object handleRuntimeException(HttpServletRequest request, NotBasicAuthException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(),ssid);
+        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotBasicAuthException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
+
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(DisableLoginException.class)
     public Object handleRuntimeException(HttpServletRequest request, DisableLoginException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(),ssid);
+        Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到DisableLoginException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -63,7 +81,7 @@ public class BreezeAuthExceptionConfiguration {
     @ExceptionHandler(NotRoleException.class)
     public Object handleRuntimeException(HttpServletRequest request, NotRoleException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(),ssid);
+        Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotRoleException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -72,7 +90,7 @@ public class BreezeAuthExceptionConfiguration {
     @ExceptionHandler(NotPermissionException.class)
     public Object handleRuntimeException(HttpServletRequest request, NotPermissionException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(),ssid);
+        Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotPermissionException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -81,7 +99,7 @@ public class BreezeAuthExceptionConfiguration {
     @ExceptionHandler(NotSafeException.class)
     public Object handleRuntimeException(HttpServletRequest request, NotSafeException e) {
         String ssid = this.getRequestId(request);
-        Response response = new Response(HttpStatus.PRECONDITION_REQUIRED.value(), e.getMessage(),ssid);
+        Response response = new Response(HttpStatus.PRECONDITION_REQUIRED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotSafeException异常：{}", ssid, e.getMessage()), e);
         return response;
     }

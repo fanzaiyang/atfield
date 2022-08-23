@@ -28,7 +28,23 @@ public class BreezeAuthProperties {
      */
     private Route route = new Route();
 
+    /**
+     * 注解鉴权
+     */
     private Annotations annotation = new Annotations();
+
+    /**
+     * jwt token需要引入插件
+     * <pre>
+     *     &lt;dependency&gt;
+     *          &lt;groupId&gt;cn.dev33&lt;/groupId&gt;
+     *          &lt;artifactId&gt;sa-token-jwt&lt;/artifactId&gt;
+     *          &lt;version&gt;${satoken.version}&lt;/version&gt;
+     *     &lt;/dependency&gt;
+     * </pre>
+     */
+    private Jwt jwt=new Jwt();
+
 
 
     @Data
@@ -44,7 +60,7 @@ public class BreezeAuthProperties {
         /**
          * 忽略路径
          */
-        private List<String> excludePathPatterns=new ArrayList<>();
+        private List<String> excludePathPatterns = new ArrayList<>();
     }
 
     /**
@@ -66,6 +82,36 @@ public class BreezeAuthProperties {
         /**
          * 忽略路径
          */
-        private List<String> excludePathPatterns=new ArrayList<>();
+        private List<String> excludePathPatterns = new ArrayList<>();
     }
+
+
+
+    @Data
+    public static class Jwt{
+        /**
+         * 是否启用，默认：true
+         */
+        private Boolean enable;
+        /**
+         * Jwt风格
+         */
+        private JwtMode mode = JwtMode.simple;
+        public enum JwtMode {
+            /**
+             * Simple 模式：Token 风格替换,默认
+             */
+            simple,
+            /**
+             * Mixin 模式：混入部分逻辑
+             */
+            mixin,
+            /**
+             * Stateless 模式：服务器完全无状态
+             */
+            stateless;
+
+        }
+    }
+
 }
