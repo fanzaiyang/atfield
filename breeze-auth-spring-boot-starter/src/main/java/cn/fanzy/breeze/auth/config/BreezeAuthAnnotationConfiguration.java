@@ -6,6 +6,7 @@ import cn.dev33.satoken.router.SaRouteFunction;
 import cn.fanzy.breeze.auth.function.BreezeDefaultRouteFunction;
 import cn.fanzy.breeze.auth.properties.BreezeAuthProperties;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
