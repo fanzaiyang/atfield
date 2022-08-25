@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>breeze-spring-boot</artifactId>
+        <groupId>cn.fanzy.breeze</groupId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>breeze-wechat</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>breeze-wechat-cp-spring-boot-starter</module>
+        <module>breeze-wechat-ma-spring-boot-starter</module>
+        <module>breeze-wechat-mp-spring-boot-starter</module>
+        <module>breeze-wechat-pay-spring-boot-starter</module>
+    </modules>
+
+    <properties>
+        <wechat.version>4.4.0</wechat.version>
+    </properties>
+</project>

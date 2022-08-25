@@ -1,5 +1,6 @@
 package com.example.breeze.web;
 
+import cn.hutool.core.util.IdUtil;
 import com.example.breeze.web.entity.User;
 import org.junit.jupiter.api.Test;
 import org.sagacity.sqltoy.dao.SqlToyLazyDao;
@@ -30,7 +31,7 @@ class BreezeSqltoyTests {
     @Test
     void testSave() {
         User user = new User();
-        // user.setId(IdUtil.nanoId()); // 不设置ID使用sqltoy默认主键策略
+         user.setId("U001"); // 不设置ID使用sqltoy默认主键策略
         user.setName("用户AAA");
         user.setAge(30);
         user.setCreateTime(new Date());
