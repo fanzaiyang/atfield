@@ -569,7 +569,7 @@ public class EntityManager {
         }
         // 业务主键策略配置解析
         BusinessId bizId = field.getAnnotation(BusinessId.class);
-        if (bizId != null && StringUtil.isNotBlank(bizId.generator())) {
+        if (bizId != null && bizId.generator() != null) {
             Class<? extends IdGenerator> bizGenerator = bizId.generator();
             entityMeta.setBizIdLength(bizId.length());
             entityMeta.setBizIdSignature(bizId.signature());
@@ -583,11 +583,11 @@ public class EntityManager {
             processIdGenerator(sqlToyContext, bizGenerator);
             // 如果是业务主键跟ID重叠,则ID以业务主键策略生成
             if (id != null) {
-                entityMeta.setIdGenerator(idGenerators.get(bizGenerator));
+                entityMeta.setIdGenerator(idGenerators.get(bizGenerator.getName()));
                 fieldMeta.setLength(bizId.length());
                 entityMeta.setBizIdEqPK(true);
             } else {
-                entityMeta.setBusinessIdGenerator(idGenerators.get(bizGenerator));
+                entityMeta.setBusinessIdGenerator(idGenerators.get(bizGenerator.getName()));
             }
         }
     }

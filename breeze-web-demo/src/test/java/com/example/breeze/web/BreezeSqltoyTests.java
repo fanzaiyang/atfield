@@ -31,7 +31,6 @@ class BreezeSqltoyTests {
     @Test
     void testSave() {
         User user = new User();
-         user.setId("U001"); // 不设置ID使用sqltoy默认主键策略
         user.setName("用户AAA");
         user.setAge(30);
         user.setCreateTime(new Date());

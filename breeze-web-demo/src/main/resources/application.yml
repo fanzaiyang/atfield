@@ -6,8 +6,8 @@ spring:
     password: hotec123qwe.?
   sqltoy:
     sql-resources-dir: classpath:sql #指定sql.xml 文件路径,多个路径用逗号分隔。示例表示在resours下的sql文件夹下。
+    debug: true
 #    unify-fields-handler: com.example.breeze.web.sql.BreezeUnifyFieldsHandler
-
 
 
 
@@ -17,4 +17,6 @@ breeze:
   web:
     code:
       enable: true
-
+logging:
+  level:
+    com.example.breeze.web: debug
