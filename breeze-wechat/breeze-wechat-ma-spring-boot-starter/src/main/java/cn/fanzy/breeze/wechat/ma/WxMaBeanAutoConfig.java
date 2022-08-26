@@ -14,7 +14,7 @@ public class WxMaBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMaLogHandler wxMaLogHandler() {
         return (message, context, service, sessionManager) -> {
-            log.info("收到消息：" + message.toString());
+            log.info("WxMaLogHandler收到消息：" + message.toString());
             return null;
         };
     }
@@ -23,7 +23,7 @@ public class WxMaBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMaImageHandler wxMaImageHandler() {
         return (message, context, service, sessionManager) -> {
-            log.info("图片消息：" + message.toString());
+            log.info("WxMaImageHandler图片消息：" + message.toString());
             return null;
         };
     }
@@ -32,7 +32,7 @@ public class WxMaBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMaQrCodeHandler wxMaQrCodeHandler() {
         return (message, context, service, sessionManager) -> {
-            log.info("二维码消息：" + message.toString());
+            log.info("WxMaQrCodeHandler二维码消息：" + message.toString());
             return null;
         };
     }
@@ -41,7 +41,7 @@ public class WxMaBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMaSubscribeHandler wxMaSubscribeHandler() {
         return (message, context, service, sessionManager) -> {
-            log.info("订阅消息：" + message.toString());
+            log.info("WxMaSubscribeHandler订阅消息：" + message.toString());
             return null;
         };
     }
@@ -50,7 +50,7 @@ public class WxMaBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMaTextHandler wxMaTextHandler() {
         return (message, context, service, sessionManager) -> {
-            log.info("文本消息：" + message.toString());
+            log.info("WxMaTextHandler文本消息：" + message.toString());
             return null;
         };
     }

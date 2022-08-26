@@ -21,7 +21,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpLogHandler wxMpLogHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("接收到请求消息，内容：{}", JSONUtil.toJsonStr(wxMessage));
+            log.info("WxMpLogHandler接收到请求消息，内容：{}", JSONUtil.toJsonStr(wxMessage));
             return null;
         };
     }
@@ -36,7 +36,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpLocationHandler wxMpLocationHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("上报地理位置，纬度 : {}\n经度 : {}\n精度 : {}",
+            log.info("WxMpLocationHandler上报地理位置，纬度 : {}\n经度 : {}\n精度 : {}",
                     wxMessage.getLatitude(), wxMessage.getLongitude(), String.valueOf(wxMessage.getPrecision()));
             return null;
         };
@@ -46,7 +46,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpMenuHandler wxMpMenuHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("菜单，{}", wxMessage.toString());
+            log.info("WxMpMenuHandler菜单，{}", wxMessage.toString());
             return null;
         };
     }
@@ -55,7 +55,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpMsgHandler wxMpMsgHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("收到消息，{}", wxMessage.toString());
+            log.info("WxMpMsgHandler收到消息，{}", wxMessage.toString());
             return null;
         };
     }
@@ -64,7 +64,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpUnsubscribeHandler wxMpUnsubscribeHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("取消关注用户 OPENID: " + wxMessage.getFromUser());
+            log.info("WxMpUnsubscribeHandler取消关注用户 OPENID: " + wxMessage.getFromUser());
             return null;
         };
     }
@@ -73,7 +73,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpSubscribeHandler wxMpSubscribeHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("感谢关注 OPENID: " + wxMessage.getFromUser());
+            log.info("WxMpSubscribeHandler感谢关注 OPENID: " + wxMessage.getFromUser());
             return null;
         };
     }
@@ -82,7 +82,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpKfSessionHandler wxMpKfSessionHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("对会话做处理" + wxMessage.toString());
+            log.info("WxMpKfSessionHandler对会话做处理" + wxMessage.toString());
             return null;
         };
     }
@@ -91,7 +91,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpScanHandler wxMpScanHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("扫码事件处理" + wxMessage.toString());
+            log.info("WxMpScanHandler扫码事件处理" + wxMessage.toString());
             return null;
         };
     }
@@ -100,7 +100,7 @@ public class WxMpBeanAutoConfig {
     @ConditionalOnMissingBean
     public WxMpStoreCheckNotifyHandler wxMpStoreCheckNotifyHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("处理门店审核事件" + wxMessage.toString());
+            log.info("WxMpStoreCheckNotifyHandler处理门店审核事件" + wxMessage.toString());
             return null;
         };
     }

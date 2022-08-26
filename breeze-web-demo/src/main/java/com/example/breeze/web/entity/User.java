@@ -1,8 +1,8 @@
 package com.example.breeze.web.entity;
 
+import cn.fanzy.breeze.sqltoy.core.config.annotation.*;
 import lombok.*;
-import org.sagacity.sqltoy.config.annotation.*;
-import org.sagacity.sqltoy.plugins.id.impl.RedisIdGenerator;
+import cn.fanzy.breeze.sqltoy.core.plugins.id.impl.RedisIdGenerator;
 
 import java.sql.Types;
 

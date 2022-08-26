@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2022/03/08
  */
 @Data
-@ConfigurationProperties(prefix = "yf.wechat.pay")
+@ConfigurationProperties(prefix = "breeze.wechat.pay")
 public class WxPayProperties {
     /**
      * 设置微信公众号或者小程序等的appid

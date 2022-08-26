@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "yf.wechat.ma")
+@ConfigurationProperties(prefix = "breeze.wechat.ma")
 public class WxMaProperties {
     /**
      * 应用程序配置集合

@@ -1,6 +1,6 @@
 package com.example.breeze.web.sql;
 
-import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
+import cn.fanzy.breeze.sqltoy.core.plugins.UnifyFieldsHandler;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class BreezeUnifyFieldsHandler implements IUnifyFieldsHandler {
+public class BreezeUnifyFieldsHandler implements UnifyFieldsHandler {
     @Override
     public Map<String, Object> createUnifyFields() {
         Map<String, Object> map = new HashMap<>();

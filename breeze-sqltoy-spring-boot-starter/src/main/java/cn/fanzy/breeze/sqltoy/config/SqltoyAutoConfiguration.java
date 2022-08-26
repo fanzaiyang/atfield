@@ -1,38 +1,47 @@
 package cn.fanzy.breeze.sqltoy.config;
 
-import org.sagacity.sqltoy.SqlToyContext;
-import org.sagacity.sqltoy.dao.SqlToyLazyDao;
-import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
-import org.sagacity.sqltoy.integration.ConnectionFactory;
-import org.sagacity.sqltoy.integration.impl.SpringAppContext;
-import org.sagacity.sqltoy.integration.impl.SpringConnectionFactory;
-import org.sagacity.sqltoy.model.DataAuthFilterConfig;
-import org.sagacity.sqltoy.model.IgnoreCaseSet;
-import org.sagacity.sqltoy.model.IgnoreKeyCaseMap;
-import org.sagacity.sqltoy.plugins.FilterHandler;
-import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
-import org.sagacity.sqltoy.plugins.OverTimeSqlHandler;
-import org.sagacity.sqltoy.plugins.TypeHandler;
-import org.sagacity.sqltoy.plugins.datasource.DataSourceSelector;
-import org.sagacity.sqltoy.plugins.secure.DesensitizeProvider;
-import org.sagacity.sqltoy.plugins.secure.FieldsSecureProvider;
-import org.sagacity.sqltoy.service.SqlToyCRUDService;
-import org.sagacity.sqltoy.service.impl.SqlToyCRUDServiceImpl;
-import org.sagacity.sqltoy.translate.cache.TranslateCacheManager;
-import org.sagacity.sqltoy.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import cn.fanzy.breeze.sqltoy.core.SqlToyContext;
+import cn.fanzy.breeze.sqltoy.core.config.EntityManager;
+import cn.fanzy.breeze.sqltoy.core.config.SqlScriptLoader;
+import cn.fanzy.breeze.sqltoy.core.dao.SqlToyLazyDao;
+import cn.fanzy.breeze.sqltoy.core.dao.impl.SqlToyLazyDaoImpl;
+import cn.fanzy.breeze.sqltoy.core.integration.AppContext;
+import cn.fanzy.breeze.sqltoy.core.integration.ConnectionFactory;
+import cn.fanzy.breeze.sqltoy.core.integration.DistributeIdGenerator;
+import cn.fanzy.breeze.sqltoy.core.integration.MongoQuery;
+import cn.fanzy.breeze.sqltoy.core.integration.impl.SpringAppContext;
+import cn.fanzy.breeze.sqltoy.core.integration.impl.SpringConnectionFactory;
+import cn.fanzy.breeze.sqltoy.core.integration.impl.SpringMongoQuery;
+import cn.fanzy.breeze.sqltoy.core.integration.impl.SpringRedisIdGenerator;
+import cn.fanzy.breeze.sqltoy.core.plugins.*;
+import cn.fanzy.breeze.sqltoy.core.plugins.datasource.DataSourceSelector;
+import cn.fanzy.breeze.sqltoy.core.plugins.datasource.impl.DefaultDataSourceSelector;
+import cn.fanzy.breeze.sqltoy.core.plugins.id.IdGenerator;
+import cn.fanzy.breeze.sqltoy.core.plugins.id.impl.*;
+import cn.fanzy.breeze.sqltoy.core.plugins.overtime.DefaultOverTimeHandler;
+import cn.fanzy.breeze.sqltoy.core.plugins.secure.DesensitizeProvider;
+import cn.fanzy.breeze.sqltoy.core.plugins.secure.FieldsSecureProvider;
+import cn.fanzy.breeze.sqltoy.core.plugins.secure.impl.DesensitizeDefaultProvider;
+import cn.fanzy.breeze.sqltoy.core.plugins.secure.impl.FieldsRSASecureProvider;
+import cn.fanzy.breeze.sqltoy.core.service.SqlToyCRUDService;
+import cn.fanzy.breeze.sqltoy.core.service.impl.SqlToyCRUDServiceImpl;
+import cn.fanzy.breeze.sqltoy.core.translate.TranslateManager;
+import cn.fanzy.breeze.sqltoy.core.translate.cache.TranslateCacheManager;
+import cn.fanzy.breeze.sqltoy.core.translate.cache.impl.TranslateCaffeineManager;
+import cn.fanzy.breeze.sqltoy.core.translate.cache.impl.TranslateEhcacheManager;
+import cn.fanzy.breeze.sqltoy.core.utils.StringUtil;
+import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import static java.lang.System.err;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * @author wolf
@@ -41,252 +50,196 @@ import static java.lang.System.err;
  * @modify {Date:2020-2-20,完善配置支持es等,实现完整功能}
  */
 @Configuration
+@AllArgsConstructor
 @EnableConfigurationProperties(SqlToyContextProperties.class)
 public class SqltoyAutoConfiguration {
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final SqlToyContextProperties properties;
 
-    @Autowired
-    private SqlToyContextProperties properties;
+    @Bean
+    @ConditionalOnMissingBean
+    public AppContext appContext(ApplicationContext applicationContext) {
+        return new SpringAppContext(applicationContext);
+    }
 
-    // 增加一个辅助校验,避免不少新用户将spring.sqltoy开头写成sqltoy.开头
-    @Value("${sqltoy.sqlResourcesDir:}")
-    private String sqlResourcesDir;
+    /**
+     * sqlToy 配置解析插件
+     *
+     * @return {@link SqlScriptLoader}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public SqlScriptLoader scriptLoader() {
+        return new SqlScriptLoader();
+    }
 
-    // 构建sqltoy上下文,并指定初始化方法和销毁方法
+    /**
+     * 实体对象管理器，加载实体bean
+     *
+     * @return {@link EntityManager}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public EntityManager entityManager() {
+        return new EntityManager();
+    }
+
+    /**
+     * sqltoy的翻译器插件(可以通过其完成对缓存的管理扩展)
+     *
+     * @return {@link TranslateManager}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public TranslateManager translateManager() {
+        return new TranslateManager(properties);
+    }
+
+    /**
+     * 统一字段处理程序
+     * <pre>统一公共字段赋值处理; 如修改时,为修改人和修改时间进行统一赋值; 创建时:为创建人、创建时间、修改人、修改时间进行统一赋值</pre>
+     *
+     * @return {@link UnifyFieldsHandler}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public UnifyFieldsHandler unifyFieldsHandler() {
+        return new DefaultUnifyFieldsHandler();
+    }
+
+    /**
+     * 基于ehcache缓存实现translate 提取缓存数据和存放缓存
+     *
+     * @return {@link TranslateCacheManager}
+     */
+    @Bean
+    @ConditionalOnClass(name = "org.ehcache.config.ResourceUnit")
+    @ConditionalOnProperty(prefix = "spring.sqltoy", name = "cacheType", havingValue = "ehcache", matchIfMissing = true)
+    @ConditionalOnMissingBean
+    public TranslateCacheManager translateEhcacheManager() {
+        return new TranslateEhcacheManager();
+    }
+
+    /**
+     * 提供基于Caffeine缓存实现
+     *
+     * @return {@link TranslateCacheManager}
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.sqltoy", name = "cacheType", havingValue = "caffeine")
+    @ConditionalOnMissingBean
+    public TranslateCacheManager translateCacheManager() {
+        return new TranslateCaffeineManager();
+    }
+
+    /**
+     * 执行超时sql自定义处理器
+     *
+     * @return {@link OverTimeSqlHandler}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public OverTimeSqlHandler overTimeSqlHandler() {
+        return new DefaultOverTimeHandler();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FilterHandler filterHandler() {
+        return new FilterHandler() {
+        };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public TypeHandler typeHandler() {
+        return new TypeHandler() {
+            @Override
+            public boolean setValue(PreparedStatement pst, int paramIndex, int jdbcType, Object value) throws SQLException {
+                return false;
+            }
+
+            @Override
+            public Object toJavaType(String javaTypeName, Class genericType, Object jdbcValue) throws Exception {
+                return null;
+            }
+        };
+    }
+
+    /**
+     * 字段加解密实现类，sqltoy提供了RSA的默认实现
+     *
+     * @return {@link FieldsSecureProvider}
+     * @throws Exception 异常
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public FieldsSecureProvider fieldsSecureProvider() throws Exception {
+        if (StringUtil.isBlank(properties.getSecurePrivateKey()) || StringUtil.isBlank(properties.getSecurePublicKey())) {
+            return null;
+        }
+        return new FieldsRSASecureProvider(properties);
+    }
+
+    /**
+     * 脱敏处理器
+     *
+     * @return {@link DesensitizeProvider}
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public DesensitizeProvider desensitizeProvider() {
+        return new DesensitizeDefaultProvider();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public ConnectionFactory connectionFactory() {
+        return new SpringConnectionFactory();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSourceSelector dataSourceSelector() {
+        return new DefaultDataSourceSelector();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DistributeIdGenerator distributeIdGenerator() {
+        return new SpringRedisIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MongoQuery mongoQuery() {
+        try {
+            Class.forName("org.springframework.data.mongodb.core.query.Query");
+            return new SpringMongoQuery();
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
     @Bean(name = "sqlToyContext", initMethod = "initialize", destroyMethod = "destroy")
     @ConditionalOnMissingBean
-    SqlToyContext sqlToyContext() throws Exception {
+    SqlToyContext sqlToyContext(SqlToyContextProperties properties, AppContext appContext, SqlScriptLoader scriptLoader, EntityManager entityManager,
+                                TranslateManager translateManager, FilterHandler filterHandler, OverTimeSqlHandler overTimeSqlHandler,
+                                TypeHandler typeHandler, FieldsSecureProvider fieldsSecureProvider, DesensitizeProvider desensitizeProvider,
+                                ConnectionFactory connectionFactory, DataSourceSelector dataSourceSelector, DistributeIdGenerator distributeIdGenerator,
+                                UnifyFieldsHandler unifyFieldsHandler, MongoQuery mongoQuery) throws Exception {
         // 用辅助配置来校验是否配置错误
-        if (StringUtil.isBlank(properties.getSqlResourcesDir()) && StringUtil.isNotBlank(sqlResourcesDir)) {
+        if (StringUtil.isBlank(properties.getSqlResourcesDir())) {
             throw new IllegalArgumentException(
                     "请检查sqltoy配置,是spring.sqltoy作为前缀,而不是sqltoy!\n正确范例: spring.sqltoy.sqlResourcesDir=classpath:com/sagframe/modules");
         }
-        SqlToyContext sqlToyContext = new SqlToyContext();
-
-        // --------5.2 变化的地方----------------------------------
-        // 注意appContext注入非常关键
-        SpringAppContext appContext = new SpringAppContext();
-        appContext.setContext(applicationContext);
-        sqlToyContext.setAppContext(appContext);
-
-        // 设置默认spring的connectFactory
-        sqlToyContext.setConnectionFactory(new SpringConnectionFactory());
-
-        // 分布式id产生器实现类
-        sqlToyContext.setDistributeIdGeneratorClass("org.sagacity.sqltoy.integration.impl.SpringRedisIdGenerator");
-
-        // 针对Caffeine缓存指定实现类型
-        sqlToyContext
-                .setTranslateCaffeineManagerClass("org.sagacity.sqltoy.translate.cache.impl.TranslateCaffeineManager");
-        // 注入spring的默认mongoQuery实现类
-        sqlToyContext.setMongoQueryClass("org.sagacity.sqltoy.integration.impl.SpringMongoQuery");
-        // --------end 5.2 -----------------------------------------
-
-        // 当发现有重复sqlId时是否抛出异常，终止程序执行
-        sqlToyContext.setBreakWhenSqlRepeat(properties.isBreakWhenSqlRepeat());
-        // sql 文件资源路径
-        sqlToyContext.setSqlResourcesDir(properties.getSqlResourcesDir());
-        if (properties.getSqlResources() != null && properties.getSqlResources().length > 0) {
-            List<String> resList = new ArrayList<String>();
-            for (String prop : properties.getSqlResources()) {
-                resList.add(prop);
-            }
-            sqlToyContext.setSqlResources(resList);
-        }
-        // sql文件解析的编码格式,默认utf-8
-        if (properties.getEncoding() != null) {
-            sqlToyContext.setEncoding(properties.getEncoding());
-        }
-
-        // sqltoy 已经无需指定扫描pojo类,已经改为用的时候动态加载
-        // pojo 扫描路径,意义不存在
-        if (properties.getPackagesToScan() != null) {
-            sqlToyContext.setPackagesToScan(properties.getPackagesToScan());
-        }
-
-        // 特定pojo类加载，意义已经不存在
-        if (properties.getAnnotatedClasses() != null) {
-            sqlToyContext.setAnnotatedClasses(properties.getAnnotatedClasses());
-        }
-
-        // 批量操作时(saveAll、updateAll)，每批次数量,默认200
-        if (properties.getBatchSize() != null) {
-            sqlToyContext.setBatchSize(properties.getBatchSize());
-        }
-        // 默认数据库fetchSize
-        if (properties.getFetchSize() > 0) {
-            sqlToyContext.setFetchSize(properties.getFetchSize());
-        }
-        // 分页查询单页最大记录数量(默认50000)
-        if (properties.getPageFetchSizeLimit() != null) {
-            sqlToyContext.setPageFetchSizeLimit(properties.getPageFetchSizeLimit());
-        }
-
-        // sql 检测间隔时长(单位秒)
-        if (properties.getScriptCheckIntervalSeconds() != null) {
-            sqlToyContext.setScriptCheckIntervalSeconds(properties.getScriptCheckIntervalSeconds());
-        }
-
-        // 缓存、sql文件在初始化后延时多少秒开始检测
-        if (properties.getDelayCheckSeconds() != null) {
-            sqlToyContext.setDelayCheckSeconds(properties.getDelayCheckSeconds());
-        }
-
-        // 是否debug模式
-        if (properties.getDebug() != null) {
-            sqlToyContext.setDebug(properties.getDebug());
-        }
-
-        // sql执行超过多长时间则打印提醒(默认30秒)
-        if (properties.getPrintSqlTimeoutMillis() != null) {
-            sqlToyContext.setPrintSqlTimeoutMillis(properties.getPrintSqlTimeoutMillis());
-        }
+        SqlToyContext sqlToyContext = new SqlToyContext(properties, appContext, scriptLoader, entityManager,
+                translateManager, filterHandler, overTimeSqlHandler,
+                typeHandler, fieldsSecureProvider, desensitizeProvider, connectionFactory,
+                dataSourceSelector, new HashMap<>(), null, distributeIdGenerator, unifyFieldsHandler, mongoQuery);
 
         // sql函数转换器
         if (properties.getFunctionConverts() != null) {
             sqlToyContext.setFunctionConverts(properties.getFunctionConverts());
-        }
-
-        // 缓存翻译配置
-        if (properties.getTranslateConfig() != null) {
-            sqlToyContext.setTranslateConfig(properties.getTranslateConfig());
-        }
-
-        // 数据库保留字
-        if (properties.getReservedWords() != null) {
-            sqlToyContext.setReservedWords(properties.getReservedWords());
-        }
-
-        // 指定需要进行产品化跨数据库查询验证的数据库
-        if (properties.getRedoDataSources() != null) {
-            sqlToyContext.setRedoDataSources(properties.getRedoDataSources());
-        }
-        // 数据库方言
-        sqlToyContext.setDialect(properties.getDialect());
-        // sqltoy内置参数默认值修改
-        sqlToyContext.setDialectConfig(properties.getDialectConfig());
-
-        // update 2021-01-18 设置缓存类别,默认ehcache
-        sqlToyContext.setCacheType(properties.getCacheType());
-
-        // getMetaData().getColumnLabel(i) 结果做大小写处理策略
-        if (null != properties.getColumnLabelUpperOrLower()) {
-            sqlToyContext.setColumnLabelUpperOrLower(properties.getColumnLabelUpperOrLower().toLowerCase());
-        }
-        sqlToyContext.setSecurePrivateKey(properties.getSecurePrivateKey());
-        sqlToyContext.setSecurePublicKey(properties.getSecurePublicKey());
-        // 设置公共统一属性的处理器
-        try {
-            sqlToyContext.setUnifyFieldsHandler(appContext.getBean(IUnifyFieldsHandler.class));
-        } catch (Exception e) {
-        }
-
-        // 设置默认数据库
-        if (properties.getDefaultDataSource() != null) {
-            sqlToyContext.setDefaultDataSourceName(properties.getDefaultDataSource());
-        }
-
-        // 自定义缓存实现管理器
-        String translateCacheManager = properties.getTranslateCacheManager();
-        if (StringUtil.isNotBlank(translateCacheManager)) {
-            // 缓存管理器的bean名称
-            if (applicationContext.containsBean(translateCacheManager)) {
-                sqlToyContext.setTranslateCacheManager(
-                        (TranslateCacheManager) applicationContext.getBean(translateCacheManager));
-            } // 包名和类名称
-            else if (translateCacheManager.contains(".")) {
-                sqlToyContext.setTranslateCacheManager((TranslateCacheManager) Class.forName(translateCacheManager)
-                        .getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义typeHandler
-        String typeHandler = properties.getTypeHandler();
-        if (StringUtil.isNotBlank(typeHandler)) {
-            if (applicationContext.containsBean(typeHandler)) {
-                sqlToyContext.setTypeHandler((TypeHandler) applicationContext.getBean(typeHandler));
-            } // 包名和类名称
-            else if (typeHandler.contains(".")) {
-                sqlToyContext.setTypeHandler(
-                        (TypeHandler) Class.forName(typeHandler).getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义数据源选择器
-        String dataSourceSelector = properties.getDataSourceSelector();
-        if (StringUtil.isNotBlank(dataSourceSelector)) {
-            if (applicationContext.containsBean(dataSourceSelector)) {
-                sqlToyContext
-                        .setDataSourceSelector((DataSourceSelector) applicationContext.getBean(dataSourceSelector));
-            } // 包名和类名称
-            else if (dataSourceSelector.contains(".")) {
-                sqlToyContext.setDataSourceSelector(
-                        (DataSourceSelector) Class.forName(dataSourceSelector).getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义数据库连接获取和释放的接口实现
-        String connectionFactory = properties.getConnectionFactory();
-        if (StringUtil.isNotBlank(connectionFactory)) {
-            if (applicationContext.containsBean(connectionFactory)) {
-                sqlToyContext.setConnectionFactory((ConnectionFactory) applicationContext.getBean(connectionFactory));
-            } // 包名和类名称
-            else if (connectionFactory.contains(".")) {
-                sqlToyContext.setConnectionFactory(
-                        (ConnectionFactory) Class.forName(connectionFactory).getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义字段安全实现器
-        String fieldsSecureProvider = properties.getFieldsSecureProvider();
-        if (StringUtil.isNotBlank(fieldsSecureProvider)) {
-            if (applicationContext.containsBean(fieldsSecureProvider)) {
-                sqlToyContext.setFieldsSecureProvider(
-                        (FieldsSecureProvider) applicationContext.getBean(fieldsSecureProvider));
-            } // 包名和类名称
-            else if (fieldsSecureProvider.contains(".")) {
-                sqlToyContext.setFieldsSecureProvider((FieldsSecureProvider) Class.forName(fieldsSecureProvider)
-                        .getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义字段脱敏处理器
-        String desensitizeProvider = properties.getDesensitizeProvider();
-        if (StringUtil.isNotBlank(desensitizeProvider)) {
-            if (applicationContext.containsBean(desensitizeProvider)) {
-                sqlToyContext
-                        .setDesensitizeProvider((DesensitizeProvider) applicationContext.getBean(desensitizeProvider));
-            } // 包名和类名称
-            else if (desensitizeProvider.contains(".")) {
-                sqlToyContext.setDesensitizeProvider((DesensitizeProvider) Class.forName(desensitizeProvider)
-                        .getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义sql中filter处理器
-        String customFilterHandler = properties.getCustomFilterHandler();
-        if (StringUtil.isNotBlank(customFilterHandler)) {
-            if (applicationContext.containsBean(customFilterHandler)) {
-                sqlToyContext.setCustomFilterHandler((FilterHandler) applicationContext.getBean(customFilterHandler));
-            } // 包名和类名称
-            else if (customFilterHandler.contains(".")) {
-                sqlToyContext.setCustomFilterHandler(
-                        (FilterHandler) Class.forName(customFilterHandler).getDeclaredConstructor().newInstance());
-            }
-        }
-
-        // 自定义sql执行超时处理器
-        String overTimeSqlHandler = properties.getOverTimeSqlHandler();
-        if (StringUtil.isNotBlank(overTimeSqlHandler)) {
-            if (applicationContext.containsBean(overTimeSqlHandler)) {
-                sqlToyContext
-                        .setOverTimeSqlHandler((OverTimeSqlHandler) applicationContext.getBean(overTimeSqlHandler));
-            } // 包名和类名称
-            else if (customFilterHandler.contains(".")) {
-                sqlToyContext.setOverTimeSqlHandler(
-                        (OverTimeSqlHandler) Class.forName(overTimeSqlHandler).getDeclaredConstructor().newInstance());
-            }
         }
         return sqlToyContext;
     }
@@ -317,10 +270,34 @@ public class SqltoyAutoConfiguration {
         return sqlToyCRUDService;
     }
 
+
     @Bean
     @ConditionalOnMissingBean
-    IUnifyFieldsHandler unifyFieldsHandler() {
-        return new IUnifyFieldsHandler() {
-        };
+    public DefaultIdGenerator defaultIdGenerator() {
+        return new DefaultIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public NanoTimeIdGenerator nanoTimeIdGenerator() {
+        return new NanoTimeIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisIdGenerator redisIdGenerator() {
+        return new RedisIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SnowflakeIdGenerator snowflakeIdGenerator() {
+        return new SnowflakeIdGenerator();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public UUIDGenerator uUIDGenerator() {
+        return new UUIDGenerator();
     }
 }

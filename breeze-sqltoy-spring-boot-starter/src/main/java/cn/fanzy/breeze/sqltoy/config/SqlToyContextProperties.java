@@ -3,12 +3,16 @@ package cn.fanzy.breeze.sqltoy.config;
 import java.io.Serializable;
 import java.util.Map;
 
+import cn.fanzy.breeze.sqltoy.core.enums.CacheType;
+import cn.hutool.core.lang.Snowflake;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author zhongxuchen
  * @version v1.0, Date:2020年2月20日
  */
+@Data
 @ConfigurationProperties(prefix = "spring.sqltoy")
 public class SqlToyContextProperties implements Serializable {
 
@@ -58,19 +62,14 @@ public class SqlToyContextProperties implements Serializable {
     private String[] redoDataSources;
 
     /**
-     * es的配置
-     */
-    private Elastic elastic;
-
-    /**
      * 是否开启debug模式(默认为false)
      */
-    private Boolean debug;
+    private boolean debug=false;
 
     /**
      * 批量操作，每批次数量,默认200
      */
-    private Integer batchSize;
+    private Integer batchSize=200;
 
     /**
      * 默认查询数据库端提取记录量,一般无需设置
@@ -80,12 +79,12 @@ public class SqlToyContextProperties implements Serializable {
     /**
      * 分页最大单页数据量(默认是5万)
      */
-    private Integer pageFetchSizeLimit;
+    private Integer pageFetchSizeLimit=50000;
 
     /**
      * 超时打印sql(毫秒,默认30秒)
      */
-    private Integer printSqlTimeoutMillis;
+    private Integer printSqlTimeoutMillis=30000;
 
     /**
      * sql文件脚本变更检测间隔时长(秒)
@@ -95,9 +94,9 @@ public class SqlToyContextProperties implements Serializable {
     /**
      * 缓存更新、sql脚本更新 延迟多少秒开始检测
      */
-    private Integer delayCheckSeconds;
+    private Integer delayCheckSeconds=30;
 
-    private String encoding;
+    private String encoding="UTF-8";
 
     /**
      * 统一字段处理器,实现IUnifyFieldsHandler接口
@@ -118,7 +117,7 @@ public class SqlToyContextProperties implements Serializable {
     /**
      * 数据库保留字,用逗号分隔
      */
-    private String reservedWords;
+    private String[] reservedWords;
 
     /**
      * 缓存管理器
@@ -138,7 +137,7 @@ public class SqlToyContextProperties implements Serializable {
     /**
      * 缓存类型，默认ehcache，可选caffeine
      */
-    private String cacheType = "ehcache";
+    private CacheType cacheType = CacheType.ehcache;
 
     /**
      * 当发现有重复sqlId时是否抛出异常，终止程序执行
@@ -186,352 +185,35 @@ public class SqlToyContextProperties implements Serializable {
     private String columnLabelUpperOrLower = "default";
 
     /**
-     * @return the sqlResourcesDir
+     * snowflake参数,如不设置框架自动以本机IP来获取
      */
-    public String getSqlResourcesDir() {
-        return sqlResourcesDir;
+    private Snowflake snowflake=new Snowflake();
+
+
+    @Data
+    public static class Snowflake{
+        /**
+         * snowflake 集群节点id<31
+         */
+        private Integer workerId;
+
+        /**
+         * 数据中心id<31
+         */
+        private Integer dataCenterId;
+        /**
+         * 服务器id(3位数字)，用于22位和26位主键生成，不设置会自动根据本机IP生成
+         */
+        private Integer serverId;
     }
 
-    /**
-     * @param sqlResourcesDir the sqlResourcesDir to set
-     */
-    public void setSqlResourcesDir(String sqlResourcesDir) {
-        this.sqlResourcesDir = sqlResourcesDir;
-    }
 
-    /**
-     * @return the translateConfig
-     */
-    public String getTranslateConfig() {
-        return translateConfig;
-    }
 
-    /**
-     * @param translateConfig the translateConfig to set
-     */
-    public void setTranslateConfig(String translateConfig) {
-        this.translateConfig = translateConfig;
-    }
-
-    public Boolean getDebug() {
-        return debug;
-    }
-
-    public void setDebug(Boolean debug) {
-        this.debug = debug;
-    }
-
-    /**
-     * @return the batchSize
-     */
-    public Integer getBatchSize() {
-        return batchSize;
-    }
-
-    /**
-     * @param batchSize the batchSize to set
-     */
-    public void setBatchSize(Integer batchSize) {
-        this.batchSize = batchSize;
-    }
-
-    public Object getFunctionConverts() {
-        return functionConverts;
-    }
-
-    /**
-     * functionConverts=close 表示关闭
-     *
-     * @param functionConverts
-     */
-    public void setFunctionConverts(Object functionConverts) {
-        this.functionConverts = functionConverts;
-    }
-
-    /**
-     * @return the packagesToScan
-     */
-    public String[] getPackagesToScan() {
-        return packagesToScan;
-    }
-
-    /**
-     * @param packagesToScan the packagesToScan to set
-     */
-    public void setPackagesToScan(String[] packagesToScan) {
-        this.packagesToScan = packagesToScan;
-    }
-
-    /**
-     * @return the unifyFieldsHandler
-     */
-    public String getUnifyFieldsHandler() {
-        return this.unifyFieldsHandler;
-    }
-
-    /**
-     * @param unifyFieldsHandler the unifyFieldsHandler to set
-     */
-    public void setUnifyFieldsHandler(String unifyFieldsHandler) {
-        this.unifyFieldsHandler = unifyFieldsHandler;
-    }
-
-    public Elastic getElastic() {
-        return elastic;
-    }
-
-    public void setElastic(Elastic elastic) {
-        this.elastic = elastic;
-    }
-
-    public String getDialect() {
-        return dialect;
-    }
-
-    public void setDialect(String dialect) {
-        this.dialect = dialect;
-    }
-
-    public Map<String, String> getDialectConfig() {
-        return dialectConfig;
-    }
-
-    public void setDialectConfig(Map<String, String> dialectConfig) {
-        this.dialectConfig = dialectConfig;
-    }
-
-    public Integer getPageFetchSizeLimit() {
-        return pageFetchSizeLimit;
-    }
-
-    public void setPageFetchSizeLimit(Integer pageFetchSizeLimit) {
-        this.pageFetchSizeLimit = pageFetchSizeLimit;
-    }
-
-    public String[] getAnnotatedClasses() {
-        return annotatedClasses;
-    }
-
-    public void setAnnotatedClasses(String[] annotatedClasses) {
-        this.annotatedClasses = annotatedClasses;
-    }
-
-    public String getEncoding() {
-        return encoding;
-    }
-
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    public Integer getPrintSqlTimeoutMillis() {
-        return printSqlTimeoutMillis;
-    }
-
-    public void setPrintSqlTimeoutMillis(Integer printSqlTimeoutMillis) {
-        this.printSqlTimeoutMillis = printSqlTimeoutMillis;
-    }
 
     public Integer getScriptCheckIntervalSeconds() {
-        return scriptCheckIntervalSeconds;
+        if(scriptCheckIntervalSeconds!=null){
+            return scriptCheckIntervalSeconds;
+        }
+        return debug?3:15;
     }
-
-    public void setScriptCheckIntervalSeconds(Integer scriptCheckIntervalSeconds) {
-        this.scriptCheckIntervalSeconds = scriptCheckIntervalSeconds;
-    }
-
-    public Integer getDelayCheckSeconds() {
-        return delayCheckSeconds;
-    }
-
-    public void setDelayCheckSeconds(Integer delayCheckSeconds) {
-        this.delayCheckSeconds = delayCheckSeconds;
-    }
-
-    public String[] getSqlResources() {
-        return sqlResources;
-    }
-
-    public void setSqlResources(String[] sqlResources) {
-        this.sqlResources = sqlResources;
-    }
-
-    public String getDefaultDataSource() {
-        return defaultDataSource;
-    }
-
-    public void setDefaultDataSource(String defaultDataSource) {
-        this.defaultDataSource = defaultDataSource;
-    }
-
-    /**
-     * @return the reservedWords
-     */
-    public String getReservedWords() {
-        return reservedWords;
-    }
-
-    /**
-     * @param reservedWords the reservedWords to set
-     */
-    public void setReservedWords(String reservedWords) {
-        this.reservedWords = reservedWords;
-    }
-
-    /**
-     * @return the translateCacheManager
-     */
-    public String getTranslateCacheManager() {
-        return translateCacheManager;
-    }
-
-    /**
-     * @param translateCacheManager the translateCacheManager to set
-     */
-    public void setTranslateCacheManager(String translateCacheManager) {
-        this.translateCacheManager = translateCacheManager;
-    }
-
-    /**
-     * @return the typeHandler
-     */
-    public String getTypeHandler() {
-        return typeHandler;
-    }
-
-    /**
-     * @param typeHandler the typeHandler to set
-     */
-    public void setTypeHandler(String typeHandler) {
-        this.typeHandler = typeHandler;
-    }
-
-    /**
-     * @return the cacheType
-     */
-    public String getCacheType() {
-        return cacheType;
-    }
-
-    /**
-     * @param cacheType the cacheType to set
-     */
-    public void setCacheType(String cacheType) {
-        this.cacheType = cacheType;
-    }
-
-    /**
-     * @return the dataSourceSelector
-     */
-    public String getDataSourceSelector() {
-        return dataSourceSelector;
-    }
-
-    /**
-     * @param dataSourceSelector the dataSourceSelector to set
-     */
-    public void setDataSourceSelector(String dataSourceSelector) {
-        this.dataSourceSelector = dataSourceSelector;
-    }
-
-    /**
-     * @return the fetchSize
-     */
-    public int getFetchSize() {
-        return fetchSize;
-    }
-
-    /**
-     * @param fetchSize the fetchSize to set
-     */
-    public void setFetchSize(int fetchSize) {
-        this.fetchSize = fetchSize;
-    }
-
-    public void setConnectionFactory(String connectionFactory) {
-        this.connectionFactory = connectionFactory;
-    }
-
-    public String getConnectionFactory() {
-        return connectionFactory;
-    }
-
-    /**
-     * @return the breakWhenSqlRepeat
-     */
-    public boolean isBreakWhenSqlRepeat() {
-        return breakWhenSqlRepeat;
-    }
-
-    /**
-     * @param breakWhenSqlRepeat the breakWhenSqlRepeat to set
-     */
-    public void setBreakWhenSqlRepeat(boolean breakWhenSqlRepeat) {
-        this.breakWhenSqlRepeat = breakWhenSqlRepeat;
-    }
-
-    public String getSecurePrivateKey() {
-        return securePrivateKey;
-    }
-
-    public void setSecurePrivateKey(String securePrivateKey) {
-        this.securePrivateKey = securePrivateKey;
-    }
-
-    public String getSecurePublicKey() {
-        return securePublicKey;
-    }
-
-    public void setSecurePublicKey(String securePublicKey) {
-        this.securePublicKey = securePublicKey;
-    }
-
-    public String getFieldsSecureProvider() {
-        return fieldsSecureProvider;
-    }
-
-    public void setFieldsSecureProvider(String fieldsSecureProvider) {
-        this.fieldsSecureProvider = fieldsSecureProvider;
-    }
-
-    public String getDesensitizeProvider() {
-        return desensitizeProvider;
-    }
-
-    public void setDesensitizeProvider(String desensitizeProvider) {
-        this.desensitizeProvider = desensitizeProvider;
-    }
-
-    public String getCustomFilterHandler() {
-        return customFilterHandler;
-    }
-
-    public void setCustomFilterHandler(String customFilterHandler) {
-        this.customFilterHandler = customFilterHandler;
-    }
-
-    public String getOverTimeSqlHandler() {
-        return overTimeSqlHandler;
-    }
-
-    public void setOverTimeSqlHandler(String overTimeSqlHandler) {
-        this.overTimeSqlHandler = overTimeSqlHandler;
-    }
-
-    public String getColumnLabelUpperOrLower() {
-        return columnLabelUpperOrLower;
-    }
-
-    public void setColumnLabelUpperOrLower(String columnLabelUpperOrLower) {
-        this.columnLabelUpperOrLower = columnLabelUpperOrLower;
-    }
-
-    public String[] getRedoDataSources() {
-        return redoDataSources;
-    }
-
-    public void setRedoDataSources(String[] redoDataSources) {
-        this.redoDataSources = redoDataSources;
-    }
-
 }

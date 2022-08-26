@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "yf.wechat.mp")
+@ConfigurationProperties(prefix = "breeze.wechat.mp")
 public class WxMpProperties {
     /**
      * 应用程序配置集合

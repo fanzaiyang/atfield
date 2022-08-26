@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "yf.wechat.cp")
+@ConfigurationProperties(prefix = "breeze.wechat.cp")
 public class WxCpProperties {
     /**
      * 设置企业微信的corpId

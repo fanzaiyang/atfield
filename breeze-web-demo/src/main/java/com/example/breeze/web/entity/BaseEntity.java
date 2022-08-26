@@ -1,7 +1,7 @@
 package com.example.breeze.web.entity;
 
 import lombok.Data;
-import org.sagacity.sqltoy.config.annotation.Column;
+import cn.fanzy.breeze.sqltoy.core.config.annotation.Column;
 
 import java.io.Serializable;
 import java.sql.Types;

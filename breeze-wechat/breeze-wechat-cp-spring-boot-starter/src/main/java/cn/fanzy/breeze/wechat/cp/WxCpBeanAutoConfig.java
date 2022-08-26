@@ -16,24 +16,24 @@ public class WxCpBeanAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpLogHandler logHandler() {
+    public WxCpLogHandler wxCpLogHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("接收到请求消息，内容：{}", JSONUtil.toJsonStr(wxMessage));
+            log.info("WxCpLogHandler接收到请求消息，内容：{}", JSONUtil.toJsonStr(wxMessage));
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpNullHandler nullHandler() {
+    public WxCpNullHandler wxCpNullHandler() {
         return (wxMessage, context, cpService, sessionManager) -> null;
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpLocationHandler locationHandler() {
+    public WxCpLocationHandler wxCpLocationHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("上报地理位置，纬度 : {}\n经度 : {}\n精度 : {}",
+            log.info("WxCpLocationHandler上报地理位置，纬度 : {}\n经度 : {}\n精度 : {}",
                     wxMessage.getLatitude(), wxMessage.getLongitude(), String.valueOf(wxMessage.getPrecision()));
             return null;
         };
@@ -41,54 +41,54 @@ public class WxCpBeanAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpMenuHandler menuHandler() {
+    public WxCpMenuHandler wxCpMenuHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("菜单，{}", wxMessage.toString());
+            log.info("WxCpMenuHandler菜单，{}", wxMessage.toString());
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpMsgHandler msgHandler() {
+    public WxCpMsgHandler wxCpMsgHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("收到消息，{}", wxMessage.toString());
+            log.info("WxCpMsgHandler收到消息，{}", wxMessage.toString());
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpUnsubscribeHandler unsubscribeHandler() {
+    public WxCpUnsubscribeHandler wxCpUnsubscribeHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("取消关注用户 OPENID: " + wxMessage.getFromUserName());
+            log.info("WxCpUnsubscribeHandler取消关注用户 OPENID: " + wxMessage.getFromUserName());
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpSubscribeHandler subscribeHandler() {
+    public WxCpSubscribeHandler wxCpSubscribeHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("感谢关注 OPENID: " + wxMessage.getFromUserName());
+            log.info("WxCpSubscribeHandler感谢关注 OPENID: " + wxMessage.getFromUserName());
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpEnterAgentHandler enterAgentHandler() {
+    public WxCpEnterAgentHandler wxCpEnterAgentHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("输入代理处理程序 " + wxMessage.getFromUserName());
+            log.info("WxCpEnterAgentHandler输入代理处理程序 " + wxMessage.getFromUserName());
             return null;
         };
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public WxCpContactChangeHandler contactChangeHandler() {
+    public WxCpContactChangeHandler wxCpContactChangeHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
-            log.info("ContactChangeHandler " + wxMessage.getFromUserName());
+            log.info("WxCpContactChangeHandler " + wxMessage.getFromUserName());
             return null;
         };
     }
