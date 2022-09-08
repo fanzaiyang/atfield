@@ -52,5 +52,6 @@ class BreezeSqltoyTests {
         Long ids = sqlToyLazyDao.deleteByIds(User.class, "1661308277350000001313","1661308669488000001313");
         // 打印结果,受影响的行数。
         System.out.println(ids);
+        String id="22365235959";
     }
 }

@@ -17,6 +17,9 @@ breeze:
   web:
     code:
       enable: true
+  auth:
+    route:
+      enable: true
 logging:
   level:
     com.example.breeze.web: debug
