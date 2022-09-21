@@ -31,7 +31,7 @@ public final class LocalScheduledStorage {
     /**
      * 缓存
      */
-    private static final Map<String, Node> cacheMap = new ConcurrentHashMap<>(1024);
+    private static Map<String, Node> cacheMap = new ConcurrentHashMap<>(1024);
 
     private ReentrantLock lock = new ReentrantLock();
     /**
@@ -100,7 +100,6 @@ public final class LocalScheduledStorage {
      */
     public synchronized static void remove(String key) {
         Assert.notNull(key, "key值不能为空");
-        cacheMap.put(key, null);
         cacheMap.remove(key);
     }
 

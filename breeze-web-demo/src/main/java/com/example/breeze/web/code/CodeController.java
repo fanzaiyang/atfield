@@ -33,9 +33,10 @@ public class CodeController {
         log.info(code.getCode());
         return JsonContent.success(code.getImageBase64());
     }
-    @BreezeCodeChecker(BreezeCodeType.IMAGE)
+    @BreezeCodeChecker(value = BreezeCodeType.IMAGE)
     @GetMapping("/image/valid")
     public JsonContent<String> imageValid(HttpServletRequest request,String clientId,String code) {
+        processor.validate(new ServletWebRequest(request,null),BreezeCodeType.IMAGE);
         return JsonContent.success();
     }
 }

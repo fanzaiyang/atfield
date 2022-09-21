@@ -153,11 +153,11 @@ public class BreezeCodeProperties {
     @Data
     public static class ImageCodeProperties {
         /**
-         * 从请求中获取邮件验证码的邮箱的参数，默认值为 email
+         * 从请求中获取图形验证码的客户端的参数，默认值为 image
          */
         protected String codeKey = "image";
         /**
-         * 请求中获取邮件验证码对应的值的参数，默认值为 imageCode
+         * 请求中获取图形验证码对应的值的参数，默认值为 imageCode
          */
         protected String codeValue = "code";
         /**

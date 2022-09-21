@@ -19,9 +19,9 @@ import java.lang.annotation.*;
 public @interface BreezeCodeChecker {
 
     /**
-     * 执行验证码类型CodeType
+     * 执行验证码类型CodeType,默认图形验证码
      *
      * @return {@link BreezeCodeType}
      */
-    BreezeCodeType value();
+    BreezeCodeType value() default BreezeCodeType.IMAGE;
 }
