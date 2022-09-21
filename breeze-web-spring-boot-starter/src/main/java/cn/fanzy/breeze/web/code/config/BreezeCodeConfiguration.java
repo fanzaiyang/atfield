@@ -16,7 +16,7 @@ import cn.fanzy.breeze.web.code.repository.impl.BreezeSimpleCodeRepository;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeImageCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
-import cn.fanzy.breeze.web.redis.BreezeRedisCoreConfiguration;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -25,7 +25,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -39,11 +38,14 @@ import java.util.Map;
  * @date 2021/09/07
  */
 @Slf4j
+@AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties({BreezeCodeProperties.class})
-@AutoConfigureAfter(value = {BreezeCacheConfiguration.class, BreezeRedisCoreConfiguration.class})
+@AutoConfigureAfter(value = {BreezeCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
 public class BreezeCodeConfiguration {
+
+    private final BreezeCodeProperties properties;
 
     /**
      * 注入一个名为codeRepository的验证码存储器
@@ -52,8 +54,8 @@ public class BreezeCodeConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(BreezeCodeRepository.class)
-    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService, BreezeCodeProperties properties) {
-        return new BreezeSimpleCodeRepository(properties,breezeCacheService);
+    public BreezeCodeRepository repository(BreezeCacheService breezeCacheService) {
+        return new BreezeSimpleCodeRepository(properties, breezeCacheService);
     }
 
     /**
@@ -119,14 +121,14 @@ public class BreezeCodeConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean({BreezeCodeProcessor.class})
-    public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators, Map<String, BreezeCodeSender> codeSenders,
-                                             BreezeCodeProperties codeProperties, BreezeCodeRepository repository) {
-        return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository, codeProperties);
+    public BreezeCodeProcessor codeProcessor(Map<String, BreezeCodeGenerator> codeGenerators, Map<String, BreezeCodeSender> codeSenders,BreezeCodeRepository repository) {
+        return new BreezeCodeDefaultProcessor(codeGenerators, codeSenders, repository, properties);
     }
 
     @Bean
-    public BreezeCodeCheckAop breezeCodeCheckAop(BreezeCodeProperties codeProperties, BreezeCodeProcessor codeProcessor, HttpServletRequest request) {
-        return new BreezeCodeCheckAop(codeProperties, codeProcessor,request);
+    @ConditionalOnMissingBean({BreezeCodeCheckAop.class})
+    public BreezeCodeCheckAop breezeCodeCheckAop(BreezeCodeProcessor codeProcessor, HttpServletRequest request) {
+        return new BreezeCodeCheckAop(properties, codeProcessor, request);
     }
 
     /**

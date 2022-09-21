@@ -32,6 +32,7 @@
         <hutool.version>5.8.6</hutool.version>
         <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
         <spring-cloud.version>2021.0.4</spring-cloud.version>
+        <spring-boot.version>2.6.11</spring-boot.version>
         <spring-boot-admin.version>2.6.9</spring-boot-admin.version>
     </properties>
     <dependencyManagement>

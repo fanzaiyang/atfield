@@ -7,14 +7,20 @@ import cn.fanzy.breeze.web.cache.service.impl.BreezeMemoryCacheService;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 
 import java.util.Map;
 
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @AllArgsConstructor
 @AutoConfigureBefore(BreezeCodeConfiguration.class)
@@ -33,6 +39,7 @@ public class BreezeCacheConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(name = "breezeMemoryCacheService")
     public BreezeCacheService breezeMemoryCacheService() {
         log.info("「微风组件」开启 <全局缓存Memory> 相关的配置。");
         return new BreezeMemoryCacheService();

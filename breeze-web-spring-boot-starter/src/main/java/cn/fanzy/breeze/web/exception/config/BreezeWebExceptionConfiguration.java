@@ -40,7 +40,6 @@ import java.sql.SQLSyntaxErrorException;
  * @date 2022-08-18
  */
 @Slf4j
-@Order()
 @Configuration(proxyBeanMethods = false)
 @RestControllerAdvice
 @EnableConfigurationProperties({BreezeWebExceptionProperties.class})
@@ -264,7 +263,7 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(IllegalStateException.class)
     public Object handleIllegalStateException(HttpServletRequest request, IllegalStateException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<Object> response = JsonContent.error(e.getMessage());
+        JsonContent<Object> response = JsonContent.error(HttpStatus.BAD_REQUEST.value(),e.getMessage());
         log.error(StrUtil.format("「微风组件」请求{}，请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -342,7 +341,7 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(RuntimeException.class)
     public Object handleRuntimeException(HttpServletRequest request, RuntimeException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<Object> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
         return response;
     }

@@ -1,6 +1,7 @@
 package com.example.breeze.web.auth;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.fanzy.breeze.web.ip.annotation.BreezeIpCheck;
 import cn.fanzy.breeze.web.model.JsonContent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 
-    @SaCheckLogin
+    /**
+     * 使用配置文件中配置的IP
+     * @return
+     */
+    @BreezeIpCheck
     @GetMapping("/user")
     public JsonContent<Object> getUser() {
+        return JsonContent.success("登录认证：只有登录之后才能进入该方法");
+    }
+
+    /**
+     * 使用注解中配置的IP
+     * @return
+     */
+    @BreezeIpCheck(handler = CustomIpCheckHandler.class)
+    @GetMapping("/user/2")
+    public JsonContent<Object> getUser2() {
         return JsonContent.success("登录认证：只有登录之后才能进入该方法");
     }
 }

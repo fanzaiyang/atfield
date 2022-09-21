@@ -31,10 +31,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 @AutoConfigureBefore(BreezeCodeConfiguration.class)
 @AutoConfigureAfter(BreezeRedisCoreConfiguration.class)
 @EnableConfigurationProperties(BreezeCacheProperties.class)
+@ConditionalOnBean(RedisTemplate.class)
 public class BreezeRedisCacheConfiguration {
-
     @Bean
-    @ConditionalOnBean(RedisTemplate.class)
+    @ConditionalOnBean(name = "breezeRedisCacheService")
     public BreezeCacheService breezeRedisCacheService(RedisTemplate<String, Object> redisTemplate) {
         log.info("「微风组件」开启 <全局缓存Redis> 相关的配置。");
         return new BreezeRedisCacheService(redisTemplate);

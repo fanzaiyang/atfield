@@ -25,6 +25,8 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
     private final BreezeCodeProperties properties;
 
     private final BreezeCacheService breezeCacheService;
+
+
     /**
      * 存储验证码
      *
