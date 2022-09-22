@@ -81,14 +81,15 @@ public class SpringUtils extends SpringUtil {
         }
         return false;
     }
+
     /**
      * 获取系统进程PID
      */
-    public static int getCurrentProcessId () {
-        try{
+    public static int getCurrentProcessId() {
+        try {
             RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
             return Integer.valueOf(runtimeMXBean.getName().split("@")[0]);
-        }catch (Exception e){
+        } catch (Exception e) {
             return 000000;
         }
     }
