@@ -31,7 +31,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 @AutoConfigureBefore(BreezeCodeConfiguration.class)
 @AutoConfigureAfter(BreezeRedisCoreConfiguration.class)
 @EnableConfigurationProperties(BreezeCacheProperties.class)
-@ConditionalOnBean(RedisTemplate.class)
 public class BreezeRedisCacheConfiguration {
     @Bean
     @ConditionalOnBean(name = "breezeRedisCacheService")
