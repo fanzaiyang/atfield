@@ -4,6 +4,8 @@ package cn.fanzy.breeze.web.cache.service.impl;
 import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.hutool.core.lang.Assert;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.concurrent.TimeUnit;
@@ -15,13 +17,15 @@ import java.util.concurrent.TimeUnit;
  * @author fanzaiyang
  * @date 2021/09/07
  */
-@AllArgsConstructor
+@Slf4j
 public class BreezeRedisCacheService implements BreezeCacheService {
 
-    private final RedisTemplate<String,Object> redisTemplate;
+    @Autowired
+    private RedisTemplate<String,Object> redisTemplate;
 
     @Override
     public void save(String key, Object value, int expireSecond) {
+        log.debug("使用Redis缓存！");
         Assert.notBlank(key, "唯一标识不能为空！");
         Assert.notNull(value, "存储值不能为空！");
         redisTemplate.opsForValue().set(key, value, expireSecond, TimeUnit.SECONDS);
@@ -29,12 +33,14 @@ public class BreezeRedisCacheService implements BreezeCacheService {
 
     @Override
     public Object get(String key) {
+        log.debug("使用Redis缓存！");
         Assert.notBlank(key, "唯一标识不能为空！");
         return redisTemplate.opsForValue().get(key);
     }
 
     @Override
     public void remove(String key) {
+        log.debug("使用Redis缓存！");
         Assert.notBlank(key, "唯一标识不能为空！");
         redisTemplate.delete(key);
     }

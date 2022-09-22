@@ -19,8 +19,6 @@ import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -40,11 +38,10 @@ import java.time.Duration;
  * @date 2021/09/07
  */
 @Slf4j
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableCaching
 @ConditionalOnClass(RedisOperations.class)
-@AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class,BreezeCodeConfiguration.class})
+@AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class, BreezeCodeConfiguration.class})
 public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
     @Bean
     public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
@@ -90,7 +87,6 @@ public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
      * @return Redis操作工具
      */
     @Bean
-    @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);

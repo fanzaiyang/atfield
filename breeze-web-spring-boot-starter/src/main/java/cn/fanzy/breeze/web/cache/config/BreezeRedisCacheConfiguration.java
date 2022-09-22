@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import javax.annotation.PostConstruct;
+
 
 /**
  * 基于Redis的验证码存储器自动配置
@@ -26,16 +28,12 @@ import org.springframework.data.redis.core.RedisTemplate;
  */
 @Slf4j
 @Configuration
-@AllArgsConstructor
 @ConditionalOnClass(RedisOperations.class)
-@AutoConfigureBefore(BreezeCodeConfiguration.class)
-@AutoConfigureAfter(BreezeRedisCoreConfiguration.class)
-@EnableConfigurationProperties(BreezeCacheProperties.class)
+@AutoConfigureBefore(BreezeCacheConfiguration.class)
 public class BreezeRedisCacheConfiguration {
     @Bean
-    @ConditionalOnBean(name = "breezeRedisCacheService")
-    public BreezeCacheService breezeRedisCacheService(RedisTemplate<String, Object> redisTemplate) {
+    public BreezeRedisCacheService breezeRedisCacheService() {
         log.info("「微风组件」开启 <全局缓存Redis> 相关的配置。");
-        return new BreezeRedisCacheService(redisTemplate);
+        return new BreezeRedisCacheService();
     }
 }
