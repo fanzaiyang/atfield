@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.auth.config;
 
 import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaRouteFunction;
 import cn.fanzy.breeze.auth.function.BreezeDefaultRouteFunction;
@@ -35,7 +36,7 @@ public class BreezeAuthAnnotationConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaAnnotationInterceptor())
+        registry.addInterceptor(new SaInterceptor())
                 .addPathPatterns(properties.getRoute().getPathPatterns())
                 .excludePathPatterns(properties.getRoute().getExcludePathPatterns());
     }
