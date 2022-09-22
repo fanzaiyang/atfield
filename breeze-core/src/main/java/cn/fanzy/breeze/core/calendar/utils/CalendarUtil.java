@@ -15,10 +15,11 @@ import java.util.List;
  * <h1>日历工具类</h1>
  * <pre>
  *     建议添加缓存到你的内容或数据库中。
+ *     接口支持来自：<a href="http://www.apihubs.cn/#/holiday">接口坞</a>
  * </pre>
  *
  * @author fanzaiyang
- * @date 2021/09/22
+ * @date 2022/09/22
  */
 @Slf4j
 public class CalendarUtil {
