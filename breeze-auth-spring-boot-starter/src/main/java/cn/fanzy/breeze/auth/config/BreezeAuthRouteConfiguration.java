@@ -1,5 +1,7 @@
 package cn.fanzy.breeze.auth.config;
 
+import cn.dev33.satoken.fun.SaParamFunction;
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaRouteFunction;
 import cn.fanzy.breeze.auth.function.BreezeDefaultRouteFunction;
@@ -33,13 +35,13 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
 
     @Bean
     @ConditionalOnMissingBean(SaRouteFunction.class)
-    public SaRouteFunction saRouteFunction() {
+    public SaParamFunction saRouteFunction() {
         return new BreezeDefaultRouteFunction();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaRouteInterceptor(saRouteFunction()))
+        registry.addInterceptor(new SaInterceptor(saRouteFunction()))
                 .addPathPatterns(properties.getRoute().getPathPatterns())
                 .excludePathPatterns(properties.getRoute().getExcludePathPatterns());
     }
