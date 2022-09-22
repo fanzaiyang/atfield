@@ -54,7 +54,7 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
         List<String> list = properties.getRoute().getExcludePathPatterns();
         list.addAll(SWAGGER_LIST);
         properties.getRoute().setExcludePathPatterns(list);
-        log.debug("「微风组件」开启 <注册SaToken路由拦截器> 相关的配置。白名单：{}", JSONUtil.toJsonStr(list));
+        log.info("「微风组件」开启 <注册SaToken路由拦截器> 相关的配置。白名单：{}", JSONUtil.toJsonStr(list));
     }
 
 }

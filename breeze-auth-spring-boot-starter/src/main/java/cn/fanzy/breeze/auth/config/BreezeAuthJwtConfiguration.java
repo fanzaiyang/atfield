@@ -49,7 +49,7 @@ public class BreezeAuthJwtConfiguration {
      */
     @PostConstruct
     public void checkConfig() {
-        log.debug("「微风组件」开启 <注册SaToken JWT> 相关的配置。");
+        log.info("「微风组件」开启 <注册SaToken JWT> 相关的配置。");
     }
 
 }

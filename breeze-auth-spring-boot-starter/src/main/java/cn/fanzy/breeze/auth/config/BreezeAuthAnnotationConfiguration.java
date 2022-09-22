@@ -37,8 +37,8 @@ public class BreezeAuthAnnotationConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new SaInterceptor())
-                .addPathPatterns(properties.getRoute().getPathPatterns())
-                .excludePathPatterns(properties.getRoute().getExcludePathPatterns());
+                .addPathPatterns(properties.getAnnotation().getPathPatterns())
+                .excludePathPatterns(properties.getAnnotation().getExcludePathPatterns());
     }
 
     /**
@@ -48,8 +48,8 @@ public class BreezeAuthAnnotationConfiguration implements WebMvcConfigurer {
     public void checkConfig() {
         List<String> list = properties.getAnnotation().getExcludePathPatterns();
         list.addAll(SWAGGER_LIST);
-        properties.getRoute().setExcludePathPatterns(list);
-        log.debug("「微风组件」开启 <注册SaToken注解拦截器> 相关的配置。白名单：{}", JSONUtil.toJsonStr(list));
+        properties.getAnnotation().setExcludePathPatterns(list);
+        log.info("「微风组件」开启 <注册SaToken注解拦截器> 相关的配置。白名单：{}", JSONUtil.toJsonStr(list));
     }
 
 }
