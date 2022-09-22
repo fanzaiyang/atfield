@@ -9,6 +9,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.util.Objects;
 
 /**
@@ -78,5 +80,16 @@ public class SpringUtils extends SpringUtil {
                     request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE);
         }
         return false;
+    }
+    /**
+     * 获取系统进程PID
+     */
+    public static int getCurrentProcessId () {
+        try{
+            RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+            return Integer.valueOf(runtimeMXBean.getName().split("@")[0]);
+        }catch (Exception e){
+            return 000000;
+        }
     }
 }
