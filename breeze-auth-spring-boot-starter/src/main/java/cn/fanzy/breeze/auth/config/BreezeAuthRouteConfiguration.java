@@ -26,7 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties(BreezeAuthProperties.class)
-@ConditionalOnProperty(prefix = "breeze.auth.route", name = {"enable"}, havingValue = "true")
+@ConditionalOnProperty(prefix = "breeze.auth.route", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
 
     private final BreezeAuthProperties properties;
