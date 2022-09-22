@@ -22,6 +22,7 @@ public class BreezeImageCodeSender implements BreezeCodeSender<BreezeImageCode> 
     @Override
     public void send(ServletWebRequest request, String target, BreezeImageCode code) {
         try {
+            log.debug("【图形验证码发送器】向客户端 {} 发送验证码，验证码的内容为 {} ", target, code.getCode());
             ImageIO.write(code.getImage(), "JPEG", request.getResponse().getOutputStream());
         } catch (IOException e) {
             throw new RuntimeException(e);

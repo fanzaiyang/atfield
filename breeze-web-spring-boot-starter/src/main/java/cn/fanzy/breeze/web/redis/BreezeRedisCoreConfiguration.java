@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.redis;
 
+import cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -39,10 +40,11 @@ import java.time.Duration;
  * @date 2021/09/07
  */
 @Slf4j
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableCaching
 @ConditionalOnClass(RedisOperations.class)
-@AutoConfigureBefore(value = {BreezeCodeConfiguration.class})
+@AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class,BreezeCodeConfiguration.class})
 public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
     @Bean
     public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {

@@ -42,7 +42,7 @@ public class BreezeEmailCodeSender implements BreezeCodeSender<BreezeEmailCode> 
     public  void send(ServletWebRequest request, String target, BreezeEmailCode code){
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-
+            log.debug("【邮箱验证码发送器】向客户端 {} 发送验证码，验证码的内容为 {} ", target, code.getCode());
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             // 发送方邮箱
             helper.setFrom(emailSender);

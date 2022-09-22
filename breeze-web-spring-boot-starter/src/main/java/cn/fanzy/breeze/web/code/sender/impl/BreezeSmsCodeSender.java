@@ -17,6 +17,6 @@ public class BreezeSmsCodeSender implements BreezeCodeSender<BreezeSmsCode> {
 
     @Override
     public void send(ServletWebRequest request, String target, BreezeSmsCode code) {
-        log.debug("【短信验证码发送器】向手机号 {} 发送短信验证码，验证码的内容为 {} ", target, code);
+        log.debug("【短信验证码发送器】向手机号 {} 发送短信验证码，验证码的内容为 {} ", target, code.getCode());
     }
 }
