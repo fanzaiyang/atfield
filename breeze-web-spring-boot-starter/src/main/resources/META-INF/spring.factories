@@ -9,4 +9,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.fanzy.breeze.web.ip.config.BreezeIpGlobalCheckConfiguration,\
   cn.fanzy.breeze.web.exception.config.BreezeWebExceptionConfiguration,\
   cn.fanzy.breeze.web.filter.ReplaceStreamFilter,\
-  cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration
+  cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration,\
+  cn.fanzy.breeze.web.cors.CorsAutoConfiguration
