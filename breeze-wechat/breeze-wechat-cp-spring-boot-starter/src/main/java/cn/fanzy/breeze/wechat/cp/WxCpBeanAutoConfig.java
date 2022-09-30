@@ -99,4 +99,12 @@ public class WxCpBeanAutoConfig {
             return null;
         };
     }
+    @Bean
+    @ConditionalOnMissingBean
+    public WxCpScanHandler wxCpScanHandler() {
+        return (wxMessage, context, cpService, sessionManager) -> {
+            log.info("WxCpScanHandler " + wxMessage.getFromUserName());
+            return null;
+        };
+    }
 }
