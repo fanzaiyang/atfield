@@ -15,7 +15,6 @@
     <modules>
         <module>breeze-core</module>
         <module>breeze-web-spring-boot-starter</module>
-<!--        <module>breeze-web-demo</module>-->
         <module>breeze-minio-spring-boot-starter</module>
         <module>breeze-auth-spring-boot-starter</module>
         <module>breeze-sqltoy-spring-boot-starter</module>
@@ -57,6 +56,66 @@
                 <version>${spring-boot-admin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-web-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-minio-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-auth-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-mybatis-plus-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-wechat</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-wechat-cp-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-wechat-ma-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-wechat-mp-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-wechat-pay-spring-boot-starter</artifactId>
+                <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
