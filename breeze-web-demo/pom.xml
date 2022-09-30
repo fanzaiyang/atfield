@@ -40,6 +40,30 @@
             <artifactId>breeze-auth-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
+        <!-- 企业微信 -->
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-wechat-cp-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 小程序 -->
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-wechat-ma-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 公众号 -->
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-wechat-mp-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- 企业支付 -->
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-wechat-pay-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

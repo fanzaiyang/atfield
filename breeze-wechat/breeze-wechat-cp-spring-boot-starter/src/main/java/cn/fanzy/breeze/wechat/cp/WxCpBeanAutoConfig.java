@@ -47,7 +47,14 @@ public class WxCpBeanAutoConfig {
             return null;
         };
     }
-
+    @Bean
+    @ConditionalOnMissingBean
+    public WxCpMenuClickHandler wxCpMenuClickHandler(){
+        return (wxMessage, context, cpService, sessionManager) -> {
+            log.info("WxCpMenuClickHandler菜单点击，{}", wxMessage.toString());
+            return null;
+        };
+    }
     @Bean
     @ConditionalOnMissingBean
     public WxCpMsgHandler wxCpMsgHandler() {

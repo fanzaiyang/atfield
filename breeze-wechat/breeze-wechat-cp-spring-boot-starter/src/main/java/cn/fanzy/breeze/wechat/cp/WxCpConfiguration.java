@@ -43,7 +43,8 @@ public class WxCpConfiguration {
     private final WxCpSubscribeHandler wxCpSubscribeHandler;
     private final WxCpContactChangeHandler wxCpContactChangeHandler;
     private final WxCpEnterAgentHandler wxCpEnterAgentHandler;
-
+    private final WxCpMenuClickHandler wxCpMenuClickHandler;
+    private final WxCpScanHandler wxCpScanHandler;
     private final WxCpProperties properties;
     public static List<WxCpProperties.AppConfig> appConfigList;
     private static Map<Integer, WxCpMessageRouter> routers = Maps.newLinkedHashMap();
@@ -53,7 +54,7 @@ public class WxCpConfiguration {
     public WxCpConfiguration(WxCpLogHandler wxCpLogHandler, WxCpNullHandler wxCpNullHandler, WxCpLocationHandler wxCpLocationHandler,
                              WxCpMenuHandler wxCpMenuHandler, WxCpMsgHandler wxCpMsgHandler, WxCpUnsubscribeHandler wxCpUnsubscribeHandler,
                              WxCpSubscribeHandler wxCpSubscribeHandler, WxCpProperties properties, WxCpContactChangeHandler wxCpContactChangeHandler,
-                             WxCpEnterAgentHandler wxCpEnterAgentHandler) {
+                             WxCpEnterAgentHandler wxCpEnterAgentHandler,WxCpMenuClickHandler wxCpMenuClickHandler,WxCpScanHandler wxCpScanHandler) {
         this.wxCpLogHandler = wxCpLogHandler;
         this.wxCpNullHandler = wxCpNullHandler;
         this.wxCpLocationHandler = wxCpLocationHandler;
@@ -64,6 +65,8 @@ public class WxCpConfiguration {
         this.properties = properties;
         this.wxCpContactChangeHandler = wxCpContactChangeHandler;
         this.wxCpEnterAgentHandler = wxCpEnterAgentHandler;
+        this.wxCpMenuClickHandler=wxCpMenuClickHandler;
+        this.wxCpScanHandler=wxCpScanHandler;
     }
 
 
@@ -129,9 +132,9 @@ public class WxCpConfiguration {
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
                 .event(WxConsts.MenuButtonType.CLICK).handler(this.wxCpMenuHandler).end();
 
-        // 点击菜单链接事件（这里使用了一个空的处理器，可以根据自己需要进行扩展）
+        // 点击菜单链接事件
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
-                .event(WxConsts.MenuButtonType.VIEW).handler(this.wxCpNullHandler).end();
+                .event(WxConsts.MenuButtonType.VIEW).handler(this.wxCpMenuClickHandler).end();
 
         // 关注事件
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
@@ -154,7 +157,7 @@ public class WxCpConfiguration {
 
         // 扫码事件（这里使用了一个空的处理器，可以根据自己需要进行扩展）
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
-                .event(WxConsts.EventType.SCAN).handler(this.wxCpNullHandler).end();
+                .event(WxConsts.EventType.SCAN).handler(this.wxCpScanHandler).end();
 
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
                 .event(WxCpConsts.EventType.CHANGE_CONTACT).handler(this.wxCpContactChangeHandler).end();
