@@ -223,7 +223,7 @@ public class HtmlImageGenerator {
             Font font = FontUtil.createFont(FileUtil.file(fontPath));
             return font.deriveFont(20f);
         } catch (Exception e) {
-            log.error("使用默认字体：SansSerif", e);
+            log.error("使用默认字体：SansSerif：{}", e.getMessage());
             return FontUtil.createSansSerifFont(20);
         }
     }
