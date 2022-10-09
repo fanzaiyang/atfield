@@ -7,43 +7,43 @@ spring:
   sqltoy:
     sql-resources-dir: classpath:sql #指定sql.xml 文件路径,多个路径用逗号分隔。示例表示在resours下的sql文件夹下。
     debug: true
-#breeze:
-#  web:
-#    code:
-#      enable: true
-#      delete-on-success: true #是否在验证成功后删除验证过的验证码,默认为true
-#      show-log: false #是否显示加载日志，默认为false
-#      prefix: validate_code_ #将验证码存储到Redis或内存时的key的前缀，默认值为validate_code_
-#      retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。全局配置，可被子配置覆盖。
-#      image:
-#        code-key: image #从请求中获取图形验证码的客户端的参数，默认值为 image
-#        code-value: code #请求中获取图形验证码对应的值的参数，默认值为 code
-#        length: 4 #验证码的长度,默认为4
-#        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
-#        contain-letter: false #验证码是否包含字母,默认不包含
-#        contain-number: true #验证码是否包含数字,默认包含
-#        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
-#        width: 70 #验证码的宽度,默认为70
-#        height: 28 #验证码的高度,默认为 28
-#        fringe: false #是否生成干扰条纹背景，默认为false
-#      sms:
-#        code-key: phone #从请求中获取短信验证码的发送目标(手机号)的参数，默认值为 phone
-#        code-value: code #请求中获取短信验证码对应的短信内容的参数，默认值为 phone_code
-#        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
-#        length: 4 #验证码的长度,默认为4
-#        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
-#        contain-letter: false #验证码是否包含字母,默认不包含
-#        contain-number: true #验证码是否包含数字,默认包含
-#      email:
-#        code-key: email #从请求中获取短信验证码的发送目标(手机号)的参数，默认值为 phone
-#        code-value: code #请求中获取短信验证码对应的短信内容的参数，默认值为 phone_code
-#        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
-#        length: 4 #验证码的长度,默认为4
-#        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
-#        contain-letter: false #验证码是否包含字母,默认不包含
-#        contain-number: true #验证码是否包含数字,默认包含
-#        sender-address: xxxx@xx.com #发送验证码的邮箱，必填
-#        title: 帐号保护验证 #验证码邮箱的标题
+breeze:
+  web:
+    code:
+      enable: true
+      delete-on-success: true #是否在验证成功后删除验证过的验证码,默认为true
+      show-log: false #是否显示加载日志，默认为false
+      prefix: validate_code_ #将验证码存储到Redis或内存时的key的前缀，默认值为validate_code_
+      retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。全局配置，可被子配置覆盖。
+      image:
+        code-key: image #从请求中获取图形验证码的客户端的参数，默认值为 image
+        code-value: code #请求中获取图形验证码对应的值的参数，默认值为 code
+        length: 4 #验证码的长度,默认为4
+        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
+        contain-letter: false #验证码是否包含字母,默认不包含
+        contain-number: true #验证码是否包含数字,默认包含
+        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
+        width: 70 #验证码的宽度,默认为70
+        height: 28 #验证码的高度,默认为 28
+        fringe: false #是否生成干扰条纹背景，默认为false
+      sms:
+        code-key: phone #从请求中获取短信验证码的发送目标(手机号)的参数，默认值为 phone
+        code-value: code #请求中获取短信验证码对应的短信内容的参数，默认值为 phone_code
+        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
+        length: 4 #验证码的长度,默认为4
+        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
+        contain-letter: false #验证码是否包含字母,默认不包含
+        contain-number: true #验证码是否包含数字,默认包含
+      email:
+        code-key: email #从请求中获取短信验证码的发送目标(手机号)的参数，默认值为 phone
+        code-value: code #请求中获取短信验证码对应的短信内容的参数，默认值为 phone_code
+        retry-count: 1 #重试计数,默认1，即验证次数超过此参数时，删除验证码，需要使用新码。
+        length: 4 #验证码的长度,默认为4
+        expire-in: 300 #验证码的失效时间，单位秒，默认为300s
+        contain-letter: false #验证码是否包含字母,默认不包含
+        contain-number: true #验证码是否包含数字,默认包含
+        sender-address: xxxx@xx.com #发送验证码的邮箱，必填
+        title: 帐号保护验证 #验证码邮箱的标题
 #breeze:
 #  minio:
 #    servers:
@@ -61,7 +61,7 @@ spring:
 #        bucket: test2 #默认的存储桶，必填项。
 #        endpoint: http://minio.zaiyang.top # minio服务地址，必填项
 #        inner-endpoint: http://minio.zaiyang.top # minio内网服务地址，目的加速文件上传，非必填项，默认同endpoint。
-breeze:
+#breeze:
   wechat:
     # 企业微信相关配置
     cp:
@@ -98,4 +98,7 @@ breeze:
       sub-mch-id: sub_mch_id #服务商模式下的子商户号，普通模式请不要配置，最好是请在配置文件中将对应项删除
       key-path: key_path #apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
       use-sandbox-env: false #以指定是否使用沙箱环境,默认false
+  auth:
+    route:
+      exclude-path-patterns: /auth/**
 

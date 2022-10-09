@@ -33,4 +33,8 @@ public class AuthController {
     public JsonContent<Object> getUser2() {
         return JsonContent.success("登录认证：只有登录之后才能进入该方法");
     }
+    @GetMapping("/user/3")
+    public JsonContent<Object> getUser3() {
+        throw new NullPointerException();
+    }
 }
