@@ -7,12 +7,15 @@ import cn.dev33.satoken.router.SaRouteFunction;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 @Slf4j
 public class BreezeDefaultRouteFunction implements SaParamFunction {
     @Override
     public void run(Object r) {
-        log.debug("参数:{}", JSONUtil.toJsonStr(r));
+        if(r instanceof ResourceHttpRequestHandler){
+            ResourceHttpRequestHandler handler=(ResourceHttpRequestHandler) r;
+        }
         StpUtil.checkLogin();
     }
 }

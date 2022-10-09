@@ -18,10 +18,6 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-web-spring-boot-starter</artifactId>
             <version>${revision}</version>
@@ -32,6 +28,11 @@
         </dependency>
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-auth-spring-boot-starter</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-minio-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
@@ -40,41 +41,41 @@
             <artifactId>breeze-auth-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!-- 企业微信 -->
+        &lt;!&ndash; 企业微信 &ndash;&gt;
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-wechat-cp-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!-- 小程序 -->
+        &lt;!&ndash; 小程序 &ndash;&gt;
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-wechat-ma-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!-- 公众号 -->
+        &lt;!&ndash; 公众号 &ndash;&gt;
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-wechat-mp-spring-boot-starter</artifactId>
             <version>${revision}</version>
         </dependency>
-        <!-- 企业支付 -->
+        &lt;!&ndash; 企业支付 &ndash;&gt;
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-wechat-pay-spring-boot-starter</artifactId>
             <version>${revision}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
             <version>${revision}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>

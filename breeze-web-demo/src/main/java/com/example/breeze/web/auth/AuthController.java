@@ -1,6 +1,5 @@
 package com.example.breeze.web.auth;
 
-import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.fanzy.breeze.web.ip.annotation.BreezeIpCheck;
 import cn.fanzy.breeze.web.model.JsonContent;
 import lombok.extern.slf4j.Slf4j;

@@ -44,9 +44,9 @@ public class ReplaceStreamFilter implements Filter {
             log.error("发生系统异常！", e);
             String message = e.getMessage();
             if (e.getCause() != null) {
-                message = e.getCause().getMessage();
+                message = e.getCause().getMessage()==null?message:e.getCause().getMessage();
                 if (e.getCause().getCause() != null) {
-                    message = e.getCause().getCause().getMessage();
+                    message = e.getCause().getCause().getMessage()==null?message:e.getCause().getCause().getMessage();
                 }
             }
             HttpUtil.out((HttpServletResponse) response, JsonContent.error(message).setData(e.getCause()));
