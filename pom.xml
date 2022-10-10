@@ -20,6 +20,7 @@
         <module>breeze-sqltoy-spring-boot-starter</module>
         <module>breeze-wechat</module>
         <module>breeze-mybatis-plus-spring-boot-starter</module>
+        <module>breeze-admin-spring-boot-starter</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

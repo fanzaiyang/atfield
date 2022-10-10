@@ -2,6 +2,9 @@ package cn.fanzy.breeze.web.utils;
 
 import cn.hutool.core.util.StrUtil;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class ExceptionUtil {
 
     /**
@@ -23,5 +26,13 @@ public class ExceptionUtil {
             errMsg.append(format);
         }
         return errMsg.toString();
+    }
+    public static String getErrorStackMessage(Exception e) {
+        if (e == null) {
+            return null;
+        }
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        return sw.getBuffer().toString();
     }
 }
