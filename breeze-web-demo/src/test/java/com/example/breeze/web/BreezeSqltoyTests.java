@@ -2,7 +2,7 @@ package com.example.breeze.web;
 
 import com.example.breeze.web.entity.User;
 import org.junit.jupiter.api.Test;
-import cn.fanzy.breeze.sqltoy.core.dao.SqlToyLazyDao;
+import org.sagacity.sqltoy.dao.SqlToyLazyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

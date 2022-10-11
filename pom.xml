@@ -21,6 +21,7 @@
         <module>breeze-wechat</module>
         <module>breeze-mybatis-plus-spring-boot-starter</module>
         <module>breeze-admin-spring-boot-starter</module>
+        <module>breeze-admin-demo</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
