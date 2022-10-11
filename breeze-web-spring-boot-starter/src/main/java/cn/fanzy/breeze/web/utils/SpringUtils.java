@@ -69,6 +69,44 @@ public class SpringUtils extends SpringUtil {
     }
 
     /**
+     * get请求方法:GET, POST, or PUT
+     *
+     * @return {@link String}
+     */
+    public static String getRequestMethod() {
+        try {
+            return getRequest().getMethod();
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
+    public static String getRequestUri() {
+        try {
+            return getRequest().getRequestURI();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static String getRequestUrl() {
+        try {
+            return getRequest().getRequestURL().toString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static boolean isJson() {
+        try {
+            return isJson(getRequest());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * 是否是json请求
      *
      * @param request 请求
