@@ -27,20 +27,38 @@ public class ExceptionUtil {
         }
         return errMsg.toString();
     }
+
     public static String getErrorStackMessage(Exception e) {
-        if (e == null) {
-            return null;
-        }
-        StringWriter sw = new StringWriter();
-        e.printStackTrace(new PrintWriter(sw, true));
-        return sw.getBuffer().toString();
+        return getErrorStackMessage(e, null);
     }
-    public static String getErrorStackMessage(Throwable e) {
+
+    public static String getErrorStackMessage(Exception e, Integer size) {
         if (e == null) {
             return null;
         }
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
-        return sw.getBuffer().toString();
+        String string = sw.getBuffer().toString();
+        if (size == null) {
+            return string;
+        }
+        return string.length() > size ? string.substring(0, size) : string;
+    }
+
+    public static String getErrorStackMessage(Throwable e) {
+        return getErrorStackMessage(e, null);
+    }
+
+    public static String getErrorStackMessage(Throwable e, Integer size) {
+        if (e == null) {
+            return null;
+        }
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        String string = sw.getBuffer().toString();
+        if (size == null) {
+            return string;
+        }
+        return string.length() > size ? string.substring(0, size) : string;
     }
 }

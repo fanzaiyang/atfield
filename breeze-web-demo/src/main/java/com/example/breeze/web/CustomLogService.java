@@ -1,4 +1,4 @@
-package com.example.breeze.web.auth;
+package com.example.breeze.web;
 
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;

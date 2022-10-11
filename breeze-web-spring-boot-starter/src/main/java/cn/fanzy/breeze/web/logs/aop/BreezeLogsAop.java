@@ -13,8 +13,11 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -46,8 +49,8 @@ public class BreezeLogsAop {
     public void cut() {
     }
 
-    @Before(value = "cut()")
-    public void before(JoinPoint joinPoint) {
+    @Around(value = "cut()")
+    public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
         Date startTime = new Date();
@@ -70,26 +73,14 @@ public class BreezeLogsAop {
         if (annotation != null) {
             breezeRequestArgs.setBizName(annotation.value());
         }
-    }
-
-    @AfterReturning(value = "cut()", returning = "obj")
-    public void afterReturning(Object obj) {
-        log.info("===响应结果：{}", JSONUtil.toJsonStr(obj));
-        if (breezeRequestArgs == null) {
-            breezeRequestArgs = BreezeRequestArgs.builder()
-                    .traceId(TLogContext.getTraceId())
-                    .clientIp(SpringUtils.getClientIp())
-                    .startTime(new Date())
-                    .requestMethod(SpringUtils.getRequestMethod())
-                    .requestUrl(SpringUtils.getRequestUri())
-                    .success(true)
-                    .build();
-        }
-        breezeRequestArgs.setResponseData(obj);
+        Object proceed = joinPoint.proceed();
+        log.info("===响应结果：{}", JSONUtil.toJsonStr(proceed));
+        breezeRequestArgs.setResponseData(proceed);
         breezeRequestArgs.setEndTime(new Date());
-        breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
+        breezeRequestArgs.setProceedSecond(interval.intervalSecond());
         breezeRequestArgs.setSuccess(true);
         breezeLogCallbackService.callback(breezeRequestArgs);
+        return proceed;
     }
 
     @AfterThrowing(throwing = "e", value = "cut()")
@@ -104,7 +95,7 @@ public class BreezeLogsAop {
                     .success(true)
                     .build();
         }
-        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e));
+        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 512));
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
