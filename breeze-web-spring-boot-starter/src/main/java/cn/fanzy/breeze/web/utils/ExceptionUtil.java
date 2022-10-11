@@ -35,4 +35,12 @@ public class ExceptionUtil {
         e.printStackTrace(new PrintWriter(sw, true));
         return sw.getBuffer().toString();
     }
+    public static String getErrorStackMessage(Throwable e) {
+        if (e == null) {
+            return null;
+        }
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw, true));
+        return sw.getBuffer().toString();
+    }
 }

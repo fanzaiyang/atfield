@@ -4,6 +4,7 @@ import cn.fanzy.breeze.web.logs.annotation.Log;
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
+import cn.fanzy.breeze.web.utils.ExceptionUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
@@ -103,8 +104,7 @@ public class BreezeLogsAop {
                     .success(true)
                     .build();
         }
-        String errorMsg = e.toString().length() > 2048 ? e.toString().substring(0, 2048) : e.toString();
-        breezeRequestArgs.setResponseData(errorMsg);
+        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e));
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
