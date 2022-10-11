@@ -142,7 +142,6 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(NullPointerException.class)
     public Object handleNullPointerException(HttpServletRequest request, NullPointerException e) {
         String ssid = this.getRequestId(request);
-        e.printStackTrace();
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 StrUtil.blankToDefault(e.getMessage(), "逻辑发生空指针异常！"), ExceptionUtil.getErrorLineNumber3(e.getStackTrace()));
         log.error(StrUtil.format("「微风组件」请求{},请求失败,失败的原因为空指针异常!", ssid), e);

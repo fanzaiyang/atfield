@@ -7,7 +7,7 @@ import org.apache.tomcat.util.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
+//@Component
 public class ExceptionHandler implements BreezeExceptionHandler{
     @Override
     public void after(Exception e) {
