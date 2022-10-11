@@ -21,7 +21,7 @@ public class ExceptionUtil {
         errMsg.append("异常位置：");
         int limit = Math.min(stackTrace.length, 3);
         for (int i = 0; i < limit; i++) {
-            StackTraceElement trace = stackTrace[0];
+            StackTraceElement trace = stackTrace[i];
             String format = StrUtil.format("{}.{}:{};", trace.getClassName(), trace.getMethodName(), trace.getLineNumber());
             errMsg.append(format);
         }
