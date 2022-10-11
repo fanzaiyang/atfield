@@ -34,6 +34,7 @@
         <spring-cloud.version>2021.0.4</spring-cloud.version>
         <spring-boot.version>2.6.11</spring-boot.version>
         <spring-boot-admin.version>2.6.9</spring-boot-admin.version>
+        <satoken.version>1.31.0</satoken.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -215,4 +216,11 @@
             <url>http://maven.yinfengnet.com/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+    <repositories>
+        <repository>
+            <id>yinfengMaven</id>
+            <name>nexus repository</name>
+            <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+        </repository>
+    </repositories>
 </project>

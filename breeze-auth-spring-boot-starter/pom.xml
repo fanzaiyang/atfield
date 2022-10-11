@@ -11,9 +11,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>breeze-auth-spring-boot-starter</artifactId>
-    <properties>
-        <satoken.version>1.31.0</satoken.version>
-    </properties>
     <dependencies>
         <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
         <dependency>
