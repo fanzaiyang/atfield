@@ -13,11 +13,9 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -50,12 +48,13 @@ public class BreezeLogsAop {
     }
 
     @Around(value = "cut()")
-    public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
         Date startTime = new Date();
         TimeInterval interval = DateUtil.timer();
         long start = interval.start();
+        log.info("===请求参数：{}",JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
         log.info("===客户端IP：「{}」-用户信息：「{}」-请求参数：{}",
                 clientIp, "",
                 JSONUtil.toJsonStr(requestData));

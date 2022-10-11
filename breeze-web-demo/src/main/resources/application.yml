@@ -101,4 +101,3 @@ breeze:
   auth:
     route:
       exclude-path-patterns: /auth/**
-

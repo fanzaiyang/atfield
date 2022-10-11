@@ -2,6 +2,9 @@ package cn.fanzy.breeze.web.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.yomahub.tlog.web.wrapper.RequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -126,9 +131,32 @@ public class SpringUtils extends SpringUtil {
     public static int getCurrentProcessId() {
         try {
             RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-            return Integer.valueOf(runtimeMXBean.getName().split("@")[0]);
+            return Integer.parseInt(runtimeMXBean.getName().split("@")[0]);
         } catch (Exception e) {
             return 000000;
         }
+    }
+
+    public static Map<String, Object> getRequestParams() {
+        Map<String, Object> params = new HashMap<>();
+        HttpServletRequest request = getRequest();
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        for (String key : parameterMap.keySet()) {
+            String[] paramArr = parameterMap.get(key);
+            if (paramArr != null && paramArr.length == 1) {
+                params.put(key, paramArr[0]);
+                continue;
+            }
+            params.put(key, paramArr);
+        }
+        if (isJson(request)) {
+            String jsonParam = new RequestWrapper(request).getBodyString();
+            JSONObject obj = JSONUtil.parseObj(jsonParam);
+            for (Map.Entry<String, Object> entry : obj) {
+                params.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return params;
+
     }
 }
