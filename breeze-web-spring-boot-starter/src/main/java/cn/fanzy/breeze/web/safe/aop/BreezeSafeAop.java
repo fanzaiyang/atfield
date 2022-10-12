@@ -39,7 +39,8 @@ public class BreezeSafeAop {
             return;
         }
         loginId=param.toString();
-        breezeSafeService.check(loginId, JoinPointUtils.getAnnotation(jp, BreezeSafe.class));
+        BreezeSafe annotation = JoinPointUtils.getAnnotation(jp, BreezeSafe.class);
+        breezeSafeService.check(loginId,annotation);
     }
 
     /**

@@ -45,7 +45,9 @@ breeze:
         sender-address: xxxx@xx.com #发送验证码的邮箱，必填
         title: 帐号保护验证 #验证码邮箱的标题
     safe:
-      login-failed-max-num: 5
+      login-failed-max-num: 6
+      need-code: true
+      login-failed-show-code-max-num: 3
   #breeze:
 #  minio:
 #    servers:

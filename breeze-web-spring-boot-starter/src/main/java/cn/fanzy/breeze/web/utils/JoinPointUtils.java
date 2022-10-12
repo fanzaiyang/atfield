@@ -34,7 +34,7 @@ public class JoinPointUtils {
 
     public static <A extends Annotation> A getAnnotation(JoinPoint joinPoint, Class<A> clazz) {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        return methodSignature.getMethod().getDeclaringClass().getAnnotation(clazz);
+        return methodSignature.getMethod().getAnnotation(clazz);
     }
 
     /**

@@ -44,7 +44,7 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
     }
 
     @Override
-    public void check(String loginId, BreezeSafe breezeSafe) {
+    public void check(String loginId, BreezeSafe annotation) {
         if (StrUtil.isBlank(loginId)) {
             log.warn("登录名不能为空！");
             return;
@@ -56,13 +56,15 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
         if (obj != null) {
             safeInfo = (BreezeSafeInfo) obj;
         }
+        // 1.校验验证码
+        if (annotation != null && properties.isNeedCode() && safeInfo.getFailNum() >= properties.getLoginFailedShowCodeMaxNum()) {
+            processor.validate(new ServletWebRequest(SpringUtils.getRequest()), annotation.value());
+        }
+        // 2. 校验次数
         if (safeInfo.getFailNum() >= properties.getLoginFailedMaxNum()) {
             throw new RuntimeException(StrUtil.format("该账号因重试次数太多，而锁定，请{}后重试！", safeInfo.getDeadTime()));
         }
-        // 校验验证码
-        if (properties.isNeedCode() && safeInfo.getFailNum() >= properties.getLoginFailedShowCodeMaxNum()) {
-            processor.validate(new ServletWebRequest(SpringUtils.getRequest()), breezeSafe.value());
-        }
+
     }
 
     @Override
