@@ -1,9 +1,6 @@
 package com.example.breeze.web;
 
-import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
-import cn.fanzy.breeze.minio.service.BreezeMinioService;
-import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

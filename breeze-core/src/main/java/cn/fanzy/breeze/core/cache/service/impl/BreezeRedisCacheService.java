@@ -1,9 +1,8 @@
-package cn.fanzy.breeze.web.cache.service.impl;
+package cn.fanzy.breeze.core.cache.service.impl;
 
 
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.hutool.core.lang.Assert;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

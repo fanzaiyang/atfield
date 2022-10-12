@@ -1,4 +1,4 @@
-package cn.fanzy.breeze.web.cache.enums;
+package cn.fanzy.breeze.core.cache.enums;
 
 public enum BreezeCacheEnum {
     /**

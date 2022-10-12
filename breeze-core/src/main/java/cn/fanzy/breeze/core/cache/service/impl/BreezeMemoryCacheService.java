@@ -1,10 +1,10 @@
 /**
  *
  */
-package cn.fanzy.breeze.web.cache.service.impl;
+package cn.fanzy.breeze.core.cache.service.impl;
 
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.core.storage.LocalScheduledStorage;
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
 import cn.hutool.core.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 

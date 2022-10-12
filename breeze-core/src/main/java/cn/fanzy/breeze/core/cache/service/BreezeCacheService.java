@@ -1,4 +1,4 @@
-package cn.fanzy.breeze.web.cache.service;
+package cn.fanzy.breeze.core.cache.service;
 
 /**
  * 微风全局缓存

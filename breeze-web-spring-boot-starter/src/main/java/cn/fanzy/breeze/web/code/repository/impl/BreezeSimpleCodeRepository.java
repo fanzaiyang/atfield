@@ -3,7 +3,7 @@
  */
 package cn.fanzy.breeze.web.code.repository.impl;
 
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;

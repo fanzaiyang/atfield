@@ -36,7 +36,7 @@ public class SqltoyTests {
     @Test
     void save1() {
         List<User> saveList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 2; i++) {
             saveList.add(User.builder()
                     .code(RandomUtil.randomNumbers(4))
                     .name(RandomUtil.randomString(6))
@@ -44,5 +44,11 @@ public class SqltoyTests {
                     .build());
         }
         sqlToyCRUDService.saveAll(saveList);
+    }
+    @Test
+    void update() {
+        User user = sqlToyCRUDService.load(User.builder().id("1665541650741000001283").build());
+        user.setName("修改");
+        sqlToyCRUDService.update(user);
     }
 }

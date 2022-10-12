@@ -1,9 +1,9 @@
 /**
  *
  */
-package cn.fanzy.breeze.web.cache.properties;
+package cn.fanzy.breeze.core.cache.properties;
 
-import cn.fanzy.breeze.web.cache.enums.BreezeCacheEnum;
+import cn.fanzy.breeze.core.cache.enums.BreezeCacheEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

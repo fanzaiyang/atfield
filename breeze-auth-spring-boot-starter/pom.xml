@@ -12,6 +12,10 @@
 
     <artifactId>breeze-auth-spring-boot-starter</artifactId>
     <dependencies>
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-core</artifactId>
+        </dependency>
         <!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
         <dependency>
             <groupId>cn.dev33</groupId>
@@ -24,11 +28,6 @@
             <artifactId>sa-token-jwt</artifactId>
             <version>${satoken.version}</version>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 

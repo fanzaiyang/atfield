@@ -1,8 +1,8 @@
 package cn.fanzy.breeze.web.code.config;
 
 
-import cn.fanzy.breeze.web.cache.config.BreezeCacheConfiguration;
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.core.cache.config.BreezeCacheConfiguration;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.aop.BreezeCodeCheckAop;
 import cn.fanzy.breeze.web.code.generator.BreezeCodeGenerator;
 import cn.fanzy.breeze.web.code.generator.impl.BreezeEmailCodeGenerator;

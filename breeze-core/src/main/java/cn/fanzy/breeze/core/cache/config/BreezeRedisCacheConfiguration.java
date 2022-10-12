@@ -1,23 +1,16 @@
-package cn.fanzy.breeze.web.cache.config;
+package cn.fanzy.breeze.core.cache.config;
 
-import cn.fanzy.breeze.web.cache.properties.BreezeCacheProperties;
-import cn.fanzy.breeze.web.cache.service.BreezeCacheService;
-import cn.fanzy.breeze.web.cache.service.impl.BreezeRedisCacheService;
-import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
-import cn.fanzy.breeze.web.redis.BreezeRedisCoreConfiguration;
-import lombok.AllArgsConstructor;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
+import cn.fanzy.breeze.core.cache.service.impl.BreezeMemoryCacheService;
+import cn.fanzy.breeze.core.cache.service.impl.BreezeRedisCacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-
-import javax.annotation.PostConstruct;
 
 
 /**
@@ -29,10 +22,11 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Configuration
 @ConditionalOnClass(RedisOperations.class)
-@AutoConfigureBefore(BreezeCacheConfiguration.class)
+@AutoConfigureAfter(BreezeCacheConfiguration.class)
 public class BreezeRedisCacheConfiguration {
     @Bean
-    public BreezeRedisCacheService breezeRedisCacheService() {
+    @ConditionalOnMissingBean
+    public BreezeCacheService breezeCacheService() {
         log.info("「微风组件」开启 <全局缓存Redis> 相关的配置。");
         return new BreezeRedisCacheService();
     }

@@ -87,7 +87,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
+                <artifactId>breeze-admin-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

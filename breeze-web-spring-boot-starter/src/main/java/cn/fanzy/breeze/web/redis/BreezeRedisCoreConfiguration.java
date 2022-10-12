@@ -1,6 +1,6 @@
 package cn.fanzy.breeze.web.redis;
 
-import cn.fanzy.breeze.web.cache.config.BreezeRedisCacheConfiguration;
+import cn.fanzy.breeze.core.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
