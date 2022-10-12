@@ -16,7 +16,10 @@ import javax.validation.Valid;
 public class BreezeAuthController {
 
     private final BreezeAuthService breezeAuthService;
-
+    @GetMapping("/login/before")
+    public JsonContent<Object> doUserPwdLoginBefore(String clientId) {
+        return breezeAuthService.doUserPwdLoginBefore(clientId);
+    }
     @PostMapping("/login/pwd")
     public JsonContent<SaTokenInfo> doUserPwdLogin(@Valid @RequestBody UsernamePasswordLoginArgs args) {
         return breezeAuthService.doUserPwdLogin(args);

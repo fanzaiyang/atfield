@@ -14,4 +14,5 @@ public class BreezeAdminProperties {
      * 接口前缀
      */
     private String prefix = "";
+
 }

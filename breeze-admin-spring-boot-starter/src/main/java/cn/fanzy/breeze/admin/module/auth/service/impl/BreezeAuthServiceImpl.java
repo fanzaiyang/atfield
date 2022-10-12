@@ -3,6 +3,7 @@ package cn.fanzy.breeze.admin.module.auth.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.entity.SysAccount;
+import cn.fanzy.breeze.web.safe.service.BreezeSafeService;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAuthService;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
@@ -23,6 +24,12 @@ public class BreezeAuthServiceImpl implements BreezeAuthService {
 
     private final SqlToyHelperDao sqlToyHelperDao;
     private final SqlToyCRUDService sqlToyCRUDService;
+    private final BreezeSafeService breezeSafeService;
+
+    @Override
+    public JsonContent<Object> doUserPwdLoginBefore(String clientId) {
+        return null;
+    }
 
     @Override
     public JsonContent<SaTokenInfo> doUserPwdLogin(UsernamePasswordLoginArgs args) {

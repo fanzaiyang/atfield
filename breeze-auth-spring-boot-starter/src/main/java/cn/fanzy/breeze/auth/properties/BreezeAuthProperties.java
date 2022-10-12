@@ -1,15 +1,12 @@
 package cn.fanzy.breeze.auth.properties;
 
 import cn.hutool.core.collection.CollUtil;
-import com.fasterxml.jackson.databind.util.Annotations;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -43,8 +40,9 @@ public class BreezeAuthProperties {
      *     &lt;/dependency&gt;
      * </pre>
      */
-    private Jwt jwt=new Jwt();
+    private Jwt jwt = new Jwt();
 
+    private Safe safe = new Safe();
 
 
     @Data
@@ -86,9 +84,8 @@ public class BreezeAuthProperties {
     }
 
 
-
     @Data
-    public static class Jwt{
+    public static class Jwt {
         /**
          * 是否启用，默认：true
          */
@@ -97,6 +94,7 @@ public class BreezeAuthProperties {
          * Jwt风格
          */
         private JwtMode mode = JwtMode.simple;
+
         public enum JwtMode {
             /**
              * Simple 模式：Token 风格替换,默认
@@ -114,4 +112,30 @@ public class BreezeAuthProperties {
         }
     }
 
+    /**
+     * 安全相关
+     */
+    @Data
+    public static class Safe {
+        /**
+         * 保存登录次数的key前缀
+         */
+        private String loginFailedPrefix = "breeze_auth_safe:";
+
+        /**
+         * 登录失败有效期，默认24小时。
+         */
+        private int loginTimeoutSecond = 24 * 60 * 60;
+        /**
+         * 是否需要验证码，默认：false
+         */
+        private boolean needCode = false;
+
+        /**
+         * 登录失败x次，后需启用验证码
+         */
+        private int loginFailedShowCodeMaxNum = 3;
+
+
+    }
 }

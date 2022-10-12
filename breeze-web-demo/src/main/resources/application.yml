@@ -44,7 +44,9 @@ breeze:
         contain-number: true #验证码是否包含数字,默认包含
         sender-address: xxxx@xx.com #发送验证码的邮箱，必填
         title: 帐号保护验证 #验证码邮箱的标题
-#breeze:
+    safe:
+      login-failed-max-num: 5
+  #breeze:
 #  minio:
 #    servers:
 #      # 第一个minio服务配置
