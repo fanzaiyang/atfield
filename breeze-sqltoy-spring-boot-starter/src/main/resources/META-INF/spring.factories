@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.fanzy.breeze.sqltoy.config.BreezeSqltoyConfig
+  cn.fanzy.breeze.sqltoy.config.BreezeSqlToyPlusConfig,\
+  cn.fanzy.breeze.sqltoy.config.BreezeSqlToyPlusSessionConfig

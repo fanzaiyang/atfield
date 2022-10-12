@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 @Configuration(proxyBeanMethods = false)
 @AllArgsConstructor
 @EnableConfigurationProperties({BreezeModelProperties.class})
+@PropertySource(value = {"classpath:application-web.properties"})
 public class BreezeModelContext {
     public static BreezeModelProperties properties;
 

@@ -30,5 +30,14 @@
             <artifactId>vavr</artifactId>
             <version>0.10.4</version>
         </dependency>
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-auth-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
