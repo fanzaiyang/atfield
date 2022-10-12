@@ -23,7 +23,6 @@ public class BreezeSqlToyUnifyFieldsHandler implements IUnifyFieldsHandler {
         map.put("createTime", new Date());
         map.put("updateBy", getLoginId());
         map.put("updateTime", new Date());
-        map.put("revision", 0);
         return map;
     }
 

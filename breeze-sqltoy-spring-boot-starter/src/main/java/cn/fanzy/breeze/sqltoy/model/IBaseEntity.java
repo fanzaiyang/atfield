@@ -3,6 +3,7 @@ package cn.fanzy.breeze.sqltoy.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.sagacity.sqltoy.config.annotation.DataVersion;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -48,6 +49,7 @@ public class IBaseEntity implements Serializable {
     /**
      * 版本号
      */
+    @DataVersion(field = "revision", startDate = true)
     private Integer revision;
 
 }
