@@ -21,7 +21,7 @@ public class BreezeSafeProperties {
     /**
      * 保存登录次数的key前缀
      */
-    private String loginFailedPrefix = "breeze_auth_safe:";
+    private String loginFailedPrefix = "breeze_cloud:safe_auth:";
 
     /**
      * 登录失败有效期，默认24小时。

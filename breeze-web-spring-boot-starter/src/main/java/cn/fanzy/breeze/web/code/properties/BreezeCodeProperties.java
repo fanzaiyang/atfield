@@ -22,9 +22,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class BreezeCodeProperties {
     private Boolean enable=true;
     /**
-     * 将验证码存储到Redis时的key的前缀，默认值为 validate_code_
+     * 将验证码存储到Redis时的key的前缀，默认值为 breeze_auth_safe:validate_code:
      */
-    private String prefix = "validate_code_";
+    private String prefix = "breeze_cloud:validate_code:";
 
     /**
      * 是否显示加载日志，默认为false
