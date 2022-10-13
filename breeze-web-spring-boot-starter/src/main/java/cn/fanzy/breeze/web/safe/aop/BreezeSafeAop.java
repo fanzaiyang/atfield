@@ -6,6 +6,7 @@ import cn.fanzy.breeze.web.safe.properties.BreezeSafeProperties;
 import cn.fanzy.breeze.web.safe.service.BreezeSafeService;
 import cn.fanzy.breeze.web.safe.utils.BreezeSafeUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -32,11 +33,12 @@ public class BreezeSafeAop {
 
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp) {
-        Object param = JoinPointUtils.getParamByName(jp, properties.getLoginKey());
+        BreezeSafe annotation = JoinPointUtils.getAnnotation(jp, BreezeSafe.class);
+        String loginKey = StrUtil.blankToDefault(annotation.loginKey(), properties.getLoginKey());
+        Object param = JoinPointUtils.getParamByName(jp, loginKey);
         String loginId = "";
         if (param != null) {
             loginId = param.toString();
-            BreezeSafe annotation = JoinPointUtils.getAnnotation(jp, BreezeSafe.class);
             breezeSafeService.check(loginId, annotation);
         }
         try {

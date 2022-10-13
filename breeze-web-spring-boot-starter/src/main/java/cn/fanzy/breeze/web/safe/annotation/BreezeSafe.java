@@ -14,4 +14,10 @@ public @interface BreezeSafe {
      * @return {@link BreezeCodeType}
      */
     BreezeCodeType value() default BreezeCodeType.IMAGE;
+
+    /**
+     * 登录的对象名，优先取此，若为空，取配置文件。
+     * @return
+     */
+    String loginKey() default "";
 }
