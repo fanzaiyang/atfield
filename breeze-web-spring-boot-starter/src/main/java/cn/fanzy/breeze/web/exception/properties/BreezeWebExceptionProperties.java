@@ -19,4 +19,17 @@ public class BreezeWebExceptionProperties {
      * 是否替换SpringBoot的BasicError，默认：true启用
      */
     private Boolean replaceBasicError;
+
+    /**
+     * 返回错误堆栈
+     */
+    private Boolean returnErrorStack = true;
+    /**
+     * 返回错误堆栈长度
+     */
+    private Integer returnErrorStackLength = 512;
+
+    public Integer getReturnErrorStackLength() {
+        return returnErrorStackLength == null ? 512 : returnErrorStackLength;
+    }
 }
