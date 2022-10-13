@@ -4,6 +4,7 @@ import cn.fanzy.breeze.admin.module.auth.controller.BreezeAdminAuthController;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
 import cn.fanzy.breeze.admin.module.auth.service.impl.BreezeAdminAuthServiceImpl;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
+import cn.fanzy.breeze.web.code.processor.BreezeCodeProcessor;
 import cn.fanzy.breeze.web.safe.service.BreezeSafeService;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.service.SqlToyCRUDService;
@@ -20,8 +21,8 @@ public class BreezeAdminAuthConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public BreezeAdminAuthService breezeAdminAuthService(SqlToyHelperDao sqlToyHelperDao, SqlToyCRUDService sqlToyCRUDService, BreezeSafeService breezeSafeService) {
-        return new BreezeAdminAuthServiceImpl(sqlToyHelperDao, sqlToyCRUDService, breezeSafeService);
+    public BreezeAdminAuthService breezeAdminAuthService(SqlToyHelperDao sqlToyHelperDao, BreezeSafeService breezeSafeService) {
+        return new BreezeAdminAuthServiceImpl(sqlToyHelperDao, breezeSafeService);
     }
 
     @PostConstruct

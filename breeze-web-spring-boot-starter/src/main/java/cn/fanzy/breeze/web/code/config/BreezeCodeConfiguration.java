@@ -14,6 +14,8 @@ import cn.fanzy.breeze.web.code.properties.BreezeCodeProperties;
 import cn.fanzy.breeze.web.code.repository.BreezeCodeRepository;
 import cn.fanzy.breeze.web.code.repository.impl.BreezeSimpleCodeRepository;
 import cn.fanzy.breeze.web.code.sender.BreezeCodeSender;
+import cn.fanzy.breeze.web.code.sender.BreezeDefaultSmsSendHandler;
+import cn.fanzy.breeze.web.code.sender.BreezeSmsSendHandler;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeImageCodeSender;
 import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
 import lombok.AllArgsConstructor;
@@ -42,7 +44,7 @@ import java.util.Map;
 @Configuration
 @EnableConfigurationProperties({BreezeCodeProperties.class})
 @AutoConfigureAfter(value = {BreezeCacheConfiguration.class})
-@ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true")
+@ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true",matchIfMissing = true)
 public class BreezeCodeConfiguration {
 
     private final BreezeCodeProperties properties;
@@ -80,6 +82,11 @@ public class BreezeCodeConfiguration {
         return new BreezeImageCodeSender();
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public BreezeSmsSendHandler breezeSmsSendHandler() {
+        return new BreezeDefaultSmsSendHandler();
+    }
     /**
      * 注入体格缺省的短信验证码发送器
      *
@@ -87,8 +94,8 @@ public class BreezeCodeConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "breezeSmsCodeSender")
-    public BreezeCodeSender breezeSmsCodeSender() {
-        return new BreezeSmsCodeSender();
+    public BreezeCodeSender breezeSmsCodeSender(BreezeSmsSendHandler breezeSmsSendHandler) {
+        return new BreezeSmsCodeSender(breezeSmsSendHandler);
     }
 
     /**
