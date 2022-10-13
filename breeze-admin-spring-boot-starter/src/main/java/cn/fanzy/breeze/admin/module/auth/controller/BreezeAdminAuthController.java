@@ -76,14 +76,14 @@ public class BreezeAdminAuthController {
     }
 
     @SaCheckLogin
-    @ApiOperation(value = "当前菜单")
+    @ApiOperation(value = "当前菜单列表")
     @ApiOperationSupport(order = 60)
     @GetMapping("/navigation")
     public JsonContent<List<SysMenu>> doGetCurrentMenu() {
         return breezeAuthService.doGetCurrentMenu();
     }
     @SaCheckLogin
-    @ApiOperation(value = "当前菜单")
+    @ApiOperation(value = "当前菜单树")
     @ApiOperationSupport(order = 65)
     @GetMapping("/navigation/tree")
     public JsonContent<List<Tree<String>>> doGetCurrentMenuTree() {
