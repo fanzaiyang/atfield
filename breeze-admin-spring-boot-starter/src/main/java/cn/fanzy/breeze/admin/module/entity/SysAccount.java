@@ -1,4 +1,4 @@
-package cn.fanzy.breeze.admin.module.auth.entity;
+package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -25,7 +25,11 @@ public class SysAccount extends IBaseEntity {
      */
     @ApiModelProperty(value = "主键", position = 0)
     private String id;
-
+    /**
+     * 头像
+     */
+    @ApiModelProperty(value = "头像", position = 13)
+    private String avatar;
     /**
      * wx用户id
      */
@@ -106,26 +110,9 @@ public class SysAccount extends IBaseEntity {
     private Integer status;
 
     /**
-     * 头像
+     * 用户类型
      */
-    @ApiModelProperty(value = "头像", position = 13)
-    private String avatar;
-    @ApiModelProperty(value = "密码是否安全，0-否，1-是", position = 16)
-    private Integer passSafe;
-    @ApiModelProperty(value = "密码修改时间", position = 20)
-    private Date passTime;
-    @ApiModelProperty(value = "锁定;0-未锁定，1-已锁定", position = 21)
-    private Integer locked;
-    @ApiModelProperty(value = "锁定时间，即解锁时间", position = 22)
-    private Date lockedTime;
-    @ApiModelProperty(value = "锁定时间，即解锁时间", position = 23)
-    private String lockedRemarks;
-    @ApiModelProperty(value = "允许删除;0-不可删除，1-可删除", position = 24)
-    private Integer deleteEnable;
-
-    @ApiModelProperty(value = "用户类型", position = 24)
+    @ApiModelProperty(value = "1-内部账户，2-外部账号，3-临时账号", position = 24)
     private Integer userType;
-    @ApiModelProperty(value = "密码修改时间", position = 20)
-    private Date delTime;
 }
 

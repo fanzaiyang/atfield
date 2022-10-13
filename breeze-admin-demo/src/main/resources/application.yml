@@ -101,5 +101,5 @@ breeze:
       exclude-path-patterns: /auth/**
   admin:
     module:
-      enable-auth: false
+      enable-auth: true
 

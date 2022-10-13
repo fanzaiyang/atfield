@@ -3,11 +3,14 @@ package cn.fanzy.breeze.admin.module.auth.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
-import cn.fanzy.breeze.admin.module.auth.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.hutool.core.lang.tree.Tree;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public interface BreezeAdminAuthService {
     /**
@@ -25,4 +28,9 @@ public interface BreezeAdminAuthService {
     JsonContent<SaTokenInfo> doUserMobileLogin(UsernameMobileLoginArgs args);
 
     JsonContent<Object> doSendUserMobileCode(String mobile, HttpServletRequest request, HttpServletResponse response);
+
+    JsonContent<List<SysMenu>> doGetCurrentMenu();
+
+    JsonContent<List<Tree<String>>> doGetCurrentMenuTree();
+
 }

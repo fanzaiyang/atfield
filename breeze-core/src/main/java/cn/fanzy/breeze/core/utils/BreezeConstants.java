@@ -6,4 +6,9 @@ import java.util.List;
 
 public class BreezeConstants {
     public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error");
+
+    /**
+     * 默认tree的根结点
+     */
+    public static final String TREE_ROOT_ID = "-1";
 }

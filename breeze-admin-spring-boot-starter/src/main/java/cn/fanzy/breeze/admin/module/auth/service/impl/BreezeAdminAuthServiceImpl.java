@@ -5,8 +5,10 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
-import cn.fanzy.breeze.admin.module.auth.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
+import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.entity.SysMenu;
+import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
@@ -19,9 +21,11 @@ import cn.fanzy.breeze.web.safe.service.BreezeSafeService;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagacity.sqltoy.model.MapKit;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -74,7 +78,15 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
 
     @Override
     public JsonContent<SaTokenInfo> doUserMobileLogin(UsernameMobileLoginArgs args) {
-        return null;
+        SysAccount account = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysAccount.class)
+                .and(i -> i.eq(SysAccount::getTelnum, args.getMobile())
+                        .or()
+                        .eq(SysAccount::getWorkTelnum, args.getMobile()))
+                .eq(SysAccount::getDelFlag, 0));
+        Assert.notNull(account, "该账号不存在!");
+        Assert.isTrue(account.getStatus() == 1, "该账号已被禁用！");
+        StpUtil.login(account.getId());
+        return JsonContent.success(StpUtil.getTokenInfo());
     }
 
     @Override
@@ -84,4 +96,17 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         return JsonContent.success();
     }
 
+    @Override
+    public JsonContent<List<SysMenu>> doGetCurrentMenu() {
+        // 查询当前用户的菜单
+        String sql = "SELECT m.* FROM sys_menu m INNER JOIN sys_role_menu rm ON m.id = rm.menu_id INNER JOIN sys_account_role ar ON rm.role_id = ar.role_id AND ar.account_id = :accountId";
+        List<SysMenu> menuList = sqlToyHelperDao.findBySql(sql, MapKit.map("accountId", StpUtil.getLoginId()), SysMenu.class);
+        return JsonContent.success(menuList);
+    }
+
+    @Override
+    public JsonContent<List<Tree<String>>> doGetCurrentMenuTree() {
+        JsonContent<List<SysMenu>> menu = doGetCurrentMenu();
+        return JsonContent.success(TreeUtils.buildTree(menu.getData()));
+    }
 }
