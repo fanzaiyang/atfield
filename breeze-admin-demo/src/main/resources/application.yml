@@ -99,3 +99,7 @@ breeze:
   auth:
     route:
       exclude-path-patterns: /auth/**
+  admin:
+    module:
+      enable-auth: false
+

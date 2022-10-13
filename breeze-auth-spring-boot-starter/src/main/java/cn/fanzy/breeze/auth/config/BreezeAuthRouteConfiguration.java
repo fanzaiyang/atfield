@@ -2,11 +2,10 @@ package cn.fanzy.breeze.auth.config;
 
 import cn.dev33.satoken.fun.SaParamFunction;
 import cn.dev33.satoken.interceptor.SaInterceptor;
-import cn.dev33.satoken.interceptor.SaRouteInterceptor;
 import cn.dev33.satoken.router.SaRouteFunction;
 import cn.fanzy.breeze.auth.function.BreezeDefaultRouteFunction;
 import cn.fanzy.breeze.auth.properties.BreezeAuthProperties;
-import cn.hutool.core.collection.CollUtil;
+import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,6 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
 
     private final BreezeAuthProperties properties;
 
-    public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error");
-
     @Bean
     @ConditionalOnMissingBean(SaRouteFunction.class)
     public SaParamFunction saRouteFunction() {
@@ -52,7 +49,7 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
     @PostConstruct
     public void checkConfig() {
         List<String> list = properties.getRoute().getExcludePathPatterns();
-        list.addAll(SWAGGER_LIST);
+        list.addAll(BreezeConstants.SWAGGER_LIST);
         properties.getRoute().setExcludePathPatterns(list);
         log.info("「微风组件」开启 <注册SaToken路由拦截器> 相关的配置。白名单：{}", JSONUtil.toJsonStr(list));
     }

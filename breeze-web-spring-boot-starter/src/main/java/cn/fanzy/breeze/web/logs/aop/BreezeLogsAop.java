@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.logs.aop;
 
+import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.web.logs.annotation.Log;
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
@@ -9,11 +10,11 @@ import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -29,9 +30,11 @@ import java.util.Map;
 @EnableConfigurationProperties(BreezeLogsProperties.class)
 @ConditionalOnProperty(prefix = "breeze.web.log", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeLogsAop {
+    private final BreezeLogsProperties properties;
     private final BreezeLogCallbackService breezeLogCallbackService;
 
-    public BreezeLogsAop(BreezeLogCallbackService breezeLogCallbackService) {
+    public BreezeLogsAop(BreezeLogsProperties properties, BreezeLogCallbackService breezeLogCallbackService) {
+        this.properties = properties;
         this.breezeLogCallbackService = breezeLogCallbackService;
     }
 
@@ -48,6 +51,9 @@ public class BreezeLogsAop {
 
     @Before(value = "cut()")
     public void before(JoinPoint joinPoint) {
+        if (skipSwagger()) {
+            return;
+        }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
         log.info("===请求参数：{}", JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
@@ -72,6 +78,9 @@ public class BreezeLogsAop {
 
     @AfterReturning(returning = "obj", value = "cut()")
     public void afterReturning(Object obj) {
+        if (skipSwagger()) {
+            return;
+        }
         log.info("===响应结果：{}", JSONUtil.toJsonStr(obj));
         breezeRequestArgs.setResponseData(obj);
         breezeRequestArgs.setEndTime(new Date());
@@ -82,6 +91,9 @@ public class BreezeLogsAop {
 
     @AfterThrowing(throwing = "e", value = "cut()")
     public void afterThrowing(Throwable e) {
+        if (skipSwagger()) {
+            return;
+        }
         if (breezeRequestArgs == null) {
             breezeRequestArgs = BreezeRequestArgs.builder()
                     .traceId(TLogContext.getTraceId())
@@ -97,6 +109,19 @@ public class BreezeLogsAop {
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
         breezeLogCallbackService.callback(breezeRequestArgs);
+    }
+
+    public boolean skipSwagger() {
+        if (properties.getIgnoreSwagger()) {
+            AntPathMatcher matcher = new AntPathMatcher();
+            String requestUri = SpringUtils.getRequestUri();
+            for (String pattern : BreezeConstants.SWAGGER_LIST) {
+                if (matcher.match(pattern, requestUri)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @PostConstruct
