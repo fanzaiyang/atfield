@@ -31,7 +31,7 @@ public class BreezeSafeProperties {
     /**
      * 允许登录失败的次数。
      */
-    private int loginFailedMaxNum = 10;
+    private int loginFailedMaxNum = 5;
     /**
      * 是否需要验证码，默认：false
      */

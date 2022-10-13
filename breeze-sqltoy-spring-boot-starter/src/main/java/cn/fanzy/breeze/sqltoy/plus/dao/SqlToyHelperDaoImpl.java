@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.sqltoy.plus.dao;
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
 import org.sagacity.sqltoy.exception.DataAccessException;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
-
+@Slf4j
 @SuppressWarnings({ "rawtypes" })
 @Repository("sqlToyHelperDao")
 public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao{

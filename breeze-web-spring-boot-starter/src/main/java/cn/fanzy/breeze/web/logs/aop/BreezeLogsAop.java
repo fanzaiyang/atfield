@@ -9,7 +9,6 @@ import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.date.TimeInterval;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
@@ -47,14 +46,11 @@ public class BreezeLogsAop {
     public void cut() {
     }
 
-    @Around(value = "cut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Before(value = "cut()")
+    public void before(JoinPoint joinPoint) {
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
-        Date startTime = new Date();
-        TimeInterval interval = DateUtil.timer();
-        long start = interval.start();
-        log.info("===请求参数：{}",JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        log.info("===请求参数：{}", JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
         log.info("===客户端IP：「{}」-用户信息：「{}」-请求参数：{}",
                 clientIp, "",
                 JSONUtil.toJsonStr(requestData));
@@ -62,7 +58,7 @@ public class BreezeLogsAop {
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
                 .requestData(requestData)
-                .startTime(startTime)
+                .startTime(new Date())
                 .classMethod(JoinPointUtils.getMethodInfo(joinPoint))
                 .requestMethod(SpringUtils.getRequestMethod())
                 .requestUrl(SpringUtils.getRequestUri())
@@ -72,14 +68,16 @@ public class BreezeLogsAop {
         if (annotation != null) {
             breezeRequestArgs.setBizName(annotation.value());
         }
-        Object proceed = joinPoint.proceed();
-        log.info("===响应结果：{}", JSONUtil.toJsonStr(proceed));
-        breezeRequestArgs.setResponseData(proceed);
+    }
+
+    @AfterReturning(returning = "obj", value = "cut()")
+    public void afterReturning(Object obj) {
+        log.info("===响应结果：{}", JSONUtil.toJsonStr(obj));
+        breezeRequestArgs.setResponseData(obj);
         breezeRequestArgs.setEndTime(new Date());
-        breezeRequestArgs.setProceedSecond(interval.intervalSecond());
+        breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(true);
         breezeLogCallbackService.callback(breezeRequestArgs);
-        return proceed;
     }
 
     @AfterThrowing(throwing = "e", value = "cut()")

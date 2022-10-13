@@ -1,9 +1,10 @@
 package cn.fanzy.breeze.web.utils;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.checkerframework.checker.units.qual.A;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,14 @@ public class JoinPointUtils {
         for (int i = 0; i < parameterNames.length; i++) {
             Object arg = joinPoint.getArgs()[i];
             if (!(arg instanceof HttpServletRequest || arg instanceof HttpServletResponse)) {
-                param.put(parameterNames[i], arg);
+                try {
+                    JSONObject entries = JSONUtil.parseObj(arg);
+                    for (Map.Entry<String, Object> entry : entries) {
+                        param.put(entry.getKey(), entry.getValue());
+                    }
+                } catch (Exception e) {
+                    param.put(parameterNames[i], arg);
+                }
             }
         }
         return param;

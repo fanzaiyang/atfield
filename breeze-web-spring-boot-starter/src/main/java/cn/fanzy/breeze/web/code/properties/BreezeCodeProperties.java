@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.web.code")
 public class BreezeCodeProperties {
-    private Boolean enable=false;
+    private Boolean enable=true;
     /**
      * 将验证码存储到Redis时的key的前缀，默认值为 validate_code_
      */

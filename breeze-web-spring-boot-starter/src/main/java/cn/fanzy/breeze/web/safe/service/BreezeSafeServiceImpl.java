@@ -19,7 +19,6 @@ import java.util.Date;
 public class BreezeSafeServiceImpl implements BreezeSafeService {
     private final BreezeCacheService cacheService;
     private final BreezeSafeProperties properties;
-    private final BreezeCodeProcessor processor;
 
     @Override
     public void count(String loginId) {
@@ -58,6 +57,7 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
         }
         // 1.校验验证码
         if (annotation != null && properties.isNeedCode() && safeInfo.getFailNum() >= properties.getLoginFailedShowCodeMaxNum()) {
+            BreezeCodeProcessor processor = SpringUtils.getBean(BreezeCodeProcessor.class);
             processor.validate(new ServletWebRequest(SpringUtils.getRequest()), annotation.value());
         }
         // 2. 校验次数
@@ -65,6 +65,15 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
             throw new RuntimeException(StrUtil.format("该账号因重试次数太多，而锁定，请{}后重试！", safeInfo.getDeadTime()));
         }
 
+    }
+
+    @Override
+    public void remove(String loginId) {
+        if (StrUtil.isBlank(loginId)) {
+            log.warn("登录名不能为空！");
+            return;
+        }
+        cacheService.remove(getKey(loginId));
     }
 
     @Override
