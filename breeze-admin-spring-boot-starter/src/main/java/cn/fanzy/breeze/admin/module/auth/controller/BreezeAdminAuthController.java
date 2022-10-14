@@ -6,7 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
-import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.web.code.annotation.BreezeCodeChecker;
 import cn.fanzy.breeze.web.code.enums.BreezeCodeType;
@@ -30,7 +30,7 @@ import java.util.List;
 @ApiSupport(author = "微风组件", order = 991001)
 @AllArgsConstructor
 @RestController
-@RequestMapping("${breeze.admin.prefix}")
+@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.auth?:/auth}}")
 public class BreezeAdminAuthController {
 
     private final BreezeAdminAuthService breezeAuthService;
@@ -51,7 +51,7 @@ public class BreezeAdminAuthController {
         return breezeAuthService.doUserPwdLogin(args);
     }
 
-    @BreezeCodeChecker(BreezeCodeType.SMS)
+
     @ApiOperation(value = "发送手机验证码")
     @ApiOperationSupport(order = 30)
     @ApiImplicitParam(name = "mobile", value = "登录名")
@@ -59,7 +59,14 @@ public class BreezeAdminAuthController {
     public JsonContent<Object> doSendUserMobileCode(String mobile, HttpServletRequest request, HttpServletResponse response) {
         return breezeAuthService.doSendUserMobileCode(mobile, request, response);
     }
-
+    @ApiOperation(value = "发送手机验证码")
+    @ApiOperationSupport(order = 30)
+    @ApiImplicitParam(name = "mobile", value = "登录名")
+    @GetMapping("/login/image/code/send")
+    public JsonContent<String> doSendUserImageCode(HttpServletRequest request, HttpServletResponse response) {
+        return breezeAuthService.doSendUserImageCode(request, response);
+    }
+    @BreezeCodeChecker(BreezeCodeType.SMS)
     @ApiOperation(value = "手机号验证码登录")
     @ApiOperationSupport(order = 40)
     @GetMapping("/login/mobile")
@@ -71,7 +78,7 @@ public class BreezeAdminAuthController {
     @ApiOperation(value = "当前登录人")
     @ApiOperationSupport(order = 50)
     @GetMapping("/user")
-    public JsonContent<SysAccount> doGetCurrentUserInfo() {
+    public JsonContent<CurrentUserInfoVo> doGetCurrentUserInfo() {
         return breezeAuthService.doGetCurrentUserInfo();
     }
 

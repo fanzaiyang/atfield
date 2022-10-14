@@ -33,7 +33,8 @@ public class BreezeCodeDefaultProcessor implements BreezeCodeProcessor {
 
     @Override
     public BreezeCode create(ServletWebRequest request, IBreezeCodeTypeEnum codeType) {
-        return this.generator(codeType).generate(request, codeProperties);
+        String key = generator(codeType).generateKey(request, codeProperties);
+        return create(request,key,codeType);
     }
 
     @Override

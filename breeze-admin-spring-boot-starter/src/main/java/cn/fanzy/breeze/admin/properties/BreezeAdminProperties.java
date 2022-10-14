@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +13,7 @@ public class BreezeAdminProperties {
     /**
      * 接口前缀
      */
-    private String prefix = "/auth";
+    private Prefix prefix = new Prefix();
     /**
      * 模块配置
      */
@@ -23,5 +22,21 @@ public class BreezeAdminProperties {
     @Data
     public static class Module {
         private Boolean enableAuth = true;
+    }
+
+    @Data
+    public static class Prefix {
+        /**
+         * API接口统一前缀
+         */
+        private String api;
+        /**
+         * 授权登录模块前缀,默认：/auth
+         */
+        private String auth;
+        /**
+         * 账户管理模块前缀,默认：/auth
+         */
+        private String account;
     }
 }

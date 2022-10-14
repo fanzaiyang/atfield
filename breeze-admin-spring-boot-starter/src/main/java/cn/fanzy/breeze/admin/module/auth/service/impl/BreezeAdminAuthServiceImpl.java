@@ -1,24 +1,29 @@
 package cn.fanzy.breeze.admin.module.auth.service.impl;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
+import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
+import cn.fanzy.breeze.admin.module.entity.SysRole;
 import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.web.code.enums.BreezeCodeType;
+import cn.fanzy.breeze.web.code.model.BreezeImageCode;
 import cn.fanzy.breeze.web.code.processor.BreezeCodeProcessor;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.fanzy.breeze.web.password.PasswordEncoder;
 import cn.fanzy.breeze.web.password.bcrypt.BCryptPasswordEncoder;
 import cn.fanzy.breeze.web.safe.service.BreezeSafeService;
 import cn.fanzy.breeze.web.utils.SpringUtils;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
@@ -62,17 +67,29 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Assert.isTrue(passwordEncoder.matches(args.getPassword(), account.getPassowrd()), "密码错误！");
         StpUtil.login(account.getId());
+        StpUtil.getSession().set("userInfo", account);
         return JsonContent.success(StpUtil.getTokenInfo());
     }
 
     @Override
-    public JsonContent<SysAccount> doGetCurrentUserInfo() {
+    public JsonContent<CurrentUserInfoVo> doGetCurrentUserInfo() {
+        SaSession session = StpUtil.getSession();
         String loginId = StpUtil.getLoginIdAsString();
+        Object o = session.get(loginId);
+        if (o instanceof CurrentUserInfoVo) {
+            return JsonContent.success((CurrentUserInfoVo) o);
+        }
         List<SysAccount> accountList = sqlToyHelperDao.loadByIds(SysAccount.class, loginId);
         if (CollUtil.isEmpty(accountList)) {
             throw new NotLoginException(StrUtil.format("未找到ID为「{}」的用户！", loginId), StpUtil.TYPE, NotLoginException.DEFAULT_MESSAGE);
         }
-        return JsonContent.success(accountList.get(0));
+        CurrentUserInfoVo currentUserInfoVo = BeanUtil.copyProperties(accountList.get(0), CurrentUserInfoVo.class);
+        // 查询当前登录人的角色
+        String sql = "SELECT t.* FROM sys_role t INNER JOIN sys_account_role ar on ar.role_id=t.id and ar.del_flag=0 and ar.account_id=:accountId WHERE t.del_flag=0";
+        List<SysRole> roleList = sqlToyHelperDao.findBySql(sql, MapKit.map("accountId", loginId), SysRole.class);
+        currentUserInfoVo.setRoleList(roleList);
+        session.set(loginId, currentUserInfoVo);
+        return JsonContent.success(currentUserInfoVo);
     }
 
 
@@ -86,6 +103,7 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         Assert.notNull(account, "该账号不存在!");
         Assert.isTrue(account.getStatus() == 1, "该账号已被禁用！");
         StpUtil.login(account.getId());
+        StpUtil.getSession().set("userInfo", account);
         return JsonContent.success(StpUtil.getTokenInfo());
     }
 
@@ -94,6 +112,13 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         BreezeCodeProcessor processor = SpringUtils.getBean(BreezeCodeProcessor.class);
         processor.createAndSend(new ServletWebRequest(request, response), BreezeCodeType.SMS);
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<String> doSendUserImageCode(HttpServletRequest request, HttpServletResponse response) {
+        BreezeCodeProcessor processor = SpringUtils.getBean(BreezeCodeProcessor.class);
+        BreezeImageCode code = (BreezeImageCode) processor.create(new ServletWebRequest(request, response), BreezeCodeType.IMAGE);
+        return JsonContent.success(code.getImageBase64());
     }
 
     @Override

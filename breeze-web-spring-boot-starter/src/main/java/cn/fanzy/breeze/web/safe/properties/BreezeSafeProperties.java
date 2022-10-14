@@ -40,5 +40,5 @@ public class BreezeSafeProperties {
     /**
      * 登录失败x次，后需启用验证码
      */
-    private int loginFailedShowCodeMaxNum = 3;
+    private int loginFailedShowCodeMaxNum = 2;
 }

@@ -153,9 +153,9 @@ public class BreezeCodeProperties {
     @Data
     public static class ImageCodeProperties {
         /**
-         * 从请求中获取图形验证码的客户端的参数，默认值为 image
+         * 从请求中获取图形验证码的客户端的参数，默认值为 clientId
          */
-        protected String codeKey = "image";
+        protected String codeKey = "clientId";
         /**
          * 请求中获取图形验证码对应的值的参数，默认值为 imageCode
          */

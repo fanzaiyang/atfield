@@ -22,7 +22,7 @@ public class BreezeSafeUtil {
         if (safeInfo.getFailNum() + 1 >= properties.getLoginFailedMaxNum()) {
             return StrUtil.format("该账号因重试次数太多，而锁定，请{}后重试！", safeInfo.getDeadTime());
         }
-        return StrUtil.format("当前可有「{}」次重试机会！", properties.getLoginFailedMaxNum() - safeInfo.getFailNum() - 1);
+        return StrUtil.format("当前可有「{}」次重试机会！", properties.getLoginFailedMaxNum() - safeInfo.getFailNum());
     }
 
     public static String getKey(BreezeSafeProperties properties, String loginId) {

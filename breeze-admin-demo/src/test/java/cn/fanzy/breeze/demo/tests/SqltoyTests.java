@@ -1,14 +1,13 @@
 package cn.fanzy.breeze.demo.tests;
 
+import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.demo.entity.User;
-import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import org.junit.jupiter.api.Test;
 import org.sagacity.sqltoy.dao.SqlToyLazyDao;
-import org.sagacity.sqltoy.model.EntityQuery;
 import org.sagacity.sqltoy.service.SqlToyCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +40,17 @@ public class SqltoyTests {
                     .code(RandomUtil.randomNumbers(4))
                     .name(RandomUtil.randomString(6))
                     .age(RandomUtil.randomInt(1, 100))
+                    .build());
+        }
+        sqlToyCRUDService.saveAll(saveList);
+    }
+    @Test
+    void save2() {
+        List<SysAccount> saveList = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            saveList.add(SysAccount.builder()
+                            .username(RandomUtil.randomString(5))
+                            .nickName(RandomUtil.randomString(8))
                     .build());
         }
         sqlToyCRUDService.saveAll(saveList);
