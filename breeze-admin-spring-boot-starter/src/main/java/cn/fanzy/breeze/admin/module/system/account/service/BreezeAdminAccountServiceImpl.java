@@ -1,19 +1,24 @@
 package cn.fanzy.breeze.admin.module.system.account.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.entity.SysAccountRole;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.model.Page;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,6 +26,7 @@ import java.util.List;
 public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService {
     private final SqlToyHelperDao sqlToyHelperDao;
 
+    @Transactional
     @Override
     public JsonContent<Object> save(BreezeAdminAccountSaveArgs args) {
         //校验
@@ -46,6 +52,13 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         }
         SysAccount account = BeanUtil.copyProperties(args, SysAccount.class);
         sqlToyHelperDao.saveOrUpdate(account);
+        //保存角色
+        if (CollUtil.isNotEmpty(args.getRoleIdList())) {
+            return saveAccountRole(BreezeAdminAccountRoleSaveArgs.builder()
+                    .id(account.getId())
+                    .roleIdList(args.getRoleIdList())
+                    .build());
+        }
         return JsonContent.success();
     }
 
@@ -77,5 +90,21 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                         .like(SysAccount::getWorkTelnum, args.getSearchWord())
                 ), new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
+    }
+
+    @Transactional
+    @Override
+    public JsonContent<Object> saveAccountRole(BreezeAdminAccountRoleSaveArgs args) {
+        sqlToyHelperDao.deleteByIds(SysAccountRole.class, args.getRoleIdList());
+        if (CollUtil.isNotEmpty(args.getRoleIdList())) {
+            List<SysAccountRole> saveList = new ArrayList<>();
+            for (String roleId : args.getRoleIdList()) {
+                saveList.add(SysAccountRole.builder()
+                        .roleId(roleId).accountId(args.getId())
+                        .build());
+            }
+            sqlToyHelperDao.saveAll(saveList);
+        }
+        return JsonContent.success();
     }
 }

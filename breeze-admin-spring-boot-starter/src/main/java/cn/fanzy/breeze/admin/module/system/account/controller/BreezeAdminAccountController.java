@@ -2,6 +2,7 @@ package cn.fanzy.breeze.admin.module.system.account.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.service.BreezeAdminAccountService;
 import cn.fanzy.breeze.web.model.JsonContent;
@@ -32,7 +33,12 @@ public class BreezeAdminAccountController {
     public JsonContent<Object> save(@Valid @RequestBody BreezeAdminAccountSaveArgs args) {
         return breezeAdminAccountService.save(args);
     }
-
+    @ApiOperation(value = "新增修改")
+    @ApiOperationSupport(order = 1)
+    @PostMapping("/role/bind")
+    public JsonContent<Object> saveAccountRole(@Valid @RequestBody BreezeAdminAccountRoleSaveArgs args) {
+        return breezeAdminAccountService.saveAccountRole(args);
+    }
     @ApiOperation(value = "删除单个")
     @ApiOperationSupport(order = 2)
     @ApiImplicitParam(name = "id",value = "账户ID")
@@ -54,4 +60,5 @@ public class BreezeAdminAccountController {
     public JsonContent<Page<SysAccount>> query(@Valid @RequestBody BreezeAdminAccountQueryArgs args) {
         return breezeAdminAccountService.query(args);
     }
+
 }

@@ -3,6 +3,8 @@ package cn.fanzy.breeze.admin.module.system.account.args;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class BreezeAdminAccountSaveArgs {
     /**
@@ -99,4 +101,6 @@ public class BreezeAdminAccountSaveArgs {
      */
     @ApiModelProperty(value = "1-内部账户，2-外部账号，3-临时账号", position = 24)
     private Integer userType;
+    @ApiModelProperty(value = "角色集合", position = 25)
+    private List<String> roleIdList;
 }

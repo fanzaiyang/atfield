@@ -35,8 +35,12 @@ public class BreezeAdminProperties {
          */
         private String auth;
         /**
-         * 账户管理模块前缀,默认：/auth
+         * 账户管理模块前缀,默认：/sys/account
          */
         private String account;
+        /**
+         * 角色管理模块前缀,默认：/sys/role
+         */
+        private String role;
     }
 }
