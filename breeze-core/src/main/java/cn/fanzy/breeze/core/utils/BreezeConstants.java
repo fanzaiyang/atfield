@@ -11,4 +11,9 @@ public class BreezeConstants {
      * 默认tree的根结点
      */
     public static final String TREE_ROOT_ID = "-1";
+
+    /**
+     * 树的上级ID
+     */
+    public static final String TREE_PARENT_ID="parentId";
 }

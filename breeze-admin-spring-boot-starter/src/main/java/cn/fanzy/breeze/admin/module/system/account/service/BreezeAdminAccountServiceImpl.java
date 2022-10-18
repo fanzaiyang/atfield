@@ -52,6 +52,7 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         }
         SysAccount account = BeanUtil.copyProperties(args, SysAccount.class);
         sqlToyHelperDao.saveOrUpdate(account);
+
         //保存角色
         if (CollUtil.isNotEmpty(args.getRoleIdList())) {
             return saveAccountRole(BreezeAdminAccountRoleSaveArgs.builder()

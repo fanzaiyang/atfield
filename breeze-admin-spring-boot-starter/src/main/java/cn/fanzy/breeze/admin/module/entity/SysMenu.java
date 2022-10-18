@@ -1,6 +1,8 @@
 package cn.fanzy.breeze.admin.module.entity;
 
+import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -85,7 +87,6 @@ public class SysMenu extends IBaseEntity {
     @Column(name = "status", type = Types.INTEGER)
     @ApiModelProperty(value = "状态;0-禁用，1-启用", position = 10)
     private Integer status;
-    @Column(name = "orderNumber", type = Types.INTEGER)
     @ApiModelProperty(value = "序号", position = 11)
     private Integer orderNumber;
 
@@ -121,5 +122,9 @@ public class SysMenu extends IBaseEntity {
     @Column(name = "is_leaf", type = Types.INTEGER)
     @ApiModelProperty(value = "是否是叶子节点", position = 8)
     private Integer isLeaf;
+
+    public String getParentId() {
+        return StrUtil.blankToDefault(parentId, BreezeConstants.TREE_ROOT_ID);
+    }
 }
 

@@ -2,6 +2,8 @@ package cn.fanzy.breeze.admin.module.system.roles.service.impl;
 
 
 import cn.fanzy.breeze.admin.module.entity.SysRole;
+import cn.fanzy.breeze.admin.module.entity.SysRoleMenu;
+import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.roles.service.BreezeAdminRoleService;
@@ -11,6 +13,7 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -20,6 +23,7 @@ import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,13 +40,12 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
                 .eq(IBaseEntity::getDelFlag, 0));
         Assert.isTrue(count == 0, "角色编码「{}」已存在！", args.getCode());
         SysRole role = BeanUtil.copyProperties(args, SysRole.class);
-        Object id = sqlToyHelperDao.save(role);
-        role.setId(id.toString());
+        sqlToyHelperDao.saveOrUpdate(role);
         TreeTableModel tableModel = new TreeTableModel(role);
         tableModel.pidField("parentId");
         tableModel.rootId(BreezeConstants.TREE_ROOT_ID);
         sqlToyHelperDao.wrapTreeTableRoute(tableModel);
-        return JsonContent.success();
+        return JsonContent.success(role.getId());
     }
 
     @Override
@@ -65,7 +68,9 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
 
     @Override
     public JsonContent<Page<SysRole>> queryPage(BreezeAdminRoleQueryPageArgs args) {
-        Page<SysRole> page = sqlToyHelperDao.findPage(Wrappers.lambdaWrapper(SysRole.class), new Page<>(args.getPageSize(), args.getPageNum()));
+        Page<SysRole> page = sqlToyHelperDao.findPage(Wrappers.lambdaWrapper(SysRole.class)
+                .eq(IBaseEntity::getDelFlag,0)
+                .orderByDesc(IBaseEntity::getCreateTime), new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
     }
 
@@ -96,6 +101,25 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
             item.setStatus(item.getStatus() == 1 ? 0 : 1);
         });
         sqlToyHelperDao.updateAll(roleList);
+        return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<Object> menuBind(BreezeAdminRoleMenuBindArgs args) {
+        List<SysRole> roleList = sqlToyHelperDao.loadByIds(SysRole.class, args.getId());
+        Assert.notEmpty(roleList, "未找到ID为「{}」的角色！", args.getId());
+        sqlToyHelperDao.delete(Wrappers.lambdaWrapper(SysRoleMenu.class)
+                .eq(SysRoleMenu::getRoleId, args.getId()));
+        if (CollUtil.isNotEmpty(args.getMenuIdList())) {
+            List<SysRoleMenu> menuList = new ArrayList<>();
+            for (String menuId : args.getMenuIdList()) {
+                menuList.add(SysRoleMenu.builder()
+                        .roleId(args.getId())
+                        .menuId(menuId)
+                        .build());
+            }
+            sqlToyHelperDao.saveAll(menuList);
+        }
         return JsonContent.success();
     }
 }

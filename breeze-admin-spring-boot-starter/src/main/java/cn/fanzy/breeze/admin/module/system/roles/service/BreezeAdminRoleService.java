@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.roles.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysRole;
+import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleSaveArgs;
 import cn.fanzy.breeze.web.model.JsonContent;
@@ -21,4 +22,6 @@ public interface BreezeAdminRoleService {
     JsonContent<Object> enable(String id);
 
     JsonContent<Object> enableBatch(List<String> idList);
+
+    JsonContent<Object> menuBind(BreezeAdminRoleMenuBindArgs args);
 }

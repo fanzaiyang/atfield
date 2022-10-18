@@ -1,6 +1,8 @@
 package cn.fanzy.breeze.admin.module.system.roles.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysRole;
+import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleEnableBatchArgs;
+import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.roles.service.BreezeAdminRoleService;
@@ -56,8 +58,8 @@ public class BreezeAdminSysRoleController {
     @ApiOperationSupport(order = 25)
     @ApiImplicitParam(name = "id",value = "角色ID")
     @PostMapping("/enable/batch")
-    public JsonContent<Object> enableBatch(List<String> idList){
-        return breezeAdminRoleService.enableBatch(idList);
+    public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminRoleEnableBatchArgs args){
+        return breezeAdminRoleService.enableBatch(args.getIdList());
     }
     @ApiOperation(value = "分页查询")
     @ApiOperationSupport(order = 30)
@@ -70,5 +72,12 @@ public class BreezeAdminSysRoleController {
     @PostMapping("/query/all")
     public JsonContent<List<SysRole>> queryAll(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
         return breezeAdminRoleService.queryAll(args);
+    }
+
+    @ApiOperation(value = "分页查询")
+    @ApiOperationSupport(order = 30)
+    @PostMapping("/menu/bind")
+    public JsonContent<Object> menuBind(@Valid @RequestBody BreezeAdminRoleMenuBindArgs args){
+        return breezeAdminRoleService.menuBind(args);
     }
 }
