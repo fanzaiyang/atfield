@@ -36,11 +36,6 @@ public class SysOrg extends IBaseEntity {
     @ApiModelProperty(value = "简称", position = 3)
     private String shortName;
     /**
-     * 备注
-     */
-    @ApiModelProperty(value = "备注", position = 4)
-    private String remarks;
-    /**
      * 上级ID
      */
     @ApiModelProperty(value = "上级ID", position = 5)
@@ -79,7 +74,7 @@ public class SysOrg extends IBaseEntity {
      * 备注
      */
     @ApiModelProperty(value = "备注", position = 12)
-    private String remark;
+    private String remarks;
     /**
      * 状态，1-正常，0-禁用
      */

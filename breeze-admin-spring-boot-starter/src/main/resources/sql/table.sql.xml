@@ -62,7 +62,7 @@
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
         </value>
     </sql>
-    <sql id="create_sys_role">
+    <sql id="create_sys_menu">
         <value>
             DROP TABLE IF EXISTS `sys_menu`;
             CREATE TABLE `sys_menu` (
