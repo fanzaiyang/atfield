@@ -95,7 +95,7 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
 
     @Override
     public JsonContent<Object> enableBatch(List<String> idList) {
-        List<SysRole> roleList = sqlToyHelperDao.loadByIds(SysRole.class, idList);
+        List<SysRole> roleList = sqlToyHelperDao.loadByIds(SysRole.class, idList.toArray());
         Assert.notEmpty(roleList, "未找到ID为「{}」的角色！", JSONUtil.toJsonStr(idList));
         roleList.forEach(item -> {
             item.setStatus(item.getStatus() == 1 ? 0 : 1);

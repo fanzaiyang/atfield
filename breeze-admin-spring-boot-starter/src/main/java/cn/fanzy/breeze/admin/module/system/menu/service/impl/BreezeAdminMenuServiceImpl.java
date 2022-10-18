@@ -11,7 +11,6 @@ import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
-import cn.fanzy.breeze.sqltoy.utils.SqlParamUtil;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
@@ -19,7 +18,6 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagacity.sqltoy.model.MapKit;
 import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,8 +80,12 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
     @Transactional
     @Override
     public JsonContent<Object> enableBatch(BreezeAdminMenuEnableArgs args) {
-        String sql = "update sys_menu set status=if(status=1,0,1) where id in (:id)";
-        sqlToyHelperDao.executeSql(sql, MapKit.map("id", SqlParamUtil.buildInArgs(args.getIdList())));
+        List<SysMenu> menuList = sqlToyHelperDao.loadByIds(SysMenu.class, args.getIdList().toArray());
+        Assert.notEmpty(menuList, "未找到对应记录！");
+        menuList.forEach(item -> {
+            item.setStatus(item.getStatus() == 1 ? 0 : 1);
+        });
+        sqlToyHelperDao.updateAll(menuList);
         return JsonContent.success();
     }
 
