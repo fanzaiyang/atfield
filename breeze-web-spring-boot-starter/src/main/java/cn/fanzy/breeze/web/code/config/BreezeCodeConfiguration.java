@@ -21,6 +21,7 @@ import cn.fanzy.breeze.web.code.sender.impl.BreezeSmsCodeSender;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -42,6 +43,7 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @Configuration
+@ImportAutoConfiguration({BreezeMailExtendAutoConfiguration.class})
 @EnableConfigurationProperties({BreezeCodeProperties.class})
 @AutoConfigureAfter(value = {BreezeCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true",matchIfMissing = true)

@@ -8,6 +8,7 @@ import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageAr
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.roles.service.BreezeAdminRoleService;
 import cn.fanzy.breeze.core.utils.BreezeConstants;
+import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
@@ -15,6 +16,7 @@ import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
@@ -102,6 +104,13 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
         });
         sqlToyHelperDao.updateAll(roleList);
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<List<Tree<String>>> queryTree(BreezeAdminRoleQueryPageArgs args) {
+        JsonContent<List<SysRole>> content = queryAll(args);
+        Assert.isTrue(content.isSuccess(),content.getMessage());
+        return JsonContent.success(TreeUtils.buildTree(content.getData()));
     }
 
     @Override

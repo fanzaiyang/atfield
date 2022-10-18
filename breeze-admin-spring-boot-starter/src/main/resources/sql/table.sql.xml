@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<sqltoy xmlns="http://www.sagframe.com/schema/sqltoy">
+    <sql id="create_sys_account">
+        <value>
+            DROP TABLE IF EXISTS `sys_account`;
+            CREATE TABLE `sys_account`(
+                `id` varchar(36) NOT NULL COMMENT '主键',
+                `wx_user_id` varchar(64) DEFAULT NULL COMMENT '微信UserId',
+                `username` varchar(20) DEFAULT NULL COMMENT '用户名',
+                `passowrd` varchar(90) DEFAULT NULL COMMENT '登录密码',
+                `nick_name` varchar(90) DEFAULT NULL COMMENT '昵称',
+                `sex` int(1) DEFAULT '0' COMMENT '性别;0-未知，1-男，2-女',
+                `email` varchar(200) DEFAULT NULL COMMENT '邮箱地址',
+                `idnum` varchar(20) DEFAULT NULL COMMENT '身份证号',
+                `telnum` varchar(90) DEFAULT NULL COMMENT '手机号码',
+                `work_telnum` varchar(90) DEFAULT NULL COMMENT '工作手机',
+                `corp_code` varchar(36) DEFAULT NULL COMMENT '公司编码',
+                `corp_name` varchar(90) DEFAULT NULL COMMENT '公司名称',
+                `dept_code` varchar(36) DEFAULT NULL COMMENT '部门编码',
+                `dept_name` varchar(90) DEFAULT NULL COMMENT '部门名称',
+                `job_code` varchar(36) DEFAULT NULL COMMENT '职务编码',
+                `job_name` varchar(90) DEFAULT NULL COMMENT '职务名称',
+                `avatar` text COMMENT '头像',
+                `status` int(1) DEFAULT '1' COMMENT '状态;状态，0-禁用，1-启用',
+                `delete_enable` int(1) DEFAULT '1' COMMENT '允许删除;0-不可删除，1-可删除',
+                `del_time` datetime DEFAULT NULL COMMENT '删除时间',
+                `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                PRIMARY KEY (`id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统账户表';
+        </value>
+    </sql>
+    <sql id="create_sys_role">
+        <value>
+            DROP TABLE IF EXISTS `sys_role`;
+            CREATE TABLE `sys_role`(
+                `id` varchar(36) NOT NULL COMMENT '主键',
+                `code` varchar(36) DEFAULT NULL COMMENT '角色标识',
+                `name` varchar(90) DEFAULT NULL COMMENT '角色名称',
+                `remarks` varchar(255) DEFAULT NULL COMMENT '备注说明',
+                `data_scope` varchar(10) DEFAULT NULL COMMENT '数据范围（ALL：全部数据权限 CUSTOM：自定数据权限 DEPT：本部门数据权限 DEPT_ALL：本部门及以下数据权限）',
+                `status` int(1) DEFAULT '1' COMMENT '状态;状态，0-禁用，1-启用',
+                `delete_enable` int(1) DEFAULT '1' COMMENT '允许删除;0-不可删除，1-可删除',
+                `order_number` int(11) DEFAULT '1' COMMENT '序号',
+                `node_level` int(11) DEFAULT '0' COMMENT '等级',
+                `node_route` text COMMENT '所有上级ID',
+                `is_leaf` int(1) DEFAULT '0' COMMENT '是否是叶子节点',
+                `parent_id` varchar(36) DEFAULT '-1' COMMENT '父节点唯一性标识',
+                `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                PRIMARY KEY (`id`) USING BTREE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统角色表';
+        </value>
+    </sql>
+    <sql id="create_sys_role">
+        <value>
+            DROP TABLE IF EXISTS `sys_menu`;
+            CREATE TABLE `sys_menu` (
+                `id` varchar(36) NOT NULL COMMENT '主键',
+                `code` varchar(90) DEFAULT NULL COMMENT '菜单标识',
+                `title` varchar(90) DEFAULT NULL COMMENT '菜单标题',
+                `icon` varchar(255) DEFAULT NULL COMMENT '菜单图标',
+                `parent_id` varchar(36) DEFAULT NULL COMMENT '上级菜单ID',
+                `menu_type` varchar(36) DEFAULT NULL COMMENT '菜单类型;menu-菜单，button-按钮',
+                `hidden` int(1) DEFAULT '0' COMMENT '是否隐藏;0-否，1-是',
+                `uri` varchar(255) DEFAULT NULL COMMENT '菜单路径',
+                `permission_code` varchar(255) DEFAULT NULL COMMENT '权限标识',
+                `callback_url` varchar(255) DEFAULT NULL COMMENT '回调地址',
+                `auth_login_token_uri` varchar(255) DEFAULT NULL COMMENT '回调地址',
+                `auth_user_check_uri` varchar(255) DEFAULT NULL COMMENT '回调地址',
+                `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
+                `status` int(1) DEFAULT '1' COMMENT '状态;0-禁用，1-启用',
+                `order_number` int(11) DEFAULT '1' COMMENT '序号',
+                `node_level` int(11) DEFAULT '0' COMMENT '等级',
+                `node_route` text COMMENT '所有上级ID',
+                `is_leaf` int(1) DEFAULT '0' COMMENT '是否是叶子节点',
+                `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                PRIMARY KEY (`id`) USING BTREE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统菜单表';
+        </value>
+    </sql>
+    <sql id="create_sys_account_role">
+        <value>
+            DROP TABLE IF EXISTS `sys_account_role`;
+            CREATE TABLE `sys_account_role` (
+                `id` varchar(36) NOT NULL COMMENT '主键',
+                `account_id` varchar(36) DEFAULT NULL COMMENT '账户ID',
+                `role_id` varchar(36) DEFAULT NULL COMMENT '角色ID',
+                `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                PRIMARY KEY (`id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='账户角色绑定表';
+        </value>
+    </sql>
+    <sql id="create_sys_role_menu">
+        <value>
+            DROP TABLE IF EXISTS `sys_role_menu`;
+            CREATE TABLE `sys_role_menu` (
+                 `id` varchar(36) NOT NULL COMMENT '主键',
+                 `menu_id` varchar(36) DEFAULT NULL COMMENT '菜单ID',
+                 `role_id` varchar(36) DEFAULT NULL COMMENT '角色ID',
+                 `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                 `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                 `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                 `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                 `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                 `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                 `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                 PRIMARY KEY (`id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单表';
+        </value>
+    </sql>
+    <sql id="create_sys_dict">
+        <value>
+            DROP TABLE IF EXISTS `sys_dict`;
+            CREATE TABLE `sys_dict` (
+                 `id` varchar(36) NOT NULL,
+                 `key_name` varchar(100) DEFAULT NULL COMMENT '键名',
+                 `key_value` varchar(900) DEFAULT NULL COMMENT '键值',
+                 `remarks` varchar(900) DEFAULT NULL COMMENT '备注',
+                 `parent_id` varchar(36) DEFAULT NULL COMMENT '上级ID',
+                 `node_level` int(11) DEFAULT '0' COMMENT '等级',
+                 `node_route` text COMMENT '所有上级ID',
+                 `is_leaf` int(1) DEFAULT '0' COMMENT '是否是叶子节点',
+                 `status` int(1) DEFAULT '1' COMMENT '是否有效，0-否，1-是',
+                 `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                 `revision` varchar(36) DEFAULT '0' COMMENT '乐观锁',
+                 `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                 `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                 `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                 `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                 `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                 PRIMARY KEY (`id`) USING BTREE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色字典表';
+        </value>
+    </sql>
+    <sql id="create_sys_log">
+        <value>
+            DROP TABLE IF EXISTS `sys_log`;
+            CREATE TABLE `sys_log` (
+                `id` varchar(36) NOT NULL,
+                `name` varchar(255) DEFAULT NULL COMMENT '业务名称',
+                `ip` varchar(36) DEFAULT NULL COMMENT 'IP地址',
+                `user_id` varchar(36) DEFAULT NULL COMMENT '当前登录用户主键',
+                `user_info` varchar(255) DEFAULT NULL COMMENT '当前用户详情',
+                `start_time` datetime DEFAULT NULL COMMENT '开始时间',
+                `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+                `spend_second` int(11) DEFAULT NULL COMMENT '请求耗时（秒）',
+                `request` text COMMENT '请求参数JSON',
+                `response` longtext COMMENT '响应结果JSON',
+                `success` tinyint(1) DEFAULT '0' COMMENT '是否成功，1-是，0-否',
+                `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户号',
+                `revision` int(11) DEFAULT '0' COMMENT '乐观锁',
+                `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+                `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+                `update_by` varchar(36) DEFAULT NULL COMMENT '更新人',
+                `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+                `del_flag` int(1) DEFAULT '0' COMMENT '删除标志;0-未删除，1-已删除',
+                PRIMARY KEY (`id`) USING BTREE
+            ) ENRSET=utf8mb4 COMMENT='系统日志表';
+        </value>
+    </sql>
+</sqltoy>

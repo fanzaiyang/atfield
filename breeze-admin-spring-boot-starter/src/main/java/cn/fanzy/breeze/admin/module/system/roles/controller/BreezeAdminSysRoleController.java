@@ -7,6 +7,7 @@ import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageAr
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.roles.service.BreezeAdminRoleService;
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.hutool.core.lang.tree.Tree;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
@@ -68,14 +69,19 @@ public class BreezeAdminSysRoleController {
         return breezeAdminRoleService.queryPage(args);
     }
     @ApiOperation(value = "分页查询")
-    @ApiOperationSupport(order = 30)
+    @ApiOperationSupport(order = 35)
     @PostMapping("/query/all")
     public JsonContent<List<SysRole>> queryAll(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
         return breezeAdminRoleService.queryAll(args);
     }
-
     @ApiOperation(value = "分页查询")
-    @ApiOperationSupport(order = 30)
+    @ApiOperationSupport(order = 35)
+    @PostMapping("/query/tree")
+    public JsonContent<List<Tree<String>>> queryTree(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
+        return breezeAdminRoleService.queryTree(args);
+    }
+    @ApiOperation(value = "分页查询")
+    @ApiOperationSupport(order = 50)
     @PostMapping("/menu/bind")
     public JsonContent<Object> menuBind(@Valid @RequestBody BreezeAdminRoleMenuBindArgs args){
         return breezeAdminRoleService.menuBind(args);
