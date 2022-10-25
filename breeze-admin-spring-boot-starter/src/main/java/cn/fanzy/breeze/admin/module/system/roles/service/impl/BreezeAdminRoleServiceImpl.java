@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.roles.service.impl;
 
 
+import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.admin.module.entity.SysRole;
 import cn.fanzy.breeze.admin.module.entity.SysRoleMenu;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
@@ -21,6 +22,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagacity.sqltoy.model.MapKit;
 import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +73,7 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
     @Override
     public JsonContent<Page<SysRole>> queryPage(BreezeAdminRoleQueryPageArgs args) {
         Page<SysRole> page = sqlToyHelperDao.findPage(Wrappers.lambdaWrapper(SysRole.class)
-                .eq(IBaseEntity::getDelFlag,0)
+                .eq(IBaseEntity::getDelFlag, 0)
                 .orderByDesc(IBaseEntity::getCreateTime), new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
     }
@@ -109,7 +111,7 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
     @Override
     public JsonContent<List<Tree<String>>> queryTree(BreezeAdminRoleQueryPageArgs args) {
         JsonContent<List<SysRole>> content = queryAll(args);
-        Assert.isTrue(content.isSuccess(),content.getMessage());
+        Assert.isTrue(content.isSuccess(), content.getMessage());
         return JsonContent.success(TreeUtils.buildTree(content.getData()));
     }
 
@@ -130,5 +132,16 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
             sqlToyHelperDao.saveAll(menuList);
         }
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<List<SysMenu>> getBindMenu(String id) {
+        // 查询已绑定的菜单ID
+        String sql = "select t.id from sys_menu t inner join sys_role_menu rm on rm.menu_id=t.id and rm.role_id=:roleId where t.del_flag=0 and t.is_leaf=1";
+        List<SysMenu> menuList = sqlToyHelperDao.findBySql(sql, MapKit.map("roleId", id), SysMenu.class);
+        if(CollUtil.isEmpty(menuList)){
+            menuList=new ArrayList<>();
+        }
+        return JsonContent.success(menuList);
     }
 }

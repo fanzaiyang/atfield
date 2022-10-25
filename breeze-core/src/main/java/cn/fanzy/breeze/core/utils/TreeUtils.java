@@ -7,6 +7,7 @@ import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,7 +84,8 @@ public class TreeUtils extends TreeUtil {
             node.setId(object.getOrDefault(StrUtil.blankToDefault(idKey, "id"), "") + "");
             node.setParentId(object.getOrDefault(StrUtil.blankToDefault(parentKey, "parentId"), "") + "");
             node.setName(object.getOrDefault(StrUtil.blankToDefault(nameKey, "name"), "") + "");
-            node.setWeight(Integer.parseInt(object.getOrDefault(StrUtil.blankToDefault(weightKey, "orderNumber"), i) + ""));
+            String orderNumber = StrUtil.blankToDefault(weightKey, "orderNumber");
+            node.setWeight(NumberUtil.isNumber(orderNumber) ? orderNumber : i);
             object.put("unionId", node.getId());
             object.put("originParentId", node.getParentId());
             object.remove(StrUtil.blankToDefault(idKey, "id"));
@@ -91,7 +93,7 @@ public class TreeUtils extends TreeUtil {
             nodeList.add(node);
         }
         // 这里是修改根结点
-        Set<String> nodeIdSet = nodeList.stream().map(item -> item.getId()).collect(Collectors.toSet());
+        Set<String> nodeIdSet = nodeList.stream().map(TreeNode::getId).collect(Collectors.toSet());
         rootId = StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID);
         String finalRootId = rootId;
         nodeList.forEach(item -> {

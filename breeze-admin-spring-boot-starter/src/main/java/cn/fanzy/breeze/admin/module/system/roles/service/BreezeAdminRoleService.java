@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.roles.service;
 
+import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.admin.module.entity.SysRole;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleQueryPageArgs;
@@ -27,4 +28,6 @@ public interface BreezeAdminRoleService {
     JsonContent<Object> menuBind(BreezeAdminRoleMenuBindArgs args);
 
     JsonContent<List<Tree<String>>> queryTree(BreezeAdminRoleQueryPageArgs args);
+
+    JsonContent<List<SysMenu>> getBindMenu(String id);
 }

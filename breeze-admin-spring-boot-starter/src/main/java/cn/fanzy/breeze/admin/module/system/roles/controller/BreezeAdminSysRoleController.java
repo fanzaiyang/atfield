@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.roles.controller;
 
+import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.admin.module.entity.SysRole;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleEnableBatchArgs;
 import cn.fanzy.breeze.admin.module.system.roles.args.BreezeAdminRoleMenuBindArgs;
@@ -68,22 +69,29 @@ public class BreezeAdminSysRoleController {
     public JsonContent<Page<SysRole>> queryPage(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
         return breezeAdminRoleService.queryPage(args);
     }
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "查询全部")
     @ApiOperationSupport(order = 35)
     @PostMapping("/query/all")
     public JsonContent<List<SysRole>> queryAll(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
         return breezeAdminRoleService.queryAll(args);
     }
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "查询角色树")
     @ApiOperationSupport(order = 35)
     @PostMapping("/query/tree")
     public JsonContent<List<Tree<String>>> queryTree(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args){
         return breezeAdminRoleService.queryTree(args);
     }
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "绑定菜单")
     @ApiOperationSupport(order = 50)
     @PostMapping("/menu/bind")
     public JsonContent<Object> menuBind(@Valid @RequestBody BreezeAdminRoleMenuBindArgs args){
         return breezeAdminRoleService.menuBind(args);
+    }
+    @ApiOperation(value = "已绑定菜单")
+    @ApiOperationSupport(order = 60)
+    @ApiImplicitParam(name = "id",value = "角色ID")
+    @GetMapping("/menu/list")
+    public JsonContent<List<SysMenu>> getBindMenu(String id){
+        return breezeAdminRoleService.getBindMenu(id);
     }
 }

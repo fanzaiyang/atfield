@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Api(tags = "「微风组件」组织管理")
-@ApiSupport(author = "微风组件", order = 992021)
+@ApiSupport(author = "微风组件", order = 992041)
 @AllArgsConstructor
 @RestController
 @RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.account?:/sys/org}}")
@@ -30,7 +30,7 @@ public class BreezeAdminOrgController {
     public JsonContent<List<SysOrg>> queryCorpAsync(String id){
         return breezeAdminOrgService.queryCorpAsync(id);
     }
-    @ApiOperation(value = "查询组织异步")
+    @ApiOperation(value = "查询组织树")
     @ApiOperationSupport(order = 101)
     @ApiImplicitParam(name = "nodeType",value = "节点类型:corp,dept,job多个用逗号隔开。")
     @GetMapping("/query/tree")
