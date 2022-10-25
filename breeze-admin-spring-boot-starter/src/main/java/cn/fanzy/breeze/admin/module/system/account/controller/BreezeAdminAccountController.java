@@ -33,7 +33,7 @@ public class BreezeAdminAccountController {
     public JsonContent<Object> save(@Valid @RequestBody BreezeAdminAccountSaveArgs args) {
         return breezeAdminAccountService.save(args);
     }
-    @ApiOperation(value = "新增修改")
+    @ApiOperation(value = "绑定角色")
     @ApiOperationSupport(order = 1)
     @PostMapping("/role/bind")
     public JsonContent<Object> saveAccountRole(@Valid @RequestBody BreezeAdminAccountRoleSaveArgs args) {
