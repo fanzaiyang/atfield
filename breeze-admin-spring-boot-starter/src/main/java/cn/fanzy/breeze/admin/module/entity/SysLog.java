@@ -5,18 +5,27 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.sagacity.sqltoy.config.annotation.Column;
+import org.sagacity.sqltoy.config.annotation.Id;
 
+import java.sql.Types;
 import java.util.Date;
-
+@Data
 @ApiModel(value="sys_log")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class SysLog extends IBaseEntity {
+    @Id(generator = "default")
+    @Column(name = "id",type = Types.VARCHAR)
     @ApiModelProperty(value="")
     private String id;
-
+    /**
+     * 线程ID
+     */
+    private String traceId;
     /**
      * 业务名称
      */
@@ -27,7 +36,7 @@ public class SysLog extends IBaseEntity {
      * IP地址
      */
     @ApiModelProperty(value="IP地址")
-    private String ip;
+    private String clientIp;
 
     /**
      * 当前登录用户主键
@@ -58,22 +67,25 @@ public class SysLog extends IBaseEntity {
      */
     @ApiModelProperty(value="请求耗时（秒）")
     private Integer spendSecond;
-
+    @ApiModelProperty(value="请求地址")
+    private String requestUri;
+    @ApiModelProperty(value="请求方法GET/POST")
+    private String requestMethod;
     /**
      * 请求参数JSON
      */
     @ApiModelProperty(value="请求参数JSON")
-    private String request;
+    private String requestData;
 
     /**
      * 响应结果JSON
      */
     @ApiModelProperty(value="响应结果JSON")
-    private String response;
+    private String responseData;
 
     /**
      * 是否成功，1-是，0-否
      */
     @ApiModelProperty(value="是否成功，1-是，0-否")
-    private Boolean success;
+    private Integer success;
 }

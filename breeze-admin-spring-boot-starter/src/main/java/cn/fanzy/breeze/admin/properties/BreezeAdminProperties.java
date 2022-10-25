@@ -19,6 +19,8 @@ public class BreezeAdminProperties {
      */
     private Module module = new Module();
 
+    private ErrorEnum errorLevel = ErrorEnum.all;
+
     @Data
     public static class Module {
         private Boolean enableAuth = true;
@@ -42,5 +44,16 @@ public class BreezeAdminProperties {
          * 角色管理模块前缀,默认：/sys/role
          */
         private String role;
+    }
+
+    public static enum ErrorEnum {
+        /**
+         * 所有
+         */
+        all,
+        /**
+         * 仅记录错误
+         */
+        error;
     }
 }

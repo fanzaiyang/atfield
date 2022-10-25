@@ -10,6 +10,11 @@ public class BreezeSaTokenCurrentSessionHandler implements BreezeCurrentSessionH
     @Override
     public String getCurrentLoginId() {
         log.debug("StpUtil。。。。");
-        return StpUtil.isLogin() ? StpUtil.getLoginIdAsString() : DEFAULT_LOGIN_ID;
+        try {
+            return StpUtil.isLogin() ? StpUtil.getLoginIdAsString() : DEFAULT_LOGIN_ID;
+        }catch (Exception e){
+            return DEFAULT_LOGIN_ID;
+        }
+
     }
 }
