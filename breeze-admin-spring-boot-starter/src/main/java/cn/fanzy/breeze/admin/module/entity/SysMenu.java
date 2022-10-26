@@ -88,6 +88,8 @@ public class SysMenu extends IBaseEntity {
     @Column(name = "status", type = Types.INTEGER)
     @ApiModelProperty(value = "状态;0-禁用，1-启用", position = 10)
     private Integer status;
+
+    @Column(name = "order_number", type = Types.INTEGER)
     @ApiModelProperty(value = "序号", position = 11)
     private Integer orderNumber;
 
