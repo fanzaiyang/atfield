@@ -58,6 +58,7 @@ public class IBaseEntity implements Serializable {
      * 版本号
      */
     @DataVersion(field = "revision", startDate = true)
+    @Column(name = "revision",type = Types.INTEGER,length = 11)
     private Integer revision;
 
 }
