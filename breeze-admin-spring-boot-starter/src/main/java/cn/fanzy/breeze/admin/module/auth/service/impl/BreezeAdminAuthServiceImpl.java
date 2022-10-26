@@ -36,6 +36,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -67,6 +68,10 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Assert.isTrue(passwordEncoder.matches(args.getPassword(), account.getPassowrd()), "密码错误！");
         StpUtil.login(account.getId());
+        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
+                .set(SysAccount::getLastLoginIp, SpringUtils.getClientIp())
+                .set(SysAccount::getLastLoginDate, new Date())
+                .eq(SysAccount::getId, account.getId()));
         StpUtil.getSession().set("userInfo", account);
         return JsonContent.success(StpUtil.getTokenInfo());
     }
@@ -104,6 +109,10 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         Assert.isTrue(account.getStatus() == 1, "该账号已被禁用！");
         StpUtil.login(account.getId());
         StpUtil.getSession().set("userInfo", account);
+        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
+                .set(SysAccount::getLastLoginIp, SpringUtils.getClientIp())
+                .set(SysAccount::getLastLoginDate, new Date())
+                .eq(SysAccount::getId, account.getId()));
         return JsonContent.success(StpUtil.getTokenInfo());
     }
 

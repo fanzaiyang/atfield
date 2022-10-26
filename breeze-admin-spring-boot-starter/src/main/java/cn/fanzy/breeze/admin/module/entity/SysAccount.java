@@ -10,6 +10,7 @@ import org.sagacity.sqltoy.config.annotation.Entity;
 import org.sagacity.sqltoy.config.annotation.Id;
 
 import java.sql.Types;
+import java.util.Date;
 
 /**
  * 系统账户表(SysAccount)表实体类
@@ -129,5 +130,11 @@ public class SysAccount extends IBaseEntity {
     @ApiModelProperty(value = "状态;状态，0-禁用，1-启用", position = 12)
     @Column(name = "status",type = Types.SMALLINT,length = 1)
     private Integer status;
+    @ApiModelProperty(value = "最后一次登录的IP", position = 13)
+    @Column(name = "last_login_ip",type = Types.VARCHAR,length = 20)
+    private String lastLoginIp;
+    @ApiModelProperty(value = "最后一次登录的时间", position = 13)
+    @Column(name = "last_login_date",type = Types.DATE)
+    private Date lastLoginDate;
 }
 
