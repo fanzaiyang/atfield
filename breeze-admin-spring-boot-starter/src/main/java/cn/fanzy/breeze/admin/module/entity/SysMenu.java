@@ -29,7 +29,8 @@ public class SysMenu extends IBaseEntity {
     /**
      * 主键
      */
-    @Id(strategy = "generator", generator = "org.sagacity.sqltoy.plugins.id.impl.DefaultIdGenerator")
+    @Id
+//    @Id(strategy = "generator", generator = "org.sagacity.sqltoy.plugins.id.impl.DefaultIdGenerator")
     @Column(name = "id", type = Types.VARCHAR)
     @ApiModelProperty(value = "主键", position = 1)
     private String id;
@@ -100,10 +101,13 @@ public class SysMenu extends IBaseEntity {
     /**
      * 权限标识
      */
+    @Column(name = "callback_url", type = Types.VARCHAR)
     @ApiModelProperty(value = "回调地址", position = 12)
     private String callbackUrl;
+    @Column(name = "auth_login_token_uri", type = Types.VARCHAR)
     @ApiModelProperty(value = "临时token登录地址", position = 13)
     private String authLoginTokenUri;
+    @Column(name = "auth_user_check_uri", type = Types.VARCHAR)
     @ApiModelProperty(value = "子系统用户验证地址", position = 14)
     private String authUserCheckUri;
 
