@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -27,14 +28,14 @@ public class SysAccount extends IBaseEntity {
     /**
      * 主键
      */
-    @Id
-    @Column(name = "id",type = Types.VARCHAR,length = 36,comment = "主键")
+    @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
+    @Column(name = "id",type = Types.VARCHAR,length = 36, comment = "主键")
     @ApiModelProperty(value = "主键", position = 0)
     private String id;
     /**
      * 头像
      */
-    @Column(name = "id",type = Types.LONGVARCHAR)
+    @Column(name = "avatar",type = Types.LONGVARCHAR)
     @ApiModelProperty(value = "头像", position = 13)
     private String avatar;
     /**

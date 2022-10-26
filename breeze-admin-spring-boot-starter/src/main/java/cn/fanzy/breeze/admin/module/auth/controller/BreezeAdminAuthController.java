@@ -42,7 +42,13 @@ public class BreezeAdminAuthController {
     public JsonContent<Boolean> doUserPwdLoginBefore(String username) {
         return breezeAuthService.doUserPwdLoginBefore(username);
     }
-
+    @ApiOperation(value = "发送图片验证码")
+    @ApiImplicitParam(name = "clientId",value = "客户端唯一标识")
+    @ApiOperationSupport(order = 15)
+    @GetMapping("/login/image/code/send")
+    public JsonContent<String> doSendUserImageCode(HttpServletRequest request, HttpServletResponse response) {
+        return breezeAuthService.doSendUserImageCode(request, response);
+    }
     @BreezeSafe
     @ApiOperation(value = "用户名密码登录")
     @ApiOperationSupport(order = 20)
@@ -53,19 +59,13 @@ public class BreezeAdminAuthController {
 
 
     @ApiOperation(value = "发送手机验证码")
-    @ApiOperationSupport(order = 30)
-    @ApiImplicitParam(name = "mobile", value = "登录名")
+    @ApiOperationSupport(order = 35)
+    @ApiImplicitParam(name = "mobile", value = "手机号")
     @GetMapping("/login/mobile/code/send")
     public JsonContent<Object> doSendUserMobileCode(String mobile, HttpServletRequest request, HttpServletResponse response) {
         return breezeAuthService.doSendUserMobileCode(mobile, request, response);
     }
-    @ApiOperation(value = "发送手机验证码")
-    @ApiOperationSupport(order = 30)
-    @ApiImplicitParam(name = "mobile", value = "登录名")
-    @GetMapping("/login/image/code/send")
-    public JsonContent<String> doSendUserImageCode(HttpServletRequest request, HttpServletResponse response) {
-        return breezeAuthService.doSendUserImageCode(request, response);
-    }
+
     @BreezeCodeChecker(BreezeCodeType.SMS)
     @ApiOperation(value = "手机号验证码登录")
     @ApiOperationSupport(order = 40)

@@ -2,6 +2,7 @@ package cn.fanzy.breeze.admin.module.entity;
 
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -25,7 +26,7 @@ import java.sql.Types;
 @NoArgsConstructor
 @Entity(tableName = "sys_dict")
 public class SysDict extends IBaseEntity {
-    @Id
+    @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id", type = Types.VARCHAR,length = 36)
     @ApiModelProperty(value = "", position = 1)
     private String id;

@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -24,7 +25,7 @@ import java.sql.Types;
 @ApiModel(value = "SysOrg", description = "组织表")
 @Entity(tableName = "sys_org")
 public class SysOrg extends IBaseEntity {
-    @Id
+    @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id",type = Types.VARCHAR)
     @ApiModelProperty(value = "", position = 1)
     private String id;

@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -27,7 +28,7 @@ public class SysRole extends IBaseEntity {
     /**
      * 主键
      */
-    @Id
+    @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id",type = Types.VARCHAR)
     @ApiModelProperty(value = "主键", position = 1)
     private String id;

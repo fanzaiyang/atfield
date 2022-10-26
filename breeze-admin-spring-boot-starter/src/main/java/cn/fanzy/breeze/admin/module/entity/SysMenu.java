@@ -2,6 +2,7 @@ package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
+import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,8 +30,7 @@ public class SysMenu extends IBaseEntity {
     /**
      * 主键
      */
-    @Id
-//    @Id(strategy = "generator", generator = "org.sagacity.sqltoy.plugins.id.impl.DefaultIdGenerator")
+    @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id", type = Types.VARCHAR)
     @ApiModelProperty(value = "主键", position = 1)
     private String id;
