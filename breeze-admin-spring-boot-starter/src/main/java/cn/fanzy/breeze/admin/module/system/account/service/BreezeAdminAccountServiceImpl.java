@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
@@ -107,5 +108,13 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
             sqlToyHelperDao.saveAll(saveList);
         }
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<List<String>> queryAccountRoleList(String id) {
+        List<SysAccountRole> roleList = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysAccountRole.class)
+                .select(SysAccountRole::getRoleId)
+                .eq(SysAccountRole::getAccountId, id));
+        return JsonContent.success(roleList.stream().map(SysAccountRole::getRoleId).collect(Collectors.toList()));
     }
 }

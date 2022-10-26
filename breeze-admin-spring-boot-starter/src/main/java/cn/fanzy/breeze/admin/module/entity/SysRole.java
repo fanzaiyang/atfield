@@ -53,7 +53,7 @@ public class SysRole extends IBaseEntity {
     /**
      * 状态;状态，0-禁用，1-启用
      */
-    @Column(name = "status",type = Types.SMALLINT)
+    @Column(name = "status",type = Types.SMALLINT,defaultValue = "1")
     @ApiModelProperty(value = "状态;状态，0-禁用，1-启用", position = 5)
     private Integer status;
 

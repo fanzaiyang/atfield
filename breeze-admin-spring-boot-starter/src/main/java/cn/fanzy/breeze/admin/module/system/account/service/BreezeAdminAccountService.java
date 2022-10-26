@@ -19,4 +19,6 @@ public interface BreezeAdminAccountService {
     JsonContent<Page<SysAccount>> query(BreezeAdminAccountQueryArgs args);
 
     JsonContent<Object> saveAccountRole(BreezeAdminAccountRoleSaveArgs args);
+
+    JsonContent<List<String>> queryAccountRoleList(String id);
 }

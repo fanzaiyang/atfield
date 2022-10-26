@@ -60,5 +60,11 @@ public class BreezeAdminAccountController {
     public JsonContent<Page<SysAccount>> query(@Valid @RequestBody BreezeAdminAccountQueryArgs args) {
         return breezeAdminAccountService.query(args);
     }
+    @ApiOperation(value = "查询账号绑定的角色")
+    @ApiOperationSupport(order = 5)
+    @GetMapping("/role/list")
+    public JsonContent<List<String>> queryAccountRoleList(String id) {
+        return breezeAdminAccountService.queryAccountRoleList(id);
+    }
 
 }
