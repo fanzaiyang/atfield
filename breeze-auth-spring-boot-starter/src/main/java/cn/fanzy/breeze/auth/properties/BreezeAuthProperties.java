@@ -87,7 +87,7 @@ public class BreezeAuthProperties {
     @Data
     public static class Jwt {
         /**
-         * 是否启用，默认：true
+         * 是否启用，默认：false
          */
         private Boolean enable;
         /**

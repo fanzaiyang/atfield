@@ -106,4 +106,14 @@ breeze:
       use-sandbox-env: false #以指定是否使用沙箱环境,默认false
   auth:
     route:
-      exclude-path-patterns: /auth/**
+      exclude-path-patterns: /auth/**,/test/** #路由鉴权忽略的路径,多个逗号隔开。
+      path-patterns: /** # 路由鉴权的路径，默认全部/**
+      enable: true #是否开启路由鉴权，默认：开启
+    annotation:
+      enable: true # 是否开启注解鉴权，默默认：开启
+      exclude-path-patterns: /auth/** # 注解鉴权的忽略的路径
+      path-patterns: /** # 注解鉴权的路径，默认全部/**
+    jwt:
+      enable: false # 是否开启jwt模式，默认：不开启
+      mode: stateless #jwt模式。https://sa-token.cc/doc.html#/plugin/jwt-extend?id=_3%e3%80%81%e6%b3%a8%e5%85%a5jwt%e5%ae%9e%e7%8e%b0
+
