@@ -7,6 +7,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import org.junit.jupiter.api.Test;
+import org.sagacity.sqltoy.SqlToyContext;
 import org.sagacity.sqltoy.dao.SqlToyLazyDao;
 import org.sagacity.sqltoy.service.SqlToyCRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class SqltoyTests {
 
     @Test
     void save1() {
+        SqlToyContext context = new SqlToyContext();
         List<User> saveList = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             saveList.add(User.builder()

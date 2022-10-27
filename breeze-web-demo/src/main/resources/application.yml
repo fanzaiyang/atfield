@@ -45,9 +45,11 @@ breeze:
         sender-address: xxxx@xx.com #发送验证码的邮箱，必填
         title: 帐号保护验证 #验证码邮箱的标题
     safe:
-      login-failed-max-num: 6
-      need-code: true
-      login-failed-show-code-max-num: 3
+      login-failed-max-num: 5 #允许最大登录失败次数。默认5从
+      need-code: true #是否需要验证码，默认：false
+      login-failed-show-code-max-num: 3 #错误次数达到3次后，启用验证码
+      login-key: username #验证的登录唯一key
+      single-ip: true #按照客户端IP进行限制，默认：true，即只限制当前IP，换个IP仍可以登录。
   #breeze:
 #  minio:
 #    servers:
