@@ -97,7 +97,8 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
     @Transactional
     @Override
     public JsonContent<Object> saveAccountRole(BreezeAdminAccountRoleSaveArgs args) {
-        sqlToyHelperDao.deleteByIds(SysAccountRole.class, args.getRoleIdList());
+        sqlToyHelperDao.delete(Wrappers.lambdaWrapper(SysAccountRole.class)
+                .eq(SysAccountRole::getAccountId, args.getId()));
         if (CollUtil.isNotEmpty(args.getRoleIdList())) {
             List<SysAccountRole> saveList = new ArrayList<>();
             for (String roleId : args.getRoleIdList()) {

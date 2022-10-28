@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -18,5 +18,5 @@ public class BreezeAdminAccountRoleSaveArgs {
     @ApiModelProperty(value = "账户ID")
     private String id;
     @ApiModelProperty(value = "角色ID集合")
-    private List<String> roleIdList;
+    private Set<String> roleIdList;
 }

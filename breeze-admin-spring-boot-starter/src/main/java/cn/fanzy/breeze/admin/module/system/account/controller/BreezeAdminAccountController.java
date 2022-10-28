@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.account.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountDelBatchArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
@@ -33,25 +34,28 @@ public class BreezeAdminAccountController {
     public JsonContent<Object> save(@Valid @RequestBody BreezeAdminAccountSaveArgs args) {
         return breezeAdminAccountService.save(args);
     }
+
     @ApiOperation(value = "绑定角色")
     @ApiOperationSupport(order = 1)
     @PostMapping("/role/bind")
     public JsonContent<Object> saveAccountRole(@Valid @RequestBody BreezeAdminAccountRoleSaveArgs args) {
         return breezeAdminAccountService.saveAccountRole(args);
     }
+
     @ApiOperation(value = "删除单个")
     @ApiOperationSupport(order = 2)
-    @ApiImplicitParam(name = "id",value = "账户ID")
+    @ApiImplicitParam(name = "id", value = "账户ID")
     @DeleteMapping("/delete")
     public JsonContent<Object> delete(String id) {
         return breezeAdminAccountService.delete(id);
     }
+
     @ApiOperation(value = "删除批量")
     @ApiOperationSupport(order = 3)
-    @ApiImplicitParam(name = "idList",value = "账户ID集合['a','b']")
-    @DeleteMapping("/delete/batch")
-    public JsonContent<Object> deleteBatch(List<String> idList) {
-        return breezeAdminAccountService.deleteBatch(idList);
+    @ApiImplicitParam(name = "idList", value = "账户ID集合['a','b']")
+    @PostMapping("/delete/batch")
+    public JsonContent<Object> deleteBatch(@Valid @RequestBody BreezeAdminAccountDelBatchArgs args) {
+        return breezeAdminAccountService.deleteBatch(args.getIdList());
     }
 
     @ApiOperation(value = "分页查询")
@@ -60,6 +64,7 @@ public class BreezeAdminAccountController {
     public JsonContent<Page<SysAccount>> query(@Valid @RequestBody BreezeAdminAccountQueryArgs args) {
         return breezeAdminAccountService.query(args);
     }
+
     @ApiOperation(value = "查询账号绑定的角色")
     @ApiOperationSupport(order = 5)
     @GetMapping("/role/list")
