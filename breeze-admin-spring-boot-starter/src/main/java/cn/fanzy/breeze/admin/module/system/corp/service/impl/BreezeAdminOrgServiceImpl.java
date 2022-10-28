@@ -3,6 +3,7 @@ package cn.fanzy.breeze.admin.module.system.corp.service.impl;
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
 import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpSaveArgs;
 import cn.fanzy.breeze.admin.module.system.corp.service.BreezeAdminOrgService;
+import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
@@ -10,10 +11,13 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.sqltoy.utils.SqlParamUtil;
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +43,15 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
 
     @Override
     public JsonContent<List<Tree<String>>> queryOrgTree(String nodeType) {
+        BreezeCacheService cacheService = SpringUtils.getBean(BreezeCacheService.class);
+        String key = "breeze_admin_org_tree_" + nodeType;
+        Object tree = cacheService.get(key);
+        try {
+            if (ObjectUtil.isNotEmpty(tree) && tree instanceof List) {
+                return JsonContent.success((List<Tree<String>>) tree);
+            }
+        } catch (Exception ignored) {
+        }
         List<String> nodeTypeList = new ArrayList<>();
         if (StrUtil.isNotBlank(nodeType)) {
             nodeTypeList = StrUtil.split(nodeType, StrPool.C_COMMA);
@@ -48,7 +61,11 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
                 .eq(SysOrg::getStatus, 1)
                 .eq(IBaseEntity::getDelFlag, 0)
                 .orderByAsc(SysOrg::getCode));
-        return JsonContent.success(TreeUtils.buildTree(list));
+        List<Tree<String>> treeList = TreeUtils.buildTree(list);
+        if (CollUtil.isNotEmpty(treeList)) {
+            cacheService.save(key, treeList, 8 * 60 * 60);
+        }
+        return JsonContent.success(treeList);
     }
 
     @Override
@@ -58,7 +75,8 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
                 .eq(SysOrg::getOrgType, "corp")
                 .eq(IBaseEntity::getDelFlag, 0)
                 .orderByAsc(SysOrg::getCode));
-        return JsonContent.success(TreeUtils.buildTree(list, BreezeConstants.TREE_ROOT_ID));
+        List<Tree<String>> treeList = TreeUtils.buildTree(list, BreezeConstants.TREE_ROOT_ID);
+        return JsonContent.success(treeList);
     }
 
     @Override
