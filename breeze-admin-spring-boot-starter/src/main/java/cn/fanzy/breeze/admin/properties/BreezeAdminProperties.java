@@ -23,7 +23,34 @@ public class BreezeAdminProperties {
 
     @Data
     public static class Module {
-        private Boolean enableAuth = true;
+        /**
+         * 启用授权模块。默认：true
+         */
+        private Boolean enableAuth;
+        /**
+         * 启用系统管理模块。默认：true
+         */
+        private Boolean enableSystem;
+        /**
+         * 启用系统管理-账户管理模块。默认：true
+         */
+        private Boolean enableAccount;
+        /**
+         * 启用系统管理-组织管理模块。默认：true
+         */
+        private Boolean enableOrg;
+        /**
+         * 启用系统管理-字典管理模块。默认：true
+         */
+        private Boolean enableDict;
+        /**
+         * 启用系统管理-菜单管理模块。默认：true
+         */
+        private Boolean enableMenu;
+        /**
+         * 启用系统管理-角色管理模块。默认：true
+         */
+        private Boolean enableRole;
     }
 
     @Data
@@ -44,6 +71,18 @@ public class BreezeAdminProperties {
          * 角色管理模块前缀,默认：/sys/role
          */
         private String role;
+        /**
+         * 菜单管理模块前缀,默认：/sys/menu
+         */
+        private String menu;
+        /**
+         * 字典管理模块前缀,默认：/sys/dict
+         */
+        private String dict;
+        /**
+         * 组织架构模块前缀,默认：/sys/org
+         */
+        private String org;
     }
 
     public static enum ErrorEnum {

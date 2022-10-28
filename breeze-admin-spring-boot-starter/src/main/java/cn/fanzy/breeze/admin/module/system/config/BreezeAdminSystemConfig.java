@@ -7,11 +7,13 @@ import cn.fanzy.breeze.admin.module.system.menu.config.BreezeAdminMenuConfig;
 import cn.fanzy.breeze.admin.module.system.roles.config.BreezeAdminRoleConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
 @ImportAutoConfiguration({BreezeAdminAccountConfig.class, BreezeAdminRoleConfig.class
         , BreezeAdminMenuConfig.class, BreezeAdminOrgConfig.class, BreezeAdminDictConfig.class})
 @Slf4j
 @Configuration
+@ConditionalOnProperty(prefix = "breeze.admin.module", name = {"enable-system"}, havingValue = "true", matchIfMissing = true)
 public class BreezeAdminSystemConfig {
 }
