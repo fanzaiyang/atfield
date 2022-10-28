@@ -49,7 +49,7 @@ public class TreeUtils extends TreeUtil {
     public static <T> List<Tree<String>> buildTree(List<T> data, String rootId) {
         TimeInterval timer = DateUtil.timer();
         List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", BreezeConstants.TREE_ROOT_ID);
-        List<Tree<String>> build = build(nodeList, StrUtil.blankToDefault(rootId, "-1"));
+        List<Tree<String>> build = build(nodeList, StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID));
         long end = System.currentTimeMillis();
         log.info("list转tree耗时(秒):{}", timer.intervalSecond());
         return build;
@@ -69,7 +69,7 @@ public class TreeUtils extends TreeUtil {
      */
     public static <T> List<Tree<String>> buildTree(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, BreezeConstants.TREE_ROOT_ID);
-        return build(nodeList, StrUtil.blankToDefault(rootId, "-1"));
+        return build(nodeList, StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID));
     }
 
     private static <T> List<TreeNode<String>> buildNodeList(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
@@ -89,6 +89,7 @@ public class TreeUtils extends TreeUtil {
             object.put("unionId", node.getId());
             object.put("originParentId", node.getParentId());
             object.remove(StrUtil.blankToDefault(idKey, "id"));
+            object.remove(StrUtil.blankToDefault(parentKey, "parentId"));
             node.setExtra(object);
             nodeList.add(node);
         }

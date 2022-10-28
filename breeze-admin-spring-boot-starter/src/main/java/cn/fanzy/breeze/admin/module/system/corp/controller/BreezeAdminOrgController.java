@@ -36,10 +36,29 @@ public class BreezeAdminOrgController {
     @ApiOperationSupport(order = 12)
     @ApiImplicitParam(name = "nodeType", value = "节点类型:corp,dept,job多个用逗号隔开。")
     @GetMapping("/query/tree")
-    public JsonContent<List<Tree<String>>> queryCorpTree(String nodeType) {
-        return breezeAdminOrgService.queryCorpTree(nodeType);
+    public JsonContent<List<Tree<String>>> queryOrgTree(String nodeType) {
+        return breezeAdminOrgService.queryOrgTree(nodeType);
     }
-
+    @ApiOperation(value = "查询所有公司")
+    @ApiOperationSupport(order = 13)
+    @GetMapping("/query/corp/tree")
+    public JsonContent<List<Tree<String>>> queryCorpTree() {
+        return breezeAdminOrgService.queryCorpTree();
+    }
+    @ApiOperation(value = "查询公司下部门")
+    @ApiImplicitParam(name = "code",value = "公司编码")
+    @ApiOperationSupport(order = 14)
+    @GetMapping("/query/dept/tree")
+    public JsonContent<List<Tree<String>>> queryDeptTree(String code) {
+        return breezeAdminOrgService.queryDeptTree(code);
+    }
+    @ApiOperation(value = "查询部门下岗位")
+    @ApiImplicitParam(name = "code",value = "部门编码")
+    @ApiOperationSupport(order = 15)
+    @GetMapping("/query/job/tree")
+    public JsonContent<List<Tree<String>>> queryJobTree(String code) {
+        return breezeAdminOrgService.queryJobTree(code);
+    }
     @ApiOperation(value = "保存修改")
     @ApiOperationSupport(order = 21)
     @PostMapping("/save")

@@ -38,7 +38,7 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
     }
 
     @Override
-    public JsonContent<List<Tree<String>>> queryCorpTree(String nodeType) {
+    public JsonContent<List<Tree<String>>> queryOrgTree(String nodeType) {
         List<String> nodeTypeList = new ArrayList<>();
         if (StrUtil.isNotBlank(nodeType)) {
             nodeTypeList = StrUtil.split(nodeType, StrPool.C_COMMA);
@@ -46,6 +46,39 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
         List<SysOrg> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysOrg.class)
                 .in(StrUtil.isNotBlank(nodeType), SysOrg::getParentId, nodeTypeList)
                 .eq(SysOrg::getStatus, 1)
+                .eq(IBaseEntity::getDelFlag, 0)
+                .orderByAsc(SysOrg::getCode));
+        return JsonContent.success(TreeUtils.buildTree(list));
+    }
+
+    @Override
+    public JsonContent<List<Tree<String>>> queryCorpTree() {
+        List<SysOrg> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysOrg.class)
+                .eq(SysOrg::getStatus, 1)
+                .eq(SysOrg::getOrgType, "corp")
+                .eq(IBaseEntity::getDelFlag, 0)
+                .orderByAsc(SysOrg::getCode));
+        return JsonContent.success(TreeUtils.buildTree(list, BreezeConstants.TREE_ROOT_ID));
+    }
+
+    @Override
+    public JsonContent<List<Tree<String>>> queryDeptTree(String code) {
+        List<SysOrg> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysOrg.class)
+                .eq(SysOrg::getStatus, 1)
+                .likeRight(SysOrg::getCode, code)
+                .eq(SysOrg::getOrgType, "dept")
+                .eq(IBaseEntity::getDelFlag, 0)
+                .orderByAsc(SysOrg::getCode));
+        List<Tree<String>> treeList = TreeUtils.buildTree(list);
+        return JsonContent.success(treeList);
+    }
+
+    @Override
+    public JsonContent<List<Tree<String>>> queryJobTree(String code) {
+        List<SysOrg> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysOrg.class)
+                .eq(SysOrg::getStatus, 1)
+                .likeRight(SysOrg::getCode, code)
+                .eq(SysOrg::getOrgType, "job")
                 .eq(IBaseEntity::getDelFlag, 0)
                 .orderByAsc(SysOrg::getCode));
         return JsonContent.success(TreeUtils.buildTree(list));

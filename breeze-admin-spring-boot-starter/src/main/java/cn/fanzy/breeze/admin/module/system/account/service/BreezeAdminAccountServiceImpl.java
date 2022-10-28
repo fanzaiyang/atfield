@@ -2,6 +2,7 @@ package cn.fanzy.breeze.admin.module.system.account.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysAccountRole;
+import cn.fanzy.breeze.admin.module.entity.SysOrg;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
@@ -52,6 +53,24 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
             Assert.isTrue(count == 0, "工作手机号「{}」已存在！", args.getUsername());
         }
         SysAccount account = BeanUtil.copyProperties(args, SysAccount.class);
+        if(StrUtil.isNotBlank(args.getCorpCode())){
+            SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
+                    .eq(SysOrg::getCode, args.getCorpCode()));
+            Assert.notNull(corp,"未找到编码为「{}」的单位信息！",args.getCorpCode());
+            account.setCorpName(corp.getName());
+        }
+        if(StrUtil.isNotBlank(args.getDeptCode())){
+            SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
+                    .eq(SysOrg::getCode, args.getDeptCode()));
+            Assert.notNull(corp,"未找到编码为「{}」的部门信息！",args.getDeptCode());
+            account.setDeptName(corp.getName());
+        }
+        if(StrUtil.isNotBlank(args.getJobCode())){
+            SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
+                    .eq(SysOrg::getCode, args.getJobCode()));
+            Assert.notNull(corp,"未找到编码为「{}」的单位信息！",args.getJobCode());
+            account.setJobName(corp.getName());
+        }
         sqlToyHelperDao.saveOrUpdate(account);
 
         //保存角色
