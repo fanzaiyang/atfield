@@ -40,6 +40,11 @@
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.14</version>
+        </dependency>
         <!--引入Knife4j的官方start包,Swagger2基于Springfox2.10.5项目-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
