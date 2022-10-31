@@ -35,11 +35,10 @@ import java.util.Map;
  */
 @Slf4j
 public class HtmlImageGenerator {
-    private final JEditorPane editorPane;
+    private final JEditorPane editorPane = createJEditorPane();
     static final Dimension DEFAULT_SIZE = new Dimension(800, 800);
 
     public HtmlImageGenerator() {
-        editorPane = createJEditorPane();
     }
 
     public ComponentOrientation getOrientation() {
