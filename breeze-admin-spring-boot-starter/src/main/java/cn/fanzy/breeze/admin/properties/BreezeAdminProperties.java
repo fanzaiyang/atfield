@@ -88,7 +88,7 @@ public class BreezeAdminProperties implements Serializable {
         private String org;
     }
 
-    public static enum ErrorEnum {
+    public enum ErrorEnum {
         /**
          * 所有
          */
@@ -96,6 +96,6 @@ public class BreezeAdminProperties implements Serializable {
         /**
          * 仅记录错误
          */
-        error;
+        error
     }
 }
