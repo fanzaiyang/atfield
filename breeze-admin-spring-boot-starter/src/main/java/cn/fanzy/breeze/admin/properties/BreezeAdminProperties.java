@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.admin")
-public class BreezeAdminProperties {
+public class BreezeAdminProperties implements Serializable {
+    private static final long serialVersionUID = 1706602478025805316L;
     /**
      * 接口前缀
      */

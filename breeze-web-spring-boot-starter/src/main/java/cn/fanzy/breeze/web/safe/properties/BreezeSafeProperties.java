@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.web.safe")
-public class BreezeSafeProperties {
+public class BreezeSafeProperties implements Serializable {
+    private static final long serialVersionUID = -3642562913132999859L;
     /**
      * 登录ID的名称
      */

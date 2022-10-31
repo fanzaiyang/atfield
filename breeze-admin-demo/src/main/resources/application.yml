@@ -122,3 +122,5 @@ breeze:
       need-code: true
   admin:
     error-level: error
+sa-token:
+  activity-timeout:

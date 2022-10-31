@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 
 /**
  * 验证码属性配置
@@ -19,8 +21,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.web.code")
-public class BreezeCodeProperties {
-    private Boolean enable=true;
+public class BreezeCodeProperties implements Serializable {
+
+    private static final long serialVersionUID = -1308099184717521177L;
+
+    private Boolean enable = true;
     /**
      * 将验证码存储到Redis时的key的前缀，默认值为 breeze_auth_safe:validate_code:
      */

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,7 +21,8 @@ import java.util.Map;
 @Slf4j
 @Data
 @ConfigurationProperties(prefix = "breeze.minio")
-public class BreezeMinIOProperties {
+public class BreezeMinIOProperties implements Serializable {
+    private static final long serialVersionUID = -5609231397331602609L;
     /**
      * MinIO服务集合
      */

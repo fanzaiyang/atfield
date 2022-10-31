@@ -5,11 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.web.exception")
-public class BreezeWebExceptionProperties {
+public class BreezeWebExceptionProperties implements Serializable {
+    private static final long serialVersionUID = 568189521091678244L;
     /**
      * 是否启用，默认：true启用
      */

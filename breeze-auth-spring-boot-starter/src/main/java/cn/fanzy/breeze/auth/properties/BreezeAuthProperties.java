@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,9 @@ import java.util.List;
 @Slf4j
 @Data
 @ConfigurationProperties(prefix = "breeze.auth")
-public class BreezeAuthProperties {
+public class BreezeAuthProperties implements Serializable {
 
+    private static final long serialVersionUID = 111129130225136300L;
     /**
      * 路由鉴权
      */

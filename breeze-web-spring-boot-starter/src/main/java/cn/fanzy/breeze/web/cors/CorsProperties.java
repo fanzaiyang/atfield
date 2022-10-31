@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 
 /**
  * 跨域支持属性配置
@@ -19,7 +21,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "breeze.web.cors")
-public class CorsProperties {
+public class CorsProperties implements Serializable {
+    private static final long serialVersionUID = -2465252437257164820L;
     /**
      * 是否开启跨域支持,默认开启
      */

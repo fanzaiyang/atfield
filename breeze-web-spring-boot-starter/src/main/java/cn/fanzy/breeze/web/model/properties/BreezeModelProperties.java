@@ -3,6 +3,8 @@ package cn.fanzy.breeze.web.model.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.io.Serializable;
+
 /**
  * 「微风」模型属性配置
  *
@@ -11,7 +13,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Data
 @ConfigurationProperties(prefix = "breeze.web.model")
-public class BreezeModelProperties {
+public class BreezeModelProperties implements Serializable {
+    private static final long serialVersionUID = 3199356034904954698L;
     /**
      * 成功代码，默认：200
      */
