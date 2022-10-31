@@ -1,10 +1,17 @@
 package cn.fanzy.breeze.web.utils;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+/**
+ * 异常工具类
+ * @author fanzaiyang
+ * @date 2022-10-31
+ */
+@Slf4j
 public class ExceptionUtil {
 
     /**

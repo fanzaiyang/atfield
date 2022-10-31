@@ -13,6 +13,10 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+/**
+ * sqltoy
+ * @author fanzaiyang
+ */
 @Slf4j
 @SuppressWarnings({ "rawtypes" })
 @Repository("sqlToyHelperDao")
@@ -226,7 +230,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
                         try {
                             o = field.get(object);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(),e);
                         }
                         if(o != null) {
                             tempMap.put(field.getName(), o);

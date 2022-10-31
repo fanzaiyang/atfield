@@ -5,6 +5,7 @@ package cn.fanzy.breeze.core.html2img.generator;
 
 import cn.fanzy.breeze.core.html2img.table.HtmlTable;
 import cn.fanzy.breeze.core.html2img.table.HtmlTh;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -14,6 +15,7 @@ import java.util.*;
  * @Date 2021/8/26 15:33
  * @Version 1.0
  */
+@Slf4j
 public class HtmlTableGenerator {
 
 
@@ -91,7 +93,7 @@ public class HtmlTableGenerator {
                         Object value = valueField.get(obj);
                         str.append(value==null?"":value.toString());
                     }catch (Exception e){
-                        e.printStackTrace();
+                        log.error(e.getMessage(),e);
                     }
                     str.append("</td>");
                 }
@@ -118,7 +120,7 @@ public class HtmlTableGenerator {
                     Object value = valueField.get(lastData);
                     str.append(value==null?"":value.toString());
                 }catch (Exception e){
-                    e.printStackTrace();
+                    log.error(e.getMessage(),e);
                 }
                 str.append("</th>");
             }
