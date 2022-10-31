@@ -19,9 +19,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity(tableName = "sys_log")
 public class SysLog extends IBaseEntity {
+    private static final long serialVersionUID = 6530809208568681351L;
     @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id", type = Types.VARCHAR)
-    @ApiModelProperty(value = "")
+    @ApiModelProperty(value = "id")
     private String id;
     /**
      * 线程ID

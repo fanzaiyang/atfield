@@ -27,6 +27,7 @@ import java.sql.Types;
 @Entity(tableName = "sys_menu")
 @ApiModel(value = "SysMenu", description = "系统菜单表")
 public class SysMenu extends IBaseEntity {
+    private static final long serialVersionUID = 663922890702276220L;
     /**
      * 主键
      */

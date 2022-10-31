@@ -28,9 +28,10 @@ import java.sql.Types;
 @NoArgsConstructor
 @Entity(tableName = "sys_dict")
 public class SysDict extends IBaseEntity {
+    private static final long serialVersionUID = 4345459075662070933L;
     @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id", type = Types.VARCHAR, length = 36)
-    @ApiModelProperty(value = "", position = 1)
+    @ApiModelProperty(value = "id", position = 1)
     private String id;
     /**
      * 键名

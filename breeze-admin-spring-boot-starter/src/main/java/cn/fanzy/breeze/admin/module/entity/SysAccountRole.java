@@ -25,6 +25,7 @@ import java.sql.Types;
 @ApiModel(value = "SysAccountRole", description = "账户角色绑定表")
 @Entity(tableName = "sys_account_role")
 public class SysAccountRole extends IBaseEntity {
+    private static final long serialVersionUID = 5614908436841616371L;
     /**
      * 主键
      */

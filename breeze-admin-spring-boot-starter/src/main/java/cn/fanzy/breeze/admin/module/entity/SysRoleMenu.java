@@ -25,6 +25,7 @@ import java.sql.Types;
 @ApiModel(value = "SysRoleMenu", description = "角色菜单表")
 @Entity(tableName = "sys_role_menu")
 public class SysRoleMenu extends IBaseEntity {
+    private static final long serialVersionUID = 8357831398457392327L;
     /**
      * 主键
      */

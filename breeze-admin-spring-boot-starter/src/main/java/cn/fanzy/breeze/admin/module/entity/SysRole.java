@@ -25,6 +25,7 @@ import java.sql.Types;
 @ApiModel(value = "SysRole", description = "系统角色表")
 @Entity(tableName = "sys_role")
 public class SysRole extends IBaseEntity {
+    private static final long serialVersionUID = -8702497642451739792L;
     /**
      * 主键
      */

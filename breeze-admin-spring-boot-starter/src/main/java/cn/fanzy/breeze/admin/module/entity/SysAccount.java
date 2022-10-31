@@ -26,12 +26,13 @@ import java.util.Date;
 @ApiModel(value = "SysAccount", description = "系统账户表")
 @Entity(tableName = "sys_account")
 public class SysAccount extends IBaseEntity {
+    private static final long serialVersionUID = 5729730651403333369L;
     /**
      * 主键
      */
     @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id",type = Types.VARCHAR,length = 36, comment = "主键")
-    @ApiModelProperty(value = "主键", position = 0)
+    @ApiModelProperty(value = "主键", position = 1)
     private String id;
     /**
      * 头像

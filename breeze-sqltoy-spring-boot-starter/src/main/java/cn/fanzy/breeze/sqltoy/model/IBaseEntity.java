@@ -23,6 +23,7 @@ import java.util.Date;
 public class IBaseEntity implements Serializable {
 
 
+    private static final long serialVersionUID = 3362711110331084702L;
     /**
      * 租户号
      */

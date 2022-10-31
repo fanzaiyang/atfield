@@ -26,7 +26,7 @@ public class BreezeMinIOProperties implements Serializable {
     /**
      * MinIO服务集合
      */
-    private Map<String,MinioServerConfig> servers = new LinkedHashMap<>();
+    private Map<String, MinioServerConfig> servers = new LinkedHashMap<>();
 
     @Data
     public static class MinioServerConfig {
