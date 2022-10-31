@@ -1,7 +1,6 @@
 # breeze-spring-cloud
 一个简单易用的SpringCloud组件库。
 * 文档地址：[ http://breeze.fanzy.cn]( http://breeze.fanzy.cn)
-* 文档用户名和密码：test 123456
 
 **微风Cloud**是基于SpringCloud开发的，一系列实用微服务业务组件库。
 
