@@ -12,7 +12,6 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.minio.*;
-import io.minio.errors.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +21,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -334,6 +331,12 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     @Override
     public String getPreviewUrl(String objectName) {
         try {
+            if (StrUtil.isBlank(objectName)) {
+                return null;
+            }
+            if (StrUtil.startWith(objectName, "http")) {
+                return objectName;
+            }
             return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(bucket)
                     .object(objectName)
@@ -345,6 +348,12 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
 
     @Override
     public String getPublicPreviewUrl(String objectName) {
+        if (StrUtil.isBlank(objectName)) {
+            return null;
+        }
+        if (StrUtil.startWith(objectName, "http")) {
+            return objectName;
+        }
         setBucketPolicy(objectName, BreezeBucketEffectEnum.Allow);
         return config.getEndpoint().endsWith("/") ? config.getEndpoint() : (config.getEndpoint() + '/')
                 + bucket +

@@ -21,4 +21,6 @@ public interface BreezeAdminAccountService {
     JsonContent<Object> saveAccountRole(BreezeAdminAccountRoleSaveArgs args);
 
     JsonContent<List<String>> queryAccountRoleList(String id);
+
+    JsonContent<Object> enableBatch(List<String> idList);
 }

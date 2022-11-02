@@ -14,6 +14,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.model.Page;
@@ -53,22 +54,22 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
             Assert.isTrue(count == 0, "工作手机号「{}」已存在！", args.getUsername());
         }
         SysAccount account = BeanUtil.copyProperties(args, SysAccount.class);
-        if(StrUtil.isNotBlank(args.getCorpCode())){
+        if (StrUtil.isNotBlank(args.getCorpCode())) {
             SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
                     .eq(SysOrg::getCode, args.getCorpCode()));
-            Assert.notNull(corp,"未找到编码为「{}」的单位信息！",args.getCorpCode());
+            Assert.notNull(corp, "未找到编码为「{}」的单位信息！", args.getCorpCode());
             account.setCorpName(corp.getName());
         }
-        if(StrUtil.isNotBlank(args.getDeptCode())){
+        if (StrUtil.isNotBlank(args.getDeptCode())) {
             SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
                     .eq(SysOrg::getCode, args.getDeptCode()));
-            Assert.notNull(corp,"未找到编码为「{}」的部门信息！",args.getDeptCode());
+            Assert.notNull(corp, "未找到编码为「{}」的部门信息！", args.getDeptCode());
             account.setDeptName(corp.getName());
         }
-        if(StrUtil.isNotBlank(args.getJobCode())){
+        if (StrUtil.isNotBlank(args.getJobCode())) {
             SysOrg corp = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class)
                     .eq(SysOrg::getCode, args.getJobCode()));
-            Assert.notNull(corp,"未找到编码为「{}」的单位信息！",args.getJobCode());
+            Assert.notNull(corp, "未找到编码为「{}」的单位信息！", args.getJobCode());
             account.setJobName(corp.getName());
         }
         sqlToyHelperDao.saveOrUpdate(account);
@@ -104,12 +105,18 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
     @Override
     public JsonContent<Page<SysAccount>> query(BreezeAdminAccountQueryArgs args) {
         Page<SysAccount> page = sqlToyHelperDao.findPage(Wrappers.lambdaWrapper(SysAccount.class)
-                .and(StrUtil.isNotBlank(args.getSearchWord()), i -> i.like(SysAccount::getNickName, args.getSearchWord())
-                        .or()
-                        .like(SysAccount::getTelnum, args.getSearchWord())
-                        .or()
-                        .like(SysAccount::getWorkTelnum, args.getSearchWord())
-                ), new Page<>(args.getPageSize(), args.getPageNum()));
+                        .and(StrUtil.isNotBlank(args.getSearchWord()), i -> i.like(SysAccount::getNickName, args.getSearchWord())
+                                .or()
+                                .like(SysAccount::getTelnum, args.getSearchWord())
+                                .or()
+                                .like(SysAccount::getWorkTelnum, args.getSearchWord())
+                        )
+                        .likeRight(StrUtil.equalsIgnoreCase(args.getOrgType(), "corp"), SysAccount::getCorpCode, args.getOrgCode())
+                        .likeRight(StrUtil.equalsIgnoreCase(args.getOrgType(), "dept"), SysAccount::getDeptCode, args.getOrgCode())
+                        .likeRight(StrUtil.equalsIgnoreCase(args.getOrgType(), "job"), SysAccount::getJobCode, args.getOrgCode())
+                        .eq(args.getStatus()!=null,SysAccount::getStatus,args.getStatus())
+                        .eq(IBaseEntity::getDelFlag, 0)
+                , new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
     }
 
@@ -136,5 +143,16 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                 .select(SysAccountRole::getRoleId)
                 .eq(SysAccountRole::getAccountId, id));
         return JsonContent.success(roleList.stream().map(SysAccountRole::getRoleId).collect(Collectors.toList()));
+    }
+
+    @Override
+    public JsonContent<Object> enableBatch(List<String> idList) {
+        List<SysAccount> accountList = sqlToyHelperDao.loadByIds(SysAccount.class, idList.toArray());
+        Assert.notEmpty(accountList, "未找到ID为「{}」的账户！", JSONUtil.toJsonStr(idList));
+        accountList.forEach(item -> {
+            item.setStatus(item.getStatus()!=null&&item.getStatus() == 1 ? 0 : 1);
+        });
+        sqlToyHelperDao.updateAll(accountList);
+        return JsonContent.success();
     }
 }

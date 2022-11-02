@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.web.utils;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -10,6 +11,8 @@ import com.yomahub.tlog.web.wrapper.RequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -168,6 +173,38 @@ public class HttpUtil {
 
         return null;
 
+    }
+
+    /**
+     * 从请求中得到上传的文件Map
+     *
+     * @param request 请求
+     * @return {@link Map}<{@link String}, {@link MultipartFile}>
+     */
+    public static Map<String, MultipartFile> getMultipartFileMap(HttpServletRequest request) {
+        Assert.isTrue(request instanceof MultipartHttpServletRequest, "请求方式不是MultipartHttpServletRequest！");
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+        assert multipartRequest != null;
+        Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        if (fileMap.size() < 1) {
+            throw new RuntimeException("请至少上传1个文件！");
+        }
+        return fileMap;
+    }
+
+    /**
+     * 从请求中得到上传的文件列表
+     *
+     * @param request 请求
+     * @return {@link List}<{@link MultipartFile}>
+     */
+    public static List<MultipartFile> getMultipartFileList(HttpServletRequest request) {
+        Map<String, MultipartFile> fileMap = getMultipartFileMap(request);
+        List<MultipartFile> fileList = new ArrayList<>();
+        for (String key : fileMap.keySet()) {
+            fileList.add(fileMap.get(key));
+        }
+        return fileList;
     }
 
 }

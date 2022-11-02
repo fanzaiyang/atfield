@@ -41,6 +41,11 @@
             <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-minio-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.14</version>

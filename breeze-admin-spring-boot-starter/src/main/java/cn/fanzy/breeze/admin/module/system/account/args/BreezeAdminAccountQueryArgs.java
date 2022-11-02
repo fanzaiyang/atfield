@@ -7,6 +7,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * 微风管理员账户查询参数
+ *
+ * @author fanzaiyang
+ * @date 2022-11-02
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -14,4 +20,7 @@ import lombok.NoArgsConstructor;
 public class BreezeAdminAccountQueryArgs extends BaseArgs {
     @ApiModelProperty(value = "姓名或手机号", position = 1)
     private String searchWord;
+    private String orgCode;
+    private String orgType;
+    private Integer status;
 }

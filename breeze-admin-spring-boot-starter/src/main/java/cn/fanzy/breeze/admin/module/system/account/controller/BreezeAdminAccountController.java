@@ -57,7 +57,13 @@ public class BreezeAdminAccountController {
     public JsonContent<Object> deleteBatch(@Valid @RequestBody BreezeAdminAccountDelBatchArgs args) {
         return breezeAdminAccountService.deleteBatch(args.getIdList());
     }
-
+    @ApiOperation(value = "启用批量")
+    @ApiOperationSupport(order = 3)
+    @ApiImplicitParam(name = "idList", value = "账户ID集合['a','b']")
+    @PostMapping("/enable/batch")
+    public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminAccountDelBatchArgs args) {
+        return breezeAdminAccountService.enableBatch(args.getIdList());
+    }
     @ApiOperation(value = "分页查询")
     @ApiOperationSupport(order = 4)
     @PostMapping("/query/page")
