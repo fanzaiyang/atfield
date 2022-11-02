@@ -37,7 +37,7 @@ public class CalendarUtil {
         log.debug("节假日请求地址：{}", url);
         String result = HttpUtil.get(url);
         log.debug("节假日查询结果：{}", result);
-        if (!JSONUtil.isJson(result)) {
+        if (!JSONUtil.isTypeJSON(result)) {
             throw new JSONException("查询结果不是JSON格式！");
         }
         JSONObject obj = JSONUtil.parseObj(result);
