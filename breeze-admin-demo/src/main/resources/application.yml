@@ -122,3 +122,10 @@ breeze:
       need-code: true
   admin:
     error-level: error
+  minio:
+    servers:
+      -test:
+        endpoint: http://minio.zaiyang.top
+        access-key: minioadmin
+        secret-key: minioadmin
+        bucket: test

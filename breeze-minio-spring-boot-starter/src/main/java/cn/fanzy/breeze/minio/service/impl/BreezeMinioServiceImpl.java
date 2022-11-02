@@ -12,6 +12,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import io.minio.*;
+import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +45,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
         innerClient = MinioClient.builder()
-                .endpoint(config.getEndpoint())
+                .endpoint(config.getInnerEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
     }
@@ -188,6 +189,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                     .objectName(objectName)
                     .fileName(fileName)
                     .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
+                    .previewUrl(getPreviewUrl(objectName))
                     .build();
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -338,8 +340,9 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                 return objectName;
             }
             return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucket)
+                    .bucket(this.bucket)
                     .object(objectName)
+                    .method(Method.GET)
                     .build());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -356,7 +359,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         }
         setBucketPolicy(objectName, BreezeBucketEffectEnum.Allow);
         return config.getEndpoint().endsWith("/") ? config.getEndpoint() : (config.getEndpoint() + '/')
-                + bucket +
+                + this.bucket +
                 (objectName.startsWith("/") ? objectName : ("/" + objectName));
     }
 }

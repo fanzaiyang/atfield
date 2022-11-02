@@ -21,6 +21,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 微风控制器管理系统作用
+ *
+ * @author fanzaiyang
+ * @date 2022-11-02
+ */
 @Api(tags = "「微风组件」角色管理")
 @ApiSupport(author = "微风组件", order = 992011)
 @AllArgsConstructor
