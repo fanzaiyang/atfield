@@ -68,7 +68,7 @@ public class SysMenu extends IBaseEntity {
     /**
      * 是否隐藏;0-否，1-是
      */
-    @Column(name = "hidden", type = Types.INTEGER)
+    @Column(name = "hidden", type = Types.INTEGER, defaultValue = "0")
     @ApiModelProperty(value = "是否隐藏;0-否，1-是", position = 7)
     private Integer hidden;
     /**
@@ -86,11 +86,11 @@ public class SysMenu extends IBaseEntity {
     /**
      * 状态;0-禁用，1-启用
      */
-    @Column(name = "status", type = Types.INTEGER)
+    @Column(name = "status", type = Types.INTEGER, defaultValue = "1")
     @ApiModelProperty(value = "状态;0-禁用，1-启用", position = 10)
     private Integer status;
 
-    @Column(name = "order_number", type = Types.INTEGER)
+    @Column(name = "order_number", type = Types.INTEGER, defaultValue = "1")
     @ApiModelProperty(value = "序号", position = 11)
     private Integer orderNumber;
 

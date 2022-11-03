@@ -26,55 +26,63 @@ import java.util.List;
 @RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.menu?:/sys/menu}}")
 public class BreezeAdminMenuController {
     private final BreezeAdminMenuService breezeAdminMenuService;
+
     @ApiOperation(value = "保存修改")
     @ApiOperationSupport(order = 1)
     @PostMapping("/save")
-    public JsonContent<Object> save(@Valid @RequestBody BreezeAdminMenuSaveArgs args){
+    public JsonContent<Object> save(@Valid @RequestBody BreezeAdminMenuSaveArgs args) {
         return breezeAdminMenuService.save(args);
     }
+
     @ApiOperation(value = "删除单个")
-    @ApiImplicitParam(name = "id",value = "菜单ID")
+    @ApiImplicitParam(name = "id", value = "菜单ID")
     @ApiOperationSupport(order = 5)
     @DeleteMapping("/delete")
-    public JsonContent<Object> delete(String id){
+    public JsonContent<Object> delete(String id) {
         return breezeAdminMenuService.delete(id);
     }
+
     @ApiOperation(value = "删除批量")
-    @ApiImplicitParam(name = "id",value = "菜单ID集合")
+    @ApiImplicitParam(name = "id", value = "菜单ID集合")
     @ApiOperationSupport(order = 10)
-    @DeleteMapping("/delete/batch")
-    public JsonContent<Object> delete(List<String> id){
-        return breezeAdminMenuService.deleteBatch(id);
+    @PostMapping("/delete/batch")
+    public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminMenuEnableArgs args) {
+        return breezeAdminMenuService.deleteBatch(args.getIdList());
     }
+
     @ApiOperation(value = "启禁用单个")
-    @ApiImplicitParam(name = "id",value = "菜单ID")
+    @ApiImplicitParam(name = "id", value = "菜单ID")
     @ApiOperationSupport(order = 15)
     @PostMapping("/enable")
-    public JsonContent<Object> enable(String id){
+    public JsonContent<Object> enable(String id) {
         return breezeAdminMenuService.enable(id);
     }
+
     @ApiOperation(value = "启禁用批量")
     @ApiOperationSupport(order = 20)
     @PostMapping("/enable/batch")
-    public JsonContent<Object> enable(@Valid @RequestBody BreezeAdminMenuEnableArgs args){
+    public JsonContent<Object> enable(@Valid @RequestBody BreezeAdminMenuEnableArgs args) {
         return breezeAdminMenuService.enableBatch(args);
     }
+
     @ApiOperation(value = "分页查询")
     @ApiOperationSupport(order = 25)
     @PostMapping("/query/page")
-    public JsonContent<Page<SysMenu>> query(@Valid @RequestBody BreezeAdminMenuQueryArgs args){
+    public JsonContent<Page<SysMenu>> query(@Valid @RequestBody BreezeAdminMenuQueryArgs args) {
         return breezeAdminMenuService.queryPage(args);
     }
+
     @ApiOperation(value = "查询所有")
     @ApiOperationSupport(order = 30)
     @PostMapping("/query/all")
-    public JsonContent<List<SysMenu>> queryAll(@Valid @RequestBody BreezeAdminMenuQueryArgs args){
+    public JsonContent<List<SysMenu>> queryAll(@Valid @RequestBody BreezeAdminMenuQueryArgs args) {
         return breezeAdminMenuService.queryAll(args);
     }
+
     @ApiOperation(value = "查询树")
     @ApiOperationSupport(order = 35)
     @PostMapping("/query/tree")
-    public JsonContent<List<Tree<String>>> queryTree(@Valid @RequestBody BreezeAdminMenuQueryArgs args){
+    public JsonContent<List<Tree<String>>> queryTree(@Valid @RequestBody BreezeAdminMenuQueryArgs args) {
         return breezeAdminMenuService.queryTree(args);
     }
 }

@@ -92,7 +92,6 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
                             .or()
                             .like(SysMenu::getNodeRoute, menu.getId())));
         }
-        sqlToyHelperDao.updateAll(menuList);
         return JsonContent.success();
     }
 
