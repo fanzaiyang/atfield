@@ -77,7 +77,7 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
         return JsonContent.success();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public JsonContent<Object> enableBatch(BreezeAdminMenuEnableArgs args) {
         List<SysMenu> menuList = sqlToyHelperDao.loadByIds(SysMenu.class, args.getIdList().toArray());

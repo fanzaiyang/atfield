@@ -76,10 +76,10 @@ public class SysDict extends IBaseEntity {
     @ApiModelProperty(value = "是否是叶子节点", position = 8)
     private Integer isLeaf;
 
-    @Column(name = "status", type = Types.SMALLINT, length = 1)
+    @Column(name = "status", type = Types.SMALLINT, length = 1,defaultValue = "1")
     @ApiModelProperty(value = "状态，1-有效，0-禁用", position = 9)
     private Integer status;
-    @Column(name = "order_number", type = Types.INTEGER)
+    @Column(name = "order_number", type = Types.INTEGER,defaultValue = "1")
     @ApiModelProperty(value = "序号", position = 11)
     private Integer orderNumber;
     public String getParentId() {

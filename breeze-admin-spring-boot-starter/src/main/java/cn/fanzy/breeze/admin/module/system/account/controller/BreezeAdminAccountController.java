@@ -1,7 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.account.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountDelBatchArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 微风管理员帐户控制器
+ *
+ * @author fanzaiyang
+ * @date 2022-11-03
+ */
 @Api(tags = "「微风组件」账户管理")
 @ApiSupport(author = "微风组件", order = 992001)
 @AllArgsConstructor
@@ -54,14 +60,14 @@ public class BreezeAdminAccountController {
     @ApiOperationSupport(order = 3)
     @ApiImplicitParam(name = "idList", value = "账户ID集合['a','b']")
     @PostMapping("/delete/batch")
-    public JsonContent<Object> deleteBatch(@Valid @RequestBody BreezeAdminAccountDelBatchArgs args) {
+    public JsonContent<Object> deleteBatch(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
         return breezeAdminAccountService.deleteBatch(args.getIdList());
     }
     @ApiOperation(value = "启用批量")
     @ApiOperationSupport(order = 3)
     @ApiImplicitParam(name = "idList", value = "账户ID集合['a','b']")
     @PostMapping("/enable/batch")
-    public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminAccountDelBatchArgs args) {
+    public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
         return breezeAdminAccountService.enableBatch(args.getIdList());
     }
     @ApiOperation(value = "分页查询")
@@ -77,5 +83,10 @@ public class BreezeAdminAccountController {
     public JsonContent<List<String>> queryAccountRoleList(String id) {
         return breezeAdminAccountService.queryAccountRoleList(id);
     }
-
+    @ApiOperation(value = "重置密码")
+    @ApiOperationSupport(order = 50)
+    @PostMapping("/pwd/reset")
+    public JsonContent<Object> doRestAccountPwd(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
+        return breezeAdminAccountService.doRestAccountPwd(args);
+    }
 }

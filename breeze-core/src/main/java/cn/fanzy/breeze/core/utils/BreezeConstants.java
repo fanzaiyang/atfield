@@ -16,4 +16,9 @@ public class BreezeConstants {
      * 树的上级ID
      */
     public static final String TREE_PARENT_ID="parentId";
+
+    /**
+     * 默认密码
+     */
+    public static final String DEFAULT_PASSWORD="123456a?";
 }

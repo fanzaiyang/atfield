@@ -24,6 +24,8 @@ public class BreezeAdminProperties implements Serializable {
 
     private ErrorEnum errorLevel = ErrorEnum.all;
 
+    private String defaultPassword = "123456a?";
+
     @Data
     public static class Module {
         /**

@@ -3,13 +3,19 @@ package cn.fanzy.breeze.admin.module.system.account.service;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysAccountRole;
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
+import cn.fanzy.breeze.admin.properties.BreezeAdminProperties;
+import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.fanzy.breeze.web.password.PasswordEncoder;
+import cn.fanzy.breeze.web.password.bcrypt.BCryptPasswordEncoder;
+import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
@@ -24,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 微风impl管理员帐户服务
+ *
+ * @author fanzaiyang
+ * @date 2022-11-03
+ */
 @Slf4j
 @AllArgsConstructor
 public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService {
@@ -154,5 +166,16 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         });
         sqlToyHelperDao.updateAll(accountList);
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<Object> doRestAccountPwd(BreezeAdminAccountBatchArgs args) {
+        BreezeAdminProperties properties = SpringUtils.getBean(BreezeAdminProperties.class);
+        String password = StrUtil.blankToDefault(properties.getDefaultPassword(), BreezeConstants.DEFAULT_PASSWORD);
+        PasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
+                .set(SysAccount::getPassowrd,passwordEncoder.encode(password))
+                .in(SysAccount::getId,args.getIdList()));
+        return JsonContent.success("密码已重置为「"+password+"」");
     }
 }

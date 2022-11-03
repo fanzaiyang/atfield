@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.account.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
+import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
 import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
@@ -23,4 +24,6 @@ public interface BreezeAdminAccountService {
     JsonContent<List<String>> queryAccountRoleList(String id);
 
     JsonContent<Object> enableBatch(List<String> idList);
+
+    JsonContent<Object> doRestAccountPwd(BreezeAdminAccountBatchArgs args);
 }
