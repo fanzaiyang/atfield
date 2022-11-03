@@ -103,7 +103,9 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
         int status = role.getStatus() == 1 ? 0 : 1;
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysRole.class)
                 .set(SysRole::getStatus, status)
-                .eq(SysRole::getId, id));
+                .eq(role.getStatus() != null, SysRole::getStatus, role.getStatus())
+                .and(i -> i.eq(SysRole::getId, id).or()
+                        .like(SysRole::getNodeRoute, id)));
         return JsonContent.success();
     }
 
@@ -111,9 +113,14 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
     public JsonContent<Object> enableBatch(List<String> idList) {
         List<SysRole> roleList = sqlToyHelperDao.loadByIds(SysRole.class, idList.toArray());
         Assert.notEmpty(roleList, "未找到ID为「{}」的角色！", JSONUtil.toJsonStr(idList));
-        roleList.forEach(item -> {
-            item.setStatus(item.getStatus() == 1 ? 0 : 1);
-        });
+        for (SysRole role : roleList) {
+            int status = role.getStatus() != null && role.getStatus() == 1 ? 0 : 1;
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysRole.class)
+                    .set(SysRole::getStatus, status)
+                    .eq(role.getStatus() != null, SysRole::getStatus, role.getStatus())
+                    .and(i -> i.eq(SysRole::getId, role.getId()).or()
+                            .like(SysRole::getNodeRoute, role.getId())));
+        }
         sqlToyHelperDao.updateAll(roleList);
         return JsonContent.success();
     }

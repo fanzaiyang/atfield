@@ -9,7 +9,6 @@ import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
-import cn.fanzy.breeze.sqltoy.utils.SqlParamUtil;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.bean.BeanUtil;
@@ -21,7 +20,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagacity.sqltoy.model.MapKit;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,15 +132,31 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
 
     @Override
     public JsonContent<Object> enable(String id) {
-        String sql = "update sys_org set status=if(status=1,0,1) where id=:id";
-        sqlToyHelperDao.executeSql(sql, MapKit.map("id", id));
+        SysOrg org = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysOrg.class).eq(SysOrg::getId, id));
+        Assert.notNull(org, "未找到ID为「{}」的数据！", id);
+        int status = org.getStatus() != null && org.getStatus() == 1 ? 0 : 1;
+        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysOrg.class)
+                .set(SysOrg::getStatus, status)
+                .eq(org.getStatus() != null, SysOrg::getStatus, org.getStatus())
+                .and(i -> i.eq(SysOrg::getId, org.getId())
+                        .or()
+                        .like(SysOrg::getNodeRoute, org.getId())));
         return JsonContent.success();
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public JsonContent<Object> enableBatch(List<String> id) {
-        String sql = "update sys_org set status=if(status=1,0,1) where id in (:id)";
-        sqlToyHelperDao.executeSql(sql, MapKit.map("id", SqlParamUtil.buildInArgs(id)));
+        List<SysOrg> orgList = sqlToyHelperDao.loadByIds(SysOrg.class, id.toArray());
+        for (SysOrg org : orgList) {
+            int status = org.getStatus() != null && org.getStatus() == 1 ? 0 : 1;
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysOrg.class)
+                    .set(SysOrg::getStatus, status)
+                    .eq(org.getStatus() != null, SysOrg::getStatus, org.getStatus())
+                    .and(i -> i.eq(SysOrg::getId, org.getId())
+                            .or()
+                            .like(SysOrg::getNodeRoute, org.getId())));
+        }
         return JsonContent.success();
     }
 }

@@ -63,10 +63,14 @@ public class BreezeAdminDictServiceImpl implements BreezeAdminDictService {
     public JsonContent<Object> enable(BreezeAdminDictBatchArgs args) {
         List<SysDict> dictList = sqlToyHelperDao.loadByIds(SysDict.class, args.getIdList().toArray());
         Assert.notEmpty(dictList, "未找到ID为「{}」的数据！", JSONUtil.toJsonStr(args.getIdList()));
-        dictList.forEach(item -> {
-            item.setStatus(item.getStatus() != null && item.getStatus() == 1 ? 0 : 1);
-        });
-        sqlToyHelperDao.updateAll(dictList);
+        for (SysDict dict : dictList) {
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysDict.class)
+                    .set(SysDict::getStatus, dict.getStatus() != null && dict.getStatus() == 1 ? 0 : 1)
+                    .eq(dict.getStatus() != null, SysDict::getStatus, dict.getStatus())
+                    .and(i -> i.eq(SysDict::getId, dict.getId())
+                            .or()
+                            .like(SysDict::getNodeRoute, dict.getId())));
+        }
         return JsonContent.success();
     }
 

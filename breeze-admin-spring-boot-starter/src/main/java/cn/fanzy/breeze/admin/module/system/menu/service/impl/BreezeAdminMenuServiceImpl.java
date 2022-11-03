@@ -72,8 +72,10 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
         SysMenu menu = sqlToyHelperDao.load(SysMenu.builder().id(id).build());
         Assert.notNull(menu, "未找到ID为「{}」的菜单！", id);
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysMenu.class)
-                .set(SysMenu::getStatus, menu.getStatus() == 1 ? 0 : 1)
-                .eq(SysMenu::getId, id));
+                .set(SysMenu::getStatus, menu.getStatus() != null && menu.getStatus() == 1 ? 0 : 1)
+                .eq(menu.getStatus() != null, SysMenu::getStatus, menu.getStatus())
+                .and(i -> i.eq(SysMenu::getId, id).or()
+                        .like(SysMenu::getNodeRoute, id)));
         return JsonContent.success();
     }
 
@@ -82,9 +84,14 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
     public JsonContent<Object> enableBatch(BreezeAdminMenuEnableArgs args) {
         List<SysMenu> menuList = sqlToyHelperDao.loadByIds(SysMenu.class, args.getIdList().toArray());
         Assert.notEmpty(menuList, "未找到对应记录！");
-        menuList.forEach(item -> {
-            item.setStatus(item.getStatus() == 1 ? 0 : 1);
-        });
+        for (SysMenu menu : menuList) {
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysMenu.class)
+                    .set(SysMenu::getStatus, menu.getStatus() != null && menu.getStatus() == 1 ? 0 : 1)
+                    .eq(menu.getStatus() != null, SysMenu::getStatus, menu.getStatus())
+                    .and(i -> i.eq(SysMenu::getId, menu.getId())
+                            .or()
+                            .like(SysMenu::getNodeRoute, menu.getId())));
+        }
         sqlToyHelperDao.updateAll(menuList);
         return JsonContent.success();
     }
