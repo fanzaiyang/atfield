@@ -35,7 +35,7 @@ import java.util.List;
 public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
     private final SqlToyHelperDao sqlToyHelperDao;
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public JsonContent<Object> save(BreezeAdminRoleSaveArgs args) {
         long count = sqlToyHelperDao.count(Wrappers.lambdaWrapper(SysRole.class)
@@ -49,7 +49,10 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
         tableModel.pidField("parentId");
         tableModel.rootId(BreezeConstants.TREE_ROOT_ID);
         sqlToyHelperDao.wrapTreeTableRoute(tableModel);
-        return JsonContent.success(role.getId());
+        return menuBind(BreezeAdminRoleMenuBindArgs.builder()
+                .id(role.getId())
+                .menuIdList(args.getMenuIdList())
+                .build());
     }
 
     @Override
@@ -57,16 +60,23 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
         Assert.notBlank(id, "角色ID不能为空！");
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysRole.class)
                 .set(IBaseEntity::getDelFlag, 1)
+                .like(SysRole::getNodeRoute, id)
+                .or()
                 .eq(SysRole::getId, id));
         return JsonContent.success();
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public JsonContent<Object> deleteBatch(List<String> idList) {
         Assert.notEmpty(idList, "角色ID不能为空！");
-        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysRole.class)
-                .set(IBaseEntity::getDelFlag, 1)
-                .in(SysRole::getId, idList));
+        for (String id : idList) {
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysRole.class)
+                    .set(IBaseEntity::getDelFlag, 1)
+                    .like(SysRole::getNodeRoute, id)
+                    .or()
+                    .eq(SysRole::getId, id));
+        }
         return JsonContent.success();
     }
 
@@ -139,8 +149,8 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
         // 查询已绑定的菜单ID
         String sql = "select t.id from sys_menu t inner join sys_role_menu rm on rm.menu_id=t.id and rm.role_id=:roleId where t.del_flag=0 and t.is_leaf=1";
         List<SysMenu> menuList = sqlToyHelperDao.findBySql(sql, MapKit.map("roleId", id), SysMenu.class);
-        if(CollUtil.isEmpty(menuList)){
-            menuList=new ArrayList<>();
+        if (CollUtil.isEmpty(menuList)) {
+            menuList = new ArrayList<>();
         }
         return JsonContent.success(menuList);
     }

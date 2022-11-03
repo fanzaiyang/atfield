@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -41,6 +43,8 @@ public class BreezeAdminRoleSaveArgs {
 
     @ApiModelProperty(value = "上级ID", position = 6)
     private String parentId;
+
+    private List<String> menuIdList;
 
     public String getParentId() {
         return StrUtil.blankToDefault(parentId, BreezeConstants.TREE_ROOT_ID);
