@@ -49,20 +49,23 @@ public class BreezeAdminMenuServiceImpl implements BreezeAdminMenuService {
     @Override
     public JsonContent<Object> delete(String id) {
         Assert.notBlank(id, "请求参数不能为空！");
-        SysMenu menu = sqlToyHelperDao.load(SysMenu.builder().id(id).build());
-        Assert.notNull(menu, "未找到ID为「{}」的菜单！", id);
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysMenu.class)
-                .set(IBaseEntity::getDelFlag, 0)
-                .eq(SysMenu::getId, id));
+                .set(IBaseEntity::getDelFlag, 1)
+                .in(SysMenu::getId, id).or()
+                .like(SysMenu::getNodeRoute, id));
         return JsonContent.success();
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
-    public JsonContent<Object> deleteBatch(List<String> id) {
-        Assert.notEmpty(id, "请求参数不能为空！");
-        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysMenu.class)
-                .set(IBaseEntity::getDelFlag, 0)
-                .in(SysMenu::getId, id));
+    public JsonContent<Object> deleteBatch(List<String> idList) {
+        Assert.notEmpty(idList, "请求参数不能为空！");
+        for (String id : idList) {
+            sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysMenu.class)
+                    .set(IBaseEntity::getDelFlag, 1)
+                    .in(SysMenu::getId, id).or()
+                    .like(SysMenu::getNodeRoute, id));
+        }
         return JsonContent.success();
     }
 

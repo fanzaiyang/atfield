@@ -121,7 +121,6 @@ public class BreezeAdminRoleServiceImpl implements BreezeAdminRoleService {
                     .and(i -> i.eq(SysRole::getId, role.getId()).or()
                             .like(SysRole::getNodeRoute, role.getId())));
         }
-        sqlToyHelperDao.updateAll(roleList);
         return JsonContent.success();
     }
 

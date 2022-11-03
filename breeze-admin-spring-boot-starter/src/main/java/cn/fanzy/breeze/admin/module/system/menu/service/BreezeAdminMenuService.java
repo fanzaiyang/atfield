@@ -15,7 +15,7 @@ public interface BreezeAdminMenuService {
 
     JsonContent<Object> delete(String id);
 
-    JsonContent<Object> deleteBatch(List<String> id);
+    JsonContent<Object> deleteBatch(List<String> idList);
 
     JsonContent<Object> enable(String id);
 
