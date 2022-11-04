@@ -20,6 +20,8 @@ spring:
         enabled: true
         url-pattern: /*
       aop-patterns: cn.fanzy.breeze.admin.*
+  profiles:
+    include: db
 
 
 #breeze:
@@ -121,7 +123,24 @@ breeze:
     safe:
       need-code: true
   admin:
-    error-level: error
+    error-level: error # 记录日志到数据库的级别，error：只写入错误日志，all：写入所有到数据库(默认)
+    default-password: 123456a? #默认的登录密码,默认：123456a?
+    module: # 模块配置
+      enable-account: true # 启用系统管理/账户管理模块，默认：true
+      enable-auth: true # 启用授权登录模块，默认：true
+      enable-dict: true # 启用系统管理/字典管理模块，默认：true
+      enable-menu: true # 启用系统管理/菜单管理模块，默认：true
+      enable-org: true # 启用系统管理/组织管理模块，默认：true
+      enable-role: true # 启用系统管理/角色管理模块，默认：true
+      enable-system: true # 启用系统管理模块，默认：true
+    prefix:
+      api: / # 全局接口前缀，适用于本组件的前缀。
+      account: /sys/account # 系统管理/账户管理模块的接口，默认：/sys/account
+      auth: /auth # 授权登录模块的接口，默认：/auth
+      dict: /sys/dict # 系统管理/字典管理模块，默认：/sys/dict
+      menu: /sys/menu # 系统管理/菜单管理模块，默认：/sys/menu
+      org: /sys/org # 系统管理/组织管理模块，默认：/sys/org
+      role: /sys/role # 系统管理/角色管理模块，默认：/sys/role
   minio:
     servers:
       -test:
