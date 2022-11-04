@@ -34,9 +34,9 @@ public class BreezeAdminAttachmentQueryArgs extends BaseArgs {
             return null;
         }
         if (StrUtil.length(rangeTime.get(0)) == 10) {
-            return startTime + " 00:00:00";
+            return rangeTime.get(0) + " 00:00:00";
         }
-        return startTime;
+        return rangeTime.get(0);
     }
 
     public String getEndTime() {
@@ -44,8 +44,8 @@ public class BreezeAdminAttachmentQueryArgs extends BaseArgs {
             return null;
         }
         if (StrUtil.length(rangeTime.get(1)) == 10) {
-            return endTime + " 23:59:59";
+            return rangeTime.get(1) + " 23:59:59";
         }
-        return endTime;
+        return rangeTime.get(1);
     }
 }
