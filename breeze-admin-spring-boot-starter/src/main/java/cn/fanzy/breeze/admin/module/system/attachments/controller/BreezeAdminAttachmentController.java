@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.attachments.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysFile;
+import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentBatchArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
@@ -54,8 +55,8 @@ public class BreezeAdminAttachmentController {
     }
     @ApiOperation(value = "删除")
     @ApiOperationSupport(order = 4)
-    @DeleteMapping("/delete")
-    public JsonContent<Object> delete(String id){
-        return breezeAdminAttachmentService.delete(id);
+    @PostMapping("/delete")
+    public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminAttachmentBatchArgs args){
+        return breezeAdminAttachmentService.delete(args);
     }
 }

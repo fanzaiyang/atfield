@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.attachments.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysFile;
+import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentBatchArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
 import cn.fanzy.breeze.web.model.JsonContent;
 import org.sagacity.sqltoy.model.Page;
@@ -21,5 +22,5 @@ public interface BreezeAdminAttachmentService {
 
     JsonContent<Page<SysFile>> queryPage(BreezeAdminAttachmentQueryArgs args);
 
-    JsonContent<Object> delete(String id);
+    JsonContent<Object> delete(BreezeAdminAttachmentBatchArgs args);
 }

@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.attachments.service.impl;
 
 import cn.fanzy.breeze.admin.module.entity.SysFile;
+import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentBatchArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
@@ -87,11 +88,10 @@ public class BreezeAdminAttachmentServiceImpl implements BreezeAdminAttachmentSe
     }
 
     @Override
-    public JsonContent<Object> delete(String id) {
-        Assert.notBlank(id, "请检查请求参数！");
+    public JsonContent<Object> delete(BreezeAdminAttachmentBatchArgs args) {
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysFile.class)
                 .set(IBaseEntity::getDelFlag, 1)
-                .eq(SysFile::getId, id));
+                .in(SysFile::getId, args.getIdList()));
         return JsonContent.success();
     }
 }
