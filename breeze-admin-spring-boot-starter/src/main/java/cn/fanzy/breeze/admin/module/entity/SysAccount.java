@@ -34,6 +34,9 @@ public class SysAccount extends IBaseEntity {
     @Column(name = "id",type = Types.VARCHAR,length = 36, comment = "主键")
     @ApiModelProperty(value = "主键", position = 1)
     private String id;
+    @Column(name = "code",type = Types.VARCHAR,length = 36, comment = "编码")
+    @ApiModelProperty(value = "编码", position = 2)
+    private String code;
     /**
      * 头像
      */

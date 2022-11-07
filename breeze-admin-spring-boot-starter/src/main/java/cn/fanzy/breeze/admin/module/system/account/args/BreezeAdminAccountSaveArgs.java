@@ -5,6 +5,12 @@ import lombok.Data;
 
 import java.util.Set;
 
+/**
+ * 微风管理员帐户保存参数
+ *
+ * @author fanzaiyang
+ * @date 2022-11-07
+ */
 @Data
 public class BreezeAdminAccountSaveArgs {
     /**
@@ -12,6 +18,8 @@ public class BreezeAdminAccountSaveArgs {
      */
     @ApiModelProperty(value = "主键", position = 0)
     private String id;
+    @ApiModelProperty(value = "编码", position = 2)
+    private String code;
     /**
      * 头像
      */
