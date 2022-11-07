@@ -41,8 +41,9 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService {
     private final SqlToyHelperDao sqlToyHelperDao;
+    private final BreezeAdminProperties properties;
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public JsonContent<Object> save(BreezeAdminAccountSaveArgs args) {
         //校验
@@ -99,8 +100,15 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                 }
             }
         }
-        sqlToyHelperDao.saveOrUpdate(account);
-
+        if (StrUtil.isNotBlank(args.getId())) {
+            SysAccount sysAccount = sqlToyHelperDao.load(SysAccount.builder().id(args.getId()).build());
+            Assert.notNull(sysAccount,"未找到ID为「{}」的账户！",args.getId());
+            sqlToyHelperDao.update(account);
+        } else {
+            PasswordEncoder encoder=new BCryptPasswordEncoder();
+            account.setPassword(encoder.encode(properties.getDefaultPassword()));
+            sqlToyHelperDao.save(account);
+        }
         //保存角色
         if (CollUtil.isNotEmpty(args.getRoleIdList())) {
             return saveAccountRole(BreezeAdminAccountRoleSaveArgs.builder()
@@ -189,7 +197,7 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         String password = StrUtil.blankToDefault(properties.getDefaultPassword(), BreezeConstants.DEFAULT_PASSWORD);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
-                .set(SysAccount::getPassowrd, passwordEncoder.encode(password))
+                .set(SysAccount::getPassword, passwordEncoder.encode(password))
                 .in(SysAccount::getId, args.getIdList()));
         return JsonContent.success("密码已重置为「" + password + "」");
     }

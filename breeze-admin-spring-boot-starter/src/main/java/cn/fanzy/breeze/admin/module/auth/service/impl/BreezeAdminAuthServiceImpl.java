@@ -39,6 +39,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 微风impl管理员身份验证服务
+ *
+ * @author fanzaiyang
+ * @date 2022-11-07
+ */
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -66,7 +72,7 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         Assert.notNull(account, "该账号不存在!");
         Assert.isTrue(account.getStatus() == 1, "该账号已被禁用！");
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Assert.isTrue(passwordEncoder.matches(args.getPassword(), account.getPassowrd()), "密码错误！");
+        Assert.isTrue(passwordEncoder.matches(args.getPassword(), account.getPassword()), "密码错误！");
         StpUtil.login(account.getId());
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
                 .set(SysAccount::getLastLoginIp, SpringUtils.getClientIp())

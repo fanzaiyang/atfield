@@ -56,8 +56,8 @@ public class SysAccount extends IBaseEntity {
      * 登录密码
      */
     @ApiModelProperty(value = "登录密码", position = 3)
-    @Column(name = "passowrd",type = Types.VARCHAR,length = 90)
-    private String passowrd;
+    @Column(name = "password",type = Types.VARCHAR,length = 90)
+    private String password;
     /**
      * 昵称
      */
