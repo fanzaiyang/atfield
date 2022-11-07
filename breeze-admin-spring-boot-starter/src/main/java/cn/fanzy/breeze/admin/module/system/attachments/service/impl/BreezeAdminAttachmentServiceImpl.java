@@ -67,6 +67,9 @@ public class BreezeAdminAttachmentServiceImpl implements BreezeAdminAttachmentSe
 
     @Override
     public JsonContent<SysFile> getFileInfo(String id) {
+        if (StrUtil.startWith(id,"http")) {
+            return JsonContent.success(SysFile.builder().previewUrl(id).build());
+        }
         SysFile sysFile = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysFile.class).eq(SysFile::getId, id));
         Assert.notNull(sysFile, "未找到id为「{}」的附件！", id);
         BreezeMinioService minioService = BreezeMinioConfiguration.instance();
