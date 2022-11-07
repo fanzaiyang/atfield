@@ -67,6 +67,13 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                     .ne(StrUtil.isNotBlank(args.getId()), SysAccount::getId, args.getId()));
             Assert.isTrue(count == 0, "工作手机号「{}」已存在！", args.getUsername());
         }
+        if (StrUtil.isNotBlank(args.getCode())) {
+            count = sqlToyHelperDao.count(Wrappers.lambdaWrapper(SysAccount.class)
+                    .eq(IBaseEntity::getDelFlag, 0)
+                    .eq(SysAccount::getCode, args.getCode())
+                    .ne(StrUtil.isNotBlank(args.getId()), SysAccount::getId, args.getId()));
+            Assert.isTrue(count == 0, "工作手机号「{}」已存在！", args.getUsername());
+        }
         SysAccount account = BeanUtil.copyProperties(args, SysAccount.class);
         // 查询单位/部门/岗位
         if (StrUtil.isNotBlank(account.getJobCode())) {
@@ -102,10 +109,10 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         }
         if (StrUtil.isNotBlank(args.getId())) {
             SysAccount sysAccount = sqlToyHelperDao.load(SysAccount.builder().id(args.getId()).build());
-            Assert.notNull(sysAccount,"未找到ID为「{}」的账户！",args.getId());
+            Assert.notNull(sysAccount, "未找到ID为「{}」的账户！", args.getId());
             sqlToyHelperDao.update(account);
         } else {
-            PasswordEncoder encoder=new BCryptPasswordEncoder();
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
             account.setPassword(encoder.encode(properties.getDefaultPassword()));
             sqlToyHelperDao.save(account);
         }
