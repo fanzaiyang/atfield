@@ -23,6 +23,7 @@
         <module>breeze-admin-spring-boot-starter</module>
         <module>breeze-admin-demo</module>
         <module>breeze-auth-jwt-spring-boot-starter</module>
+        <module>breeze-auth-redis</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
@@ -64,6 +65,11 @@
             <dependency>
                 <groupId>cn.fanzy.breeze</groupId>
                 <artifactId>breeze-core</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-auth-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
