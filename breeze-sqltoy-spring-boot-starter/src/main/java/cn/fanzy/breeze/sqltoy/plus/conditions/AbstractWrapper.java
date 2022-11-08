@@ -1,7 +1,5 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions;
 
-
-
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.CompareEnum;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 import cn.fanzy.breeze.sqltoy.plus.conditions.interfaces.Operated;
@@ -92,7 +90,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.EQ, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.EQ, val));
     }
 
     @Override
@@ -100,7 +98,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.NE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NE, val));
     }
 
     @Override
@@ -108,7 +106,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.GT, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GT, val));
     }
 
     @Override
@@ -116,7 +114,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.GE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GE, val));
     }
 
     @Override
@@ -124,7 +122,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LT, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LT, val));
     }
 
     @Override
@@ -132,7 +130,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LE, val));
     }
 
     @Override
@@ -194,7 +192,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LIKE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE, val));
     }
 
     @Override
@@ -202,7 +200,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LIKE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE, val));
     }
 
     @Override
@@ -210,7 +208,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LIKE_LEFT, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_LEFT, val));
     }
 
     @Override
@@ -218,17 +216,21 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.LIKE_RIGHT, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_RIGHT, val));
     }
 
     @Override
     public Children isNull(boolean condition, R column) {
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.IS_NULL, null));
+        return addAssembler((strategy) -> maybeDo(condition, () -> {
+            appendSqlSegments(() -> CompareEnum.IS_NULL.getMetaSql(null, columnToString(column)));
+        }));
     }
 
     @Override
     public Children isNotNull(boolean condition, R column) {
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.IS_NOT_NULL, null));
+        return addAssembler((strategy) -> maybeDo(condition, () -> {
+            appendSqlSegments(() -> CompareEnum.IS_NOT_NULL.getMetaSql(null, columnToString(column)));
+        }));
     }
 
     @Override
@@ -236,7 +238,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(coll)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.IN, coll));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, coll));
     }
 
     @Override
@@ -244,7 +246,15 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(values)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.IN, values));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, values));
+    }
+
+    @Override
+    public Children inb(boolean condition, Collection<R> columns, Collection<Object[]> values) {
+        if (columns == null || columns.size() == 0 || values == null || values.size() == 0) {
+            return typedThis;
+        }
+        return addAssembler((strategy) -> addBatchInCondition(strategy, condition, columns, values));
     }
 
     @Override
@@ -252,7 +262,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(coll)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.NOT_IN, coll));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, coll));
     }
 
     @Override
@@ -260,7 +270,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(values)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addCondition(strategy, condition, column, CompareEnum.NOT_IN, values));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, values));
     }
 
     @Override
@@ -449,8 +459,33 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
      * @param compareEnum SQL 关键词
      * @param val        条件值
      */
-    protected Children addCondition(FiledMappingStrategy mappingStrategy, boolean condition, R column, CompareEnum compareEnum, Object val) {
+    protected Children addNeedValCondition(FiledMappingStrategy mappingStrategy, boolean condition, R column, CompareEnum compareEnum, Object val) {
         return maybeDo(condition, () -> addSqlSegment(mappingStrategy, column, compareEnum, val));
+    }
+
+    private void addBatchInCondition(FiledMappingStrategy mappingStrategy, boolean condition, Collection<R> columns, Collection<Object[]> values) {
+        List<String> fieldNames = columns.stream().map(this::columnToString).collect(Collectors.toList());
+        List<String> columnNames = new ArrayList<>();
+        List<String> paramNames = new ArrayList<>();
+        Map<String, Object> paramMap = new HashMap<>();
+        for (int i = 0; i < fieldNames.size(); i++) {
+            String fieldName = fieldNames.get(i);
+            columnNames.add(mappingStrategy.getColumnName(fieldName));
+            String paramName = getParamName(fieldName);
+            paramNames.add(paramName);
+            int finalI = i;
+            paramMap.put(paramName, values.stream().map(e -> e[finalI]).collect(Collectors.toList()));
+        }
+        maybeDo(condition, () -> appendSqlSegments(new ISqlSegment() {
+            @Override
+            public String getSqlSegment() {
+                return CompareEnum.IN_BATCH.getBatchMetaSql(paramNames, columnNames);
+            }
+            @Override
+            public Map<String, Object> getSqlSegmentParamMap() {
+                return paramMap;
+            }
+        }));
     }
 
     /**

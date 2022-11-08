@@ -1,7 +1,11 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.eumn;
 
-
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
+import org.sagacity.sqltoy.exception.DataAccessException;
+
+import java.util.Collection;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * @description: 条件枚举
@@ -53,14 +57,14 @@ public enum CompareEnum {
         }
     },
 
-    LIKE_RIGHT(SqlKeyword.LIKE) {
+    LIKE_LEFT(SqlKeyword.LIKE) {
         public String getMetaSql(String paramName, String columnName) {
             //"code like concat(:code,'%')"
             return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.COLON + paramName+ "," + StringPool.PERCENT + ")";
         }
     },
 
-    LIKE_LEFT(SqlKeyword.LIKE) {
+    LIKE_RIGHT(SqlKeyword.LIKE) {
         //"code like concat('%', :code)"
         public String getMetaSql(String paramName, String columnName) {
             return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.PERCENT  + "," + StringPool.COLON + paramName + ")";
@@ -70,6 +74,19 @@ public enum CompareEnum {
     IN(SqlKeyword.IN) {
         public String getMetaSql(String paramName, String columnName) {
             return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + " (:" + paramName + ")";
+        }
+    },
+
+    //多字段in语句
+    IN_BATCH(SqlKeyword.IN) {
+        public String getMetaSql(String paramName, String columnName) {
+            throw new DataAccessException("多字段in操作不支持该数据类型！");
+        }
+
+        public String getBatchMetaSql(Collection<String> paramNames, Collection<String> columnNames) {
+            String head = String.join(",", columnNames);
+            String end = paramNames.stream().map(e -> ":" + e).collect(joining(","));
+            return "(" + head + ") " + getSymbol() + " (" + end + ")";
         }
     },
 
@@ -97,6 +114,10 @@ public enum CompareEnum {
 
     public abstract String getMetaSql(String paramName, String columnName);
 
+    public String getBatchMetaSql(Collection<String> paramNames, Collection<String> columnNames) {
+        throw new DataAccessException("该操作类型不支持此种sql组装方式！");
+    }
+
     private CompareEnum( SqlKeyword sqlKeyword) {
         this.sqlKeyword = sqlKeyword;
     }
@@ -108,4 +129,6 @@ public enum CompareEnum {
     public SqlKeyword getSqlKeyword() {
         return sqlKeyword;
     }
+
+
 }

@@ -2,7 +2,6 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.toolkit;
 
 import org.sagacity.sqltoy.exception.DataAccessException;
 
-import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Field;
 
 
@@ -15,8 +14,6 @@ public class ReflectLambdaMeta implements LambdaMeta {
             Class<SerializedLambda> aClass = SerializedLambda.class;
             fieldCapturingClass = ReflectionKit.setAccessible(aClass.getDeclaredField("capturingClass"));
         } catch (Throwable e) {
-            // 解决高版本 jdk 的问题 gitee: https://gitee.com/baomidou/mybatis-plus/issues/I4A7I5
-//            log.warn(e.getMessage());
             fieldCapturingClass = null;
         }
         FIELD_CAPTURING_CLASS = fieldCapturingClass;

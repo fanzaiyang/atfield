@@ -1,7 +1,6 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 
-
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
 

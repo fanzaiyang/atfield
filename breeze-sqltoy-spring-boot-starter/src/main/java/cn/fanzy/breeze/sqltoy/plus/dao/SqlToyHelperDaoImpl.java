@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.sqltoy.plus.dao;
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
@@ -13,14 +14,16 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
+
 /**
  * sqltoy
+ *
  * @author fanzaiyang
  */
 @Slf4j
-@SuppressWarnings({ "rawtypes" })
+@SuppressWarnings({"rawtypes"})
 @Repository("sqlToyHelperDao")
-public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao{
+public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao {
 
     /**
      * 查询一条记录,如果出现多条记录,获取其中第一条记录
@@ -39,8 +42,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     /**
      * 根据查询条件查询, 仅支持单表条件
      *
-     * @param wrapper
-     *            - 查询条件
+     * @param wrapper - 查询条件
      * @return 结果集
      */
     public <T> List<T> findList(Wrapper<T> wrapper) {
@@ -50,10 +52,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     /**
      * 根据查询条件分页查询, 仅支持单表条件
      *
-     * @param wrapper
-     *            - 查询条件
-     * @param page
-     *            - 分页条件
+     * @param wrapper - 查询条件
+     * @param page    - 分页条件
      * @param <T>
      * @return
      */
@@ -63,8 +63,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 删除
-     * @param wrapper
-     *          - 删除条件
+     *
+     * @param wrapper - 删除条件
      * @param <T>
      */
     public <T> long delete(Wrapper<T> wrapper) {
@@ -73,8 +73,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 统计
-     * @param wrapper
-     *          - 统计条件
+     *
+     * @param wrapper - 统计条件
      * @param <T>
      */
     public <T> long count(Wrapper<T> wrapper) {
@@ -83,8 +83,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 更新
-     * @param updateWrapper
-     *          - 更新参数条件对象
+     *
+     * @param updateWrapper - 更新参数条件对象
      * @param <T>
      */
     public <T> long update(Wrapper<T> updateWrapper) {
@@ -93,10 +93,9 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 更新
-     * @param t
-     *          - 更新元数据
-     * @param wrapper
-     *          - 更新参数条件对象
+     *
+     * @param t       - 更新元数据
+     * @param wrapper - 更新参数条件对象
      * @param <T>
      * @return
      */
@@ -105,11 +104,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     }
 
     /**
-     *
-     * @param setMap
-     *          - 更新元数据
-     * @param wrapper
-     *          - 更新参数条件对象
+     * @param setMap  - 更新元数据
+     * @param wrapper - 更新参数条件对象
      * @param <T>
      * @return
      */
@@ -119,8 +115,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 获取查询条件对象
-     * @param wrapper
-     *          - 查询条件
+     *
+     * @param wrapper - 查询条件
      * @param <T>
      * @return
      */
@@ -128,7 +124,11 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
         EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
         //开始组装sql
         wrapper.assemble(entityMeta::getColumnName);
-        EntityQuery entityQuery = EntityQuery.create().where(wrapper.getSqlSegment()).values(wrapper.getSqlSegmentParamMap());
+        Map<String, Object> paramMap = wrapper.getSqlSegmentParamMap();
+        EntityQuery entityQuery = EntityQuery.create().where(wrapper.getSqlSegment());
+        if (paramMap != null && !paramMap.isEmpty()) {
+            entityQuery.values(wrapper.getSqlSegmentParamMap());
+        }
         if (wrapper.getSelectColumns() != null && !wrapper.getSelectColumns().isEmpty()) {
             entityQuery.select(wrapper.getSelectColumns().toArray(new String[0]));
         }
@@ -137,8 +137,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 组装更新条件
-     * @param updateWrapper
-     *          - 更新条件
+     *
+     * @param updateWrapper - 更新条件
      * @param <T>
      * @return
      */
@@ -148,13 +148,9 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     }
 
     /**
-     *
-     * @param t
-     *          - 更新元数据
-     * @param queryWrapper
-     *          - 更新的查询条件
-     * @param forceUpdateProps
-     *          - 忽略字段
+     * @param t                - 更新元数据
+     * @param queryWrapper     - 更新的查询条件
+     * @param forceUpdateProps - 忽略字段
      * @param <T>
      * @return
      */
@@ -175,13 +171,13 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
     /**
      * 组装更新条件
-     * @param queryWrapper
-     *          - 更新的查询条件
+     *
+     * @param queryWrapper - 更新的查询条件
      * @param <T>
      * @return
      */
     private <T> EntityUpdate getEntityUpdate(Map<String, Object> setMap, Wrapper<T> queryWrapper) {
-        if (setMap == null || setMap.size() <= 0) {
+        if (setMap == null || setMap.size() == 0) {
             throw new DataAccessException("sqlToy plus update param can not empty");
         }
         EntityMeta entityMeta = super.getEntityMeta(queryWrapper.entityClass());
@@ -189,7 +185,14 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
         queryWrapper.assemble(entityMeta::getColumnName);
         EntityUpdate entityUpdate = EntityUpdate.create();
         setMap.forEach(entityUpdate::set);
-        return entityUpdate.where(queryWrapper.getSqlSegment()).values(queryWrapper.getSqlSegmentParamMap());
+        String sqlSegment = queryWrapper.getSqlSegment();
+        Map<String, Object> paramMap = queryWrapper.getSqlSegmentParamMap();
+        // 当where无参数时，添加1=1，解决IllegalArgumentException异常
+        if (paramMap.isEmpty()) {
+            sqlSegment = StrUtil.isBlank(sqlSegment) ? "1=:DEFAULT_VALUE " : ("1=:DEFAULT_VALUE AND " + sqlSegment);
+            paramMap.put("DEFAULT_VALUE", 1);
+        }
+        return entityUpdate.where(sqlSegment).values(paramMap);
     }
 
     /**
@@ -230,9 +233,9 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
                         try {
                             o = field.get(object);
                         } catch (Exception e) {
-                            log.error(e.getMessage(),e);
+                            log.error(e.getMessage(), e);
                         }
-                        if(o != null) {
+                        if (o != null) {
                             tempMap.put(field.getName(), o);
                         }
                     }

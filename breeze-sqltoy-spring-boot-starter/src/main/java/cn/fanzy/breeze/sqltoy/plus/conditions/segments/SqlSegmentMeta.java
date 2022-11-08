@@ -1,8 +1,9 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
+
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.CompareEnum;
-import io.vavr.Tuple2;
+import cn.hutool.core.lang.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,11 +36,11 @@ public class SqlSegmentMeta implements ISqlSegment {
     /**
      * sql中变量键值对
      */
-    private Tuple2<String, Object> paramPair;
+    private Pair<String, Object> paramPair;
 
 
     public void putPair(String key, Object value) {
-        paramPair = new Tuple2<>(key, value);
+        paramPair = new Pair<>(key, value);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class SqlSegmentMeta implements ISqlSegment {
     @Override
     public Map<String, Object> getSqlSegmentParamMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put(paramPair._1, paramPair._2);
+        map.put(paramPair.getKey(), paramPair.getValue());
         return map;
     }
 
@@ -89,11 +90,11 @@ public class SqlSegmentMeta implements ISqlSegment {
         this.compareEnum = compareEnum;
     }
 
-    public Tuple2<String, Object> getParamPair() {
+    public Pair<String, Object> getParamPair() {
         return paramPair;
     }
 
-    public void setParamPair(Tuple2<String, Object> paramPair) {
+    public void setParamPair(Pair<String, Object> paramPair) {
         this.paramPair = paramPair;
     }
 }

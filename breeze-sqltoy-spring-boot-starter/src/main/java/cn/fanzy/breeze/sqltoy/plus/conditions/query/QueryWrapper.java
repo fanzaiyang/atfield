@@ -1,7 +1,5 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.query;
 
-
-
 import cn.fanzy.breeze.sqltoy.plus.conditions.AbstractQueryWrapper;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.MergeSegments;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.SqlStringUtil;

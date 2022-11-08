@@ -40,7 +40,7 @@ public interface Nested<Param, Children> extends Serializable {
      * </p>
      *
      * @param condition 执行条件
-     * @param consumer  消费函数
+     * @param function  消费函数
      * @return children
      */
     Children and(boolean condition, Function<Param, Param> function);

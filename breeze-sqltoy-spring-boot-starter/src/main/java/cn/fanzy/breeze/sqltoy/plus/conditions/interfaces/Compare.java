@@ -294,6 +294,24 @@ public interface Compare<Children, R> extends Serializable {
      */
     Children in(boolean condition, R column, Object... values);
 
+    default Children inb(Collection<R> columns, Collection<Object[]> values) {
+        return inb(true, columns, values);
+    }
+
+    /**
+     * (字段1,字段2...) IN ((v0, v1...), (v2, v3...)...)
+     * <p>例: in("id","code", Object[]...)</p>
+     *
+     * <li> 注意！数组为空若存在逻辑错误，请在 condition 条件中判断 </li>
+     * <li> 如果动态数组为 empty 则不会进行 sql 拼接 </li>
+     *
+     * @param condition 执行条件
+     * @param columns    字段集合
+     * @param values    数据数组
+     * @return children
+     */
+    Children inb(boolean condition, Collection<R> columns, Collection<Object[]> values);
+
     /**
      * ignore
      */

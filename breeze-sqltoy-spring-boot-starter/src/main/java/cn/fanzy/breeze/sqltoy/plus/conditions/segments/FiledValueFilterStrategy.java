@@ -3,7 +3,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 public interface FiledValueFilterStrategy {
 
-    boolean validate(Object... values);
+    boolean validate(Object value);
 
     class FiledValueFilterStrategyHolder {
 
@@ -24,18 +24,16 @@ public interface FiledValueFilterStrategy {
     }
 
     /**
-     * 默认字段映射策略
+     * 默认值过滤策略
      */
     class DefaultFiledValueFilterStrategy implements FiledValueFilterStrategy {
 
         private DefaultFiledValueFilterStrategy() {}
 
         @Override
-        public boolean validate(Object... values) {
-            for (Object value : values) {
-                if (value == null) {
-                    return false;
-                }
+        public boolean validate(Object value) {
+            if (value == null) {
+                return false;
             }
             return true;
         }

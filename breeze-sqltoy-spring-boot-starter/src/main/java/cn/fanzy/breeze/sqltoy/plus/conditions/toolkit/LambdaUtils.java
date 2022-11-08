@@ -44,18 +44,17 @@ public final class LambdaUtils {
         // 2. 反射读取
         try {
             Method method = func.getClass().getDeclaredMethod("writeReplace");
-            return new ReflectLambdaMeta((java.lang.invoke.SerializedLambda) ReflectionKit.setAccessible(method).invoke(func));
+            return new ReflectLambdaMeta((SerializedLambda) ReflectionKit.setAccessible(method).invoke(func));
         } catch (Throwable e) {
             // 3. 反射失败使用序列化的方式读取
-            return new ShadowLambdaMeta(cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.SerializedLambda.extract(func));
+            return new ShadowLambdaMeta(SerializedLambda.extract(func));
         }
     }
 
     /**
      * 获取方法对应的属性名
-     *
      * @param func 需要解析的 lambda 对象
-     * @param <T>  类型，被调用的 Function 对象的目标类型
+     * @param <T> 类型，被调用的 Function 对象的目标类型
      * @return
      */
     public static <T> String extractToFiled(SFunction<T, ?> func) {
