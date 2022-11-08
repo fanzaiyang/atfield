@@ -158,6 +158,7 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                         .likeRight(StrUtil.equalsIgnoreCase(args.getOrgType(), "job"), SysAccount::getJobCode, args.getOrgCode())
                         .eq(args.getStatus() != null, SysAccount::getStatus, args.getStatus())
                         .eq(IBaseEntity::getDelFlag, 0)
+                        .orderByAsc(CollUtil.newArrayList(SysAccount::getCorpCode,SysAccount::getDeptCode,SysAccount::getJobCode,SysAccount::getCode))
                 , new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
     }
