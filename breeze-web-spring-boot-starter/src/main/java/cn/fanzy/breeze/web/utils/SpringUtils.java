@@ -151,9 +151,11 @@ public class SpringUtils extends SpringUtil {
         }
         if (isJson(request)) {
             String jsonParam = new RequestWrapper(request).getBodyString();
-            JSONObject obj = JSONUtil.parseObj(jsonParam);
-            for (Map.Entry<String, Object> entry : obj) {
-                params.put(entry.getKey(), entry.getValue());
+            if(JSONUtil.isTypeJSON(jsonParam)){
+                JSONObject obj = JSONUtil.parseObj(jsonParam);
+                for (Map.Entry<String, Object> entry : obj) {
+                    params.put(entry.getKey(), entry.getValue());
+                }
             }
         }
         return params;
