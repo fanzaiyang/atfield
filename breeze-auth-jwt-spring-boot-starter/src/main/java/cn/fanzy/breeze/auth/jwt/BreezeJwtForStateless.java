@@ -153,7 +153,7 @@ public class BreezeJwtForStateless extends StpLogic {
      */
     @Override
     public Object getExtra(String tokenValue, String key) {
-        return SaJwtUtil.getPayloads(tokenValue, loginType, jwtSecretKey()).get(key);
+        return SaJwtUtil.getPayloadsNotCheck(tokenValue, loginType, jwtSecretKey()).get(key);
     }
 
 

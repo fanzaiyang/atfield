@@ -45,7 +45,7 @@ public class BreezeAuthJwtProperties implements Serializable {
         /**
          * 不校验过期
          */
-        statelessFull;
+        statelessNotCheck;
 
     }
 }
