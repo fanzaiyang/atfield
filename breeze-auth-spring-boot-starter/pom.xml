@@ -26,6 +26,7 @@
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-auth-jwt-spring-boot-starter</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
