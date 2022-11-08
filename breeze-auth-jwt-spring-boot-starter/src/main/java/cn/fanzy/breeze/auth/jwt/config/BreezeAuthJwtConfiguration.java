@@ -43,7 +43,7 @@ public class BreezeAuthJwtConfiguration {
             return new StpLogicJwtForStateless();
         }
         if (jwtMode.equals(BreezeAuthJwtProperties.JwtMode.statelessFull)) {
-            log.info("Stateless 模式：服务器完全无状态");
+            log.info("Stateless Full模式：服务器完全无状态");
             return new BreezeJwtForStateless();
         }
         throw new RuntimeException("未知的jwt类型，请检查sa-token.jwt-mode,必须是simple或mixin或stateless。");
