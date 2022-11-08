@@ -21,7 +21,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 @EnableConfigurationProperties(BreezeAuthProperties.class)
 @ConditionalOnClass(StpLogicJwtForSimple.class)
-@ConditionalOnProperty(prefix = "breeze.auth.jwt", name = {"enable"}, havingValue = "true")
+@ConditionalOnProperty(prefix = "breeze.auth.jwt", name = {"enable"}, havingValue = "true",matchIfMissing = true)
 public class BreezeAuthJwtConfiguration {
 
     private final BreezeAuthProperties properties;
