@@ -6,7 +6,6 @@ import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmen
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.admin.module.system.attachments.vo.TinyMCEVo;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
-import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.lang.Assert;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -53,7 +52,7 @@ public class BreezeAdminAttachmentController {
         }
         String previewUrl = upload.getData().get(0).getPreviewUrl();
         Assert.notBlank(previewUrl,"预览地址不能为空！");
-        return new TinyMCEVo(previewUrl.split(StringPool.QUESTION_MARK)[0]);
+        return new TinyMCEVo(previewUrl);
     }
     @ApiOperation(value = "获取单个")
     @ApiOperationSupport(order = 2)
