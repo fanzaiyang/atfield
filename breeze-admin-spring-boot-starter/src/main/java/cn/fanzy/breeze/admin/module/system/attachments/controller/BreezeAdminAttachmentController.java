@@ -4,6 +4,7 @@ import cn.fanzy.breeze.admin.module.entity.SysFile;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentBatchArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
+import cn.fanzy.breeze.admin.module.system.attachments.vo.TinyMCEVo;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
 import cn.fanzy.breeze.web.model.JsonContent;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -39,6 +40,16 @@ public class BreezeAdminAttachmentController {
     @PostMapping("/upload")
     public JsonContent<List<SysFile>> upload(String prefix, HttpServletRequest request) {
         return breezeAdminAttachmentService.upload(prefix, request);
+    }
+    @ApiOperation(value = "上传TinyMCE",notes = "支持TinyMCE的上传。")
+    @ApiOperationSupport(order = 1)
+    @PostMapping("/upload/tiny")
+    public TinyMCEVo uploadTinyMCE(String prefix, HttpServletRequest request) {
+        JsonContent<List<SysFile>> upload = upload(prefix, request);
+        if(!upload.isSuccess()){
+            throw new RuntimeException(upload.getMessage());
+        }
+        return new TinyMCEVo(upload.getData().get(0).getPreviewUrl());
     }
     @ApiOperation(value = "获取单个")
     @ApiOperationSupport(order = 2)
