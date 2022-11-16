@@ -84,8 +84,8 @@ public class TreeUtils extends TreeUtil {
             node.setId(object.getOrDefault(StrUtil.blankToDefault(idKey, "id"), "") + "");
             node.setParentId(object.getOrDefault(StrUtil.blankToDefault(parentKey, "parentId"), "") + "");
             node.setName(object.getOrDefault(StrUtil.blankToDefault(nameKey, "name"), "") + "");
-            String orderNumber = StrUtil.blankToDefault(weightKey, "orderNumber");
-            node.setWeight(NumberUtil.isNumber(orderNumber) ? orderNumber : i);
+            Object orderNumber = object.getOrDefault(StrUtil.blankToDefault(weightKey, "orderNumber"),i);
+            node.setWeight(NumberUtil.isNumber(orderNumber+"") ? NumberUtil.parseInt(orderNumber+"") : i);
             object.put("unionId", node.getId());
             object.put("originParentId", node.getParentId());
             object.remove(StrUtil.blankToDefault(idKey, "id"));
