@@ -68,10 +68,13 @@ public class BreezeAdminDictController {
 
     @ApiOperation(value = "查询下级")
     @ApiOperationSupport(order = 4)
-    @ApiImplicitParam(name = "keyName", value = "keyName")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "keyName", value = "keyName"),
+            @ApiImplicitParam(name = "showDisable", value = "是否显示禁用，false-不显示（默认），true-显示。"),
+    })
     @GetMapping("/query/children")
-    public JsonContent<List<SysDict>> queryChildren(String keyName) {
-        return breezeAdminDictService.queryChildren(keyName);
+    public JsonContent<List<SysDict>> queryChildren(String keyName,boolean showDisable) {
+        return breezeAdminDictService.queryChildren(keyName,showDisable);
     }
     @ApiOperation(value = "查询树结构")
     @ApiOperationSupport(order = 5)

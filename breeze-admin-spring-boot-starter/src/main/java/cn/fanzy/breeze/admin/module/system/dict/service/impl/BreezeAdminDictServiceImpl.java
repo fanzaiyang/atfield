@@ -109,11 +109,14 @@ public class BreezeAdminDictServiceImpl implements BreezeAdminDictService {
     }
 
     @Override
-    public JsonContent<List<SysDict>> queryChildren(String keyName) {
+    public JsonContent<List<SysDict>> queryChildren(String keyName, boolean showDisable) {
         SysDict dict = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysDict.class)
                 .eq(SysDict::getKeyName, keyName));
-        Assert.notNull(dict,"未找到keyName为「」的字典值！",keyName);
-        List<SysDict> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysDict.class).eq(SysDict::getParentId, dict.getId()));
+        Assert.notNull(dict, "未找到keyName为「」的字典值！", keyName);
+        List<SysDict> list = sqlToyHelperDao.findList(Wrappers.lambdaWrapper(SysDict.class)
+                .eq(SysDict::getParentId, dict.getId())
+                .eq(!showDisable, SysDict::getStatus, 1)
+                .orderByAsc(SysDict::getOrderNumber));
         return JsonContent.success(list);
     }
 }
