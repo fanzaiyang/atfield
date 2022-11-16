@@ -19,4 +19,6 @@ public interface BreezeAdminDictService {
     JsonContent<List<SysDict>> queryAsync(String id, boolean showDisable);
 
     JsonContent<Page<Tree<String>>> queryPageTree(BreezeAdminDictQueryArgs args);
+
+    JsonContent<List<SysDict>> queryChildren(String keyName);
 }

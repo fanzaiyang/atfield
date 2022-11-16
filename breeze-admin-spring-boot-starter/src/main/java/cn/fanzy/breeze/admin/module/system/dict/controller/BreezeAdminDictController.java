@@ -66,6 +66,13 @@ public class BreezeAdminDictController {
         return breezeAdminDictService.queryAsync(id, showDisable);
     }
 
+    @ApiOperation(value = "查询下级")
+    @ApiOperationSupport(order = 4)
+    @ApiImplicitParam(name = "keyName", value = "keyName")
+    @GetMapping("/query/children")
+    public JsonContent<List<SysDict>> queryChildren(String keyName) {
+        return breezeAdminDictService.queryChildren(keyName);
+    }
     @ApiOperation(value = "查询树结构")
     @ApiOperationSupport(order = 5)
     @ApiImplicitParams({
