@@ -5,9 +5,12 @@ import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmen
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.admin.module.system.attachments.vo.TinyMCEVo;
+import cn.fanzy.breeze.admin.module.system.attachments.vo.WangEditorVo;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
+import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.annotations.Api;
@@ -53,6 +56,29 @@ public class BreezeAdminAttachmentController {
         String previewUrl = upload.getData().get(0).getPreviewUrl();
         Assert.notBlank(previewUrl,"预览地址不能为空！");
         return new TinyMCEVo(previewUrl);
+    }
+    @ApiOperation(value = "上传wangeditorE",notes = "支持wangeditor的上传。")
+    @ApiOperationSupport(order = 1)
+    @PostMapping("/upload/wangeditor")
+    public WangEditorVo uploadWangEditor(String prefix, HttpServletRequest request) {
+        JsonContent<List<SysFile>> upload = upload(prefix, request);
+        if(!upload.isSuccess()){
+           return WangEditorVo.builder().errno(1).message(upload.getMessage()).build();
+        }
+        String previewUrl = upload.getData().get(0).getPreviewUrl();
+        Assert.notBlank(previewUrl,"预览地址不能为空！");
+        WangEditorVo vo = new WangEditorVo();
+        vo.setErrno(0);
+        vo.setMessage(upload.getMessage());
+        WangEditorVo.Body body=new WangEditorVo.Body();
+        if(StrUtil.contains(previewUrl, StringPool.QUESTION_MARK)){
+            previewUrl=StrUtil.split(previewUrl,StringPool.QUESTION_MARK).get(0);
+        }
+        body.setUrl(previewUrl);
+        body.setAlt(upload.getData().get(0).getFileName());
+        body.setHref(previewUrl);
+        vo.setData(body);
+        return vo;
     }
     @ApiOperation(value = "获取单个")
     @ApiOperationSupport(order = 2)
