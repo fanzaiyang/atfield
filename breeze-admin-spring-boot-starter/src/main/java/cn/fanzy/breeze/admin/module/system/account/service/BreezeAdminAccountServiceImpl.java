@@ -214,8 +214,9 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         SysAccount account = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysAccount.class).eq(SysAccount::getId, id));
         Assert.notNull(account, "未找到用户！");
         PasswordEncoder encoder = new BCryptPasswordEncoder();
+        Assert.isTrue(encoder.matches(args.getOldPassword(),account.getPassword()),"旧密码输出错误！");
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
-                .set(SysAccount::getPassword, encoder.encode(args.getPassword()))
+                .set(SysAccount::getPassword, encoder.encode(args.getNewPassword()))
                 .eq(SysAccount::getId, id));
         return JsonContent.success();
     }
