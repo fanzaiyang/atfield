@@ -1,10 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.account.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.*;
 import cn.fanzy.breeze.admin.module.system.account.service.BreezeAdminAccountService;
 import cn.fanzy.breeze.web.model.JsonContent;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
@@ -84,9 +81,16 @@ public class BreezeAdminAccountController {
         return breezeAdminAccountService.queryAccountRoleList(id);
     }
     @ApiOperation(value = "重置密码")
-    @ApiOperationSupport(order = 50)
+    @ApiOperationSupport(order = 6)
     @PostMapping("/pwd/reset")
     public JsonContent<Object> doRestAccountPwd(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
         return breezeAdminAccountService.doRestAccountPwd(args);
+    }
+
+    @ApiOperation(value = "修改密码")
+    @ApiOperationSupport(order = 7)
+    @PostMapping("/pwd/update")
+    public JsonContent<Object> doChangeAccountPwd(@Valid @RequestBody BreezeAdminAccountPwdChangeArgs args) {
+        return breezeAdminAccountService.doChangeAccountPwd(args);
     }
 }

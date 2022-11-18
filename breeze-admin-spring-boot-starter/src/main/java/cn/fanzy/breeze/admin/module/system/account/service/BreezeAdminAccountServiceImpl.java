@@ -1,12 +1,10 @@
 package cn.fanzy.breeze.admin.module.system.account.service;
 
+import cn.fanzy.breeze.admin.module.auth.utils.BreezeAuthUtil;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysAccountRole;
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.*;
 import cn.fanzy.breeze.admin.properties.BreezeAdminProperties;
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
@@ -158,7 +156,7 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                         .likeRight(StrUtil.equalsIgnoreCase(args.getOrgType(), "job"), SysAccount::getJobCode, args.getOrgCode())
                         .eq(args.getStatus() != null, SysAccount::getStatus, args.getStatus())
                         .eq(IBaseEntity::getDelFlag, 0)
-                        .orderByAsc(CollUtil.newArrayList(SysAccount::getCorpCode,SysAccount::getDeptCode,SysAccount::getJobCode,SysAccount::getCode))
+                        .orderByAsc(CollUtil.newArrayList(SysAccount::getCorpCode, SysAccount::getDeptCode, SysAccount::getJobCode, SysAccount::getCode))
                 , new Page<>(args.getPageSize(), args.getPageNum()));
         return JsonContent.success(page);
     }
@@ -208,5 +206,17 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                 .set(SysAccount::getPassword, passwordEncoder.encode(password))
                 .in(SysAccount::getId, args.getIdList()));
         return JsonContent.success("密码已重置为「" + password + "」");
+    }
+
+    @Override
+    public JsonContent<Object> doChangeAccountPwd(BreezeAdminAccountPwdChangeArgs args) {
+        String id = StrUtil.blankToDefault(args.getId(), BreezeAuthUtil.getCurrentAccountId());
+        SysAccount account = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysAccount.class).eq(SysAccount::getId, id));
+        Assert.notNull(account, "未找到用户！");
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
+                .set(SysAccount::getPassword, encoder.encode(args.getPassword()))
+                .eq(SysAccount::getId, id));
+        return JsonContent.success();
     }
 }

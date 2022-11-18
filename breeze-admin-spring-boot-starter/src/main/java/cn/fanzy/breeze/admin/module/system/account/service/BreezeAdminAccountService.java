@@ -1,10 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.account.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountBatchArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountQueryArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountRoleSaveArgs;
-import cn.fanzy.breeze.admin.module.system.account.args.BreezeAdminAccountSaveArgs;
+import cn.fanzy.breeze.admin.module.system.account.args.*;
 import cn.fanzy.breeze.web.model.JsonContent;
 import org.sagacity.sqltoy.model.Page;
 
@@ -26,4 +23,6 @@ public interface BreezeAdminAccountService {
     JsonContent<Object> enableBatch(List<String> idList);
 
     JsonContent<Object> doRestAccountPwd(BreezeAdminAccountBatchArgs args);
+
+    JsonContent<Object> doChangeAccountPwd(BreezeAdminAccountPwdChangeArgs args);
 }
