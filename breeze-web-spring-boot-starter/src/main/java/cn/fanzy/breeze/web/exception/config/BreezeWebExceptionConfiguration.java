@@ -5,6 +5,7 @@ import cn.fanzy.breeze.core.utils.RegexUtil;
 import cn.fanzy.breeze.web.exception.handler.BreezeExceptionHandler;
 import cn.fanzy.breeze.web.exception.properties.BreezeWebExceptionProperties;
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.fanzy.breeze.web.model.enums.ErrorShowType;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
@@ -66,6 +67,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "参数解析失败"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},错误的请求,失败的原因为：{}", ssid, e.getMessage())
                 , e);
         handler.after(e);
@@ -85,6 +87,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "参数不符合要求"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{}，参数解析失败,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -104,6 +107,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -124,6 +128,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前媒体类型"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},不支持当前媒体类型,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -142,6 +147,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 StrUtil.blankToDefault(e.getMessage(), "逻辑发生空指针异常！"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -164,6 +170,7 @@ public class BreezeWebExceptionConfiguration {
         String msg = e.getMessage();
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 RegexUtil.containChinese(msg) ? msg : "请求失败");
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -186,6 +193,7 @@ public class BreezeWebExceptionConfiguration {
         String msg = e.getMessage();
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 RegexUtil.containChinese(msg) ? msg : "IO操作失败");
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -201,6 +209,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},请求参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -213,6 +222,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},方法参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -232,6 +242,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "非法参数"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},参数校验有误,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -251,6 +262,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "非法参数"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},参数约束有误,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -269,6 +281,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 StrUtil.blankToDefault(e.getMessage(), "数组越界"));
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -289,6 +302,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleCustomException(HttpServletRequest request, CustomException e) {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -309,6 +323,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleIllegalStateException(HttpServletRequest request, IllegalStateException e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{}，请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -319,6 +334,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleException(HttpServletRequest request, SQLSyntaxErrorException e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -332,6 +348,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleException(HttpServletRequest request, SQLException e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -353,6 +370,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleException(HttpServletRequest request, NoHandlerFoundException e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到未找到处理程序异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
         return response;
@@ -384,7 +402,7 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到文件上传超过限制异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
-        return new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(),ErrorShowType.NOTIFICATION_ERROR);
     }
 
     /**
@@ -399,6 +417,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, RuntimeException e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
@@ -419,6 +438,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleException(HttpServletRequest request, Exception e) {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }
