@@ -3,6 +3,7 @@ package cn.fanzy.breeze.admin.module.auth.service;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
+import cn.fanzy.breeze.admin.module.auth.vo.ClientEnvVo;
 import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.web.model.JsonContent;
@@ -35,4 +36,5 @@ public interface BreezeAdminAuthService {
     JsonContent<List<Tree<String>>> doGetCurrentMenuTree();
 
 
+    JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request);
 }

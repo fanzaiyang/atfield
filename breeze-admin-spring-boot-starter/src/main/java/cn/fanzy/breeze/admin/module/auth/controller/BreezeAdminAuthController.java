@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
+import cn.fanzy.breeze.admin.module.auth.vo.ClientEnvVo;
 import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.web.code.annotation.BreezeCodeChecker;
@@ -34,7 +35,12 @@ import java.util.List;
 public class BreezeAdminAuthController {
 
     private final BreezeAdminAuthService breezeAuthService;
-
+    @ApiOperation(value = "客户端环境", notes = "获取客户端环境")
+    @ApiOperationSupport(order = 10)
+    @GetMapping("/env")
+    public JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request) {
+        return breezeAuthService.getClientEnv(request);
+    }
     @ApiOperation(value = "登录前", notes = "登录前调用此接口，用于判断是否需要显示验证码。true显示，false不显示")
     @ApiOperationSupport(order = 10)
     @ApiImplicitParam(name = "username", value = "登录名")

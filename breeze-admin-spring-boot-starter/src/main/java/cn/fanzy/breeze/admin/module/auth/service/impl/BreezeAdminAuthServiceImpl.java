@@ -7,6 +7,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.auth.args.UsernameMobileLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.args.UsernamePasswordLoginArgs;
 import cn.fanzy.breeze.admin.module.auth.service.BreezeAdminAuthService;
+import cn.fanzy.breeze.admin.module.auth.vo.ClientEnvVo;
 import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
@@ -27,6 +28,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -148,5 +150,14 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
     public JsonContent<List<Tree<String>>> doGetCurrentMenuTree() {
         JsonContent<List<SysMenu>> menu = doGetCurrentMenu();
         return JsonContent.success(TreeUtils.buildTree(menu.getData()));
+    }
+
+    @Override
+    public JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request) {
+        String clientIp = SpringUtils.getClientIp(request);
+        return JsonContent.success(ClientEnvVo.builder()
+                .clientIp(clientIp)
+                        .clientId(IdUtil.nanoId())
+                .build());
     }
 }
