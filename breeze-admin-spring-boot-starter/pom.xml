@@ -28,6 +28,7 @@
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
             <artifactId>breeze-auth-redis</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--持久层-->
         <dependency>

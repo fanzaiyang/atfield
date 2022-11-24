@@ -109,7 +109,7 @@ public class SysAccount extends IBaseEntity {
      */
     @ApiModelProperty(value = "部门编码", position = 8)
     @Column(name = "dept_code",type = Types.VARCHAR,length = 36)
-    private String deptCode;
+        private String deptCode;
     /**
      * 部门名称
      */
