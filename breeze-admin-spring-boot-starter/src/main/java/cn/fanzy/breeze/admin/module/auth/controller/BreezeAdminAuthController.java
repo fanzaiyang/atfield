@@ -36,10 +36,16 @@ public class BreezeAdminAuthController {
 
     private final BreezeAdminAuthService breezeAuthService;
     @ApiOperation(value = "客户端环境", notes = "获取客户端环境")
-    @ApiOperationSupport(order = 10)
+    @ApiOperationSupport(order = 1)
     @GetMapping("/env")
     public JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request) {
         return breezeAuthService.getClientEnv(request);
+    }
+    @ApiOperation(value = "是否登录", notes = "是否登录")
+    @ApiOperationSupport(order = 2)
+    @GetMapping("/is/login")
+    public JsonContent<Boolean> isLogin() {
+        return JsonContent.success(StpUtil.isLogin());
     }
     @ApiOperation(value = "登录前", notes = "登录前调用此接口，用于判断是否需要显示验证码。true显示，false不显示")
     @ApiOperationSupport(order = 10)
