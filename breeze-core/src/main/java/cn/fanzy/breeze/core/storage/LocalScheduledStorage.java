@@ -55,7 +55,10 @@ public final class LocalScheduledStorage {
     public synchronized static Object get(String key) {
         Assert.notNull(key, "key值不能为空");
         Node node = cacheMap.get(key);
-        Assert.notNull(node, "未找到键为「{}」的内容！", key);
+        if(node==null){
+            log.warn("未找到键为「{}」的内容！",key);
+            return null;
+        }
         if (DateUtil.currentSeconds() > node.getExpireTime()) {
             remove(key);
             return null;
