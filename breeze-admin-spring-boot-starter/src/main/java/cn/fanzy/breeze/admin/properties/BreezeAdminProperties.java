@@ -13,6 +13,7 @@ import java.io.Serializable;
 @ConfigurationProperties(prefix = "breeze.admin")
 public class BreezeAdminProperties implements Serializable {
     private static final long serialVersionUID = 1706602478025805316L;
+    private String appName;
     /**
      * 接口前缀
      */

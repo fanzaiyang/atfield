@@ -4,6 +4,8 @@ import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
+import cn.fanzy.breeze.web.password.PasswordEncoder;
+import cn.fanzy.breeze.web.password.bcrypt.BCryptPasswordEncoder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +23,8 @@ public class SqltoyTests {
 
     @Test
     void update() {
+        PasswordEncoder encoder=new BCryptPasswordEncoder();
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
-                .set(IBaseEntity::getTenantId, 1)
-                .isNull(IBaseEntity::getTenantId));
+                .set(SysAccount::getPassword,encoder.encode("123456")));
     }
 }

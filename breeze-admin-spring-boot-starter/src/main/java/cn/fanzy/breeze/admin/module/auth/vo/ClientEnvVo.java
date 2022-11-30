@@ -13,4 +13,5 @@ public class ClientEnvVo {
     private String clientIp;
 
     private String clientId;
+    private String appName;
 }

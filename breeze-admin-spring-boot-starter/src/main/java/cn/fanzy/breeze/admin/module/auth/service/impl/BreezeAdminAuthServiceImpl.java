@@ -12,6 +12,7 @@ import cn.fanzy.breeze.admin.module.auth.vo.CurrentUserInfoVo;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysMenu;
 import cn.fanzy.breeze.admin.module.entity.SysRole;
+import cn.fanzy.breeze.admin.properties.BreezeAdminProperties;
 import cn.fanzy.breeze.core.utils.TreeUtils;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrappers;
@@ -154,10 +155,12 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
 
     @Override
     public JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request) {
+        BreezeAdminProperties properties = SpringUtils.getBean(BreezeAdminProperties.class);
         String clientIp = SpringUtils.getClientIp(request);
         return JsonContent.success(ClientEnvVo.builder()
+                .appName(properties.getAppName())
                 .clientIp(clientIp)
-                        .clientId(IdUtil.nanoId())
+                .clientId(IdUtil.nanoId())
                 .build());
     }
 }
