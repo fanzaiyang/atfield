@@ -141,6 +141,7 @@ breeze:
       menu: /sys/menu # 系统管理/菜单管理模块，默认：/sys/menu
       org: /sys/org # 系统管理/组织管理模块，默认：/sys/org
       role: /sys/role # 系统管理/角色管理模块，默认：/sys/role
+    app-name: 微风组件
   minio:
     servers:
       -test:
