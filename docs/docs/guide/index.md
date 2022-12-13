@@ -19,13 +19,13 @@
 
 1. 微风Cloud依赖版本
 
-| 依赖                                                         | 版本       |
-| ------------------------------------------------------------ | ---------- |
-| [spring-boot](https://spring.io/projects/spring-boot)        | 2.6.11     |
-| [spring-cloud](https://spring.io/projects/spring-cloud)      | 2021.0.4   |
+| 依赖                                                                      | 版本         |
+| ----------------------------------------------------------------------- | ---------- |
+| [spring-boot](https://spring.io/projects/spring-boot)                   | 2.6.11     |
+| [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.4   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
-| [spring-boot-admin](https://github.com/codecentric/spring-boot-admin) | 2.6.9      |
-| [hutool-all](https://gitee.com/dromara/hutool/)              | 5.8.6      |
+| [spring-boot-admin](https://github.com/codecentric/spring-boot-admin)   | 2.6.9      |
+| [hutool-all](https://gitee.com/dromara/hutool/)                         | 5.8.6      |
 
 2. 微风Cloud版本管理
 
@@ -35,22 +35,22 @@
 
 最新版本号：![Maven](https://badgen.net/maven/v/metadata-url/http/maven.yinfengnet.com/repository/maven-public/cn/fanzy/breeze/breeze-spring-cloud/maven-metadata.xml)
 
-| 名称                                     | 说明                                                         |
-| ---------------------------------------- | ------------------------------------------------------------ |
-| breeze-core                              | 微风Cloud组件库的核心模块，封装了常用工具类等。              |
-| breeze-web-spring-boot-starter           | web组件：封装了异常、缓存、验证码、过滤器等。                |
-| breeze-minio-spring-boot-starter         | MinIO组件：封装了[minio](https://min.io/)对象存储功能，方便在项目任何位置，使用。 |
+| 名称                                       | 说明                                                                             |
+| ---------------------------------------- | ------------------------------------------------------------------------------ |
+| breeze-core                              | 微风Cloud组件库的核心模块，封装了常用工具类等。                                                     |
+| breeze-web-spring-boot-starter           | web组件：封装了异常、缓存、验证码、过滤器等。                                                       |
+| breeze-minio-spring-boot-starter         | MinIO组件：封装了[minio](https://min.io/)对象存储功能，方便在项目任何位置，使用。                        |
 | breeze-auth-spring-boot-starter          | 授权组件：对[sa-token](https://sa-token.dev33.cn/doc/index.html#/)二次封装，一个简单易上手的授权组件。 |
-| + breeze-wechat                          | 微信相关组件，帮助开发者快速集成微信相关接口功能             |
-| -  breeze-wechat-cp-spring-boot-starter  | 企业微信                                                     |
-| -  breeze-wechat-ma-spring-boot-starter  | 微信小程序                                                   |
-| -  breeze-wechat-mp-spring-boot-starter  | 微信公众号                                                   |
-| -  breeze-wechat-pay-spring-boot-starter | 微信支付                                                     |
+| + breeze-wechat                          | 微信相关组件，帮助开发者快速集成微信相关接口功能                                                       |
+| -  breeze-wechat-cp-spring-boot-starter  | 企业微信                                                                           |
+| -  breeze-wechat-ma-spring-boot-starter  | 微信小程序                                                                          |
+| -  breeze-wechat-mp-spring-boot-starter  | 微信公众号                                                                          |
+| -  breeze-wechat-pay-spring-boot-starter | 微信支付                                                                           |
 
 # 组件使用说明
 
 > ⚠️ **注意：**
->
+> 
 > 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址
 
 1. Maven私服地址
@@ -58,11 +58,11 @@
 ```xml
 <!-- pom.xml -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
@@ -89,7 +89,7 @@
 <parent>
     <groupId>cn.fanzy.breeze</groupId>
     <artifactId>breeze-spring-cloud</artifactId>
-    <version>1.0.0</version>
+    <version>最新版本号</version>
     <relativePath/> <!-- lookup parent from repository -->
 </parent>
 ```
@@ -109,4 +109,3 @@ breeze:
 ```
 
 组件的详细说明，在各组件介绍中，会详细说明，请阅读对应章节。
-
