@@ -5,7 +5,7 @@ hero:
   description: 面向Spring Cloud的组件库
   actions:
     - text: 起步
-      link: /guild
+      link: /guide
     - text: Github
       link: /
 features:
