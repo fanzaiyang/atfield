@@ -1,7 +1,7 @@
 ---
 title: WEB组件
 order: 1
-tocDepth: 3
+toc: content
 ---
 
 WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置，如：缓存管理、验证码、异常管理、过滤器、IP校验、Redis序列化、字段加密、Spring上下文工具等。

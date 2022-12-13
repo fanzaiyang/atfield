@@ -1,7 +1,9 @@
 ---
 title: 消息推送
+order: 2
 group:
   title: 企业微信
+toc: content
 ---
 # 消息推送
 

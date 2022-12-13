@@ -1,5 +1,6 @@
 ---
 title: 素材管理
+order: 5
 group:
   title: 企业微信
 ---

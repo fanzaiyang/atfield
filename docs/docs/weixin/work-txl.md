@@ -1,5 +1,6 @@
 ---
 title: 通讯录
+order: 6
 group:
   title: 企业微信
 ---

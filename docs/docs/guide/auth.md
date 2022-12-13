@@ -1,4 +1,8 @@
-# 授权组件
+---
+title: 授权组件
+order: 3
+---
+
 该组件集成了[SaToken](https://gitee.com/dromara/sa-token)一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！该组件使用简单的API即可实现强大的功能。
 
 ## 组件说明

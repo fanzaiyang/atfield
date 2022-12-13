@@ -1,5 +1,6 @@
 ---
-title: 微信小程序
-order: 3
+title: 简介
+order: 30
+group:
+  title: 微信小程序
 ---
-# 微信小程序

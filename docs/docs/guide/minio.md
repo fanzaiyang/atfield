@@ -1,4 +1,7 @@
-# MinIO组件
+---
+title: MinIO组件
+order: 4
+---
 [MinIO](https://min.io/)是一个高性能的对象存储工具。MinIO组件，是对[MinIO](https://min.io/)的进一步封装，目的是方便开发者快速集成使用MinIO服务。
 ## 组件说明
 MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.2.2`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。

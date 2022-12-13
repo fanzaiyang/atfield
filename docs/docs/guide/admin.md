@@ -1,4 +1,7 @@
-# Admin组件
+---
+title: Admin组件
+order: 5
+---
 
 该组件是集成授权组件、web组件、MinIO组件、Swagger2的一个快速搭建信息系统的组件，配合前端[breeze-admin-web-arco](https://gitee.com/it-xiaofan/breeze-admin-web-arco)使用。
 
