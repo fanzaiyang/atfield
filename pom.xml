@@ -21,7 +21,6 @@
         <module>breeze-wechat</module>
         <module>breeze-mybatis-plus-spring-boot-starter</module>
         <module>breeze-admin-spring-boot-starter</module>
-        <module>breeze-admin-demo</module>
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
         <module>breeze-spring-cloud-dependencies</module>
