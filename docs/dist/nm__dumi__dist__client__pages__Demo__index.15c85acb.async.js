@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkbreeze_spring_cloud=self.webpackChunkbreeze_spring_cloud||[]).push([[9],{12535:function(i,n,e){e.r(n),e.d(n,{default:function(){return u}});var r=e(66190),o=e(67294),t=function(){var d=(0,r.UO)(),s=d.id,m=(0,r.WF)(),c=m.demos,f=c[s]||{},a=f.component;return a&&(0,o.createElement)(a)},u=t}}]);
