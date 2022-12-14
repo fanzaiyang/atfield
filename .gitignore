@@ -43,3 +43,7 @@ build/
 /docs/yarn.lock
 /docs/.dumi/tmp/
 /docs/.dumi/tmp-production/
+/docs-breeze-site/.dumi/tmp/
+/docs-breeze-site/.dumi/tmp-production/
+/docs-breeze-site/yarn.lock
+/docs-breeze-site/node_modules/
