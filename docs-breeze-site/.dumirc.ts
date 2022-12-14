@@ -5,9 +5,9 @@ export default defineConfig({
   publicPath:'/breeze-spring-cloud/',
   themeConfig: {
     name: '微风组件',
-    logo: '/breeze-spring-cloud/logo.png',
+    logo: 'https://raw.githubusercontent.com/fanzaiyang/breeze-spring-cloud/master/docs-breeze-site/public/logo.png',
     autoAlias: false,
-    favicons: ['/breeze-spring-cloud/favicon.icon'],
+    favicons: ['https://raw.githubusercontent.com/fanzaiyang/breeze-spring-cloud/master/docs-breeze-site/public/favicon.ico'],
     nav: [
       {title: '指南', link: '/guide'},
       {title: '微信', link: '/weixin'},
