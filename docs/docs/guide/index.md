@@ -36,7 +36,8 @@ order: 1
 
 # 组件列表
 
-最新版本号：![Maven](https://badgen.net/maven/v/metadata-url/http/maven.yinfengnet.com/repository/maven-public/cn/fanzy/breeze/breeze-spring-cloud/maven-metadata.xml)
+![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud)
 
 | 名称                                       | 说明                                                                             |
 | ---------------------------------------- | ------------------------------------------------------------------------------ |
