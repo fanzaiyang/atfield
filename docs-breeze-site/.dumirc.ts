@@ -2,6 +2,7 @@ import {defineConfig} from 'dumi';
 
 export default defineConfig({
   base:'/breeze-spring-cloud',
+  publicPath:'/breeze-spring-cloud/',
   themeConfig: {
     name: '微风组件',
     logo: '/logo.png',
