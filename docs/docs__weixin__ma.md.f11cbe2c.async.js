@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkbreeze_spring_cloud=self.webpackChunkbreeze_spring_cloud||[]).push([[510],{55641:function(i,s,_){_.r(s);var n=_(71100),t=_(35532),l=_(80543),r=_(87551),m=_(52919),E=_(67915),d=_(66190),D=_(67294),e=_(85893);function o(){var u=(0,d.eL)(),a=u.texts;return(0,e.jsx)(d.dY,{children:(0,e.jsx)(e.Fragment,{})})}s.default=o}}]);
