@@ -47,3 +47,4 @@ build/
 /docs-breeze-site/.dumi/tmp-production/
 /docs-breeze-site/yarn.lock
 /docs-breeze-site/node_modules/
+/docs-breeze-site/dist/
