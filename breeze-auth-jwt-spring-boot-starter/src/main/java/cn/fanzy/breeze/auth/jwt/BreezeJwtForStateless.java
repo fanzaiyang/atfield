@@ -45,7 +45,7 @@ public class BreezeJwtForStateless extends StpLogic {
      */
     public String jwtSecretKey() {
         String keyt = getConfig().getJwtSecretKey();
-        SaTokenException.throwByNull(keyt, "请配置jwt秘钥");
+        SaTokenException.throwByNull(keyt, "请配置jwt秘钥",500);
         return keyt;
     }
 
@@ -93,7 +93,7 @@ public class BreezeJwtForStateless extends StpLogic {
      */
     @Override
     public String createLoginSession(Object id, SaLoginModel loginModel) {
-        SaTokenException.throwByNull(id, "账号id不能为空");
+        SaTokenException.throwByNull(id, "账号id不能为空",400);
 
         // ------ 1、初始化 loginModel
         loginModel.build(getConfig());
