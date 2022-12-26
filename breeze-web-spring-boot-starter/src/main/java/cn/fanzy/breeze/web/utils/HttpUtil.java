@@ -79,20 +79,20 @@ public class HttpUtil {
      * @param request HttpServletRequest
      */
     public static void stack(HttpServletRequest request) {
-        log.debug("\r\n");
-        log.debug("==start  用户请求的请求参数中包含的信息为 query start ===");
+        log.info("\r\n");
+        log.info("==start  用户请求的请求参数中包含的信息为 query start ===");
         Map<String, String[]> params = request.getParameterMap();
         if (null != params) {
             params.forEach((k, v) -> log.debug("请求参数中的参数名字为 {},对应的值为 {}", k, String.join(" , ", v)));
         }
-        log.debug("==end  用户请求的请求参数中包含的信息为  query end ===");
-        log.debug("==start  用户请求的请求头中包含的信息为 header start ===");
+        log.info("==end  用户请求的请求参数中包含的信息为  query end ===");
+        log.info("==start  用户请求的请求头中包含的信息为 header start ===");
         for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
             String name = e.nextElement();
             log.debug("请求头的名字为 {},对应的值为 {}", name, request.getHeader(name));
         }
-        log.debug("==end  用户请求的请求头中包含的信息为 header end ===");
-        log.debug("\r\n");
+        log.info("==end  用户请求的请求头中包含的信息为 header end ===");
+        log.info("\r\n");
     }
 
     /**

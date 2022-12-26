@@ -6,6 +6,7 @@ import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
+import cn.fanzy.breeze.web.utils.HttpUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
@@ -56,10 +57,7 @@ public class BreezeLogsAop {
         }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
-        log.info("===请求参数：{}", JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
-        log.info("===客户端IP：「{}」-用户信息：「{}」-请求参数：{}",
-                clientIp, "",
-                JSONUtil.toJsonStr(requestData));
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}",clientIp, SpringUtils.getRequestUri(),JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
         breezeRequestArgs = BreezeRequestArgs.builder()
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
