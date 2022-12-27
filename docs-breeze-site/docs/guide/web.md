@@ -126,7 +126,7 @@ breeze:
 
 效果如下：
 
-![basicerror](https://gitee.com/it-xiaofan/breeze-spring-cloud/raw/master/docs-breeze-site/public/basicerror.png)
+![basicerror](https://c2.im5i.com/2022/12/27/Reis2.png)
 
 拦截到异常，返回前台的JSON数据格式如下：
 
