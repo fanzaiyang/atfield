@@ -119,8 +119,7 @@ public class SpringUtils extends SpringUtil {
      */
     public static boolean isJson(HttpServletRequest request) {
         if (request.getContentType() != null) {
-            return request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE) ||
-                    request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            return request.getContentType().startsWith(MediaType.APPLICATION_JSON_VALUE);
         }
         return false;
     }
