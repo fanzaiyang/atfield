@@ -118,7 +118,7 @@ spring:
 breeze:
   auth:
     route:
-      exclude-path-patterns: /auth/**
+      exclude-path-patterns: /auth/**,/test/**
   web:
     safe:
       need-code: true

@@ -118,10 +118,11 @@ public class SpringUtils extends SpringUtil {
      * @return boolean
      */
     public static boolean isJson(HttpServletRequest request) {
-        if (request.getContentType() != null) {
-            return request.getContentType().startsWith(MediaType.APPLICATION_JSON_VALUE);
+        if (request.getContentType() == null) {
+            return false;
         }
-        return false;
+        return StrUtil.equalsIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE) ||
+                StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**
@@ -150,7 +151,7 @@ public class SpringUtils extends SpringUtil {
         }
         if (isJson(request)) {
             String jsonParam = new RequestWrapper(request).getBodyString();
-            if(JSONUtil.isTypeJSON(jsonParam)){
+            if (JSONUtil.isTypeJSON(jsonParam)) {
                 JSONObject obj = JSONUtil.parseObj(jsonParam);
                 for (Map.Entry<String, Object> entry : obj) {
                     params.put(entry.getKey(), entry.getValue());
