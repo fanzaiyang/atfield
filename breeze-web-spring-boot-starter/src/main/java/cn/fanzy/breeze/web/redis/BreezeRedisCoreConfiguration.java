@@ -2,6 +2,7 @@ package cn.fanzy.breeze.web.redis;
 
 import cn.fanzy.breeze.core.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
+import cn.fanzy.breeze.web.redis.lock.aop.DistributedLockAop;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
@@ -40,6 +42,7 @@ import java.time.Duration;
 @Slf4j
 @Configuration
 @EnableCaching
+@ImportAutoConfiguration(DistributedLockAop.class)
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class, BreezeCodeConfiguration.class})
 public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {

@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.demo.controller;
 
 import cn.fanzy.breeze.web.model.JsonContent;
+import cn.fanzy.breeze.web.redis.lock.annotation.LockDistributed;
 import cn.hutool.core.thread.ThreadUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,13 @@ public class TestController {
         log.info("执行方法。。。");
         ThreadUtil.sleep(3000);
         rLock.unlock();
+        return JsonContent.success();
+    }
+    @LockDistributed("test_unlock")
+    @GetMapping("/unlock")
+    public JsonContent<Object> unlock(){
+        log.info("执行方法。。。");
+        ThreadUtil.sleep(3000);
         return JsonContent.success();
     }
 }
