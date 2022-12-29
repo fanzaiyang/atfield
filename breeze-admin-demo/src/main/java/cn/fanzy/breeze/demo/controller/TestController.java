@@ -38,7 +38,10 @@ public class TestController {
         return JsonContent.success();
     }
 
-    @RateLimit(rateInterval = 10,rate = 10)
+    /**
+     * 表示该接口：1秒内，并发请求10次。
+     */
+    @RateLimit(rateInterval = 100,rate = 1,useIp = true)
     @GetMapping("/rates")
     public JsonContent<Object> rate() {
         log.info("执行方法。。。rate");

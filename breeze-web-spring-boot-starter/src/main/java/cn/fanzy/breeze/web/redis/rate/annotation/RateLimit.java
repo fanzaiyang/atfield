@@ -31,7 +31,7 @@ public @interface RateLimit {
      * 限流速率
      * @return
      */
-    long rateInterval() default 10;
+    long rateInterval() default 1000;
 
     /**
      * 限流速率单位
