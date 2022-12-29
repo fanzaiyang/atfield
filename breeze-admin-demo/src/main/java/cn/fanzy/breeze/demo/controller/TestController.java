@@ -38,8 +38,8 @@ public class TestController {
         return JsonContent.success();
     }
 
-    @RateLimit(rateInterval = 3)
-    @GetMapping("/rate")
+    @RateLimit(rateInterval = 10,rate = 10)
+    @GetMapping("/rates")
     public JsonContent<Object> rate() {
         log.info("执行方法。。。rate");
         return JsonContent.success();

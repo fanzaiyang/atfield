@@ -6,6 +6,7 @@ import cn.fanzy.breeze.web.utils.SpringUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -32,6 +33,32 @@ public class RateLimitAop {
         if (annotation == null) {
             return;
         }
+        RRateLimiter rateLimiter = redissonClient.getRateLimiter(getRateKey(annotation));
+        if (!rateLimiter.isExists()) {
+            rateLimiter.delete();
+            rateLimiter.trySetRate(annotation.type(), annotation.rate(), annotation.rateInterval(), annotation.timeUnit());
+        }
+        rateLimiter.clearExpire();
+        boolean acquire = rateLimiter.tryAcquire();
+        if (!acquire) {
+            throw new RuntimeException(annotation.useIp() ? "请求过于频繁，请稍后在试～" : "当前访问用户太多，请稍后在试～");
+        }
+    }
+
+    @After("cut()")
+    public void after(JoinPoint jp) {
+//        RateLimit annotation = JoinPointUtils.getAnnotation(jp, RateLimit.class);
+//        if (annotation == null) {
+//            return;
+//        }
+//        RRateLimiter rateLimiter = redissonClient.getRateLimiter(getRateKey(annotation));
+//        if(rateLimiter.isExists()){
+//            rateLimiter.delete();
+//        }
+    }
+
+
+    private String getRateKey(RateLimit annotation) {
         String key = "breeze_rate:";
         String clientIp = SpringUtils.getClientIp();
         if (annotation.useIp()) {
@@ -39,14 +66,6 @@ public class RateLimitAop {
         }
         String requestUri = SpringUtils.getRequestUri().replaceAll("/", "_");
         key += requestUri;
-        RRateLimiter rateLimiter = redissonClient.getRateLimiter(key);
-        if (!rateLimiter.isExists()) {
-            rateLimiter.trySetRate(annotation.type(), annotation.rate(), annotation.rateInterval(), annotation.timeUnit());
-            return;
-        }
-        boolean acquire = rateLimiter.tryAcquire();
-        if (!acquire) {
-            throw new RuntimeException(annotation.useIp() ? "请求过于频繁，请稍后在试～" : "当前访问用户太多，请稍后在试～");
-        }
+        return key;
     }
 }
