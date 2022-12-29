@@ -39,4 +39,5 @@ public class CodeController {
         processor.validate(new ServletWebRequest(request,null),BreezeCodeType.IMAGE);
         return JsonContent.success();
     }
+
 }

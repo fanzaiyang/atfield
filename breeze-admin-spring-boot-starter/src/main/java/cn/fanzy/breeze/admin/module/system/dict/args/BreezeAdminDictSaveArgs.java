@@ -1,36 +1,36 @@
 package cn.fanzy.breeze.admin.module.system.dict.args;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 public class BreezeAdminDictSaveArgs {
-    @ApiModelProperty(value = "", position = 1)
+    @Schema(description = "")
     private String id;
     /**
      * 键名
      */
     @NotBlank(message = "字典名称不能为空！")
-    @ApiModelProperty(value = "键名", position = 2)
+    @Schema(description = "键名")
     private String keyName;
     /**
      * 键值
      */
     @NotBlank(message = "字典值不能为空！")
-    @ApiModelProperty(value = "键值", position = 3)
+    @Schema(description = "键值")
     private String keyValue;
     /**
      * 备注
      */
-    @ApiModelProperty(value = "备注", position = 4)
+    @Schema(description = "备注")
     private String remarks;
     /**
      * 上级ID
      */
-    @ApiModelProperty(value = "上级ID", position = 5)
+    @Schema(description = "上级ID")
     private String parentId;
-    @ApiModelProperty(value = "序号", position = 11)
+    @Schema(description = "序号")
     private Integer orderNumber;
 }

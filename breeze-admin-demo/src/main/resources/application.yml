@@ -1,4 +1,7 @@
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     username: hotec
@@ -22,8 +25,6 @@ spring:
       aop-patterns: cn.fanzy.breeze.admin.*
   profiles:
     include: db
-
-
 #breeze:
 #  web:
 #    code:
@@ -118,7 +119,7 @@ spring:
 breeze:
   auth:
     route:
-      exclude-path-patterns: /auth/**
+      exclude-path-patterns: /auth/**,/test/**
   web:
     safe:
       need-code: true
@@ -149,3 +150,14 @@ breeze:
         access-key: minioadmin
         secret-key: minioadmin
         bucket: test
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: cn.fanzy.breeze.demo
+  api-docs:
+    groups:
+      enabled: false
+

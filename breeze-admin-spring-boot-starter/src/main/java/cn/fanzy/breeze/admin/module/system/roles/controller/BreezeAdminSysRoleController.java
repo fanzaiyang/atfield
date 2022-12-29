@@ -8,9 +8,9 @@ import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.lang.tree.Tree;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.sagacity.sqltoy.model.Page;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2022-11-02
  */
-@Api(tags = "「微风组件」角色管理")
+@Tag(name = "「微风组件」角色管理")
 @ApiSupport(author = "微风组件", order = 992011)
 @AllArgsConstructor
 @RestController
@@ -32,76 +32,76 @@ import java.util.List;
 public class BreezeAdminSysRoleController {
     private final BreezeAdminRoleService breezeAdminRoleService;
 
-    @ApiOperation(value = "保存修改")
+    @Operation(summary = "保存修改")
     @ApiOperationSupport(order = 1)
     @PostMapping("/save")
     public JsonContent<Object> save(@Valid @RequestBody BreezeAdminRoleSaveArgs args) {
         return breezeAdminRoleService.save(args);
     }
 
-    @ApiOperation(value = "删除单个",notes = "级联下级也会删除！")
+    @Operation(summary = "删除单个",description = "级联下级也会删除！")
     @ApiOperationSupport(order = 10)
-    @ApiImplicitParam(name = "id", value = "角色ID")
+    @Parameter(name = "id", description = "角色ID")
     @DeleteMapping("/delete")
     public JsonContent<Object> delete(String id) {
         return breezeAdminRoleService.delete(id);
     }
 
-    @ApiOperation(value = "删除批量",notes = "级联下级也会删除！")
+    @Operation(summary = "删除批量",description = "级联下级也会删除！")
     @ApiOperationSupport(order = 15)
-    @ApiImplicitParam(name = "id", value = "角色ID")
+    @Parameter(name = "id", description = "角色ID")
     @PostMapping("/delete/batch")
     public JsonContent<Object> delete(@RequestBody BreezeAdminRoleDeleteArgs args) {
         return breezeAdminRoleService.deleteBatch(args.getIdList());
     }
 
-    @ApiOperation(value = "启禁用单个")
+    @Operation(summary = "启禁用单个")
     @ApiOperationSupport(order = 20)
-    @ApiImplicitParam(name = "id", value = "角色ID")
+    @Parameter(name = "id", description = "角色ID")
     @PostMapping("/enable")
     public JsonContent<Object> enable(String id) {
         return breezeAdminRoleService.enable(id);
     }
 
-    @ApiOperation(value = "启禁用批量")
+    @Operation(summary = "启禁用批量")
     @ApiOperationSupport(order = 25)
-    @ApiImplicitParam(name = "id", value = "角色ID")
+    @Parameter(name = "id", description = "角色ID")
     @PostMapping("/enable/batch")
     public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminRoleEnableBatchArgs args) {
         return breezeAdminRoleService.enableBatch(args.getIdList());
     }
 
-    @ApiOperation(value = "分页查询")
+    @Operation(summary = "分页查询")
     @ApiOperationSupport(order = 30)
     @PostMapping("/query")
     public JsonContent<Page<SysRole>> queryPage(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args) {
         return breezeAdminRoleService.queryPage(args);
     }
 
-    @ApiOperation(value = "查询全部")
+    @Operation(summary = "查询全部")
     @ApiOperationSupport(order = 35)
     @PostMapping("/query/all")
     public JsonContent<List<SysRole>> queryAll(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args) {
         return breezeAdminRoleService.queryAll(args);
     }
 
-    @ApiOperation(value = "查询角色树")
+    @Operation(summary = "查询角色树")
     @ApiOperationSupport(order = 35)
     @PostMapping("/query/tree")
     public JsonContent<List<Tree<String>>> queryTree(@Valid @RequestBody BreezeAdminRoleQueryPageArgs args) {
         return breezeAdminRoleService.queryTree(args);
     }
 
-    @ApiOperation(value = "绑定菜单")
+    @Operation(summary = "绑定菜单")
     @ApiOperationSupport(order = 50)
     @PostMapping("/menu/bind")
     public JsonContent<Object> menuBind(@Valid @RequestBody BreezeAdminRoleMenuBindArgs args) {
         return breezeAdminRoleService.menuBind(args);
     }
 
-    @ApiOperation(value = "已绑定菜单")
+    @Operation(summary = "已绑定菜单")
     @ApiOperationSupport(order = 60)
-    @ApiImplicitParam(name = "id", value = "角色ID")
+    @Parameter(name = "id", description = "角色ID")
     @GetMapping("/menu/list")
     public JsonContent<List<SysMenu>> getBindMenu(String id) {
         return breezeAdminRoleService.getBindMenu(id);

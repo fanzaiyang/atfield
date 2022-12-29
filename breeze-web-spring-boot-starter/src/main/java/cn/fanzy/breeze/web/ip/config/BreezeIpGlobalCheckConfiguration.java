@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
@@ -40,6 +41,26 @@ public class BreezeIpGlobalCheckConfiguration implements WebMvcConfigurer {
         }
         registry.addInterceptor(new BreezeIpGlobalCheckInterceptor(breezeIpGlobalCheckService()))
                 .addPathPatterns(path);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        // 配置knife4j 显示文档
+        registry.addResourceHandler("doc.html")
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        // 配置swagger-ui显示文档
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        // 公共部分内容
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/favicon.ico")
+                .addResourceLocations("classpath:/static/");
     }
     @PostConstruct
     public void init() {

@@ -2,50 +2,50 @@ package cn.fanzy.breeze.admin.module.system.corp.args;
 
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.hutool.core.util.StrUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
 public class BreezeAdminCorpSaveArgs {
-    @ApiModelProperty(value = "", position = 1)
+    @Schema(description = "")
     private String id;
     /**
      * 编码
      */
     @NotBlank(message = "编码不能为空！")
-    @ApiModelProperty(value = "编码", position = 2)
+    @Schema(description = "编码")
     private String code;
     /**
      * 名称
      */
     @NotBlank(message = "名称不能为空！")
-    @ApiModelProperty(value = "名称", position = 3)
+    @Schema(description = "名称")
     private String name;
     /**
      * 简称
      */
-    @ApiModelProperty(value = "简称", position = 3)
+    @Schema(description = "简称")
     private String shortName;
     /**
      * 上级ID
      */
-    @ApiModelProperty(value = "上级ID", position = 5)
+    @Schema(description = "上级ID")
     private String parentId;
     /**
      * 父节点编码
      */
-    @ApiModelProperty(value = "父节点编码", position = 6)
+    @Schema(description = "父节点编码")
     private String parentCode;
     /**
      * 类别:corp=公司，dept=部门，job=职务
      */
-    @ApiModelProperty(value = "类别:corp=公司，dept=部门，job=职务", position = 7)
+    @Schema(description = "类别:corp=公司，dept=部门，job=职务")
     private String orgType;
-    @ApiModelProperty(value = "排序序号", position = 10)
+    @Schema(description = "排序序号")
     private Integer orderNumber;
-    @ApiModelProperty(value = "备注", position = 12)
+    @Schema(description = "备注")
     private String remarks;
 
     public String getParentId() {

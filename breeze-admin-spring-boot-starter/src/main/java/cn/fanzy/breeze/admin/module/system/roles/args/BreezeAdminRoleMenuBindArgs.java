@@ -1,6 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.roles.args;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BreezeAdminRoleMenuBindArgs {
     @NotEmpty(message = "角色ID不能为空！")
-    @ApiModelProperty(value = "角色ID")
+    @Schema(description = "角色ID")
     private String id;
-    @ApiModelProperty(value = "菜单ID集合")
+    @Schema(description = "菜单ID集合")
     private List<String> menuIdList;
 }

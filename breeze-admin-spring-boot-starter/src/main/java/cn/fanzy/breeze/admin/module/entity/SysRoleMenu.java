@@ -2,8 +2,7 @@ package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.sagacity.sqltoy.config.annotation.Column;
 import org.sagacity.sqltoy.config.annotation.Entity;
@@ -22,7 +21,7 @@ import java.sql.Types;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "SysRoleMenu", description = "角色菜单表")
+@Schema(description = "角色菜单表")
 @Entity(tableName = "sys_role_menu")
 public class SysRoleMenu extends IBaseEntity {
     private static final long serialVersionUID = 8357831398457392327L;
@@ -31,19 +30,19 @@ public class SysRoleMenu extends IBaseEntity {
      */
     @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id", type = Types.VARCHAR)
-    @ApiModelProperty(value = "主键", position = 1)
+    @Schema(description = "主键")
     private String id;
     /**
      * 菜单ID
      */
     @Column(name = "menu_id", type = Types.VARCHAR)
-    @ApiModelProperty(value = "菜单ID", position = 2)
+    @Schema(description = "菜单ID")
     private String menuId;
     /**
      * 角色ID
      */
     @Column(name = "role_id", type = Types.VARCHAR)
-    @ApiModelProperty(value = "角色ID", position = 3)
+    @Schema(description = "角色ID")
     private String roleId;
 }
 
