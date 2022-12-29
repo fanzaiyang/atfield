@@ -1,10 +1,15 @@
 spring:
+  redis:
+    host: localhost
+    port: 6379
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    username: hotec
-    password: hotec123qwe.?
-    url: jdbc:mysql://mysql.wanghuifeng.me:3306/yf_common_test?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    driver-class-name: com.mysql.jdbc.Driver
+#    username: hotec
+#    password: hotec123qwe.?
+#    url: jdbc:mysql://mysql.wanghuifeng.me:3306/yf_common_test?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://rm-bp1jkk8wuje4g4wbpvo.mysql.rds.aliyuncs.com/fanzy_wedding?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: fanzy_wedding
+    password: Fan415517
+    driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
       initial-size: 2
       min-idle: 2
@@ -20,10 +25,9 @@ spring:
         enabled: true
         url-pattern: /*
       aop-patterns: cn.fanzy.breeze.admin.*
+
   profiles:
     include: db
-
-
 #breeze:
 #  web:
 #    code:
@@ -149,3 +153,14 @@ breeze:
         access-key: minioadmin
         secret-key: minioadmin
         bucket: test
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: cn.fanzy.breeze.demo
+  api-docs:
+    groups:
+      enabled: false
+

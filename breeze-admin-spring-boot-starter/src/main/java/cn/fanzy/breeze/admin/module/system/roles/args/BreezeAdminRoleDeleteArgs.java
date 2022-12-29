@@ -1,6 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.roles.args;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +22,6 @@ public class BreezeAdminRoleDeleteArgs {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "主键", position = 1)
+    @Schema(description = "主键")
     private List<String> idList;
 }

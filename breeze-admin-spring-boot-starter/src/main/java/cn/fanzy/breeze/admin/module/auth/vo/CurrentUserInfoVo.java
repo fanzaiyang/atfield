@@ -2,7 +2,7 @@ package cn.fanzy.breeze.admin.module.auth.vo;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysRole;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class CurrentUserInfoVo extends SysAccount {
 
-    @ApiModelProperty(value = "角色集合", position = 40)
+    @Schema(title = "角色集合")
     private List<SysRole> roleList;
 }

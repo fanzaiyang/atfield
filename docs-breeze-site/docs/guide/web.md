@@ -23,11 +23,11 @@ WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置，如：缓
 </dependencies>
 <!-- maven私服 -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
@@ -105,9 +105,9 @@ breeze:
 全局异常默认情况捕获Spring上下文中的所有异常和过滤器中发生的异常，以及定制了默认的错误页面。
 
 > 默认情况下开启了全局异常拦截。
->
+> 
 > ⚠️注意
->
+> 
 > 所有的异常返回到前端的HTTP状态码，均为：200，不需要前端处理catch响应内容。
 
 1. 配置文件说明
@@ -134,13 +134,13 @@ JSON返回类见：`cn.fanzy.breeze.web.model.JsonContent`关于此类的详细�
 
 ```json
 {
-	"id": "11322416650626944",
-	"code": 404,
-	"message": "Not Found",
-	"data": "/auth/test",
-	"now": "2022-09-21 14:39:27",
-	"success": false,
-	"exData": null
+    "id": "11322416650626944",
+    "code": 404,
+    "message": "Not Found",
+    "data": "/auth/test",
+    "now": "2022-09-21 14:39:27",
+    "success": false,
+    "exData": null
 }
 ```
 
@@ -217,17 +217,15 @@ public class BreezeAuthExceptionConfiguration {
 
 > 该模块定义了返回前端实体类，实体类属性说明：
 
-
-
-| 属性    | 类型    | 说明                                            |
-| ------- | ------- | ----------------------------------------------- |
-| id      | String  | 请求链路唯一ID                                  |
-| code    | Int     | 返回错误码，默认：200标识成功。                 |
-| message | String  | 返回的消息                                      |
-| data    | T       | 泛型对象，Object。                              |
+| 属性      | 类型      | 说明                               |
+| ------- | ------- | -------------------------------- |
+| id      | String  | 请求链路唯一ID                         |
+| code    | Int     | 返回错误码，默认：200标识成功。                |
+| message | String  | 返回的消息                            |
+| data    | T       | 泛型对象，Object。                     |
 | success | boolean | 是否成功，默认code=200时，此为true，其它为false |
-| now     | String  | 当前时间，格式：yyyy-MM-dd HH:mm:ss             |
-| exData  | object  | 额外返回内容，根据实际业务情况使用即可。        |
+| now     | String  | 当前时间，格式：yyyy-MM-dd HH:mm:ss      |
+| exData  | object  | 额外返回内容，根据实际业务情况使用即可。             |
 
 配置参数：
 
@@ -251,6 +249,66 @@ breeze:
 目的解决使用`RedisTemplate`保存的内容乱码问题，及创建`RedisTemplate<String, Object>`Bean，用于上下文使用。
 
 当引入`spring-boot-starter-data-redis`依赖后生效，且不可更改。
+
+### 分布式锁
+
+> 分布式锁是居于`redisson`实现的，除了框架提供方法外你可以直接使用`redisson`特性。
+
+> 使用前需要你引入`redisson-spring-boot-starter`或`breeze-auth-redis`中的一个即可。
+
+* 加入依赖「**推荐**」
+  
+  ```xml
+  <dependency>
+      <groupId>cn.fanzy.breeze</groupId>
+      <artifactId>breeze-auth-redis</artifactId>
+  </dependency>
+  ```
+
+* 方法处加注解`@LockDistributed("KEY_NAME")`
+  
+  ```java
+  @LockDistributed("test_unlock")
+  @GetMapping("/unlock")
+  public JsonContent<Object> unlock() {
+      log.info("执行方法。。。");
+      ThreadUtil.sleep(3000);
+      return JsonContent.success();
+  }
+  ```
+
+### 分布式限流
+
+限流是居于`redisson`的`RRateLimiter`实现的，除了框架提供方法外你可以直接使用`redisson`特性。
+
+默认限流：1秒1000并发。可通过注解修改。
+
+* 加入依赖
+  
+  ```xml
+  <dependency>
+      <groupId>cn.fanzy.breeze</groupId>
+      <artifactId>breeze-auth-redis</artifactId>
+  </dependency>
+  ```
+
+* 方法处加注解`@RateLimit`即可。
+  
+  ```java
+  /**
+   * 表示该接口：1秒内，并发请求10次。
+   */
+  @RateLimit(rateInterval = 100,rate = 1)
+  @GetMapping("/rates")
+  public JsonContent<Object> rate() {
+      log.info("执行方法。。。rate");
+      return JsonContent.success();
+  }
+  ```
+
+* IP进行限流
+  
+  @RateLimit(rateInterval = 100,rate = 1,**useIp = true**)
 
 ## IP检查
 
@@ -311,15 +369,14 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
         // todo 读取数据库执行校验
     }
 }
-
 ```
 
 2. 自定义注解的检查
-
+   
    在注解`@BreezeIpCheck(handler=CustomIpHandler.class)`添加你的实现类。该类必须实现接口`BreezeIpCheckService`，示例：
-
+   
    * 添加注解到方法
-
+   
    ```java
    @BreezeIpCheck(handler = CustomIpCheckHandler.class)
    @GetMapping("/user/2")
@@ -327,9 +384,9 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
       return JsonContent.success("");
     }
    ```
-
+   
    * 实现接口
-
+   
    ```java
    public class CustomIpCheckHandler implements BreezeIpCheckService {
        @Override
@@ -343,7 +400,7 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
 ## 字段脱敏
 
 > 很多时候我们希望返回给前端的数据中某个字段需要进行脱敏处理，这时你可以使用该功能实现你的需求。
->
+> 
 > 该功能支持：身份证号、密码、手机号、真实姓名、银行卡脱敏。
 
 ### 使用方法
@@ -415,7 +472,10 @@ SpringUtils继承自hutool提供的`SpringUtil`。出了hutool自带方法外，
   * 判断请求是否时json方式
 * getCurrentProcessId
   * 获取系统进程PID
-  
+* getRequestParams
+  * 获取前端的请求参数query+body
+* getRequestMethod
+  * 获取当前请求方式：GET、POST、...
 
 ## 验证码
 
@@ -471,7 +531,7 @@ private BreezeCodeProcessor codeProcessor;
 ```
 
 > ⚠️注意：
->
+> 
 > 在生成验证码和验证验证码的请求中，请求参数中的clientId，mobile,email参数由code-key属性,image_code参数由code-value属性决定。在某些极端情况下，可以通过这两个配置修改请求参数。
 
 ### 图形验证码
@@ -503,7 +563,7 @@ public JsonContent<String> imageCode(HttpServletRequest request,String clientId)
 在需要校验验证码的方法上添加注解`@BreezeCodeChecker`，示例：
 
 > 注意：
->
+> 
 > 你需要在此请求中携带验证码的key和value值。
 
 ```java
@@ -594,7 +654,7 @@ spring.mail.properties.mail.smtp.starttls.required=true
 ```
 
 > 注意：
->
+> 
 > 如果不加入以上配置，在使用邮件验证码时会提示 【验证码处理器不存在】，且不能正确发送邮件验证码。
 
 邮件验证码的发送代码与图形验证码的发送方法基本一致，只需要将BreezeCodeType.IMAGE改成BreezeCodeType.EMAIL即可。
@@ -642,4 +702,3 @@ breeze:
 
 * **value** 执行验证码类型CodeType,默认图形验证码
 * **loginKey**  登录的对象名，优先取此，若为空，取配置文件的`breeze.web.safe.login-key`。
-

@@ -2,8 +2,7 @@ package cn.fanzy.breeze.admin.module.entity;
 
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
 import cn.fanzy.breeze.sqltoy.utils.IdStrategy;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.sagacity.sqltoy.config.annotation.Column;
 import org.sagacity.sqltoy.config.annotation.Entity;
@@ -22,84 +21,84 @@ import java.sql.Types;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "SysOrg", description = "组织表")
+@Schema(description = "组织表")
 @Entity(tableName = "sys_org")
 public class SysOrg extends IBaseEntity {
     private static final long serialVersionUID = -7727798661931138108L;
     @Id(strategy = IdStrategy.GENERATOR, generator = IdStrategy.Generator.DEFAULT)
     @Column(name = "id",type = Types.VARCHAR)
-    @ApiModelProperty(value = "id", position = 1)
+    @Schema(description = "id")
     private String id;
     /**
      * 编码
      */
     @Column(name = "code",type = Types.VARCHAR)
-    @ApiModelProperty(value = "编码", position = 2)
+    @Schema(description = "编码")
     private String code;
     /**
      * 名称
      */
     @Column(name = "name",type = Types.VARCHAR)
-    @ApiModelProperty(value = "名称", position = 3)
+    @Schema(description = "名称")
     private String name;
     /**
      * 简称
      */
     @Column(name = "short_name",type = Types.VARCHAR)
-    @ApiModelProperty(value = "简称", position = 3)
+    @Schema(description = "简称")
     private String shortName;
     /**
      * 上级ID
      */
     @Column(name = "parent_id",type = Types.VARCHAR)
-    @ApiModelProperty(value = "上级ID", position = 5)
+    @Schema(description = "上级ID")
     private String parentId;
     /**
      * 父节点编码
      */
     @Column(name = "parent_code",type = Types.VARCHAR)
-    @ApiModelProperty(value = "父节点编码", position = 6)
+    @Schema(description = "父节点编码")
     private String parentCode;
     /**
      * 类别:corp=公司，dept=部门，job=职务
      */
     @Column(name = "org_type",type = Types.VARCHAR)
-    @ApiModelProperty(value = "类别:corp=公司，dept=部门，job=职务", position = 7)
+    @Schema(description = "类别:corp=公司，dept=部门，job=职务")
     private String orgType;
     /**
      * 上级全路径
      */
     @Column(name = "node_route",type = Types.LONGVARCHAR)
-    @ApiModelProperty(value = "上级全路径", position = 8)
+    @Schema(description = "上级全路径")
     private String nodeRoute;
     /**
      * 级别
      */
     @Column(name = "node_level",type = Types.SMALLINT)
-    @ApiModelProperty(value = "级别", position = 9)
+    @Schema(description = "级别")
     private Integer nodeLevel;
     /**
      * 排序序号
      */
     @Column(name = "order_number",type = Types.INTEGER)
-    @ApiModelProperty(value = "排序序号", position = 10)
+    @Schema(description = "排序序号")
     private Integer orderNumber;
     /**
      * 叶子节点：1-是，0-否
      */
     @Column(name = "is_leaf",type = Types.SMALLINT)
-    @ApiModelProperty(value = "叶子节点：1-是，0-否", position = 11)
+    @Schema(description = "叶子节点：1-是，0-否")
     private Integer isLeaf;
     /**
      * 备注
      */
     @Column(name = "remarks",type = Types.VARCHAR)
-    @ApiModelProperty(value = "备注", position = 12)
+    @Schema(description = "备注")
     private String remarks;
     /**
      * 状态，1-正常，0-禁用
      */
     @Column(name = "status",type = Types.SMALLINT)
-    @ApiModelProperty(value = "状态，1-正常，0-禁用", position = 14)
+    @Schema(description = "状态，1-正常，0-禁用")
     private Integer status;
 }

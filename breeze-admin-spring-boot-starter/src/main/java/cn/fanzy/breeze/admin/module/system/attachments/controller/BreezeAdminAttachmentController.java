@@ -13,8 +13,8 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.sagacity.sqltoy.model.Page;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -30,7 +30,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2022-11-01
  */
-@Api(tags = "「微风组件」附件管理")
+@Tag(name = "「微风组件」附件管理")
 @ApiSupport(author = "微风组件", order = 993001)
 @AllArgsConstructor
 @ConditionalOnClass(BreezeMinioConfiguration.class)
@@ -39,13 +39,13 @@ import java.util.List;
 public class BreezeAdminAttachmentController {
     private final BreezeAdminAttachmentService breezeAdminAttachmentService;
 
-    @ApiOperation(value = "上传",notes = "支持批量上传，无需指定文件名。")
+    @Operation(summary = "上传",description = "支持批量上传，无需指定文件名。")
     @ApiOperationSupport(order = 1)
     @PostMapping("/upload")
     public JsonContent<List<SysFile>> upload(String prefix, HttpServletRequest request) {
         return breezeAdminAttachmentService.upload(prefix, request);
     }
-    @ApiOperation(value = "上传TinyMCE",notes = "支持TinyMCE的上传。")
+    @Operation(summary = "上传TinyMCE",description = "支持TinyMCE的上传。")
     @ApiOperationSupport(order = 1)
     @PostMapping("/upload/tiny")
     public TinyMCEVo uploadTinyMCE(String prefix, HttpServletRequest request) {
@@ -57,7 +57,7 @@ public class BreezeAdminAttachmentController {
         Assert.notBlank(previewUrl,"预览地址不能为空！");
         return new TinyMCEVo(previewUrl);
     }
-    @ApiOperation(value = "上传wangeditorE",notes = "支持wangeditor的上传。")
+    @Operation(summary = "上传wangeditorE",description = "支持wangeditor的上传。")
     @ApiOperationSupport(order = 1)
     @PostMapping("/upload/wangeditor")
     public WangEditorVo uploadWangEditor(String prefix, HttpServletRequest request) {
@@ -80,20 +80,20 @@ public class BreezeAdminAttachmentController {
         vo.setData(body);
         return vo;
     }
-    @ApiOperation(value = "获取单个")
+    @Operation(summary = "获取单个")
     @ApiOperationSupport(order = 2)
     @GetMapping("/get")
     public JsonContent<SysFile> getFileInfo(String id) {
         return breezeAdminAttachmentService.getFileInfo(id);
     }
 
-    @ApiOperation(value = "分页查询")
+    @Operation(summary = "分页查询")
     @ApiOperationSupport(order = 3)
     @PostMapping("/query")
     public JsonContent<Page<SysFile>> queryPage(@Valid @RequestBody BreezeAdminAttachmentQueryArgs args){
         return breezeAdminAttachmentService.queryPage(args);
     }
-    @ApiOperation(value = "删除")
+    @Operation(summary = "删除")
     @ApiOperationSupport(order = 4)
     @PostMapping("/delete")
     public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminAttachmentBatchArgs args){

@@ -1,6 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.menu.args;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,68 +16,68 @@ public class BreezeAdminMenuSaveArgs {
     /**
      * 主键
      */
-    @ApiModelProperty(value = "主键", position = 1)
+    @Schema(description = "主键")
     private String id;
     /**
      * 菜单标识
      */
     @NotBlank(message = "菜单编码不能为空！")
-    @ApiModelProperty(value = "菜单标识", position = 2)
+    @Schema(description = "菜单标识")
     private String code;
     /**
      * 菜单标题
      */
     @NotBlank(message = "菜单标题不能为空！")
-    @ApiModelProperty(value = "菜单标题", position = 3)
+    @Schema(description = "菜单标题")
     private String title;
     /**
      * 菜单图标
      */
-    @ApiModelProperty(value = "菜单图标", position = 4)
+    @Schema(description = "菜单图标")
     private String icon;
     /**
      * 上级菜单ID
      */
-    @ApiModelProperty(value = "上级菜单ID", position = 5)
+    @Schema(description = "上级菜单ID")
     private String parentId;
     /**
      * 菜单类型;menu-菜单，button-按钮
      */
     @NotBlank(message = "菜单类型不能为空！")
-    @ApiModelProperty(value = "菜单类型;M目录 C菜单 F按钮", position = 6)
+    @Schema(description = "菜单类型;M目录 C菜单 F按钮")
     private String menuType;
     /**
      * 是否隐藏;0-否，1-是
      */
-    @ApiModelProperty(value = "是否隐藏;0-否，1-是", position = 7)
+    @Schema(description = "是否隐藏;0-否，1-是")
     private Integer hidden;
     /**
      * 菜单路径
      */
-    @ApiModelProperty(value = "菜单路径", position = 8)
+    @Schema(description = "菜单路径")
     private String uri;
     /**
      * 备注
      */
-    @ApiModelProperty(value = "备注", position = 9)
+    @Schema(description = "备注")
     private String remarks;
 
-    @ApiModelProperty(value = "序号", position = 11)
+    @Schema(description = "序号")
     private Integer orderNumber;
 
     /**
      * 权限标识
      */
-    @ApiModelProperty(value = "权限标识", position = 12)
+    @Schema(description = "权限标识")
     private String permissionCode;
     /**
      * 权限标识
      */
-    @ApiModelProperty(value = "回调地址", position = 12)
+    @Schema(description = "回调地址")
     private String callbackUrl;
-    @ApiModelProperty(value = "临时token登录地址", position = 13)
+    @Schema(description = "临时token登录地址")
     private String authLoginTokenUri;
-    @ApiModelProperty(value = "子系统用户验证地址", position = 14)
+    @Schema(description = "子系统用户验证地址")
     private String authUserCheckUri;
 
     private Integer status;
