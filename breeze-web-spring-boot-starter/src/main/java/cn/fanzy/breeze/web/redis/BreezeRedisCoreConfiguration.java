@@ -3,6 +3,7 @@ package cn.fanzy.breeze.web.redis;
 import cn.fanzy.breeze.core.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
 import cn.fanzy.breeze.web.redis.lock.aop.DistributedLockAop;
+import cn.fanzy.breeze.web.redis.rate.aop.RateLimitAop;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -42,7 +43,7 @@ import java.time.Duration;
 @Slf4j
 @Configuration
 @EnableCaching
-@ImportAutoConfiguration(DistributedLockAop.class)
+@ImportAutoConfiguration({DistributedLockAop.class, RateLimitAop.class})
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class, BreezeCodeConfiguration.class})
 public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
