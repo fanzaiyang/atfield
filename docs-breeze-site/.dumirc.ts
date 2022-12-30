@@ -1,8 +1,8 @@
 import {defineConfig} from 'dumi';
 
 export default defineConfig({
-  base:'/breeze-spring-cloud',
-  publicPath:'/breeze-spring-cloud/',
+  // base:'/breeze-spring-cloud',
+  // publicPath:'/breeze-spring-cloud/',
   themeConfig: {
     name: '微风组件',
     logo: 'https://raw.githubusercontent.com/fanzaiyang/breeze-spring-cloud/master/docs-breeze-site/public/logo.png',
