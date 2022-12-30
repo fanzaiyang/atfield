@@ -36,8 +36,7 @@ order: 1
 
 # 组件列表
 
-![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud)
+![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud.png) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 | 名称                                       | 说明                                                                             |
 | ---------------------------------------- | ------------------------------------------------------------------------------ |
