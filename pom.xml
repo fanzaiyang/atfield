@@ -217,6 +217,11 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.4.1</version>
+                    </plugin>
                     <!-- 统一版本号管理 -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
