@@ -23,7 +23,7 @@ order: 1
 1. 微风Cloud依赖版本
 
 | 依赖                                                                      | 版本         |
-| ----------------------------------------------------------------------- |------------|
+| ----------------------------------------------------------------------- | ---------- |
 | [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.6      |
 | [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.5   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
@@ -36,8 +36,7 @@ order: 1
 
 # 组件列表
 
-![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud)
+![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud.png) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 | 名称                                       | 说明                                                                             |
 | ---------------------------------------- | ------------------------------------------------------------------------------ |
@@ -45,6 +44,9 @@ order: 1
 | breeze-web-spring-boot-starter           | web组件：封装了异常、缓存、验证码、过滤器等。                                                       |
 | breeze-minio-spring-boot-starter         | MinIO组件：封装了[minio](https://min.io/)对象存储功能，方便在项目任何位置，使用。                        |
 | breeze-auth-spring-boot-starter          | 授权组件：对[sa-token](https://sa-token.dev33.cn/doc/index.html#/)二次封装，一个简单易上手的授权组件。 |
+| breeze-auth-redis                        | 让授权写入到redis及redisson支持。                                                        |
+| breeze-auth-jwt-spring-boot-starter      | 授权支持jwt模式                                                                      |
+| breeze-admin-spring-boot-starter         | 集中常用登录与系统管理的功能                                                                 |
 | + breeze-wechat                          | 微信相关组件，帮助开发者快速集成微信相关接口功能                                                       |
 | -  breeze-wechat-cp-spring-boot-starter  | 企业微信                                                                           |
 | -  breeze-wechat-ma-spring-boot-starter  | 微信小程序                                                                          |
@@ -55,9 +57,11 @@ order: 1
 
 > ⚠️ **注意：**
 > 
-> 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址
+> 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址。
 
 1. Maven私服地址
+
+⚠️ 如果maven配置了代理需要将`yinfengMaven`排除在外
 
 ```xml
 <!-- pom.xml -->
@@ -70,24 +74,22 @@ order: 1
 </repositories>
 ```
 
-2. 引入依赖
+或者使用coding制品库
 
-> 根据你的需要，引入需要的依赖即可。
-
-以web组件`breeze-web-spring-boot-starter`为例，在`pom.xml`配置如下：
+⚠️ 如果maven配置了代理需要将`fancode-maven-releases`排除在外
 
 ```xml
 <!-- pom.xml -->
-<dependency>
-    <groupId>cn.fanzy.breeze</groupId>
-    <artifactId>breeze-web-spring-boot-starter</artifactId>
-    <version>最新版本号</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>fancode-maven-releases</id>
+        <name>releases</name>
+         <url>https://fancode-maven.pkg.coding.net/repository/maven/releases/</url>
+    </repository>
+</repositories>
 ```
 
-3. 替换pom中的parent「可选」「推荐」
-
-替换parent
+2. 替换pom中的parent **「推荐」**
 
 ```xml
 <parent>
@@ -98,7 +100,17 @@ order: 1
 </parent>
 ```
 
-使用这个方式，你不需要指定组件的版本号
+> Tips：使用这个方式，你不需要指定组件的版本号。锁定依赖版本。
+
+3. 以web组件`breeze-web-spring-boot-starter`为例，在`pom.xml`配置如下：
+
+```xml
+<!-- pom.xml -->
+<dependency>
+    <groupId>cn.fanzy.breeze</groupId>
+    <artifactId>breeze-web-spring-boot-starter</artifactId>
+</dependency>
+```
 
 4. 添加配置
 
@@ -109,7 +121,7 @@ order: 1
 breeze:
   web:
     exception: 
-      enable: false
+      enable: true
 ```
 
 组件的详细说明，在各组件介绍中，会详细说明，请阅读对应章节。

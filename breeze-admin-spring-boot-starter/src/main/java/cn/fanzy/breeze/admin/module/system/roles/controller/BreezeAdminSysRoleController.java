@@ -49,7 +49,6 @@ public class BreezeAdminSysRoleController {
 
     @Operation(summary = "删除批量",description = "级联下级也会删除！")
     @ApiOperationSupport(order = 15)
-    @Parameter(name = "id", description = "角色ID")
     @PostMapping("/delete/batch")
     public JsonContent<Object> delete(@RequestBody BreezeAdminRoleDeleteArgs args) {
         return breezeAdminRoleService.deleteBatch(args.getIdList());
@@ -65,7 +64,6 @@ public class BreezeAdminSysRoleController {
 
     @Operation(summary = "启禁用批量")
     @ApiOperationSupport(order = 25)
-    @Parameter(name = "id", description = "角色ID")
     @PostMapping("/enable/batch")
     public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminRoleEnableBatchArgs args) {
         return breezeAdminRoleService.enableBatch(args.getIdList());

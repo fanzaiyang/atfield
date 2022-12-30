@@ -702,3 +702,53 @@ breeze:
 
 * **value** 执行验证码类型CodeType,默认图形验证码
 * **loginKey**  登录的对象名，优先取此，若为空，取配置文件的`breeze.web.safe.login-key`。
+
+## Swagger
+
+> 该模块基于的是[Knife4j](https://doc.xiaominfo.com/docs/quick-start)开发，使用OpenAPI3规范。
+
+### 开始使用
+
+默认情况已经启用了swagger，你不需要做额外引入，只需要在配置文件中配置扫描的包即可。
+
+### 配置文件方式
+
+这里使用[springdoc](https://springdoc.org/)配置文件。
+
+```yaml
+springdoc:
+  group-configs:
+    - group: '默认'
+      packages-to-scan: # 你的包名，比如: cn.fanzy.breeze.demo
+```
+
+### bean方式
+
+```java
+@Slf4j
+@AllArgsConstructor
+@Configuration
+public class BreezeAdminSwaggerConfig {
+    @Bean
+    public GroupedOpenApi breezeAdminApi(){
+        return GroupedOpenApi.builder()
+                .group("微风组件")
+                .pathsToMatch("/**")
+                .packagesToScan("cn.fanzy.breeze.admin")
+                .build();
+    }
+}
+```
+
+### OpenAPI3规范
+
+| swagger2           | OpenAPI 3                                                       | 注解位置                         |
+| ------------------ | --------------------------------------------------------------- | ---------------------------- |
+| @Api               | @Tag(name = “接口类描述”)                                            | Controller 类上                |
+| @ApiOperation      | @Operation(summary =“接口方法描述”)                                   | Controller 方法上               |
+| @ApiImplicitParams | @Parameters                                                     | Controller 方法上               |
+| @ApiImplicitParam  | @Parameter(description=“参数描述”)                                  | Controller 方法上 @Parameters 里 |
+| @ApiParam          | @Parameter(description=“参数描述”)                                  | Controller 方法的参数上            |
+| @ApiIgnore         | @Parameter(hidden = true) 或 @Operation(hidden = true) 或 @Hidden | -                            |
+| @ApiModel          | @Schema                                                         | DTO类上                        |
+| @ApiModelProperty  | @Schema                                                         | DTO类上                        |

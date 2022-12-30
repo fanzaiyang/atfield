@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.corp.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
+import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpBatchArgs;
 import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpSaveArgs;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.lang.tree.Tree;
@@ -20,7 +21,7 @@ public interface BreezeAdminOrgService {
 
     JsonContent<Object> delete(String id);
 
-    JsonContent<Object> deleteBatch(List<String> id);
+    JsonContent<Object> deleteBatch(BreezeAdminCorpBatchArgs args);
 
     JsonContent<Object> enable(String id);
 

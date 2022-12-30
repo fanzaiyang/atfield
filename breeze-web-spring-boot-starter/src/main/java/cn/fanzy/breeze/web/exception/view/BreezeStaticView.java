@@ -69,6 +69,7 @@ public class BreezeStaticView implements View {
                 "  </div>" +
                 "</div>";
         builder.append(html);
+        builder.append("<div class=\"text-center pt-10 text-blue-500\"><a href=\"doc.html\">接口文档地址http://ip:port/doc.html</a></div>");
         builder.append("</div>");
         builder.append("</div>");
         int year = DateUtil.year(new Date());

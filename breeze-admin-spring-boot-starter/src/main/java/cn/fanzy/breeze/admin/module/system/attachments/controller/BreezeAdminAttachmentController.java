@@ -14,6 +14,7 @@ import cn.hutool.core.util.StrUtil;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.sagacity.sqltoy.model.Page;
@@ -41,12 +42,14 @@ public class BreezeAdminAttachmentController {
 
     @Operation(summary = "上传",description = "支持批量上传，无需指定文件名。")
     @ApiOperationSupport(order = 1)
+    @Parameter(name = "prefix",description = "上传到服务器前缀路径")
     @PostMapping("/upload")
     public JsonContent<List<SysFile>> upload(String prefix, HttpServletRequest request) {
         return breezeAdminAttachmentService.upload(prefix, request);
     }
     @Operation(summary = "上传TinyMCE",description = "支持TinyMCE的上传。")
-    @ApiOperationSupport(order = 1)
+    @ApiOperationSupport(order = 2)
+    @Parameter(name = "prefix",description = "上传到服务器前缀路径")
     @PostMapping("/upload/tiny")
     public TinyMCEVo uploadTinyMCE(String prefix, HttpServletRequest request) {
         JsonContent<List<SysFile>> upload = upload(prefix, request);
@@ -57,8 +60,9 @@ public class BreezeAdminAttachmentController {
         Assert.notBlank(previewUrl,"预览地址不能为空！");
         return new TinyMCEVo(previewUrl);
     }
-    @Operation(summary = "上传wangeditorE",description = "支持wangeditor的上传。")
-    @ApiOperationSupport(order = 1)
+    @Operation(summary = "上传wangeditor",description = "支持wangeditor的上传。")
+    @ApiOperationSupport(order = 3)
+    @Parameter(name = "prefix",description = "上传到服务器前缀路径")
     @PostMapping("/upload/wangeditor")
     public WangEditorVo uploadWangEditor(String prefix, HttpServletRequest request) {
         JsonContent<List<SysFile>> upload = upload(prefix, request);
@@ -81,20 +85,21 @@ public class BreezeAdminAttachmentController {
         return vo;
     }
     @Operation(summary = "获取单个")
-    @ApiOperationSupport(order = 2)
+    @ApiOperationSupport(order = 4)
+    @Parameter(name = "prefix",description = "文件ID")
     @GetMapping("/get")
     public JsonContent<SysFile> getFileInfo(String id) {
         return breezeAdminAttachmentService.getFileInfo(id);
     }
 
     @Operation(summary = "分页查询")
-    @ApiOperationSupport(order = 3)
+    @ApiOperationSupport(order = 5)
     @PostMapping("/query")
     public JsonContent<Page<SysFile>> queryPage(@Valid @RequestBody BreezeAdminAttachmentQueryArgs args){
         return breezeAdminAttachmentService.queryPage(args);
     }
     @Operation(summary = "删除")
-    @ApiOperationSupport(order = 4)
+    @ApiOperationSupport(order = 6)
     @PostMapping("/delete")
     public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminAttachmentBatchArgs args){
         return breezeAdminAttachmentService.delete(args);

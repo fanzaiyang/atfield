@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.dict.args;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -14,5 +15,6 @@ import java.util.List;
 @Data
 public class BreezeAdminDictBatchArgs {
     @NotEmpty(message = "请求参数不能为空！")
+    @Schema(description = "字典ID集合")
     private List<String> idList;
 }

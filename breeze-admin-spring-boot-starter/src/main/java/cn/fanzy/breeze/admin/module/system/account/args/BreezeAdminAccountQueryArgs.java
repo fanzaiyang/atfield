@@ -20,7 +20,10 @@ import lombok.NoArgsConstructor;
 public class BreezeAdminAccountQueryArgs extends BaseArgs {
     @Schema(description = "姓名或手机号")
     private String searchWord;
+    @Schema(description = "组织编码")
     private String orgCode;
+    @Schema(description = "组织类型")
     private String orgType;
+    @Schema(description = "状态。0-禁用，1-启用")
     private Integer status;
 }

@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.corp.service.impl;
 
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
+import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpBatchArgs;
 import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpSaveArgs;
 import cn.fanzy.breeze.admin.module.system.corp.service.BreezeAdminOrgService;
 import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
@@ -121,8 +122,8 @@ public class BreezeAdminOrgServiceImpl implements BreezeAdminOrgService {
     }
 
     @Override
-    public JsonContent<Object> deleteBatch(List<String> id) {
-        for (String s : id) {
+    public JsonContent<Object> deleteBatch(BreezeAdminCorpBatchArgs args) {
+        for (String s : args.getIdList()) {
             sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysOrg.class)
                     .set(IBaseEntity::getDelFlag, 1)
                     .like(SysOrg::getNodeRoute, s));

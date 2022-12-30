@@ -55,7 +55,7 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
             return null;
         }
         Object obj = breezeCacheService.get(properties.getPrefix()+key);
-        Assert.notNull(obj, "验证码不能为空或验证码唯一标识错误！", key);
+        Assert.notNull(obj, "验证码不存在！", key);
         return (BreezeCode) obj;
     }
 

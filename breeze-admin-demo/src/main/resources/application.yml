@@ -3,9 +3,9 @@ spring:
     host: localhost
     port: 6379
   datasource:
-#    username: hotec
-#    password: hotec123qwe.?
-#    url: jdbc:mysql://mysql.wanghuifeng.me:3306/yf_common_test?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    #    username: hotec
+    #    password: hotec123qwe.?
+    #    url: jdbc:mysql://mysql.wanghuifeng.me:3306/yf_common_test?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     url: jdbc:mysql://rm-bp1jkk8wuje4g4wbpvo.mysql.rds.aliyuncs.com/fanzy_wedding?useUnicode=true&useSSL=false&rewriteBatchedStatements=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: fanzy_wedding
     password: Fan415517
@@ -153,14 +153,9 @@ breeze:
         access-key: minioadmin
         secret-key: minioadmin
         bucket: test
-knife4j:
-  enable: true
+
 springdoc:
   group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
+    - group: '默认'
       packages-to-scan: cn.fanzy.breeze.demo
-  api-docs:
-    groups:
-      enabled: false
 

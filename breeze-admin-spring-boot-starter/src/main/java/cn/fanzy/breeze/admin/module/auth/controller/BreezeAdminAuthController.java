@@ -35,32 +35,36 @@ import java.util.List;
 public class BreezeAdminAuthController {
 
     private final BreezeAdminAuthService breezeAuthService;
+
     @Operation(summary = "客户端环境", description = "获取客户端环境")
     @ApiOperationSupport(order = 1)
     @GetMapping("/env")
     public JsonContent<ClientEnvVo> getClientEnv(HttpServletRequest request) {
         return breezeAuthService.getClientEnv(request);
     }
+
     @Operation(summary = "是否登录", description = "是否登录")
     @ApiOperationSupport(order = 2)
     @GetMapping("/is/login")
     public JsonContent<Boolean> isLogin() {
         return JsonContent.success(StpUtil.isLogin());
     }
+
     @Operation(summary = "登录前", description = "登录前调用此接口，用于判断是否需要显示验证码。true显示，false不显示")
     @ApiOperationSupport(order = 10)
-    @Parameter(name = "username", description = "登录名",required = true)
+    @Parameter(name = "username", description = "登录名", required = true)
     @GetMapping("/login/before")
     public JsonContent<Boolean> doUserPwdLoginBefore(String username) {
         return breezeAuthService.doUserPwdLoginBefore(username);
     }
-    @Operation(summary = "发送图片验证码")
-    @Parameter(name = "clientId",description = "客户端唯一标识",required = true)
+
+    @Operation(summary = "发送图片验证码",description = "需要传入clientId")
     @ApiOperationSupport(order = 15)
     @GetMapping("/login/image/code/send")
     public JsonContent<String> doSendUserImageCode(HttpServletRequest request, HttpServletResponse response) {
         return breezeAuthService.doSendUserImageCode(request, response);
     }
+
     @BreezeSafe
     @Operation(summary = "用户名密码登录")
     @ApiOperationSupport(order = 20)
@@ -72,7 +76,7 @@ public class BreezeAdminAuthController {
 
     @Operation(summary = "发送手机验证码")
     @ApiOperationSupport(order = 35)
-    @Parameter(name = "mobile", description = "手机号",required = true)
+    @Parameter(name = "mobile", description = "手机号", required = true)
     @GetMapping("/login/mobile/code/send")
     public JsonContent<Object> doSendUserMobileCode(String mobile, HttpServletRequest request, HttpServletResponse response) {
         return breezeAuthService.doSendUserMobileCode(mobile, request, response);
@@ -101,6 +105,7 @@ public class BreezeAdminAuthController {
     public JsonContent<List<SysMenu>> doGetCurrentMenu() {
         return breezeAuthService.doGetCurrentMenu();
     }
+
     @SaCheckLogin
     @Operation(summary = "当前菜单树")
     @ApiOperationSupport(order = 65)
@@ -108,6 +113,7 @@ public class BreezeAdminAuthController {
     public JsonContent<List<Tree<String>>> doGetCurrentMenuTree() {
         return breezeAuthService.doGetCurrentMenuTree();
     }
+
     @SaCheckLogin
     @Operation(summary = "退出登录")
     @ApiOperationSupport(order = 90)
