@@ -23,7 +23,7 @@ order: 1
 1. 微风Cloud依赖版本
 
 | 依赖                                                                      | 版本         |
-| ----------------------------------------------------------------------- |------------|
+| ----------------------------------------------------------------------- | ---------- |
 | [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.6      |
 | [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.5   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
@@ -55,9 +55,11 @@ order: 1
 
 > ⚠️ **注意：**
 > 
-> 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址
+> 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址。
 
 1. Maven私服地址
+
+⚠️ 如果maven配置了代理需要将`yinfengMaven`排除在外
 
 ```xml
 <!-- pom.xml -->
@@ -70,7 +72,20 @@ order: 1
 </repositories>
 ```
 
-2. 引入依赖
+或者使用coding制品库
+
+⚠️ 如果maven配置了代理需要将`fancode-maven-releases`排除在外
+
+```xml
+<!-- pom.xml -->
+<repositories>
+    <repository>
+        <id>fancode-maven-releases</id>
+        <name>releases</name>
+         <url>https://fancode-maven.pkg.coding.net/repository/maven/releases/</url>
+    </repository>
+</repositories>
+```
 
 > 根据你的需要，引入需要的依赖即可。
 
