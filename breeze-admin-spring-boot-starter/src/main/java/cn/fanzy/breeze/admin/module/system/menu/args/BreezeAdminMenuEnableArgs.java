@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.admin.module.system.menu.args;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,6 @@ import java.util.List;
 public class BreezeAdminMenuEnableArgs {
 
     @NotEmpty(message = "菜单ID不能为空！")
+    @Schema(description = "ID集合")
     private List<String> idList;
 }

@@ -22,6 +22,6 @@ public class BreezeAdminRoleDeleteArgs {
     /**
      * 主键
      */
-    @Schema(description = "主键")
+    @Schema(description = "主键集合")
     private List<String> idList;
 }

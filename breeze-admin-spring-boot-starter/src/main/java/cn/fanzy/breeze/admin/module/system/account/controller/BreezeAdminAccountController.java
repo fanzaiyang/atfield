@@ -55,14 +55,12 @@ public class BreezeAdminAccountController {
 
     @Operation(summary = "删除批量")
     @ApiOperationSupport(order = 3)
-    @Parameter(name = "idList", description = "账户ID集合['a','b']")
     @PostMapping("/delete/batch")
     public JsonContent<Object> deleteBatch(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
         return breezeAdminAccountService.deleteBatch(args.getIdList());
     }
     @Operation(summary = "启用批量")
     @ApiOperationSupport(order = 3)
-    @Parameter(name = "idList", description = "账户ID集合['a','b']")
     @PostMapping("/enable/batch")
     public JsonContent<Object> enableBatch(@Valid @RequestBody BreezeAdminAccountBatchArgs args) {
         return breezeAdminAccountService.enableBatch(args.getIdList());
@@ -76,6 +74,7 @@ public class BreezeAdminAccountController {
 
     @Operation(summary = "查询账号绑定的角色")
     @ApiOperationSupport(order = 5)
+    @Parameter(name = "id",description = "账户ID")
     @GetMapping("/role/list")
     public JsonContent<List<String>> queryAccountRoleList(String id) {
         return breezeAdminAccountService.queryAccountRoleList(id);

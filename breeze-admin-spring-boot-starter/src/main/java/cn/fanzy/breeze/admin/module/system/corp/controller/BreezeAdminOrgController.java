@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.admin.module.system.corp.controller;
 
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
+import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpBatchArgs;
 import cn.fanzy.breeze.admin.module.system.corp.args.BreezeAdminCorpSaveArgs;
 import cn.fanzy.breeze.admin.module.system.corp.service.BreezeAdminOrgService;
 import cn.fanzy.breeze.web.model.JsonContent;
@@ -74,20 +75,21 @@ public class BreezeAdminOrgController {
     }
     @Operation(summary = "删除批量", description = "级联删除其下级")
     @ApiOperationSupport(order = 23)
-    @DeleteMapping("/delete/batch")
-    public JsonContent<Object> delete(List<String> id) {
-        return breezeAdminOrgService.deleteBatch(id);
+    @PostMapping("/delete/batch")
+    public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminCorpBatchArgs args) {
+        return breezeAdminOrgService.deleteBatch(args);
     }
     @Operation(summary = "启用禁用")
     @ApiOperationSupport(order = 24)
+    @Parameter(name = "id",description = "组织ID")
     @PostMapping("/enable")
     public JsonContent<Object> enable(String id) {
         return breezeAdminOrgService.enable(id);
     }
     @Operation(summary = "启用禁用")
-    @ApiOperationSupport(order = 24)
+    @ApiOperationSupport(order = 25)
     @PostMapping("/enable/batch")
-    public JsonContent<Object> enable(List<String> id) {
-        return breezeAdminOrgService.enableBatch(id);
+    public JsonContent<Object> enable(@Valid @RequestBody BreezeAdminCorpBatchArgs args) {
+        return breezeAdminOrgService.enableBatch(args.getIdList());
     }
 }

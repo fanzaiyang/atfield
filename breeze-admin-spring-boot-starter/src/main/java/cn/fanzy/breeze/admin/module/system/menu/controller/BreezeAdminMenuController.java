@@ -43,7 +43,6 @@ public class BreezeAdminMenuController {
     }
 
     @Operation(summary = "删除批量")
-    @Parameter(name = "id", description = "菜单ID集合")
     @ApiOperationSupport(order = 10)
     @PostMapping("/delete/batch")
     public JsonContent<Object> delete(@Valid @RequestBody BreezeAdminMenuEnableArgs args) {

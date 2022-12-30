@@ -78,10 +78,6 @@ public class BreezeAdminDictController {
     }
     @Operation(summary = "查询树结构")
     @ApiOperationSupport(order = 5)
-    @Parameters({
-            @Parameter(name = "id", description = "主键"),
-            @Parameter(name = "showDisable", description = "是否显示禁用，false-不显示（默认），true-显示。"),
-    })
     @PostMapping("/query/page/tree")
     public JsonContent<Page<Tree<String>>> queryPageTree(@Valid @RequestBody BreezeAdminDictQueryArgs args) {
         return breezeAdminDictService.queryPageTree(args);
