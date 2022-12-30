@@ -23,12 +23,12 @@ order: 1
 1. 微风Cloud依赖版本
 
 | 依赖                                                                      | 版本         |
-| ----------------------------------------------------------------------- | ---------- |
-| [spring-boot](https://spring.io/projects/spring-boot)                   | 2.6.11     |
-| [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.4   |
+| ----------------------------------------------------------------------- |------------|
+| [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.6      |
+| [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.5   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
 | [spring-boot-admin](https://github.com/codecentric/spring-boot-admin)   | 2.6.9      |
-| [hutool-all](https://gitee.com/dromara/hutool/)                         | 5.8.6      |
+| [hutool-all](https://gitee.com/dromara/hutool/)                         | 5.8.10     |
 
 2. 微风Cloud版本管理
 
