@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.GroupedOpenApi;
 import org.springdoc.core.SpringDocConfigProperties;
-import org.springdoc.core.SwaggerUiConfigParameters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +18,7 @@ import javax.annotation.PostConstruct;
 public class SwaggerConfig {
     protected final SpringDocConfigProperties springDocConfigProperties;
     @Bean
-    public GroupedOpenApi breezeAdminApi(SwaggerUiConfigParameters swaggerUiConfigParameters){
+    public GroupedOpenApi breezeAdminApi(){
 //        swaggerUiConfigParameters.addGroup("微风组件");
         return GroupedOpenApi.builder()
                 .group("微风组件")
