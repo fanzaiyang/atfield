@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
 
-@ImportAutoConfiguration(value = {SwaggerConfig.class,BreezeAdminAuthConfig.class, BreezeAdminModuleConfig.class})
+@ImportAutoConfiguration(value = {BreezeAdminSwaggerConfig.class,BreezeAdminAuthConfig.class, BreezeAdminModuleConfig.class})
 @Slf4j
 @Configuration
 @AllArgsConstructor

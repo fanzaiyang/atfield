@@ -153,8 +153,7 @@ breeze:
         access-key: minioadmin
         secret-key: minioadmin
         bucket: test
-knife4j:
-  enable: true
+
 springdoc:
   group-configs:
     - group: 'default'
