@@ -715,7 +715,7 @@ breeze:
 
 这里使用[springdoc](https://springdoc.org/)配置文件。
 
-```yml
+```yaml
 springdoc:
   group-configs:
     - group: '默认'
@@ -738,7 +738,6 @@ public class BreezeAdminSwaggerConfig {
                 .build();
     }
 }
-
 ```
 
 ### OpenAPI3规范

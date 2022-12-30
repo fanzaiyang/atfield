@@ -44,6 +44,9 @@ order: 1
 | breeze-web-spring-boot-starter           | web组件：封装了异常、缓存、验证码、过滤器等。                                                       |
 | breeze-minio-spring-boot-starter         | MinIO组件：封装了[minio](https://min.io/)对象存储功能，方便在项目任何位置，使用。                        |
 | breeze-auth-spring-boot-starter          | 授权组件：对[sa-token](https://sa-token.dev33.cn/doc/index.html#/)二次封装，一个简单易上手的授权组件。 |
+| breeze-auth-redis                        | 让授权写入到redis及redisson支持。                                                        |
+| breeze-auth-jwt-spring-boot-starter      | 授权支持jwt模式                                                                      |
+| breeze-admin-spring-boot-starter         | 集中常用登录与系统管理的功能                                                                 |
 | + breeze-wechat                          | 微信相关组件，帮助开发者快速集成微信相关接口功能                                                       |
 | -  breeze-wechat-cp-spring-boot-starter  | 企业微信                                                                           |
 | -  breeze-wechat-ma-spring-boot-starter  | 微信小程序                                                                          |
@@ -86,22 +89,7 @@ order: 1
 </repositories>
 ```
 
-> 根据你的需要，引入需要的依赖即可。
-
-以web组件`breeze-web-spring-boot-starter`为例，在`pom.xml`配置如下：
-
-```xml
-<!-- pom.xml -->
-<dependency>
-    <groupId>cn.fanzy.breeze</groupId>
-    <artifactId>breeze-web-spring-boot-starter</artifactId>
-    <version>最新版本号</version>
-</dependency>
-```
-
-3. 替换pom中的parent「可选」「推荐」
-
-替换parent
+2. 替换pom中的parent **「推荐」**
 
 ```xml
 <parent>
@@ -112,7 +100,17 @@ order: 1
 </parent>
 ```
 
-使用这个方式，你不需要指定组件的版本号
+> Tips：使用这个方式，你不需要指定组件的版本号。锁定依赖版本。
+
+3. 以web组件`breeze-web-spring-boot-starter`为例，在`pom.xml`配置如下：
+
+```xml
+<!-- pom.xml -->
+<dependency>
+    <groupId>cn.fanzy.breeze</groupId>
+    <artifactId>breeze-web-spring-boot-starter</artifactId>
+</dependency>
+```
 
 4. 添加配置
 
@@ -123,7 +121,7 @@ order: 1
 breeze:
   web:
     exception: 
-      enable: false
+      enable: true
 ```
 
 组件的详细说明，在各组件介绍中，会详细说明，请阅读对应章节。

@@ -1,9 +1,13 @@
 ---
 title: MinIO组件
 order: 4
+
 ---
+
 [MinIO](https://min.io/)是一个高性能的对象存储工具。MinIO组件，是对[MinIO](https://min.io/)的进一步封装，目的是方便开发者快速集成使用MinIO服务。
+
 ## 组件说明
+
 MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.2.2`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
 
 ## 快速开始
@@ -23,18 +27,18 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
 </dependencies>
 <!-- maven私服 -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
 2. 修改配置
 
 > ⚠️**注意：**
->
+> 
 > 该组件是需要你配置minio相关服务和密钥的，否则是无法使用的。故而，此组件配置文件是必须的。
 
 ```yaml
@@ -109,7 +113,7 @@ class BreezeMinioTests {
         BreezeMinioService minioService = BreezeMinioConfiguration.instance();
         InputStream objectName = minioService.getObject("objectName");
     }
-  	/**
+      /**
      * 当提供的方法不满足需要是，你可以直接获取MinIO的SDK中的MinioClient使用
      */
     @Test
@@ -133,15 +137,15 @@ class BreezeMinioTests {
 ## 组件方法
 
 > 组件提供大量的重载方法，方便开发者上传下载文件，此外MinIO的sdk也可以个性使用。
->
+> 
 > 注意：你需要在你的Spring上下文中使用。
 
 * BreezeMinioConfiguration.instance()
-
+  
   获取配置文件中第一个MinIO服务。大多数情况下，一个项目中就一个MinIO服务。
 
 * BreezeMinioConfiguration.instance(name)
-
+  
   根据名称获取指定的MinIO服务，这里的name是配置文件中的节点。
 
 * BreezeMinioService方法一览
@@ -339,30 +343,27 @@ public interface BreezeMinioService {
 ```
 
 * 关于上传的一些说明
-
+  
   * 上传响应结果
-
-  | 字段       | 类型   | 说明                                |
-  | ---------- | ------ | ----------------------------------- |
-  | etag       | String | 标识,MinIO SDK上传后返回此字段      |
-  | endpoint   | String | MinIO地址                           |
-  | bucket     | String | 文件保存的存储桶                    |
+  
+  | 字段         | 类型     | 说明                   |
+  | ---------- | ------ | -------------------- |
+  | etag       | String | 标识,MinIO SDK上传后返回此字段 |
+  | endpoint   | String | MinIO地址              |
+  | bucket     | String | 文件保存的存储桶             |
   | objectName | String | 对象名，文件在MinIO服务器的唯一名字 |
-  | fileName   | String | 上传文件的原始名称                  |
-  | fileMbSize | double | 文件大小，单位：Mb，保留两位小数。  |
-  | previewUrl | String | 临时预览地址，7天有效               |
-
+  | fileName   | String | 上传文件的原始名称            |
+  | fileMbSize | double | 文件大小，单位：Mb，保留两位小数。   |
+  | previewUrl | String | 临时预览地址，7天有效          |
+  
   * 上传的objectName
-
-    在不指定objectName时，系统默认生成的objectName是yyyy/MM/dd/[objectId].[文件类型]
-
-  * contentType
-
-    强烈建议指定文件的contentType，在不指定的情况下，系统根据上传文件的扩展名，进行匹配。目前支持图片类匹配，若匹配不到，默认使用`application/octet-stream`。
-
-  * 存储桶
-
-    在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
-
     
-
+    在不指定objectName时，系统默认生成的objectName是yyyy/MM/dd/[objectId].[文件类型]
+  
+  * contentType
+    
+    强烈建议指定文件的contentType，在不指定的情况下，系统根据上传文件的扩展名，进行匹配。目前支持图片类匹配，若匹配不到，默认使用`application/octet-stream`。
+  
+  * 存储桶
+    
+    在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
