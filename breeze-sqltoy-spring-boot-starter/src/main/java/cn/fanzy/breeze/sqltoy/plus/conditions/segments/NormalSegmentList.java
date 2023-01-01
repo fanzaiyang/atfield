@@ -44,8 +44,7 @@ public class NormalSegmentList extends AbstractSegmentList {
 
     /**
      * 剔除第一个
-     * @param predicate
-     * @return
+     * @param predicate Predicate
      */
     public void filterFirst(Predicate<ISqlSegment> predicate) {
         if (sqlSegments == null || sqlSegments.isEmpty()) {
@@ -59,8 +58,7 @@ public class NormalSegmentList extends AbstractSegmentList {
 
     /**
      * 剔除最后一个
-     * @param predicate
-     * @return
+     * @param predicate predicate
      */
     public void filterLast(Predicate<ISqlSegment> predicate) {
         if (sqlSegments == null || sqlSegments.isEmpty()) {
@@ -74,8 +72,7 @@ public class NormalSegmentList extends AbstractSegmentList {
 
     /**
      * 合并多个sql片段
-     * @param predicate
-     * @return
+     * @param predicate predicate
      */
     public void mergeAndOrSegments(Predicate<ISqlSegment> predicate) {
         if (sqlSegments == null || sqlSegments.isEmpty()) {

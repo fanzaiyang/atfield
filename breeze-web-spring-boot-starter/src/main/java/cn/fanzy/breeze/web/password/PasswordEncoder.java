@@ -8,6 +8,8 @@ public interface PasswordEncoder {
     /**
      * Encode the raw password. Generally, a good encoding algorithm applies a SHA-1 or
      * greater hash combined with an 8-byte or greater randomly generated salt.
+     * @param rawPassword rawPassword
+     * @return String
      */
     String encode(CharSequence rawPassword);
 
@@ -38,8 +40,8 @@ public interface PasswordEncoder {
     /**
      * 判断是否加密
      *
-     * @param encodedPassword
-     * @return
+     * @param encodedPassword encodedPassword
+     * @return boolean
      */
     boolean isMatches(String encodedPassword);
 }

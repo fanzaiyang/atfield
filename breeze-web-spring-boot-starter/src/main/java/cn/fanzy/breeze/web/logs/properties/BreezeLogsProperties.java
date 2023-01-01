@@ -5,6 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
+/**
+ * @author fanzaiyang
+ */
 @Data
 @ConfigurationProperties(prefix = "breeze.web.log")
 public class BreezeLogsProperties implements Serializable {

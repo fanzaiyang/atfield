@@ -2,6 +2,7 @@ package cn.fanzy.breeze.web.exception.controller;
 
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -24,6 +25,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author fanzaiyang
+ */
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BreezeDefaultBasicErrorController extends AbstractErrorController {

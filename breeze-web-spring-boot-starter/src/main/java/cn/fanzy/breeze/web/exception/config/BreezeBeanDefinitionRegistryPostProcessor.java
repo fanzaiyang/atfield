@@ -25,6 +25,9 @@ import org.springframework.web.servlet.View;
 import javax.annotation.PostConstruct;
 import java.util.stream.Collectors;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Configuration
 @AutoConfigureAfter(ErrorMvcAutoConfiguration.class)

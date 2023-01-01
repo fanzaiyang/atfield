@@ -16,7 +16,7 @@ import java.util.Map;
  * MinIO属性配置
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 @Data

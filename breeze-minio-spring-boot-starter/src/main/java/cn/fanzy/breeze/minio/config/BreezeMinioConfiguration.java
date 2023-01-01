@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 微风minio配置
  *
  * @author fanzaiyang
- * @date 2022-08-22
+ * @since 2022-08-22
  */
 @Slf4j
 @Configuration

@@ -14,7 +14,7 @@ import java.io.IOException;
  * 图形验证码发送器
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 public class BreezeImageCodeSender implements BreezeCodeSender<BreezeImageCode> {

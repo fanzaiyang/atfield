@@ -11,6 +11,9 @@ import org.springframework.core.annotation.Order;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration(proxyBeanMethods = false)

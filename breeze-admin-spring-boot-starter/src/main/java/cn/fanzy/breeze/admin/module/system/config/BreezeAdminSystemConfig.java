@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * 微风管理系统配置
  *
  * @author fanzaiyang
- * @date 2022-11-01
+ * @since 2022-11-01
  */
 @ImportAutoConfiguration({BreezeAdminAccountConfig.class, BreezeAdminRoleConfig.class
         , BreezeAdminMenuConfig.class, BreezeAdminOrgConfig.class, BreezeAdminDictConfig.class,

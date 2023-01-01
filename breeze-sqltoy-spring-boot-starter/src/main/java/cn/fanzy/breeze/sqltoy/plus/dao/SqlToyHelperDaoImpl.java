@@ -25,12 +25,7 @@ import java.util.*;
 @Repository("sqlToyHelperDao")
 public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao {
 
-    /**
-     * 查询一条记录,如果出现多条记录,获取其中第一条记录
-     *
-     * @param wrapper
-     * @return
-     */
+
     public <T> T findOne(Wrapper<T> wrapper) {
         List<T> rs = findList(wrapper);
         if (rs == null || rs.isEmpty()) {
@@ -39,87 +34,42 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
         return rs.get(0);
     }
 
-    /**
-     * 根据查询条件查询, 仅支持单表条件
-     *
-     * @param wrapper - 查询条件
-     * @return 结果集
-     */
+
     public <T> List<T> findList(Wrapper<T> wrapper) {
         return super.findEntity(wrapper.entityClass(), getEntityQuery(wrapper));
     }
 
-    /**
-     * 根据查询条件分页查询, 仅支持单表条件
-     *
-     * @param wrapper - 查询条件
-     * @param page    - 分页条件
-     * @param <T>
-     * @return
-     */
+
     public <T> Page<T> findPage(Wrapper<T> wrapper, Page<?> page) {
         return super.findPageEntity(page, wrapper.entityClass(), getEntityQuery(wrapper));
     }
 
-    /**
-     * 删除
-     *
-     * @param wrapper - 删除条件
-     * @param <T>
-     */
+
     public <T> long delete(Wrapper<T> wrapper) {
         return super.deleteByQuery(wrapper.entityClass(), getEntityQuery(wrapper));
     }
 
-    /**
-     * 统计
-     *
-     * @param wrapper - 统计条件
-     * @param <T>
-     */
+
     public <T> long count(Wrapper<T> wrapper) {
         return super.getCount(wrapper.entityClass(), getEntityQuery(wrapper));
     }
 
-    /**
-     * 更新
-     *
-     * @param updateWrapper - 更新参数条件对象
-     * @param <T>
-     */
+
     public <T> long update(Wrapper<T> updateWrapper) {
         return super.updateByQuery(updateWrapper.entityClass(), getEntityUpdate(updateWrapper));
     }
 
-    /**
-     * 更新
-     *
-     * @param t       - 更新元数据
-     * @param wrapper - 更新参数条件对象
-     * @param <T>
-     * @return
-     */
+
     public <T> long update(T t, Wrapper<T> wrapper) {
         return super.updateByQuery(wrapper.entityClass(), getEntityUpdate(t, wrapper));
     }
 
-    /**
-     * @param setMap  - 更新元数据
-     * @param wrapper - 更新参数条件对象
-     * @param <T>
-     * @return
-     */
+
     public <T> long update(Map<String, Object> setMap, Wrapper<T> wrapper) {
         return super.updateByQuery(wrapper.entityClass(), getEntityUpdate(setMap, wrapper));
     }
 
-    /**
-     * 获取查询条件对象
-     *
-     * @param wrapper - 查询条件
-     * @param <T>
-     * @return
-     */
+
     private <T> EntityQuery getEntityQuery(Wrapper<T> wrapper) {
         EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
         //开始组装sql
@@ -139,8 +89,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * 组装更新条件
      *
      * @param updateWrapper - 更新条件
-     * @param <T>
-     * @return
+     * @param <T> T
+     * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(Wrapper<T> updateWrapper) {
         Map<String, Object> setMap = updateWrapper.getSetMap();
@@ -151,8 +101,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * @param t                - 更新元数据
      * @param queryWrapper     - 更新的查询条件
      * @param forceUpdateProps - 忽略字段
-     * @param <T>
-     * @return
+     * @param <T> T
+     * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(T t, Wrapper<T> queryWrapper, String... forceUpdateProps) {
         EntityUpdate entityUpdate = EntityUpdate.create();
@@ -173,8 +123,8 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * 组装更新条件
      *
      * @param queryWrapper - 更新的查询条件
-     * @param <T>
-     * @return
+     * @param <T> T
+     * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(Map<String, Object> setMap, Wrapper<T> queryWrapper) {
         if (setMap == null || setMap.size() == 0) {
@@ -198,9 +148,9 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     /**
      * 转换对象为map
      *
-     * @param object
-     * @param ignore
-     * @return HashMap<String, Object>
+     * @param object Object
+     * @param ignore String[]
+     * @return HashMap
      */
     public static HashMap<String, Object> objectToObjectMap(Object object, String... ignore) {
         if (object == null) {

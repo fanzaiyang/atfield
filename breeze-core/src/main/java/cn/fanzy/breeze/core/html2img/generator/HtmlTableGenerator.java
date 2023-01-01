@@ -11,9 +11,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * @Author wyq
- * @Date 2021/8/26 15:33
- * @Version 1.0
+ * @author  wyq
+ * @since 2021/8/26 15:33
  */
 @Slf4j
 public class HtmlTableGenerator {
@@ -27,7 +26,7 @@ public class HtmlTableGenerator {
      * @param collection 需要生成数据的List
      * @param tClass     类型
      * @param lastData   合计（页脚数据）
-     * @param fileSaveUrl
+     * @param fileSaveUrl fileSaveUrl
      */
     public void  dataToImage (Collection<?> collection, Class<?> tClass,Object lastData,String fileSaveUrl) {
         HtmlImageGenerator htmlImageGenerator = new HtmlImageGenerator();

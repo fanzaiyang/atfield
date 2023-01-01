@@ -22,17 +22,19 @@ import java.util.Map;
 /**
  * SQL 片段接口
  *
+ * @author fanzaiyang
  */
 public interface ISqlSegment extends Serializable {
 
     /**
      * SQL 片段
+     * @return string
      */
     String getSqlSegment();
 
     /**
      * SQL片段参数map
-     * @return
+     * @return Map
      */
     default Map<String, Object> getSqlSegmentParamMap() {
         return null;

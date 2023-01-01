@@ -28,9 +28,9 @@ public class ColumnUtils {
     /**
      * 转换对象为map
      *
-     * @param object
-     * @param ignore
-     * @return HashMap<String, Object>
+     * @param object Obj
+     * @param ignore string[]
+     * @return HashMap
      */
     public static HashMap<String, Object> objectToObjectMap(Object object, String... ignore) {
         if (object == null) {

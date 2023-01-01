@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
  * 基于内存实现的验证码存储器
  *
  * @author fanzaiyang
- * @version 1.0.0
  * @since 1.0.0
  */
 @Slf4j

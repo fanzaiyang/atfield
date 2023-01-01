@@ -8,7 +8,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * 验证码发送器
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @since 2021/09/07
  */
 public interface BreezeCodeSender<T extends BreezeCode> {
 

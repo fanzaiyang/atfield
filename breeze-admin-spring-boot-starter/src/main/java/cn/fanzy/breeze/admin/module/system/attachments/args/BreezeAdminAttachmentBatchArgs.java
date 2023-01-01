@@ -10,7 +10,7 @@ import java.util.List;
  * 微风管理附件批量参数
  *
  * @author fanzaiyang
- * @date 2022-11-04
+ * @since 2022-11-04
  */
 @Data
 public class BreezeAdminAttachmentBatchArgs {

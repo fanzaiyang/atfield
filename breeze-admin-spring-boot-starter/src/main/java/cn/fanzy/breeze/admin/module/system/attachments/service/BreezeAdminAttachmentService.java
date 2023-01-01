@@ -13,7 +13,7 @@ import java.util.List;
  * 微风管理附件服务
  *
  * @author fanzaiyang
- * @date 2022-11-01
+ * @since 2022-11-01
  */
 public interface BreezeAdminAttachmentService {
     JsonContent<List<SysFile>> upload(String prefix, HttpServletRequest request);

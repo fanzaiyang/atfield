@@ -59,9 +59,7 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
         return groupBy(true, column, columns);
     }
 
-    /**
-     * 分组：GROUP BY 字段, ...
-     */
+
     Children groupBy(boolean condition, R column, R... columns);
 
     /**
@@ -100,9 +98,7 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
         return orderByAsc(true, column, columns);
     }
 
-    /**
-     * 排序：ORDER BY 字段, ... ASC
-     */
+
     default Children orderByAsc(boolean condition, R column, R... columns) {
         return orderBy(condition, true, column, columns);
     }
@@ -143,9 +139,7 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
         return orderByDesc(true, column, columns);
     }
 
-    /**
-     * 排序：ORDER BY 字段, ... DESC
-     */
+
     default Children orderByDesc(boolean condition, R column, R... columns) {
         return orderBy(condition, false, column, columns);
     }
@@ -172,14 +166,10 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
      */
     Children orderBy(boolean condition, boolean isAsc, List<R> columns);
 
-    /**
-     * 排序：ORDER BY 字段, ...
-     */
+
     Children orderBy(boolean condition, boolean isAsc, R column, R... columns);
 
-    /**
-     * ignore
-     */
+
     default Children having(String sqlHaving, Map<String, Object> paramMap) {
         return having(true, sqlHaving, paramMap);
     }
@@ -196,9 +186,7 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
      */
     Children having(boolean condition, String sqlHaving, Map<String, Object> paramMap);
 
-    /**
-     * ignore
-     */
+
     default Children accept(Consumer<Children> consumer) {
         return accept(true, consumer);
     }
@@ -207,6 +195,7 @@ public interface Func<Children extends Func<Children, R>, R> extends Serializabl
      * 消费函数
      *
      * @param consumer 消费函数
+     * @param condition boolen
      * @return children
      * @since 3.3.1
      */

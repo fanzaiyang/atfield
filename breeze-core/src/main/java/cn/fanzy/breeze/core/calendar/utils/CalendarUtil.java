@@ -19,7 +19,7 @@ import java.util.List;
  * </pre>
  *
  * @author fanzaiyang
- * @date 2022/09/22
+ * @since 2022/09/22
  */
 @Slf4j
 public class CalendarUtil {
@@ -30,7 +30,7 @@ public class CalendarUtil {
      * 查询某年每一天详细信息
      *
      * @param year 年份，如2021、2022等
-     * @return {@link List}<{@link Day}>
+     * @return {@link List}
      */
     public static List<Day> queryDayList(int year) {
         String url = StrUtil.format(API_URI, year, 1, 31);

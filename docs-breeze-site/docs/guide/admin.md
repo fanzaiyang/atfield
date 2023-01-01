@@ -25,16 +25,16 @@ order: 5
 </dependencies>
 <!-- maven私服 -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
 2. 配置说明
-
+   
    不需要修改任何配置即可使用
 
 ```yaml
@@ -61,5 +61,5 @@ breeze:
 ```
 
 3. 使用
-
+   
    启用项目，访问文档地址(/doc.html)：http://localhost:PORT/doc.html

@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * wx cp配置
  *
  * @author fanzaiyang
- * @date 2021/09/09
+ * @since 2021/09/09
  */
 @Slf4j
 @Configuration

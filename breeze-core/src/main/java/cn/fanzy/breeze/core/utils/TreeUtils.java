@@ -21,17 +21,16 @@ import java.util.stream.Collectors;
  * util树
  *
  * @author fanzaiyang
- * @date 2021/06/16
+ * @since 2021/06/16
  */
 @Slf4j
 public class TreeUtils extends TreeUtil {
+
     /**
-     * 构建树
-     * 默认为：id，parentId，name，orderNumber
-     * 根节点是：-1
-     *
-     * @param data 数据
-     * @return {@link List<Tree<String>>}
+     * 构建树 默认为：id，parentId，name，orderNumber 根节点是：-1
+     * @param data List数据
+     * @return List树结构
+     * @param <T> 类型
      */
     public static <T> List<Tree<String>> buildTree(List<T> data) {
         List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", BreezeConstants.TREE_ROOT_ID);
@@ -43,8 +42,9 @@ public class TreeUtils extends TreeUtil {
      * 默认为：id，parentId，name，orderNumber
      *
      * @param data   数据
+     * @param <T> 类型
      * @param rootId 根id,默认-1
-     * @return {@link List<Tree<String>>}
+     * @return List
      */
     public static <T> List<Tree<String>> buildTree(List<T> data, String rootId) {
         TimeInterval timer = DateUtil.timer();
@@ -65,7 +65,8 @@ public class TreeUtils extends TreeUtil {
      * @param nameKey   名字的关键，默认：name
      * @param weightKey 顺序的关键，默认：orderNumber
      * @param rootId    根id,默认-1
-     * @return {@link List<Tree<String>>}
+     * @param <T> 类型
+     * @return List
      */
     public static <T> List<Tree<String>> buildTree(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, BreezeConstants.TREE_ROOT_ID);
@@ -84,8 +85,8 @@ public class TreeUtils extends TreeUtil {
             node.setId(object.getOrDefault(StrUtil.blankToDefault(idKey, "id"), "") + "");
             node.setParentId(object.getOrDefault(StrUtil.blankToDefault(parentKey, "parentId"), "") + "");
             node.setName(object.getOrDefault(StrUtil.blankToDefault(nameKey, "name"), "") + "");
-            Object orderNumber = object.getOrDefault(StrUtil.blankToDefault(weightKey, "orderNumber"),i);
-            node.setWeight(NumberUtil.isNumber(orderNumber+"") ? NumberUtil.parseInt(orderNumber+"") : i);
+            Object orderNumber = object.getOrDefault(StrUtil.blankToDefault(weightKey, "orderNumber"), i);
+            node.setWeight(NumberUtil.isNumber(orderNumber + "") ? NumberUtil.parseInt(orderNumber + "") : i);
             object.put("unionId", node.getId());
             object.put("originParentId", node.getParentId());
             object.remove(StrUtil.blankToDefault(idKey, "id"));

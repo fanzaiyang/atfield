@@ -25,18 +25,18 @@ order: 3
 </dependencies>
 <!-- maven私服 -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
 2. 修改配置
 
 > ⚠️**注意：**
->
+> 
 > 该组件可以在未任何配置的情况下使用，默认开启了[注解](https://sa-token.cc/doc.html#/use/at-check)和[路由](https://sa-token.cc/doc.html#/use/route-check)鉴权。
 
 ```yaml
@@ -56,11 +56,11 @@ breeze:
 ```
 
 3. 文档地址
-
+   
    https://sa-token.cc/doc.html
-
+   
    常用方法
-
+   
    ```java
    // 会话登录：参数填写要登录的账号id，建议的数据类型：long | int | String， 不可以传入复杂类型，如：User、Admin 等等
    StpUtil.login(Object id);     
@@ -102,5 +102,3 @@ breeze:
    // 获取当前会话的token信息参数
    StpUtil.getTokenInfo();
    ```
-
-   

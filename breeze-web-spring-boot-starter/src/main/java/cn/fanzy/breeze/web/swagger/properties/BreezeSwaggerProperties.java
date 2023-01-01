@@ -10,6 +10,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * @author fanzaiyang
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  * 微风代码检查器
  *
  * @author fanzaiyang
- * @date 2022-08-19
+ * @since 2022-08-19
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

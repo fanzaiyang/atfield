@@ -13,7 +13,7 @@ import java.sql.Types;
 /**
  * 组织表(SysOrg)表实体类
  *
- * @author fasnzaiyang
+ * @author fanzaiyang
  * @since 2021-09-27 18:09:29
  */
 @EqualsAndHashCode(callSuper = true)

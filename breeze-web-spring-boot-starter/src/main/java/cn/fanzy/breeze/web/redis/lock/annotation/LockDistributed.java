@@ -2,6 +2,9 @@ package cn.fanzy.breeze.web.redis.lock.annotation;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
+/**
+ * @author fanzaiyang
+ */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -16,7 +19,7 @@ public @interface LockDistributed {
     /**
      * 过期时间
      *
-     * @return
+     * @return long
      */
     long time() default 0;
 
@@ -29,6 +32,7 @@ public @interface LockDistributed {
 
     /**
      * 使用tryLock
+     * @return boolen
      */
     boolean isTry() default false;
 }

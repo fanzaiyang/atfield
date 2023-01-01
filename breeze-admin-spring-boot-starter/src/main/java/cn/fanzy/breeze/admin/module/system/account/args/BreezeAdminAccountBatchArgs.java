@@ -10,7 +10,7 @@ import java.util.List;
  * 微风del批arg游戏管理员帐户
  *
  * @author fanzaiyang
- * @date 2022-11-03
+ * @since 2022-11-03
  */
 @Data
 public class BreezeAdminAccountBatchArgs {

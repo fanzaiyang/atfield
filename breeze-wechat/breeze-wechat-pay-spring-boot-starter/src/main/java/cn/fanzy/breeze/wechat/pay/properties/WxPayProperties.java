@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * wx支付属性
  *
  * @author fanzaiyang
- * @date 2022/03/08
+ * @since 2022/03/08
  */
 @Data
 @ConfigurationProperties(prefix = "breeze.wechat.pay")

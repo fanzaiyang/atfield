@@ -3,7 +3,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.toolkit;
 
 /**
  * 基于 {@link SerializedLambda} 创建的元信息
- * <p>
+ * @author fanzaiyang
  */
 public class ShadowLambdaMeta implements LambdaMeta {
     private final SerializedLambda lambda;

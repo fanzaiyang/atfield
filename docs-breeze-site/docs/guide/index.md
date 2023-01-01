@@ -32,7 +32,7 @@ order: 1
 
 2. 微风Cloud版本管理
 
-微风Cloud组件使用统一的版本管理策略，每个子组件继承父级组件版本。
+微风Cloud组件使用**统一的版本管理**策略，每个子组件继承父级组件版本。
 
 # 组件列表
 
@@ -89,7 +89,7 @@ order: 1
 </repositories>
 ```
 
-2. 替换pom中的parent **「推荐」**
+2. 替换pom中的parent **「推荐」** ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 ```xml
 <parent>

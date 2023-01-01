@@ -15,6 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @AllArgsConstructor
 @Configuration

@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>breeze-web-spring-boot-starter</artifactId>
+    <description>Business enhancement components for SpringBoot 2.x</description>
 
 
     <dependencies>

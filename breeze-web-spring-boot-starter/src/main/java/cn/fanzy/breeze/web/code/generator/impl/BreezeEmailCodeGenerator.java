@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
+/**
+ * @author fanzaiyang
+ */
 @AllArgsConstructor
 public class BreezeEmailCodeGenerator implements BreezeCodeGenerator<BreezeEmailCode> {
     @Override

@@ -7,7 +7,7 @@ import me.chanjar.weixin.cp.message.WxCpMessageHandler;
  * 零处理程序
  *
  * @author fanzaiyang
- * @date 2021/06/02
+ * @since 2021/06/02
  */
 public interface WxCpNullHandler extends WxCpMessageHandler {
 

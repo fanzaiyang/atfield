@@ -5,7 +5,7 @@ export default defineConfig({
   // publicPath:'/breeze-spring-cloud/',
   themeConfig: {
     name: '微风组件',
-    logo: 'https://c2.im5i.com/2022/12/27/ReZC7.png',
+    logo: '/logo.png',
     autoAlias: false,
     favicons: ['/favicon.ico'],
     nav: [

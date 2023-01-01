@@ -1,5 +1,8 @@
 package cn.fanzy.breeze.web.safe.exception;
 
+/**
+ * @author fanzaiyang
+ */
 public class LoginFailException extends RuntimeException {
     /**
      *

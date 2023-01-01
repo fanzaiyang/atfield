@@ -13,7 +13,7 @@ import java.io.Serializable;
  * 跨域支持属性配置
  *
  * @author fanzaiyang
- * @date 2021/09/06
+ * @since 2021/09/06
  */
 @Data
 @ConfigurationProperties(prefix = "mybatis-plus.global-config")

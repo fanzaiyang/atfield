@@ -13,12 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * @author fanzaiyang
+ */
 public interface BreezeAdminAuthService {
     /**
      * 登录之前调用
      *
-     * @param username
-     * @return
+     * @param username string
+     * @return JsonContent
      */
     JsonContent<Boolean> doUserPwdLoginBefore(String username);
 

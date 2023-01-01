@@ -8,7 +8,7 @@ import java.util.Map;
  * 格式名称工具类
  *
  * @author fanzaiyang
- * @date 2021/08/26
+ * @since 2021/08/26
  */
 public class FormatNameUtil {
     public static Map<String, String> types = new HashMap<String, String>();

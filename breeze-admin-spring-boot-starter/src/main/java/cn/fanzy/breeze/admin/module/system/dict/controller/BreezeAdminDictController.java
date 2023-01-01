@@ -24,7 +24,7 @@ import java.util.List;
  * 微风admin dict控制器
  *
  * @author fanzaiyang
- * @date 2022-11-03
+ * @since 2022-11-03
  */
 @Tag(name = "「微风组件」字典管理")
 @ApiSupport(author = "微风组件", order = 992051)

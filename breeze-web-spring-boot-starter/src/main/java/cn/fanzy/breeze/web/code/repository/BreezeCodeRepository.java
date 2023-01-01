@@ -8,7 +8,7 @@ import cn.fanzy.breeze.web.code.model.BreezeCode;
  * 验证码存储器
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @since 2021/09/07
  */
 public interface BreezeCodeRepository {
 

@@ -31,7 +31,7 @@ import static me.chanjar.weixin.mp.constant.WxMpEventConstants.POI_CHECK_NOTIFY;
  * wx cp配置
  *
  * @author fanzaiyang
- * @date 2021/09/09
+ * @since 2021/09/09
  */
 @Slf4j
 @Configuration

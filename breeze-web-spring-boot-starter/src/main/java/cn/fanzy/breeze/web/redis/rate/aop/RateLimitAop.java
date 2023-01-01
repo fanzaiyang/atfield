@@ -15,6 +15,9 @@ import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Aspect
 @Component

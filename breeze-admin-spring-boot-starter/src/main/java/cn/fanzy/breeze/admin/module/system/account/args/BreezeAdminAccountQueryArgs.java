@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
  * 微风管理员账户查询参数
  *
  * @author fanzaiyang
- * @date 2022-11-02
+ * @since 2022-11-02
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

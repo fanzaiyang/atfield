@@ -14,6 +14,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Date;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @AllArgsConstructor
 public class BreezeSafeServiceImpl implements BreezeSafeService {

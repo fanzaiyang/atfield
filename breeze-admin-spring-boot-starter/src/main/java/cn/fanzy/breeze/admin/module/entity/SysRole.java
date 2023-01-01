@@ -13,7 +13,7 @@ import java.sql.Types;
 /**
  * 系统角色表(SysRole)表实体类
  *
- * @author fasnzaiyang
+ * @author fanzaiyang
  * @since 2021-09-27 18:09:30
  */
 @Data
