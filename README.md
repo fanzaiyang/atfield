@@ -10,3 +10,27 @@
 * 简单配置：在开启组件功能后，无需进行复杂配置即可使用组件的基本功能。
 * 个性定制：每个组件提供大量额外配置，自定义组件复杂功能。
 * 高级扩展：每个组件都可以被重写，已实现个性化需求。
+settings.xml
+```xml
+<profile>
+        <id>github</id>
+        <repositories>
+          <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2</url>
+          </repository>
+          <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/fanzaiyang/breeze-spring-cloud</url>
+            <snapshots>
+              <enabled>true</enabled>
+            </snapshots>
+          </repository>
+        </repositories>
+      </profile>
+<server>
+<id>github</id>
+<username>fanzaiyang</username>
+<password>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</password>
+</server>
+```
