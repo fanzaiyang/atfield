@@ -23,9 +23,6 @@ import java.io.Serializable;
  */
 public interface Join<Children> extends Serializable {
 
-    /**
-     * ignore
-     */
     default Children or() {
         return or(true);
     }
