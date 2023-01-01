@@ -55,41 +55,8 @@ order: 1
 
 # 组件使用说明
 
-> ⚠️ **注意：**
-> 
-> 组件库未发布到maven中心仓库，请在你的`pom.xml`中配置私服地址。
-
-1. Maven私服地址
-
-⚠️ 如果maven配置了代理需要将`yinfengMaven`排除在外
-
-```xml
-<!-- pom.xml -->
-<repositories>
-    <repository>
-        <id>yinfengMaven</id>
-        <name>nexus repository</name>
-        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
-    </repository>
-</repositories>
-```
-
-或者使用coding制品库
-
-⚠️ 如果maven配置了代理需要将`fancode-maven-releases`排除在外
-
-```xml
-<!-- pom.xml -->
-<repositories>
-    <repository>
-        <id>fancode-maven-releases</id>
-        <name>releases</name>
-         <url>https://fancode-maven.pkg.coding.net/repository/maven/releases/</url>
-    </repository>
-</repositories>
-```
-
-2. 替换pom中的parent **「推荐」** ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
+2. 替换pom中的parent **「推荐」**
+   * 最新版本号：![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 ```xml
 <parent>

@@ -3,11 +3,11 @@ title: 授权组件
 order: 3
 ---
 
-该组件集成了[SaToken](https://gitee.com/dromara/sa-token)一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！该组件使用简单的API即可实现强大的功能。
+该组件集成了[SaToken 1.33.0](https://gitee.com/dromara/sa-token)一个轻量级 Java 权限认证框架，让鉴权变得简单、优雅！该组件使用简单的API即可实现强大的功能。
 
 ## 组件说明
 
-组件针对业务常见场景，对SaToken进行了部分封装，仅需简单配置即可实现常用的场景。
+组件针对业务常见场景，对SaToken进行了部分业务封装，仅需简单配置即可实现常用的场景。默认实现了基于路由和注解的鉴权，只需要通过简单配置文件即可自定义使用。
 
 ## 快速开始
 
@@ -21,16 +21,7 @@ order: 3
         <groupId>cn.fanzy.breeze</groupId>
         <artifactId>breeze-auth-spring-boot-starter</artifactId>
     </dependency>
- ... ...
 </dependencies>
-<!-- maven私服 -->
-<repositories>
-    <repository>
-        <id>yinfengMaven</id>
-        <name>nexus repository</name>
-        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
-    </repository>
-</repositories>
 ```
 
 2. 修改配置
@@ -102,3 +93,40 @@ breeze:
    // 获取当前会话的token信息参数
    StpUtil.getTokenInfo();
    ```
+
+4. 其他说明
+* 鉴权写入redis，在pom中添加
+  
+  ```xml
+  <!--pom.xml-->
+  <dependency>
+     <groupId>cn.fanzy.breeze</groupId>
+     <artifactId>breeze-auth-redis</artifactId>
+  </dependency>
+  ```
+
+* 使用JWT，在pom中添加
+  
+  ```xml
+  <dependency>
+     <groupId>cn.fanzy.breeze</groupId>
+     <artifactId>breeze-auth-jwt-spring-boot-starter</artifactId>
+  </dependency>
+  ```
+  
+  JWT风格配置。
+  
+  * simple模式：Token 风格替换,默认
+  
+  * Mixin 模式：混入部分逻辑
+  
+  * Stateless 模式：服务器完全无状态
+  
+  * statelessNotCheck：不校验过期
+  
+  在配置文件中配置即可。
+  
+  ```properties
+  breeze.auth.jwt.enable=true # 是否启用jwt，默认：false
+  breeze.auth.jwt.mode=stateless # 可选simple、mixin、stateless、statelessNotCheck。
+  ```

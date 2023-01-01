@@ -9,8 +9,11 @@ title: 更新日志
 修订版本号：进行日常 bugfix 更新。（如果有紧急的 bugfix，则任何时候都可发布）
 次版本号：发布一个带有新特性的向下兼容的版本。
 主版本号：含有破坏性更新和新特性，不在发布周期内。
+
 ## 最新版本
+
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
+
 ## v2.0.0
 
 升级基础依赖版本，面向SpringBoot 3.x。

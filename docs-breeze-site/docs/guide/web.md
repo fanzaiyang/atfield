@@ -2,11 +2,12 @@
 title: WEB组件
 order: 1
 toc: content
+
 ---
 
 WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置。
 
-## 🧾功能清单 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud.png)
+## 🧾功能清单
 
 | 功能名称     | 功能说明                                            |
 | -------- | ----------------------------------------------- |
@@ -35,7 +36,6 @@ WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置。
     <dependency>
         <groupId>cn.fanzy.breeze</groupId>
         <artifactId>breeze-web-spring-boot-starter</artifactId>
-        <version>最新版本</version>
     </dependency>
  ... ...
 </dependencies>
