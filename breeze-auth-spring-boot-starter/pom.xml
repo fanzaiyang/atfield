@@ -9,6 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <description>enhancement for auth base SaToken</description>
 
     <artifactId>breeze-auth-spring-boot-starter</artifactId>
     <dependencies>

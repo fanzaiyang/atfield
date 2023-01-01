@@ -12,6 +12,7 @@
     <groupId>cn.fanzy.breeze</groupId>
     <artifactId>breeze-spring-cloud</artifactId>
     <version>${revision}</version>
+    <description>A set of highly available components for SpringBoot 2.x. </description>
     <modules>
         <module>breeze-core</module>
         <module>breeze-web-spring-boot-starter</module>
@@ -168,7 +169,6 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <version>${spring-boot.version}</version>
                         <configuration>
                             <excludes>
                                 <exclude>
@@ -222,6 +222,20 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.4.1</version>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- 统一版本号管理 -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -260,4 +274,32 @@
             <url>http://maven.yinfengnet.com/repository/maven-public/</url>
         </repository>
     </repositories>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>scm:git:https://github.com/fanzaiyang/breeze-spring-cloud.git</connection>
+        <developerConnection>scm:git:https://github.com/fanzaiyang/breeze-spring-cloud.git</developerConnection>
+        <url>https://github.com/fanzaiyang/breeze-spring-cloud.git</url>
+    </scm>
+    <developers>
+        <developer>
+            <name>fanzaiyang</name>
+            <email>zaiyangnihao@163.com</email>
+        </developer>
+    </developers>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 </project>
