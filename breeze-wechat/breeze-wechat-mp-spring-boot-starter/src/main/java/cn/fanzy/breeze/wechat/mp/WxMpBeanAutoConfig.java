@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * wx议员bean自动配置
  *
  * @author fanzaiyang
- * @date 2022/03/07
+ * @version 2022/03/07
  */
 @Slf4j
 @Configuration

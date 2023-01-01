@@ -6,7 +6,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * ip全局检查服务
  *
  * @author fanzaiyang
- * @date 2022-08-16
+ * @version 2022-08-16
  */
 public interface BreezeIpGlobalCheckService {
     void handler(ServletWebRequest servletWebRequest);

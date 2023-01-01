@@ -15,7 +15,7 @@ import java.io.Serializable;
  * 跨域支持属性配置
  *
  * @author fanzaiyang
- * @date 2021/09/06
+ * @version 2021/09/06
  */
 @Data
 @NoArgsConstructor

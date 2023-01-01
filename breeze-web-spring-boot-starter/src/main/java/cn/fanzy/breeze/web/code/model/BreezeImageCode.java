@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  * 验证码实体类
  *
  * @author fanzaiyang
- * @date 2022-08-16
+ * @version 2022-08-16
  */
 @Getter
 @Setter

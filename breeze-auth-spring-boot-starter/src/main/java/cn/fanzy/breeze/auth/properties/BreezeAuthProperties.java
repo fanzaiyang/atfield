@@ -14,7 +14,7 @@ import java.util.List;
  * MinIO属性配置
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @version 2021/09/07
  */
 @Slf4j
 @Data
@@ -55,7 +55,7 @@ public class BreezeAuthProperties implements Serializable {
      * 注解鉴权
      *
      * @author fanzaiyang
-     * @date 2022-08-23
+     * @version 2022-08-23
      */
     @Data
     public static class Annotations {

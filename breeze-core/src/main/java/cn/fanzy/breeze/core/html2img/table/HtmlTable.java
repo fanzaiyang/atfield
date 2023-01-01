@@ -7,9 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * java数据转图片实体类注解
- * @Author wyq
- * @Date 2021/8/26 14:40
- * @Version 1.0
+ * @author  wyq
+ * @version 2021/8/26 14:40
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

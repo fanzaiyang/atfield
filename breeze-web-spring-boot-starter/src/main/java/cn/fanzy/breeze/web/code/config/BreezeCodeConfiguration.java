@@ -38,7 +38,7 @@ import java.util.Map;
  * 验证码组件自动配置
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @version 2021/09/07
  */
 @Slf4j
 @AllArgsConstructor

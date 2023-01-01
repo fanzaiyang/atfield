@@ -12,7 +12,7 @@ import java.util.List;
  * wx cp属性,多Agent支持
  *
  * @author fanzaiyang
- * @date 2021/06/02
+ * @version 2021/06/02
  */
 @Getter
 @Setter

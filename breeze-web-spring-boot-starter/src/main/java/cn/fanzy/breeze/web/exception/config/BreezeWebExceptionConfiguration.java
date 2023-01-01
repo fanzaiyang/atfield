@@ -41,7 +41,7 @@ import java.sql.SQLSyntaxErrorException;
  * 微风web异常配置
  *
  * @author fanzaiyang
- * @date 2022-08-18
+ * @version 2022-08-18
  */
 @Slf4j
 @AllArgsConstructor

@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
  * 即可
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @version 2021/09/07
  */
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotationsInside

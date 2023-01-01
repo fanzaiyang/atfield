@@ -6,7 +6,7 @@ import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
  * 微风日志回调服务
  *
  * @author fanzaiyang
- * @date 2022-10-11
+ * @version 2022-10-11
  */
 public interface BreezeLogCallbackService {
 

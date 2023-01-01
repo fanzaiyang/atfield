@@ -8,7 +8,7 @@ import cn.hutool.core.util.NumberUtil;
  * 基本参数
  *
  * @author fanzaiyang
- * @date 2022-08-16
+ * @version 2022-08-16
  */
 public class BaseArgs {
 

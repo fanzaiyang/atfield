@@ -26,7 +26,7 @@ import java.util.Date;
  * </ol>
  *
  * @author fanzaiyang
- * @date 2021/09/07
+ * @version 2021/09/07
  */
 @Slf4j
 public final class DateTimeUtil {

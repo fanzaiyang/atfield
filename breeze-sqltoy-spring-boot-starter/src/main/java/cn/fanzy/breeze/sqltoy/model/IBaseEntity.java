@@ -15,7 +15,7 @@ import java.util.Date;
  * 支持AR模式
  *
  * @author fanzaiyang
- * @date 2021/05/31
+ * @version 2021/05/31
  */
 @Data
 @NoArgsConstructor

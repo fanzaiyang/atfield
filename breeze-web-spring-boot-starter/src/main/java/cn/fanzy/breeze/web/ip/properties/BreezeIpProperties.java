@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 微风ip属性
  *
  * @author fanzaiyang
- * @date 2022-08-18
+ * @version 2022-08-18
  */
 @Data
 @NoArgsConstructor

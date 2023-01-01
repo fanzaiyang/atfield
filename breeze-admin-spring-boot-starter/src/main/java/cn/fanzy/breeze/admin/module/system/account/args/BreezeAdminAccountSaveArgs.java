@@ -9,7 +9,7 @@ import java.util.Set;
  * 微风管理员帐户保存参数
  *
  * @author fanzaiyang
- * @date 2022-11-07
+ * @version 2022-11-07
  */
 @Data
 public class BreezeAdminAccountSaveArgs {
