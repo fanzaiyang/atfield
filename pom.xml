@@ -222,7 +222,7 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.4.1</version>
                     </plugin>
-                    <plugin>
+                    <!--<plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.5</version>
@@ -235,7 +235,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin>-->
                     <!-- 统一版本号管理 -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -264,22 +264,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>github</id>
-            <repositories>
-                <repository>
-                    <id>central</id>
-                    <url>https://repo1.maven.org/maven2</url>
-                </repository>
-                <repository>
-                    <id>github</id>
-                    <url>https://maven.pkg.github.com/cn.fanzy.breeze/breeze-spring-cloud</url>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
-                </repository>
-            </repositories>
         </profile>
     </profiles>
 
@@ -312,7 +296,7 @@
         <repository>
             <id>github</id>
             <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/cn.fanzy.breeze/breeze-spring-cloud</url>
+            <url>https://maven.pkg.github.com/fanzaiyang/breeze-spring-cloud</url>
         </repository>
     </distributionManagement>
 </project>
