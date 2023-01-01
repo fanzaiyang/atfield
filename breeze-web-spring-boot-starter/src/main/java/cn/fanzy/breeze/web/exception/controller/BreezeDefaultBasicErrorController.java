@@ -29,7 +29,6 @@ import java.util.Map;
  * @author fanzaiyang
  */
 @Controller
-@AllArgsConstructor
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BreezeDefaultBasicErrorController extends AbstractErrorController {
 
