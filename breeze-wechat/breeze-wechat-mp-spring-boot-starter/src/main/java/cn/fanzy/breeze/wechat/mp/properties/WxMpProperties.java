@@ -12,7 +12,7 @@ import java.util.List;
  * wx mp属性
  *
  * @author fanzaiyang
- * @version 2021/06/02
+ * @since 2021/06/02
  */
 @Getter
 @Setter

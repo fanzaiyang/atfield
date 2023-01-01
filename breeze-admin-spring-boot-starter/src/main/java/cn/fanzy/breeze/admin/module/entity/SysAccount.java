@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * 系统账户表(SysAccount)表实体类
  *
- * @author fasnzaiyang
+ * @author fanzaiyang
  * @since 2021-09-27 18:09:29
  */
 @Data

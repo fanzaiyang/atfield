@@ -16,7 +16,7 @@ import java.util.Date;
  * 支持AR模式
  *
  * @author fanzaiyang
- * @version 2021/05/31
+ * @since 2021/05/31
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
  * 微风管理员帐户配置
  *
  * @author fanzaiyang
- * @version 2022-11-07
+ * @since 2022-11-07
  */
 @ImportAutoConfiguration(BreezeAdminAccountController.class)
 @Slf4j

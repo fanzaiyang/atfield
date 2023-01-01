@@ -13,7 +13,7 @@ import java.util.List;
  * 微风管理附件查询参数
  *
  * @author fanzaiyang
- * @version 2022-11-01
+ * @since 2022-11-01
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

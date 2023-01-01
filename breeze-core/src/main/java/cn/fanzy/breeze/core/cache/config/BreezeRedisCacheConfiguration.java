@@ -17,7 +17,7 @@ import org.springframework.data.redis.core.RedisOperations;
  * 基于Redis的验证码存储器自动配置
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 @Configuration

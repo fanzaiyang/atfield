@@ -31,7 +31,7 @@ import java.util.Map;
  * html图像发生器
  *
  * @author fanzaiyang
- * @version 2021/08/26
+ * @since 2021/08/26
  */
 @Slf4j
 public class HtmlImageGenerator {

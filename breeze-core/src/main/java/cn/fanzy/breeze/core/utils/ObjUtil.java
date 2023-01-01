@@ -11,7 +11,7 @@ package cn.fanzy.breeze.core.utils;
  * 该工具主要用于判断集合里元素的数量
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 public final class ObjUtil {
 

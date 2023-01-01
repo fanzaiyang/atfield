@@ -10,11 +10,6 @@ import lombok.experimental.Accessors;
 import org.springframework.http.HttpStatus;
 
 /**
- * @author 黑山老妖
- * @version 2018/9/19
- */
-
-/**
  * 统一响应结果
  *
  * @author wanghuifeng
@@ -75,7 +70,7 @@ public class JsonContent<T> {
 
     /**
      * 成功
-     *
+     * @param <T> T
      * @return JsonContent
      */
     public static <T> JsonContent<T> success() {
@@ -86,7 +81,8 @@ public class JsonContent<T> {
      * 成功
      *
      * @param object 对象
-     * @return {@link JsonContent}<{@link T}>
+     * @param <T> T
+     * @return {@link JsonContent} {@link T}
      */
     public static <T> JsonContent<T> success(T object) {
         return new JsonContent<>(BreezeModelContext.properties.getSuccessCode(), BreezeModelContext.properties.getSuccessMessage(), object);
@@ -94,47 +90,26 @@ public class JsonContent<T> {
 
     /**
      * 失败
-     *
-     * @return {@link JsonContent}<{@link T}>
+     * @param <T> T
+     * @return {@link JsonContent} {@link T}
      */
     public static <T> JsonContent<T> error() {
         return new JsonContent<>(BreezeModelContext.properties.getErrorCode(), BreezeModelContext.properties.getErrorMessage(), ErrorShowType.MESSAGE_ERROR);
     }
 
-    /**
-     * 失败
-     *
-     * @return JsonContent
-     */
     public static <T> JsonContent<T> error(int errorCode, String errorMessage) {
         return new JsonContent<>(errorCode, errorMessage, ErrorShowType.MESSAGE_ERROR);
     }
 
-    /**
-     * 失败
-     *
-     * @return JsonContent
-     */
+
     public static <T> JsonContent<T> error(int errorCode, Exception e) {
         return new JsonContent<>(errorCode, e.getMessage(), ErrorShowType.MESSAGE_ERROR);
     }
 
-    /**
-     * 失败
-     *
-     * @return JsonContent
-     */
     public static <T> JsonContent<T> error(Exception exception) {
         return new JsonContent<>(BreezeModelContext.properties.getErrorCode(), exception.getMessage(), ErrorShowType.MESSAGE_ERROR);
     }
 
-    /**
-     * 错误
-     * 失败
-     *
-     * @param errorMessage 错误消息
-     * @return JsonContent
-     */
     public static <T> JsonContent<T> error(String errorMessage) {
         return error(new RuntimeException(errorMessage));
     }
@@ -151,6 +126,7 @@ public class JsonContent<T> {
     /**
      * 根据响应提示信息生成一个表示参数有误的响应对象(响应码400)
      *
+     * @param <T> T
      * @param message 响应提示信息
      * @return 表示参数有误的响应对象(响应码400)
      */
@@ -170,18 +146,14 @@ public class JsonContent<T> {
         return new JsonContent(HttpStatus.BAD_REQUEST.value(), message, data, ErrorShowType.MESSAGE_ERROR);
     }
 
-    /**
-     * 生成一个默认的表示资源未授权的响应对象(401响应码)
-     *
-     * @return 表示资源未授权的响应对象(401响应码)
-     */
+
     public static <T> JsonContent<T> unAuth() {
         return new JsonContent<>(HttpStatus.UNAUTHORIZED.value(), "你没有权限访问此资源！", ErrorShowType.NOTIFICATION_WARN);
     }
 
     /**
      * 根据响应提示信息生成一个表示资源未授权的响应对象(401响应码)
-     *
+     * @param <T> T
      * @param message 响应提示信息
      * @return 表示资源未授权的响应对象(401响应码)
      */
@@ -201,30 +173,17 @@ public class JsonContent<T> {
         return new JsonContent<>(HttpStatus.UNAUTHORIZED.value(), message, data, ErrorShowType.NOTIFICATION_WARN);
     }
 
-    /**
-     * 生成一个默认的表示资源不可用的响应对象(403响应码)
-     *
-     * @return 表示资源不可用的响应对象(403响应码)
-     */
+
     public static <T> JsonContent<T> notAllow() {
         return new JsonContent<>(HttpStatus.FORBIDDEN.value(), "资源不可用!", ErrorShowType.NOTIFICATION_ERROR);
     }
 
-    /**
-     * 根据响应提示信息生成表示资源不可用的响应对象(403响应码)
-     *
-     * @param message 响应提示信息
-     * @return 表示资源不可用的响应对象(403响应码)
-     */
+
     public static <T> JsonContent<T> notAllow(String message) {
         return new JsonContent<>(HttpStatus.FORBIDDEN.value(), message, ErrorShowType.NOTIFICATION_ERROR);
     }
 
-    /**
-     * 生成一个默认的表示资源不存在的响应对象(404响应码)
-     *
-     * @return 表示资源不存在的响应对象(404响应码)
-     */
+
     public static <T> JsonContent<T> notFound() {
         return new JsonContent<>(HttpStatus.NOT_FOUND.value(), "访问的资源不存在！", ErrorShowType.NOTIFICATION_WARN);
     }

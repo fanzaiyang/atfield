@@ -13,7 +13,7 @@ import java.util.WeakHashMap;
  * 该工具主要是一个基于内存和ThreadLocal的KV键值对存储工具，该键值对内容与当前线程关联，在使用时需要注意内存溢出问题。<strong>接口均为线程安全的</strong>
  *
  * @author fanzaiyang
- * @version 1.0.0
+ * @since 1.0.0
  * @since 1.0.0
  */
 @Slf4j

@@ -16,6 +16,9 @@ import org.springframework.web.context.request.ServletWebRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @AllArgsConstructor
 public class BreezeImageCodeGenerator implements BreezeCodeGenerator<BreezeImageCode> {

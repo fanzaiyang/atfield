@@ -12,13 +12,16 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 public class JoinPointUtils {
     /**
      * 得到参数
      *
      * @param joinPoint 连接点
-     * @return {@link Map}<{@link String}, {@link Object}>
+     * @return {@link Map} {@link String}, {@link Object}
      */
     public static Map<String, Object> getParams(JoinPoint joinPoint) {
         Map<String, Object> param = new HashMap<>();
@@ -58,10 +61,9 @@ public class JoinPointUtils {
     /**
      * 从 joinPoint 中 根据 参数名称 获取参数
      *
-     * @param joinPoint
-     * @param paramName
-     * @return
-     * @author Lishuzhen
+     * @param joinPoint JoinPoint
+     * @param paramName String
+     * @return Object
      */
     public static Object getParamByName(JoinPoint joinPoint, String paramName) {
         // 获取所有参数的值

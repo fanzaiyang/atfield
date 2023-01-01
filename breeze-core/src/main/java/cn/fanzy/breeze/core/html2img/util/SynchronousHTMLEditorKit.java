@@ -13,7 +13,7 @@ import javax.swing.text.html.ImageView;
  * 同步编辑器套件
  *
  * @author fanzaiyang
- * @version 2021/08/26
+ * @since 2021/08/26
  */
 public class SynchronousHTMLEditorKit extends HTMLEditorKit {
 

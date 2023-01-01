@@ -9,7 +9,7 @@ import java.io.StringWriter;
 /**
  * 异常工具类
  * @author fanzaiyang
- * @version 2022-10-31
+ * @since 2022-10-31
  */
 @Slf4j
 public class ExceptionUtil {

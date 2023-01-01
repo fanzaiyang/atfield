@@ -11,7 +11,7 @@ package cn.fanzy.breeze.core.utils;
  * <strong>该工具是一个线程安全类的工具。</strong>
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 public final class HumpUtil {
 

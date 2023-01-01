@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 缓存属性配置
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 @Data
 @ConfigurationProperties(prefix = "breeze.web.cache")

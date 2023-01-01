@@ -19,7 +19,7 @@ import java.util.Date;
  * </ol>
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 public class BetweenUtil {
 

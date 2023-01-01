@@ -41,7 +41,7 @@ import java.sql.SQLSyntaxErrorException;
  * 微风web异常配置
  *
  * @author fanzaiyang
- * @version 2022-08-18
+ * @since 2022-08-18
  */
 @Slf4j
 @AllArgsConstructor
@@ -376,9 +376,7 @@ public class BreezeWebExceptionConfiguration {
         return response;
     }
 
-    /**
-     * 处理valid验证参数问题
-     */
+
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public JsonContent<Object> processException(HttpServletRequest request, MethodArgumentNotValidException e) {
@@ -395,6 +393,9 @@ public class BreezeWebExceptionConfiguration {
 
     /**
      * 处理文件上传异常
+     * @param request request
+     * @param e e
+     * @return JsonContent
      */
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)

@@ -12,7 +12,7 @@ import java.util.*;
 
 /**
  * @author  wyq
- * @version 2021/8/26 15:33
+ * @since 2021/8/26 15:33
  */
 @Slf4j
 public class HtmlTableGenerator {

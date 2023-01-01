@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 「微风」模型属性配置
  *
  * @author fanzaiyang
- * @version 2022-08-16
+ * @since 2022-08-16
  */
 @Data
 @ConfigurationProperties(prefix = "breeze.web.model")

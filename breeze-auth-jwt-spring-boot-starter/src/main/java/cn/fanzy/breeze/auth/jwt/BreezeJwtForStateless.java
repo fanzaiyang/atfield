@@ -21,7 +21,7 @@ import java.util.Map;
  * 微风jwt为无状态
  *
  * @author fanzaiyang
- * @version 2022-11-08
+ * @since 2022-11-08
  */
 public class BreezeJwtForStateless extends StpLogic {
     /**

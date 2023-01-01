@@ -179,7 +179,7 @@ public class HttpUtil {
      * 从请求中得到上传的文件Map
      *
      * @param request 请求
-     * @return {@link Map}<{@link String}, {@link MultipartFile}>
+     * @return Map
      */
     public static Map<String, MultipartFile> getMultipartFileMap(HttpServletRequest request) {
         Assert.isTrue(request instanceof MultipartHttpServletRequest, "请求方式不是MultipartHttpServletRequest！");
@@ -196,7 +196,7 @@ public class HttpUtil {
      * 从请求中得到上传的文件列表
      *
      * @param request 请求
-     * @return {@link List}<{@link MultipartFile}>
+     * @return {@link List} {@link MultipartFile}
      */
     public static List<MultipartFile> getMultipartFileList(HttpServletRequest request) {
         Map<String, MultipartFile> fileMap = getMultipartFileMap(request);

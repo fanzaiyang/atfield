@@ -15,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Configuration
 @AllArgsConstructor

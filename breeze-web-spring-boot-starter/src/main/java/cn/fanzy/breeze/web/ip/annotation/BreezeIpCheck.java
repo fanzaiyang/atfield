@@ -4,6 +4,9 @@ import cn.fanzy.breeze.web.ip.service.BreezeIpCheckService;
 
 import java.lang.annotation.*;
 
+/**
+ * @author fanzaiyang
+ */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -23,7 +26,7 @@ public @interface BreezeIpCheck {
     /**
      * 自定义处理程序
      *
-     * @return {@link Class}<{@link ?} {@link extends} {@link BreezeIpCheckService}>
+     * @return Class extends BreezeIpCheckService
      */
     Class<? extends BreezeIpCheckService> handler() default BreezeIpCheckService.class;
 }

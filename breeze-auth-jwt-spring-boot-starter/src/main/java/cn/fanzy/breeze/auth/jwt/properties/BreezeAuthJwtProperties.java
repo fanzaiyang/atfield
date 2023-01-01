@@ -11,7 +11,7 @@ import java.io.Serializable;
  * MinIO属性配置
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 @Data

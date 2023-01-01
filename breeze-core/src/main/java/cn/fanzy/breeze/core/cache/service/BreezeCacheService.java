@@ -5,7 +5,7 @@ package cn.fanzy.breeze.core.cache.service;
  * 若开启了redis则保存到redis否则存在内存
  *
  * @author fanzaiyang
- * @version 2022-08-19
+ * @since 2022-08-19
  */
 public interface BreezeCacheService {
 

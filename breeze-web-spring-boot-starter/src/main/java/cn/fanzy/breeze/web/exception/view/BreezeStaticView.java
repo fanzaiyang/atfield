@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 public class BreezeStaticView implements View {
 

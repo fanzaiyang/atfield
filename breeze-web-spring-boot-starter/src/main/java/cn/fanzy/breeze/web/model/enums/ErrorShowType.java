@@ -1,5 +1,9 @@
 package cn.fanzy.breeze.web.model.enums;
 
+/**
+ * @author fanzaiyang
+ */
+
 public enum ErrorShowType {
     /**
      * 静默，不显示

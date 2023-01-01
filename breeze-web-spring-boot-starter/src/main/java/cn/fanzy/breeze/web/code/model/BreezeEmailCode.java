@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
  * 验证码实体类
  *
  * @author fanzaiyang
- * @version 2022-08-16
+ * @since 2022-08-16
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

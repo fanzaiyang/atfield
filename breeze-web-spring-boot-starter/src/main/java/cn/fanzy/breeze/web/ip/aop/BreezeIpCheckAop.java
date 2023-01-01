@@ -20,6 +20,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Aspect
 @Component

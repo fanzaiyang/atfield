@@ -10,7 +10,7 @@ import java.util.Date;
  * Minio对象生成
  *
  * @author fanzaiyang
- * @version 2022-08-22
+ * @since 2022-08-22
  */
 public class BreezeObjectGenerate {
 

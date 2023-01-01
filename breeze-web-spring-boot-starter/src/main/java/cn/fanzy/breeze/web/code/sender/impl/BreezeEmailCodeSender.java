@@ -22,7 +22,6 @@ import java.time.format.DateTimeFormatter;
  * 邮件验证码发送器
  *
  * @author fanzaiyang
- * @version 1.0.0
  * @since 1.0.0
  */
 @Slf4j

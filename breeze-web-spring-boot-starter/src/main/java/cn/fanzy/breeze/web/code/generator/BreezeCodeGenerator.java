@@ -14,7 +14,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * </p>
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 public interface BreezeCodeGenerator<T extends BreezeCode> {
 

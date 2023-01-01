@@ -15,7 +15,7 @@ import java.sql.Types;
 /**
  * 系统菜单表(SysMenu)表实体类
  *
- * @author fasnzaiyang
+ * @author fanzaiyang
  * @since 2021-09-27 18:09:29
  */
 @Data

@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
  * 微风管理附件配置
  *
  * @author fanzaiyang
- * @version 2022-11-01
+ * @since 2022-11-01
  */
 @ImportAutoConfiguration(BreezeAdminAttachmentController.class)
 @Slf4j

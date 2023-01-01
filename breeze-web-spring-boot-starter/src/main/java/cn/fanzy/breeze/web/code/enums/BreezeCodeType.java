@@ -8,7 +8,7 @@ package cn.fanzy.breeze.web.code.enums;
  * 验证码类型
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 public enum BreezeCodeType implements IBreezeCodeTypeEnum {
 

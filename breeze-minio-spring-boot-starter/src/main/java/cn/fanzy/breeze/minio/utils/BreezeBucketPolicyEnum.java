@@ -4,7 +4,7 @@ package cn.fanzy.breeze.minio.utils;
  * 微风桶政策枚举
  *
  * @author fanzaiyang
- * @version 2022-08-22
+ * @since 2022-08-22
  */
 public enum BreezeBucketPolicyEnum {
     GetBucketLocation("s3:GetBucketLocation"),

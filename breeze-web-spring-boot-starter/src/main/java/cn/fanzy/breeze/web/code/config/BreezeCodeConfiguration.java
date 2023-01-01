@@ -38,7 +38,7 @@ import java.util.Map;
  * 验证码组件自动配置
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 @AllArgsConstructor
@@ -53,7 +53,7 @@ public class BreezeCodeConfiguration {
 
     /**
      * 注入一个名为codeRepository的验证码存储器
-     *
+     * @param breezeCacheService BreezeCacheService
      * @return 名为codeRepository的验证码存储器
      */
     @Bean
@@ -125,8 +125,10 @@ public class BreezeCodeConfiguration {
 
     /**
      * 注入一个验证码处理器
-     *
-     * @return 验证码处理器
+     * @param codeGenerators codeGenerators
+     * @param codeSenders codeSenders
+     * @param repository repository
+     * @return BreezeCodeProcessor
      */
     @Bean
     @ConditionalOnMissingBean({BreezeCodeProcessor.class})

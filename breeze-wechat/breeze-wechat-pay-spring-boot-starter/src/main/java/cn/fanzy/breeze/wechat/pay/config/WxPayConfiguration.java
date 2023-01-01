@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
  * wx支付配置
  *
  * @author fanzaiyang
- * @version 2022/03/08
+ * @since 2022/03/08
  */
 @Slf4j
 @Configuration

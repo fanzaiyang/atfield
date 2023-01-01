@@ -11,7 +11,7 @@ import java.util.*;
  * 链接收割机
  *
  * @author fanzaiyang
- * @version 2021/08/26
+ * @since 2021/08/26
  */
 public class LinkHarvester {
     private final JTextComponent textComponent;

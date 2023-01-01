@@ -9,7 +9,7 @@ import java.util.Map;
  * 链接信息
  *
  * @author fanzaiyang
- * @version 2021/08/26
+ * @since 2021/08/26
  */
 public class LinkInfo {
     private final Map<String, String> attributes;

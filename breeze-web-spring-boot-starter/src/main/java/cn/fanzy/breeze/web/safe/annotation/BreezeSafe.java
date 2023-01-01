@@ -4,6 +4,9 @@ import cn.fanzy.breeze.web.code.enums.BreezeCodeType;
 
 import java.lang.annotation.*;
 
+/**
+ * @author fanzaiyang
+ */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -17,7 +20,7 @@ public @interface BreezeSafe {
 
     /**
      * 登录的对象名，优先取此，若为空，取配置文件。
-     * @return
+     * @return String
      */
     String loginKey() default "";
 }

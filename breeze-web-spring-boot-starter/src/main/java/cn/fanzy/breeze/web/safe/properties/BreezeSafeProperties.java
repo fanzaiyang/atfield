@@ -7,6 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
 
+/**
+ * @author fanzaiyang
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

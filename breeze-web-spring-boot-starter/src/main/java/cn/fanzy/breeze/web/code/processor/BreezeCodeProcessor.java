@@ -5,6 +5,9 @@ import cn.fanzy.breeze.web.code.model.BreezeCode;
 import cn.hutool.core.exceptions.ValidateException;
 import org.springframework.web.context.request.ServletWebRequest;
 
+/**
+ * @author fanzaiyang
+ */
 public interface BreezeCodeProcessor {
     /**
      * 创建校验码

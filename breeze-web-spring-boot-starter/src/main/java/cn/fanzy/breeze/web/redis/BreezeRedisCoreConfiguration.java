@@ -38,7 +38,7 @@ import java.time.Duration;
  * Redis扩展支持自动配置
  *
  * @author fanzaiyang
- * @version 2021/09/07
+ * @since 2021/09/07
  */
 @Slf4j
 @Configuration

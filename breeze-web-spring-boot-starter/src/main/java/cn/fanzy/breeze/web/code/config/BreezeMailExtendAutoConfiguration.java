@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMessage;
  * 邮箱验证码发送器自动配置
  *
  * @author fanzaiyang
- * @version 1.0.0
  * @since 1.0.0
  */
 @Configuration

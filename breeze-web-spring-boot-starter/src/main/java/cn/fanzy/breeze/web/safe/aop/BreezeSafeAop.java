@@ -14,6 +14,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
+/**
+ * @author fanzaiyang
+ */
 @Slf4j
 @Aspect
 @EnableConfigurationProperties(BreezeSafeProperties.class)

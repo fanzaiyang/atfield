@@ -12,7 +12,7 @@ import java.util.Map;
  * 全局存储工具该工具主要是一个基于内存的KV键值对存储工具。 <strong>线程安全的</strong>
  *
  * @author fanzaiyang
- * @version 2022-08-16
+ * @since 2022-08-16
  */
 @Slf4j
 public final class LocalStorage {

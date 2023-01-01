@@ -6,6 +6,9 @@ import cn.fanzy.breeze.web.safe.properties.BreezeSafeProperties;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.util.StrUtil;
 
+/**
+ * @author fanzaiyang
+ */
 public class BreezeSafeUtil {
     public static String getErrorMsg(String loginId) {
         if (StrUtil.isBlank(loginId)) {

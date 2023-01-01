@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author  wyq
- * @version 2021/8/26 15:00
+ * @since 2021/8/26 15:00
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
