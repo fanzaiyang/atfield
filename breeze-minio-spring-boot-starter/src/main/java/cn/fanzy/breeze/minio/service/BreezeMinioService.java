@@ -38,6 +38,7 @@ public interface BreezeMinioService {
      * 变更存储桶
      *
      * @param bucket 桶
+     * @return BreezeMinioServiceImpl
      */
     BreezeMinioServiceImpl bucket(String bucket);
 
