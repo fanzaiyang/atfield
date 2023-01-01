@@ -91,7 +91,7 @@ public class BreezeCodeConfiguration {
     }
     /**
      * 注入体格缺省的短信验证码发送器
-     *
+     * @param breezeSmsSendHandler BreezeSmsSendHandler
      * @return 短信验证码发送器
      */
     @Bean

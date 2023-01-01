@@ -116,7 +116,7 @@ public class JsonContent<T> {
 
     /**
      * 生成一个默认的表示参数有误的响应对象(响应码400)
-     *
+     * @param <T> T
      * @return 表示参数有误的响应对象(响应码400)
      */
     public static <T> JsonContent<T> badParam() {

@@ -7,14 +7,13 @@ import java.util.Collection;
  * 比较条件抽象接口
  * <p>比较值</p>
  *
+ * @author fanzaiyang
  * @param <Children>
  * @param <R> 参与比较的字段
  */
 public interface Compare<Children, R> extends Serializable {
 
-    /**
-     * ignore
-     */
+    
     default Children eq(R column, Object val) {
         return eq(true, column, val);
     }
@@ -29,9 +28,7 @@ public interface Compare<Children, R> extends Serializable {
      */
     Children eq(boolean condition, R column, Object val);
 
-    /**
-     * ignore
-     */
+    
     default Children ne(R column, Object val) {
         return ne(true, column, val);
     }
@@ -80,9 +77,7 @@ public interface Compare<Children, R> extends Serializable {
      */
     Children ge(boolean condition, R column, Object val);
 
-    /**
-     * ignore
-     */
+    
     default Children lt(R column, Object val) {
         return lt(true, column, val);
     }
@@ -312,9 +307,7 @@ public interface Compare<Children, R> extends Serializable {
      */
     Children inb(boolean condition, Collection<R> columns, Collection<Object[]> values);
 
-    /**
-     * ignore
-     */
+    
     default Children notIn(R column, Collection<?> coll) {
         return notIn(true, column, coll);
     }
@@ -330,9 +323,7 @@ public interface Compare<Children, R> extends Serializable {
      */
     Children notIn(boolean condition, R column, Collection<?> coll);
 
-    /**
-     * ignore
-     */
+    
     default Children notIn(R column, Object... value) {
         return notIn(true, column, value);
     }
