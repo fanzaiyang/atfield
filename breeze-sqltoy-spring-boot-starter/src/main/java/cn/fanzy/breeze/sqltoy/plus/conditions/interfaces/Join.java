@@ -38,9 +38,7 @@ public interface Join<Children> extends Serializable {
      */
     Children or(boolean condition);
 
-    /**
-     * ignore
-     */
+
     default Children and() {
         return and(true);
     }
@@ -53,9 +51,7 @@ public interface Join<Children> extends Serializable {
      */
     Children and(boolean condition);
 
-    /**
-     * ignore
-     */
+
     default Children last(String lastSql) {
         return last(true, lastSql);
     }

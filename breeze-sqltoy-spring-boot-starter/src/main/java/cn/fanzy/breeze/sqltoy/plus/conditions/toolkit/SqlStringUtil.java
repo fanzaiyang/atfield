@@ -22,6 +22,7 @@ public class SqlStringUtil {
      * </ul>
      *
      * @param str 字符串
+     * @return string
      */
     public static String sqlInjectionReplaceBlank(String str) {
         if (SqlInjectionUtils.check(str)) {

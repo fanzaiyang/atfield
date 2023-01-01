@@ -19,9 +19,7 @@ import java.io.Serializable;
 
 public interface Update<Children, R> extends Serializable {
 
-    /**
-     * ignore
-     */
+
     default Children set(R column, Object val) {
         return set(true, column, val);
     }

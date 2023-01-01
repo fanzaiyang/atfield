@@ -21,14 +21,15 @@ import java.util.function.Function;
 /**
  * 查询条件封装
  * <p>嵌套</p>
+ * <ul>
  * <li>泛型 Param 是具体需要运行函数的类(也是 wrapper 的子类)</li>
+ * </ul>
+ *
  * @author fanzaiyang
  */
 public interface Nested<Param, Children> extends Serializable {
 
-    /**
-     * ignore
-     */
+
     default Children and(Function<Param, Param> function) {
         return and(true, function);
     }
@@ -45,9 +46,7 @@ public interface Nested<Param, Children> extends Serializable {
      */
     Children and(boolean condition, Function<Param, Param> function);
 
-    /**
-     * ignore
-     */
+
     default Children or(Function<Param, Param> function) {
         return or(true, function);
     }
@@ -64,9 +63,6 @@ public interface Nested<Param, Children> extends Serializable {
      */
     Children or(boolean condition, Function<Param, Param> function);
 
-    /**
-     * ignore
-     */
     default Children nested(Function<Param, Param> function) {
         return nested(true, function);
     }
@@ -83,9 +79,7 @@ public interface Nested<Param, Children> extends Serializable {
      */
     Children nested(boolean condition, Function<Param, Param> function);
 
-    /**
-     * ignore
-     */
+
     default Children not(Function<Param, Param> function) {
         return not(true, function);
     }

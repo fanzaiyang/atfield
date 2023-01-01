@@ -411,6 +411,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     /**
      * 内部自用
      * <p>NOT 关键词</p>
+     * @param condition boolean
      * @return Children
      */
     protected Children not(boolean condition) {

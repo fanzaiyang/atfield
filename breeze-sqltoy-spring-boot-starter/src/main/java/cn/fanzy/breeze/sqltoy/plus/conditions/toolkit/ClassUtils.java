@@ -68,9 +68,9 @@ public final class ClassUtils {
     }
 
     /**
-     * @param name
-     * @param classLoader
-     * @return
+     * @param name str
+     * @param classLoader ClassLoader
+     * @return class
      * @since 3.4.3
      */
     public static Class<?> toClassConfident(String name, ClassLoader classLoader) {

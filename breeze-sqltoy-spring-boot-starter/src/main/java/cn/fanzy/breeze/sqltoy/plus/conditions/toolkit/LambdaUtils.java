@@ -55,7 +55,7 @@ public final class LambdaUtils {
      * 获取方法对应的属性名
      * @param func 需要解析的 lambda 对象
      * @param <T> 类型，被调用的 Function 对象的目标类型
-     * @return
+     * @return string
      */
     public static <T> String extractToFiled(SFunction<T, ?> func) {
         LambdaMeta meta = LambdaUtils.extract(func);

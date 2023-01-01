@@ -8,9 +8,9 @@ import java.util.Collection;
 import static java.util.stream.Collectors.joining;
 
 /**
- * @description: 条件枚举
- * @author: 高总辉
- * @create: 2021-12-30 15:48
+ * 条件枚举
+ * @author 高总辉
+ * @serial 2021-12-30 15:48
  */
 public enum CompareEnum {
 
