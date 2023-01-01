@@ -6,7 +6,7 @@ toc: content
 
 WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置。
 
-## 🧾功能清单 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
+## 🧾功能清单 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud.png)
 
 | 功能名称     | 功能说明                                            |
 | -------- | ----------------------------------------------- |

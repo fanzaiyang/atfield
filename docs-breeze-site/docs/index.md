@@ -2,7 +2,7 @@
 title: 微风Cloud
 hero:
   title: Breeze
-  description: 面向Spring Cloud的组件库
+  description: 简单易上手的Spring Cloud的组件库。
   actions:
     - text: 起步
       link: /guide
@@ -19,3 +19,4 @@ features:
     emoji: 🧩
     description: 所有组件都可以被重写、自定义。各个组件统一一个版本号。
 ---
+## 最新版本 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
