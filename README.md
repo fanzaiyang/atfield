@@ -31,6 +31,6 @@ settings.xml
 <server>
 <id>github</id>
 <username>fanzaiyang</username>
-<password>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</password>
+<password>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</password>
 </server>
 ```
