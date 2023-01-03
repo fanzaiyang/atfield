@@ -36,6 +36,13 @@ public class BreezeSafeAop {
 
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp) {
+        if (properties.getEnable() != null && !properties.getEnable()) {
+            try {
+                return jp.proceed();
+            } catch (Throwable e) {
+                return JsonContent.error(e.getMessage());
+            }
+        }
         BreezeSafe annotation = JoinPointUtils.getAnnotation(jp, BreezeSafe.class);
         String loginKey = StrUtil.blankToDefault(annotation.loginKey(), properties.getLoginKey());
         Object param = JoinPointUtils.getParamByName(jp, loginKey);

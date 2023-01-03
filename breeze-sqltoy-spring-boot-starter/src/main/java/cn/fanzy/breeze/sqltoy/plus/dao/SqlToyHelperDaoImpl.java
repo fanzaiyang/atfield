@@ -9,7 +9,6 @@ import org.sagacity.sqltoy.exception.DataAccessException;
 import org.sagacity.sqltoy.model.EntityQuery;
 import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.Page;
-import org.springframework.stereotype.Repository;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -21,8 +20,6 @@ import java.util.*;
  * @author fanzaiyang
  */
 @Slf4j
-@SuppressWarnings({"rawtypes"})
-@Repository("sqlToyHelperDao")
 public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao {
 
 

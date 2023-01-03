@@ -22,6 +22,9 @@ public class BreezeAdminLoginCallbackService implements BreezeLogCallbackService
 
     @Override
     public void callback(BreezeRequestArgs args) {
+        if (BreezeAdminProperties.ErrorEnum.none.equals(properties.getErrorLevel())) {
+            return;
+        }
         SqlToyHelperDao sqlToyHelperDao = SpringUtils.getBean(SqlToyHelperDao.class);
         SysLog sysLog = SysLog.builder()
                 .traceId(args.getTraceId())
@@ -39,10 +42,10 @@ public class BreezeAdminLoginCallbackService implements BreezeLogCallbackService
                 .success(args.isSuccess() ? 1 : 0)
                 .build();
         if (properties.getErrorLevel() == null || StrUtil.equalsIgnoreCase(properties.getErrorLevel().name(), BreezeAdminProperties.ErrorEnum.all.name())) {
-            ThreadUtil.execute(()-> sqlToyHelperDao.save(sysLog));
+            ThreadUtil.execute(() -> sqlToyHelperDao.save(sysLog));
         }
         if (!args.isSuccess() && StrUtil.equalsIgnoreCase(properties.getErrorLevel().name(), BreezeAdminProperties.ErrorEnum.error.name())) {
-            ThreadUtil.execute(()-> sqlToyHelperDao.save(sysLog));
+            ThreadUtil.execute(() -> sqlToyHelperDao.save(sysLog));
         }
     }
 }

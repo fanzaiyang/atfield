@@ -2,7 +2,6 @@ package cn.fanzy.breeze.web.exception.controller;
 
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
-import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -12,7 +11,6 @@ import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,12 +26,11 @@ import java.util.Map;
 /**
  * @author fanzaiyang
  */
-@Controller
+//@Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BreezeDefaultBasicErrorController extends AbstractErrorController {
 
     private final ErrorProperties errorProperties;
-
     /**
      * Create a new {@link BasicErrorController} instance.
      *

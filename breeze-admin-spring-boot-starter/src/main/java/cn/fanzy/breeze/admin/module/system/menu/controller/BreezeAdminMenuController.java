@@ -23,7 +23,7 @@ import java.util.List;
 @ApiSupport(author = "微风组件", order = 992021)
 @AllArgsConstructor
 @RestController
-@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.menu?:/sys/menu}}")
+@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.menu?:sys/menu}}")
 public class BreezeAdminMenuController {
     private final BreezeAdminMenuService breezeAdminMenuService;
 

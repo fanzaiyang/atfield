@@ -23,7 +23,7 @@ public class BreezeAdminProperties implements Serializable {
      */
     private Module module = new Module();
 
-    private ErrorEnum errorLevel = ErrorEnum.all;
+    private ErrorEnum errorLevel = ErrorEnum.none;
 
     private String defaultPassword = "123456a?";
 
@@ -99,6 +99,7 @@ public class BreezeAdminProperties implements Serializable {
         /**
          * 仅记录错误
          */
-        error
+        error,
+        none;
     }
 }
