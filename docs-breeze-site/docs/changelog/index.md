@@ -14,6 +14,16 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.0.1
+
+* 升级依赖：SpringBoot 2.7.7
+
+* 移除自定义异常页面
+
+* redisson降级到3.8.0，支持springboot2.x
+
+* 修复Admin组件接口404
+
 ## v2.0.0
 
 升级基础依赖版本，面向SpringBoot 3.x。

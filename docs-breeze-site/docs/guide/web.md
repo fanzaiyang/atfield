@@ -140,15 +140,7 @@ breeze:
 
 ### 默认错误页面
 
-组件重写了springboot的basicError。如果关闭的话，修改配置即可：`breeze.web.exception.replace-basic-error=false`
-
-效果如下：
-
-![basicerror](https://c2.im5i.com/2022/12/27/Reis2.png)
-
-拦截到异常，返回前台的JSON数据格式如下：
-
-JSON返回类见：`cn.fanzy.breeze.web.model.JsonContent`关于此类的详细说明，见下文。
+拦截到异常，返回前台的JSON数据格式如下：JSON返回类见：`cn.fanzy.breeze.web.model.JsonContent`关于此类的详细说明，见下文。
 
 ```json
 {
