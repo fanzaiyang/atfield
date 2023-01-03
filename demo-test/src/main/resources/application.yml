@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: yfdc-customer-service-api
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+
+logging:
+  level:
+    com.yfdc.customer: debug
+    org.springframework.jdbc.core: debug
+  logback:
+    rollingpolicy:
+      max-history: 30
+      max-file-size: 256MB
+  file:
+    path: logs
+sa-token:
+  token-name: yfdc-token
+
+breeze:
+  auth:
+    route:
+      exclude-path-patterns: /auth/**
+  admin:
+    error-level: none

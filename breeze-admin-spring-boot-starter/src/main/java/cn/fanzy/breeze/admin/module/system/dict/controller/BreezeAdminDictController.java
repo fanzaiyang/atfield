@@ -30,7 +30,7 @@ import java.util.List;
 @ApiSupport(author = "微风组件", order = 992051)
 @AllArgsConstructor
 @RestController
-@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.dict?:/sys/dict}}")
+@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.dict?:sys/dict}}")
 public class BreezeAdminDictController {
     private final BreezeAdminDictService breezeAdminDictService;
 

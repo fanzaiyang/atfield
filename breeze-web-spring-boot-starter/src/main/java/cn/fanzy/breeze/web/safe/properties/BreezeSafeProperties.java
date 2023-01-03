@@ -16,6 +16,7 @@ import java.io.Serializable;
 @ConfigurationProperties(prefix = "breeze.web.safe")
 public class BreezeSafeProperties implements Serializable {
     private static final long serialVersionUID = -3642562913132999859L;
+    private Boolean enable = true;
     /**
      * 登录ID的名称
      */
@@ -47,4 +48,11 @@ public class BreezeSafeProperties implements Serializable {
      * 登录失败x次，后需启用验证码
      */
     private int loginFailedShowCodeMaxNum = 2;
+
+    public Boolean getEnable() {
+        if (enable == null) {
+            return true;
+        }
+        return enable;
+    }
 }

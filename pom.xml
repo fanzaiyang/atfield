@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.6</version>
+        <version>2.7.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -25,10 +25,11 @@
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
         <module>breeze-spring-cloud-dependencies</module>
+        <module>demo-test</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.0.0</revision>
+        <revision>2.0.1</revision>
         <java.version>8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -36,7 +37,7 @@
         <hutool.version>5.8.10</hutool.version>
         <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <spring-boot.version>2.7.6</spring-boot.version>
+        <spring-boot.version>2.7.7</spring-boot.version>
         <spring-boot-admin.version>2.7.9</spring-boot-admin.version>
         <satoken.version>1.33.0</satoken.version>
     </properties>

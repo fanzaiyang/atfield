@@ -1,29 +1,22 @@
 package cn.fanzy.breeze.web.exception.config;
 
-import cn.fanzy.breeze.web.exception.controller.BreezeDefaultBasicErrorController;
 import cn.fanzy.breeze.web.exception.properties.BreezeWebExceptionProperties;
 import cn.fanzy.breeze.web.exception.view.BreezeStaticView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.View;
 
 import javax.annotation.PostConstruct;
-import java.util.stream.Collectors;
 
 /**
  * @author fanzaiyang
@@ -49,13 +42,13 @@ public class BreezeBeanDefinitionRegistryPostProcessor implements BeanDefinition
 
     }
 
-    @Bean
-    @ConditionalOnMissingBean(BreezeDefaultBasicErrorController.class)
-    public BreezeDefaultBasicErrorController breezeDefaultBasicErrorController(ErrorAttributes errorAttributes, ServerProperties serverProperties,
-                                                                               ObjectProvider<ErrorViewResolver> errorViewResolvers) {
-        return new BreezeDefaultBasicErrorController(errorAttributes, serverProperties.getError(),
-                errorViewResolvers.orderedStream().collect(Collectors.toList()));
-    }
+//    @Bean
+//    @ConditionalOnMissingBean(BreezeDefaultBasicErrorController.class)
+//    public BreezeDefaultBasicErrorController breezeDefaultBasicErrorController(ErrorAttributes errorAttributes,
+//                                                                               @NotNull ObjectProvider<ErrorViewResolver> errorViewResolvers) {
+//        return new BreezeDefaultBasicErrorController(errorAttributes, this.serverProperties.getError(),
+//                errorViewResolvers.orderedStream().collect(Collectors.toList()));
+//    }
 
     @Bean(name = "breezeView")
     public View defaultErrorView() {
