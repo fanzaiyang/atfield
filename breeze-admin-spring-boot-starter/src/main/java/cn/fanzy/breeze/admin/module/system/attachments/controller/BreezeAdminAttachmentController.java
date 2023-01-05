@@ -36,7 +36,7 @@ import java.util.List;
 @AllArgsConstructor
 @ConditionalOnClass(BreezeMinioConfiguration.class)
 @RestController
-@RequestMapping("${breeze.admin.prefix.api?:/${breeze.admin.prefix.account?:sys/attachment}}")
+@RequestMapping("${breeze.admin.prefix.api:/}${breeze.admin.prefix.account:sys/attachment}")
 public class BreezeAdminAttachmentController {
     private final BreezeAdminAttachmentService breezeAdminAttachmentService;
 

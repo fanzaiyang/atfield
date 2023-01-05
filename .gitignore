@@ -48,3 +48,4 @@ build/
 /docs-breeze-site/yarn.lock
 /docs-breeze-site/node_modules/
 /docs-breeze-site/dist/
+/logs/

@@ -27,3 +27,5 @@ breeze:
       exclude-path-patterns: /auth/**
   admin:
     error-level: none
+    prefix:
+      api: /api
