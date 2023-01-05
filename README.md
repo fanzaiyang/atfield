@@ -12,25 +12,3 @@
 * 高级扩展：每个组件都可以被重写，已实现个性化需求。
 settings.xml
 ```xml
-<profile>
-        <id>github</id>
-        <repositories>
-          <repository>
-            <id>central</id>
-            <url>https://repo1.maven.org/maven2</url>
-          </repository>
-          <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/fanzaiyang/breeze-spring-cloud</url>
-            <snapshots>
-              <enabled>true</enabled>
-            </snapshots>
-          </repository>
-        </repositories>
-      </profile>
-<server>
-<id>github</id>
-<username>fanzaiyang</username>
-<password>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</password>
-</server>
-```
