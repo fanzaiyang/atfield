@@ -111,4 +111,6 @@ public class BreezeAdminAccountSaveArgs {
     private Integer userType;
     @Schema(description = "角色集合")
     private Set<String> roleIdList;
+
+    private Integer revision;
 }

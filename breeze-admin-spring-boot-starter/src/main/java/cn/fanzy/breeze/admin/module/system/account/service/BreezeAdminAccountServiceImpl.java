@@ -105,13 +105,19 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                 }
             }
         }
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        account.setPassword(encoder.encode(properties.getDefaultPassword()));
         if (StrUtil.isNotBlank(args.getId())) {
             SysAccount sysAccount = sqlToyHelperDao.load(SysAccount.builder().id(args.getId()).build());
-            Assert.notNull(sysAccount, "未找到ID为「{}」的账户！", args.getId());
-            sqlToyHelperDao.update(account);
+            if (sysAccount == null) {
+                sqlToyHelperDao.save(account);
+            } else {
+                account.setRevision(sysAccount.getRevision());
+                sqlToyHelperDao.update(account);
+            }
+
         } else {
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
-            account.setPassword(encoder.encode(properties.getDefaultPassword()));
+
             sqlToyHelperDao.save(account);
         }
         //保存角色
@@ -214,7 +220,7 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
         SysAccount account = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysAccount.class).eq(SysAccount::getId, id));
         Assert.notNull(account, "未找到用户！");
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        Assert.isTrue(encoder.matches(args.getOldPassword(),account.getPassword()),"旧密码输出错误！");
+        Assert.isTrue(encoder.matches(args.getOldPassword(), account.getPassword()), "旧密码输出错误！");
         sqlToyHelperDao.update(Wrappers.lambdaUpdateWrapper(SysAccount.class)
                 .set(SysAccount::getPassword, encoder.encode(args.getNewPassword()))
                 .eq(SysAccount::getId, id));
