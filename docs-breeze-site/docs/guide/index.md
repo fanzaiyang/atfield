@@ -24,7 +24,7 @@ order: 1
 
 | 依赖                                                                      | 版本         |
 | ----------------------------------------------------------------------- | ---------- |
-| [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.6      |
+| [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.7      |
 | [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.5   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
 | [spring-boot-admin](https://github.com/codecentric/spring-boot-admin)   | 2.6.9      |

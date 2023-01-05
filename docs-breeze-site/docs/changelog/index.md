@@ -14,6 +14,10 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.0.2
+
+- 修复admin组件，通过配置文件配置接口前缀无效问题。
+
 ## v2.0.1
 
 * 升级依赖：SpringBoot 2.7.7
