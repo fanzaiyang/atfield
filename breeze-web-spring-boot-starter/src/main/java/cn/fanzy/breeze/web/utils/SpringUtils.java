@@ -127,6 +127,7 @@ public class SpringUtils extends SpringUtil {
 
     /**
      * 获取系统进程PID
+     *
      * @return int
      */
     public static int getCurrentProcessId() {
@@ -153,9 +154,15 @@ public class SpringUtils extends SpringUtil {
         if (isJson(request)) {
             String jsonParam = new RequestWrapper(request).getBodyString();
             if (JSONUtil.isTypeJSON(jsonParam)) {
-                JSONObject obj = JSONUtil.parseObj(jsonParam);
-                for (Map.Entry<String, Object> entry : obj) {
-                    params.put(entry.getKey(), entry.getValue());
+                if (JSONUtil.isTypeJSONArray(jsonParam)) {
+                    params.put("body", JSONUtil.parseArray(jsonParam));
+                } else if (JSONUtil.isTypeJSONObject(jsonParam)) {
+                    JSONObject obj = JSONUtil.parseObj(jsonParam);
+                    for (Map.Entry<String, Object> entry : obj) {
+                        params.put(entry.getKey(), entry.getValue());
+                    }
+                } else {
+                    params.put("unknown", jsonParam);
                 }
             }
         }
