@@ -4,6 +4,7 @@ import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -47,6 +48,9 @@ public class BreezeMinioConfiguration {
      * @return {@link BreezeMinioService}
      */
     public static BreezeMinioService instance(String name) {
+        if(StrUtil.isBlank(name)){
+            return instance();
+        }
         return serviceMap.get(name);
     }
 

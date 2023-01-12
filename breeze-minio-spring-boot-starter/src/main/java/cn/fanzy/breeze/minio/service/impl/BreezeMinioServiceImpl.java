@@ -35,6 +35,8 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
 
     private String bucket;
 
+
+
     @Override
     public void setConfig(BreezeMinIOProperties.MinioServerConfig config) {
         this.config = config;
@@ -173,6 +175,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
             contentType = contentType.replaceAll("jpeg", "jpg");
         }
         bucketExistsAndCreate(this.bucket);
+
         try {
             int available = inputStream.available();
             BigDecimal decimal = new BigDecimal(available).divide(new BigDecimal(1048576));
@@ -194,6 +197,24 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @Override
+    public BreezeMinioResponse merge(ComposeObjectArgs args) {
+        try {
+            bucketExistsAndCreate(this.bucket);
+            ObjectWriteResponse response = innerClient.composeObject(args);
+            return BreezeMinioResponse.builder()
+                    .etag(response.etag())
+                    .bucket(bucket)
+                    .endpoint(config.getEndpoint())
+                    .objectName(response.object())
+                    .previewUrl(getPreviewUrl(response.object()))
+                    .build();
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 
     @Override

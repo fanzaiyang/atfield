@@ -5,15 +5,12 @@ import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
+import io.minio.ComposeObjectArgs;
 import io.minio.MinioClient;
-import io.minio.errors.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 
 public interface BreezeMinioService {
 
@@ -117,6 +114,8 @@ public interface BreezeMinioService {
      * @return {@link BreezeMinioResponse}
      */
     BreezeMinioResponse upload(InputStream inputStream, String objectName, String fileName, String contentType);
+
+    BreezeMinioResponse merge(ComposeObjectArgs args);
     /**
      * 得到对象
      *
