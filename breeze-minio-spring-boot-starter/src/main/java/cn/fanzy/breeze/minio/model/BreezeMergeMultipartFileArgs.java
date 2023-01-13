@@ -7,11 +7,11 @@ import lombok.Data;
  * @author fanzaiyang
  */
 @Data
-public class BreezePutMultipartFileArgs {
+public class BreezeMergeMultipartFileArgs {
     /**
      * minio配置文件名
      */
-    private String minioConfigName;
+    private String uploadId;
     /**
      * 合并后的文件存储桶名 称
      */
@@ -20,17 +20,5 @@ public class BreezePutMultipartFileArgs {
      * 合并后的文件名称唯一
      */
     private String objectName;
-    /**
-     * 每个分片大小
-     */
-    private long chunkSize;
-    /**
-     * 分片总个数
-     */
-    private int totalChunks;
-    /**
-     * 文件唯一值MD5
-     */
-    private String identifier;
 
 }

@@ -3,7 +3,6 @@ package cn.fanzy.breeze.minio.service.impl;
 import cn.fanzy.breeze.minio.model.BreezeBucketPolicy;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
-import cn.fanzy.breeze.minio.service.BreezeMinioMultipartTemplate;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.utils.*;
 import cn.hutool.core.collection.CollUtil;
@@ -30,6 +29,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,6 +75,11 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         }
         this.bucket = bucket;
         return this;
+    }
+
+    @Override
+    public String getBucket() {
+        return this.bucket;
     }
 
     @Override
@@ -390,14 +395,14 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public String getUploadId(String bucketName, String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
+    public String getUploadId(String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
         MinioAsyncClient asyncClient = MinioAsyncClient.builder()
                 .endpoint(config.getEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
         try {
-            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
-            return template.getUploadId(bucketName, region, objectName, headers, extraQueryParams);
+            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
+            return template.getUploadId(bucket, region, objectName, headers, extraQueryParams);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -410,7 +415,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
         try {
-            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
+            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
             return template.removeMultipartUpload(bucket, region, object, uploadId, headers, extraQueryParams);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -418,28 +423,28 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
+    public ObjectWriteResponse mergeMultipart(String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
         MinioAsyncClient asyncClient = MinioAsyncClient.builder()
                 .endpoint(config.getEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
         try {
-            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
-            return template.mergeMultipart(bucketName, region, objectName, uploadId, parts, extraHeaders, extraQueryParams);
+            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
+            return template.mergeMultipart(bucket, region, objectName, uploadId, parts, extraHeaders, extraQueryParams);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public ListPartsResponse listMultipart(String bucketName, String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
+    public ListPartsResponse listMultipart(String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
         MinioAsyncClient asyncClient = MinioAsyncClient.builder()
                 .endpoint(config.getEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
         try {
-            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
-            return template.listMultipart(bucketName, region, objectName, maxParts, partNumberMarker, uploadId, extraHeaders, extraQueryParams);
+            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
+            return template.listMultipart(bucket, region, objectName, maxParts, partNumberMarker, uploadId, extraHeaders, extraQueryParams);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -457,6 +462,22 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
             // 设置上传文件的大小 64kiB to 10MiB.
             //policy.addContentLengthRangeCondition(64 * 1024, 10 * 1024 * 1024);
             return client.getPresignedPostFormData(policy);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit) {
+        try {
+            if (expireDuration == null) {
+                expireDuration = 1;
+                timeUnit = TimeUnit.DAYS;
+            }
+            return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucket)
+                    .method(method).object(objectName).expiry(expireDuration, timeUnit)
+                    .build());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

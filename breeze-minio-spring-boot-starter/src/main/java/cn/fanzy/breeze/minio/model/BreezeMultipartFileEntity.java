@@ -18,6 +18,7 @@ import java.util.Date;
 public class BreezeMultipartFileEntity {
     private String id;
 
+    private String uploadId;
     /**
      * 文件的唯一标识identifier（md5摘要）
      */
@@ -59,16 +60,6 @@ public class BreezeMultipartFileEntity {
     private Long chunkSize;
 
     /**
-     *
-     */
-    private Long currentChunkSize;
-
-    /**
-     * 当前第几片
-     */
-    private Integer currentChunkIndex;
-
-    /**
      * 上传开始时间
      */
     private Date beginTime;
@@ -86,9 +77,7 @@ public class BreezeMultipartFileEntity {
     /**
      * 文件状态：0-上传中，1-上传完成
      */
-    private Short status;
-
-    private String parentId;
+    private Integer status;
 
     /**
      * 删除标志,0:未删除 1:已删除

@@ -1,4 +1,4 @@
-package cn.fanzy.breeze.minio.service;
+package cn.fanzy.breeze.minio.utils;
 
 import com.google.common.collect.Multimap;
 import io.minio.*;
@@ -11,10 +11,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class BreezeMinioMultipartTemplate extends MinioAsyncClient {
+public class BreezeMinioMultipartClient extends MinioAsyncClient {
 
 
-    public BreezeMinioMultipartTemplate(MinioAsyncClient client) {
+    public BreezeMinioMultipartClient(MinioAsyncClient client) {
         super(client);
     }
 

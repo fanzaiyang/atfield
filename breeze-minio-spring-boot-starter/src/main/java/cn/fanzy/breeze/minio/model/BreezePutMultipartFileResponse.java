@@ -1,6 +1,9 @@
 package cn.fanzy.breeze.minio.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -9,7 +12,11 @@ import java.util.List;
  * @author fanzaiyang
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BreezePutMultipartFileResponse {
+    private String uploadId;
     /**
      * 是否完成
      */
@@ -23,5 +30,35 @@ public class BreezePutMultipartFileResponse {
      */
     private String objectName;
 
-    private List<BreezeMultipartFileEntity> finishedFiles;
+    /**
+     * 已上传的分片
+     */
+    private List<PartFile> partList;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PartFile{
+        /**
+         * 当前分片序号
+         */
+        private int currentPartNumber;
+
+        /**
+         * 上传的URL uploadMethod: 'PUT', octet
+         */
+        private String uploadUrl;
+
+        /**
+         * 是否已上传完成
+         */
+        private boolean finished;
+
+        private String objectName;
+
+        private String etag;
+
+        private Long size;
+    }
 }

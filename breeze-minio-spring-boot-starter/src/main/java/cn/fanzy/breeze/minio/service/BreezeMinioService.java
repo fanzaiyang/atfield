@@ -10,12 +10,14 @@ import io.minio.ComposeObjectArgs;
 import io.minio.ListPartsResponse;
 import io.minio.MinioClient;
 import io.minio.ObjectWriteResponse;
+import io.minio.http.Method;
 import io.minio.messages.Part;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public interface BreezeMinioService {
 
@@ -43,6 +45,8 @@ public interface BreezeMinioService {
      * @return BreezeMinioServiceImpl
      */
     BreezeMinioServiceImpl bucket(String bucket);
+
+    String getBucket();
 
     /**
      * 桶存在和创造
@@ -212,14 +216,13 @@ public interface BreezeMinioService {
 
     /**
      * 分片上传，获取上传ID
-     * @param bucketName 存储桶
      * @param region region
      * @param objectName 对象名唯一
      * @param headers 头
      * @param extraQueryParams 额外参数
      * @return String
      */
-    String getUploadId(String bucketName, String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
+    String getUploadId(String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
 
 
     /**
@@ -236,7 +239,6 @@ public interface BreezeMinioService {
 
     /**
      * 合并分片
-     * @param bucketName 存储桶
      * @param region region
      * @param objectName 对象名唯一
      * @param uploadId 上传ID
@@ -245,11 +247,10 @@ public interface BreezeMinioService {
      * @param extraQueryParams 参数
      * @return
      */
-    ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+    ObjectWriteResponse mergeMultipart(String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
 
     /**
      * 查询分片
-     * @param bucketName 存储桶
      * @param region region
      * @param objectName 对象名唯一
      * @param maxParts 最大分片个数
@@ -259,7 +260,7 @@ public interface BreezeMinioService {
      * @param extraQueryParams 参数
      * @return
      */
-    ListPartsResponse listMultipart(String bucketName, String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+    ListPartsResponse listMultipart(String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
 
     /**
      *  获取带签名的临时上传元数据对象，前端可获取后，直接上传到Minio
@@ -267,4 +268,8 @@ public interface BreezeMinioService {
      * @return Map
      */
     Map<String, String> getPresignedPostFormData(String objectName);
+
+    String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit);
+
+
 }
