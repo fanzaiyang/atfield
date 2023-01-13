@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 public class BreezeMinioMultipartTemplate extends MinioAsyncClient {
 
 
-    protected BreezeMinioMultipartTemplate(MinioAsyncClient client) {
+    public BreezeMinioMultipartTemplate(MinioAsyncClient client) {
         super(client);
     }
 

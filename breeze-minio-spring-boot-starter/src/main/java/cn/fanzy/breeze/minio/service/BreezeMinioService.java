@@ -5,12 +5,17 @@ import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
+import com.google.common.collect.Multimap;
 import io.minio.ComposeObjectArgs;
+import io.minio.ListPartsResponse;
 import io.minio.MinioClient;
+import io.minio.ObjectWriteResponse;
+import io.minio.messages.Part;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Map;
 
 public interface BreezeMinioService {
 
@@ -176,7 +181,7 @@ public interface BreezeMinioService {
      *
      * @param args   arg游戏
      */
-    void setBucketPolicy(BreezeBucketPolicy args)    ;
+    void setBucketPolicy(BreezeBucketPolicy args);
 
     /**
      * 删除桶政策
@@ -203,4 +208,63 @@ public interface BreezeMinioService {
      * @return {@link String}
      */
     String getPublicPreviewUrl(String objectName);
+
+
+    /**
+     * 分片上传，获取上传ID
+     * @param bucketName 存储桶
+     * @param region region
+     * @param objectName 对象名唯一
+     * @param headers 头
+     * @param extraQueryParams 额外参数
+     * @return String
+     */
+    String getUploadId(String bucketName, String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
+
+
+    /**
+     * 删除上传的分片任务
+     * @param bucket 存储桶
+     * @param region region
+     * @param object 对象名唯一
+     * @param uploadId 上传ID
+     * @param headers 头
+     * @param extraQueryParams 额外参数
+     * @return String
+     */
+    String removeMultipartUpload(String bucket, String region, String object,String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
+
+    /**
+     * 合并分片
+     * @param bucketName 存储桶
+     * @param region region
+     * @param objectName 对象名唯一
+     * @param uploadId 上传ID
+     * @param parts 分片数组
+     * @param extraHeaders 头
+     * @param extraQueryParams 参数
+     * @return
+     */
+    ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+
+    /**
+     * 查询分片
+     * @param bucketName 存储桶
+     * @param region region
+     * @param objectName 对象名唯一
+     * @param maxParts 最大分片个数
+     * @param partNumberMaker partNumberMaker
+     * @param uploadId 上传ID
+     * @param extraHeaders 头
+     * @param extraQueryParams 参数
+     * @return
+     */
+    ListPartsResponse listMultipart(String bucketName, String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+
+    /**
+     *  获取带签名的临时上传元数据对象，前端可获取后，直接上传到Minio
+     * @param objectName objectName
+     * @return Map
+     */
+    Map<String, String> getPresignedPostFormData(String objectName);
 }

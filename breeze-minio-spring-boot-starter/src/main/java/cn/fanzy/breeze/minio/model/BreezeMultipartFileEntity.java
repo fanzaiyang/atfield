@@ -88,6 +88,8 @@ public class BreezeMultipartFileEntity {
      */
     private Short status;
 
+    private String parentId;
+
     /**
      * 删除标志,0:未删除 1:已删除
      */

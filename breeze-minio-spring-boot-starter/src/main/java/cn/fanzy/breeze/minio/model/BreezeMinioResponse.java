@@ -41,10 +41,4 @@ public class BreezeMinioResponse {
      */
     private String previewUrl;
 
-
-    /**
-     * 上传是否完成
-     */
-    private boolean finished;
-
 }

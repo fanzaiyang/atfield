@@ -61,7 +61,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
     public BreezeMinioResponse mergeChunk(String identifier, String minioConfigName, String bucketName, String objectName) {
         List<BreezeMultipartFileEntity> entityList = beforeUpload(identifier);
         // 当数据库保存已上传分片个数与上传分片总个相等时，说明上传完成。
-        if (CollUtil.isEmpty(entityList) || entityList.get(0).getTotalChunkNum() != entityList.get(0).getCurrentChunkIndex()) {
+        if (CollUtil.isEmpty(entityList) || !Objects.equals(entityList.get(0).getTotalChunkNum(), entityList.get(0).getCurrentChunkIndex())) {
             throw new RuntimeException(StrUtil.format("文件不满足合并要求，总分片{}个，已完成{}个。", entityList.get(0).getTotalChunkNum(), entityList.get(0).getCurrentChunkIndex()));
         }
         return mergeChunk(entityList, minioConfigName, bucketName, objectName);

@@ -3,6 +3,7 @@ package cn.fanzy.breeze.minio.service.impl;
 import cn.fanzy.breeze.minio.model.BreezeBucketPolicy;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
+import cn.fanzy.breeze.minio.service.BreezeMinioMultipartTemplate;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.utils.*;
 import cn.hutool.core.collection.CollUtil;
@@ -11,9 +12,12 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Multimap;
 import io.minio.*;
 import io.minio.http.Method;
+import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,7 +40,6 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     private MinioClient innerClient;
 
     private String bucket;
-
 
 
     @Override
@@ -211,7 +216,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                     .objectName(response.object())
                     .previewUrl(getPreviewUrl(response.object()))
                     .build();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
 
@@ -382,5 +387,78 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         return config.getEndpoint().endsWith("/") ? config.getEndpoint() : (config.getEndpoint() + '/')
                 + this.bucket +
                 (objectName.startsWith("/") ? objectName : ("/" + objectName));
+    }
+
+    @Override
+    public String getUploadId(String bucketName, String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
+        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
+                .endpoint(config.getEndpoint())
+                .credentials(config.getAccessKey(), config.getSecretKey())
+                .build();
+        try {
+            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
+            return template.getUploadId(bucketName, region, objectName, headers, extraQueryParams);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String removeMultipartUpload(String bucket, String region, String object, String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
+        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
+                .endpoint(config.getEndpoint())
+                .credentials(config.getAccessKey(), config.getSecretKey())
+                .build();
+        try {
+            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
+            return template.removeMultipartUpload(bucket, region, object, uploadId, headers, extraQueryParams);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
+        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
+                .endpoint(config.getEndpoint())
+                .credentials(config.getAccessKey(), config.getSecretKey())
+                .build();
+        try {
+            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
+            return template.mergeMultipart(bucketName, region, objectName, uploadId, parts, extraHeaders, extraQueryParams);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ListPartsResponse listMultipart(String bucketName, String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
+        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
+                .endpoint(config.getEndpoint())
+                .credentials(config.getAccessKey(), config.getSecretKey())
+                .build();
+        try {
+            BreezeMinioMultipartTemplate template = new BreezeMinioMultipartTemplate(asyncClient);
+            return template.listMultipart(bucketName, region, objectName, maxParts, partNumberMarker, uploadId, extraHeaders, extraQueryParams);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Map<String, String> getPresignedPostFormData(String objectName) {
+        try {
+            // 为存储桶创建一个上传策略，过期时间为1天
+            PostPolicy policy = new PostPolicy(bucket, ZonedDateTime.now().plusDays(1));
+            // 设置一个参数key，值为上传对象的名称
+            policy.addEqualsCondition("key", objectName);
+            // 添加Content-Type，例如以"image/"开头，表示只能上传照片，这里所有类型
+            policy.addStartsWithCondition("Content-Type", MediaType.ALL_VALUE);
+            // 设置上传文件的大小 64kiB to 10MiB.
+            //policy.addContentLengthRangeCondition(64 * 1024, 10 * 1024 * 1024);
+            return client.getPresignedPostFormData(policy);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
