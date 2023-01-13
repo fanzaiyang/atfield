@@ -1,21 +1,23 @@
 package cn.fanzy.breeze.minio.model;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
 /**
  * 分片上传前端请求参数
+ *
  * @author fanzaiyang
  */
 @Data
 public class BreezePutMultipartFileArgs {
     /**
-     * minio配置文件名
-     */
-    private String minioConfigName;
-    /**
      * 合并后的文件存储桶名 称
      */
     private String bucketName;
+    /**
+     * 文件名称
+     */
+    private String fileName;
     /**
      * 合并后的文件名称唯一
      */
@@ -33,4 +35,10 @@ public class BreezePutMultipartFileArgs {
      */
     private String identifier;
 
+    public String getFileName() {
+        if (StrUtil.isBlank(fileName)) {
+            return "";
+        }
+        return "_" + fileName;
+    }
 }

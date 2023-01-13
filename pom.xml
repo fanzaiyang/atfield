@@ -25,7 +25,7 @@
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
         <module>breeze-spring-cloud-dependencies</module>
-        <!--<module>demo-test</module>-->
+        <module>demo-test</module>
     </modules>
     <packaging>pom</packaging>
     <properties>

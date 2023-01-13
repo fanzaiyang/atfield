@@ -254,7 +254,7 @@ public interface BreezeMinioService {
      * @param region region
      * @param objectName 对象名唯一
      * @param maxParts 最大分片个数
-     * @param partNumberMaker partNumberMaker
+     * @param partNumberMarker partNumberMaker
      * @param uploadId 上传ID
      * @param extraHeaders 头
      * @param extraQueryParams 参数

@@ -24,8 +24,15 @@ sa-token:
 breeze:
   auth:
     route:
-      exclude-path-patterns: /auth/**
+      exclude-path-patterns: /auth/**,/upload/**
   admin:
     error-level: none
     prefix:
       api: /api
+  minio:
+    servers:
+      test:
+        endpoint: https://minio.zaiyang.top
+        access-key: minioadmin
+        secret-key: minioadmin
+        bucket: test

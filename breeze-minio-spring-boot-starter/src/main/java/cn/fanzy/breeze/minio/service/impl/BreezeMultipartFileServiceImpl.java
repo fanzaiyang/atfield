@@ -36,7 +36,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
             // 不存在，需要新的上传
             String uploadId = minioService.getUploadId(null, args.getObjectName(), null, null);
             for (int i = 0; i < args.getTotalChunks(); i++) {
-                String partName = StrUtil.format("/{}/{}.part", args.getIdentifier(), "chuck_" + i);
+                String partName = StrUtil.format("/{}/{}.part", args.getIdentifier(), "chuck_" + i + args.getFileName());
                 partList.add(BreezePutMultipartFileResponse.PartFile.builder()
                         .currentPartNumber(i)
                         .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, partName, null, null))
@@ -44,7 +44,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                         .build());
             }
             return BreezePutMultipartFileResponse.builder()
-                    .uploadId(uploadId).bucketName(args.getBucketName()).finished(false)
+                    .uploadId(uploadId).bucketName(minioService.getBucket()).finished(false)
                     .objectName(args.getObjectName()).partList(partList)
                     .build();
         }
