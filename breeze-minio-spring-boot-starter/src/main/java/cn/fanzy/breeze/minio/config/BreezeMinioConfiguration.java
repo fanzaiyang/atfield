@@ -60,7 +60,7 @@ public class BreezeMinioConfiguration {
 
     @Bean
     public BreezeMultipartFileService breezeMultipartFileService(JdbcTemplate jdbcTemplate){
-        return new BreezeMultipartFileServiceImpl(jdbcTemplate);
+        return new BreezeMultipartFileServiceImpl(jdbcTemplate,properties);
     }
 
     /**
