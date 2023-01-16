@@ -462,6 +462,8 @@ public class UploadController {
 
 ### 前端使用
 
+> 前端demo代码地址：[breeze-spring-cloud: SpringBoot组件 - Gitee.com](https://gitee.com/it-xiaofan/breeze-spring-cloud/tree/2.1.x/upload-demo)
+
 1. 计算文件MD5
    
    安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
