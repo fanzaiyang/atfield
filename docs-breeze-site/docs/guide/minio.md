@@ -432,6 +432,52 @@ public interface BreezeMinioService {
      | etag              | string  | 当前分片唯一值                           |
      | size              | Long    | 当前分片大小                            |
 
+2. 获取分片预签名上传地址
+   
+   * 接口地址：/breeze/minio/multipart/presigned
+   
+   * 请求方式：GET
+   
+   * 请求参数：
+     
+     | 字段              | 数据类型   | 必填  | 说明                          |
+     | --------------- | ------ | --- | --------------------------- |
+     | identifier      | string | 是   | 文件唯一标识md5                   |
+     | partNumber      | int    | 是   | 分片索引，1开始                    |
+     | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。 |
+   
+   * 响应参数PartFile
+     
+     | 字段                | 数据类型    | 说明                                 |
+     | ----------------- | ------- | ---------------------------------- |
+     | currentPartNumber | int     | 当前分片序号                             |
+     | uploadUrl         | string  | 当前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
+     | finished          | boolean | 是否已上传完成                            |
+
+3. 合并分片
+   
+   * 请求地址：/breeze/minio/multipart/merge
+   
+   * 请求方式：GET
+   
+   * 请求参数：
+     
+     | 字段         | 数据类型   | 必填  | 说明        |
+     | ---------- | ------ | --- | --------- |
+     | identifier | string | 是   | 文件唯一标识MD5 |
+   
+   * 响应参数
+     
+     | 字段         | 数据类型   | 说明             |
+     | ---------- | ------ | -------------- |
+     | etag       | string | 文件唯一标识，minio返回 |
+     | endpoint   | string | minio地址        |
+     | bucket     | string | 存储桶            |
+     | objectName | string | 对象名            |
+     | fileName   | string | 文件名            |
+     | fileMbSize | double | 文件大小Mb         |
+     | previewUrl | string | 预览地址           |
+
 ### 后端使用
 
 #### 创建数据库表
