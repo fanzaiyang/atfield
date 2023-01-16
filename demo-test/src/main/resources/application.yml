@@ -36,3 +36,6 @@ breeze:
         access-key: minioadmin
         secret-key: minioadmin
         bucket: test
+    api:
+      init: /breeze/minio/multipart/init
+      merge: /breeze/minio/multipart/merge

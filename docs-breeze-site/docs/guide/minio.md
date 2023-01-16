@@ -21,18 +21,9 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
     <dependency>
         <groupId>cn.fanzy.breeze</groupId>
         <artifactId>breeze-minio-spring-boot-starter</artifactId>
-        <version>最新版本</version>
     </dependency>
  ... ...
 </dependencies>
-<!-- maven私服 -->
-<repositories>
-    <repository>
-        <id>yinfengMaven</id>
-        <name>nexus repository</name>
-        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
-    </repository>
-</repositories>
 ```
 
 2. 修改配置
@@ -44,6 +35,10 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
 ```yaml
 breeze:
   minio:
+    api:
+      init: /breeze/minio/multipart/init # 默认此地址
+      merge: /breeze/minio/multipart/merge # 默认此地址
+      table-name: sys_multipart_file_info #默认此名称
     servers:
       # 第一个minio服务配置
       test:
@@ -367,3 +362,100 @@ public interface BreezeMinioService {
   * 存储桶
     
     在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
+
+## 分片上传
+
+> 这是基于MinIO的分片上传，上传和业务逻辑分离，提高上传效率。支持秒传、断点续传。
+
+### 上传原理
+
+![上传原理](https://breeze.fanzy.cn/uploader-flow.png)
+
+对于前端开发者而言，需要做一下工作。
+
+> **注意：**
+> 
+> 后台返回的数据中，包含各个分片上传状态和具体的每一片上传地址，前端需要针对不同分片上传不同地址。
+
+* 计算文件md5，可以使用npm包`spark-md5`，对于ts用户可能还需要安装`@types/spark-md5`
+
+* 计算好md5后需要把md5传给后台，校验文件上传进度。
+
+* 根据前端返回数据，进行下一步工作。
+  
+  * 秒传：当后台返回完成时，直接完成即可。
+  
+  * 断点续传：后台返回的分片数据中有部分标识为完成的前端不用再对此分片进行操作，直接完成即可。
+
+### 开始使用
+
+#### 创建数据库表
+
+> 断点续传和秒传需要数据库支持。
+
+这里的数据库表名可以自定义，需要在配置文件中声明表名`breeze.minio.api.table-name`，组件默认表名是：`sys_multipart_file_info`
+
+```sql
+CREATE TABLE `sys_multipart_file_info` (
+  `id` varchar(36) NOT NULL,
+  `identifier` varchar(64) DEFAULT NULL COMMENT '文件的唯一标识identifier（md5摘要）',
+  `upload_id` varchar(128) DEFAULT NULL COMMENT 'MinIO上传ID',
+  `file_name` varchar(512) DEFAULT NULL,
+  `bucket_host` varchar(255) DEFAULT NULL COMMENT '存储桶host地址',
+  `bucket_name` varchar(200) DEFAULT NULL COMMENT '存储桶名称',
+  `object_name` varchar(1024) DEFAULT NULL,
+  `total_chunk_num` int(11) DEFAULT NULL COMMENT '分片个数',
+  `total_file_size` bigint(20) DEFAULT NULL,
+  `chunk_size` bigint(20) DEFAULT NULL COMMENT '每片按照多大分割',
+  `begin_time` datetime DEFAULT NULL COMMENT '上传开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '上传结束时间',
+  `spend_second` int(11) DEFAULT NULL COMMENT '后台上传耗时',
+  `status` smallint(1) DEFAULT NULL COMMENT '文件状态：0-上传中，1-上传完成',
+  `del_flag` int(1) DEFAULT '0' COMMENT '删除标志,0:未删除 1:已删除',
+  `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(36) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `revision` int(11) DEFAULT NULL,
+  `tenant_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+```
+
+#### 后端使用
+
+1. 方式一，自定义请求接口`controller`。
+
+只需要在需要位置注入`BreezeMultipartFileService`即可，示例如下：
+
+```java
+@RestController
+@Slf4j
+@AllArgsConstructor
+@RequestMapping("/upload")
+public class UploadController {
+
+    private final BreezeMultipartFileService breezeMultipartFileService;
+    @PostMapping("/before")
+    public JsonContent<BreezePutMultipartFileResponse> before(@RequestBody BreezePutMultipartFileArgs args){
+        BreezePutMultipartFileResponse upload = breezeMultipartFileService.beforeUpload(args);
+        return JsonContent.success(upload);
+    }
+    
+    @GetMapping("/merge")
+    public JsonContent<BreezeMinioResponse> merge(String identifier){
+        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
+        return JsonContent.success(response);
+    }
+}
+```
+
+2. 方式二，使用组件的controller。**「推荐」**
+   
+   该方式可以通过配置文件修改接口地址，默认组件上传的两个接口地址分别是：
+   
+   * 初始化：/breeze/minio/multipart/init
+   
+   * 合并：/breeze/minio/multipart/merge
+
+3. 当与admin组件配合使用时建议使用admin组件附件模块**「推荐」**

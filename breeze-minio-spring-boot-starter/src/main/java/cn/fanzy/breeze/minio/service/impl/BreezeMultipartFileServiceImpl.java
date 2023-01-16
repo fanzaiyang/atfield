@@ -5,6 +5,7 @@ import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.model.BreezeMultipartFileEntity;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
+import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.minio.utils.BreezeFileTypeUtil;
@@ -29,11 +30,12 @@ import java.util.*;
 @AllArgsConstructor
 public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileService {
     private final JdbcTemplate jdbcTemplate;
+    private final BreezeMinIOProperties properties;
 
     @Override
     public BreezePutMultipartFileResponse beforeUpload(BreezePutMultipartFileArgs args) {
         Assert.notBlank(args.getIdentifier(), "参与文件MD5值（identifier）不能为空！");
-        String sql = "select * from sys_multipart_file_info t where t.del_flag=0 and t.identifier=? limit 1";
+        String sql = "select * from "+getTableName()+" t where t.del_flag=0 and t.identifier=? limit 1";
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), args.getIdentifier());
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(args.getMinioConfigName());
         List<BreezePutMultipartFileResponse.PartFile> partList = new ArrayList<>();
@@ -53,7 +55,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                         .finished(false)
                         .build());
             }
-            String insSql = "insert into sys_multipart_file_info (id, identifier, upload_id, file_name, bucket_host, bucket_name, object_name, total_chunk_num, total_file_size,chunk_size, begin_time, end_time, spend_second, status, create_by, create_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String insSql = "insert into "+getTableName()+" (id, identifier, upload_id, file_name, bucket_host, bucket_name, object_name, total_chunk_num, total_file_size,chunk_size, begin_time, end_time, spend_second, status, create_by, create_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             jdbcTemplate.update(insSql, IdUtil.getSnowflakeNextIdStr(), args.getIdentifier(), uploadId, args.getFileName(), minioService.getBucketHost(),
                     minioService.getBucket(), args.getObjectName(), args.getTotalChunks(), args.getFileSize(), args.getChunkSize(), new Date(),
                     null, null, 0, "MINIO_SERVER", new Date());
@@ -134,7 +136,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
 
     @Override
     public BreezeMinioResponse mergeChunk(String identifier, String minioConfigName) {
-        String sql = "select * from sys_multipart_file_info t where t.del_flag=0 and (t.identifier=? or t.upload_id=?) limit 1";
+        String sql = "select * from "+getTableName()+" t where t.del_flag=0 and (t.identifier=? or t.upload_id=?) limit 1";
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), identifier, identifier);
         Assert.notEmpty(query, "未找到合并文件！");
         BreezeMultipartFileEntity file = query.get(0);
@@ -143,7 +145,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         Assert.notEmpty(partList, "分片尚未完成，无法执行合并！");
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
         CompleteMultipartUploadResult response = minioService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
-        jdbcTemplate.update("update sys_multipart_file_info set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
+        jdbcTemplate.update("update "+getTableName()+" set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
         BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
         return BreezeMinioResponse.builder()
                 .etag(response.getETag())
@@ -155,4 +157,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                 .build();
     }
 
+    private String getTableName(){
+        return properties.getApi().getTableName();
+    }
 }
