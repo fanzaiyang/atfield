@@ -74,6 +74,10 @@ public class BreezeMinIOProperties implements Serializable {
          * 上传合并接口名称，默认：/breeze/minio/multipart/merge
          */
         private String merge;
+        /**
+         * 获取某分片上传地址，默认：/breeze/minio/multipart/presigned
+         */
+        private String presigned;
 
         private String tableName;
 

@@ -57,7 +57,16 @@ public class BreezeAdminAttachmentController {
     public JsonContent<BreezePutMultipartFileResponse> uploadMultipartInit(@Valid @RequestBody BreezePutMultipartFileArgs args) {
         return breezeAdminAttachmentService.uploadMultipartInit(args);
     }
-
+    @Operation(summary = "获取某分片上传地址", description = "基于minio的分片上传，支持断点续传、秒传等。")
+    @Parameters({
+            @Parameter(name = "identifier", description = "文件的MD5值"),
+            @Parameter(name = "partNumber", description = "分片索引，1开始"),
+            @Parameter(name = "minioConfigName", description = "后端多minio服务端是填写，默认第一个。")
+    })
+    @GetMapping("/upload/multipart/presigned}")
+    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        return breezeAdminAttachmentService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+    }
     @Operation(summary = "分片合并", description = "基于minio的分片上传，支持断点续传、秒传等。")
     @Parameters({
             @Parameter(name = "identifier", description = "文件的MD5值"),

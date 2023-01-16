@@ -22,7 +22,15 @@ public interface BreezeMultipartFileService {
      */
     BreezePutMultipartFileResponse beforeUpload(BreezePutMultipartFileArgs args);
 
-    List<PartSummary> queryListPart(String uploadId);
+    /**
+     * 获取上传预签名地址
+     * @param identifier 文件MD5
+     * @param partNumber 分片索引，1开始
+     * @return 上传地址
+     */
+    String getPresignedObjectUrl(String identifier,int partNumber,String minioConfigName);
+
+    List<PartSummary> queryListPart(String uploadId,String minioConfigName);
 
     /**
      * 根据文件的MD5合并文件

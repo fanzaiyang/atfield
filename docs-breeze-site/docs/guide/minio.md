@@ -459,3 +459,84 @@ public class UploadController {
    * 合并：/breeze/minio/multipart/merge
 
 3. 当与admin组件配合使用时建议使用admin组件附件模块**「推荐」**
+
+#### 前端使用
+
+1. 计算文件MD5
+   
+   安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
+   
+   ```shell
+   npm install --save spark-md5
+   
+   # ts同学还需添加@types/spark-md5
+   npm install --save @types/spark-md5
+   ```
+
+> 注意：
+> 
+> 当文件比较大时，直接计算md5会导致内存不足，浏览器奔溃。需要对文件进行分割，逐步计算。
+
+使用`spark-md5`计算文件md5的工具类如下：
+
+```ts
+import SparkMD5 from 'spark-md5'
+// 默认分割大小，与上传时分割大小可以不一致
+const DEFAULT_SIZE = 20 * 1024 * 1024
+const md5 = (file:any, chunkSize = DEFAULT_SIZE) => {
+    return new Promise((resolve, reject) => {
+        const startMs = new Date().getTime();
+        let blobSlice =
+            File.prototype.slice ||
+            File.prototype?.mozSlice ||
+            File.prototype?.webkitSlice;
+        let chunks = Math.ceil(file.size / chunkSize);
+        let currentChunk = 0;
+        let spark = new SparkMD5.ArrayBuffer(); //追加数组缓冲区。
+        let fileReader = new FileReader(); //读取文件
+        fileReader.onload = function (e) {
+            spark.append(e.target?.result);
+            currentChunk++;
+            if (currentChunk < chunks) {
+                loadNext();
+            } else {
+                const md5 = spark.end(); //完成md5的计算，返回十六进制结果。
+                console.log('文件md5计算结束，总耗时：', (new Date().getTime() - startMs) / 1000, 's')
+                resolve(md5);
+            }
+        };
+        fileReader.onerror = function (e) {
+            reject(e);
+        };
+
+        function loadNext() {
+            console.log('当前part number：', currentChunk, '总块数：', chunks);
+            let start = currentChunk * chunkSize;
+            let end = start + chunkSize;
+            (end > file.size) && (end = file.size);
+            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+        }
+        loadNext();
+    });
+}
+
+export default md5
+```
+
+如何使用此工具类
+
+```ts
+// 这里假设工具放到了utils包下，且名为md5.ts
+import md5 from "@/utils/md5";
+// 这里file为选择的文件Blob格式
+const identifier = await md5(file)
+console.log(`文件MD5值：${identifier}`);
+```
+
+2. 前端并发数限制，以及错误重试
+   
+   > 前端实现这部分比较麻烦的是在分片上传的时候要控制请求的并发数，让多个分片并发上传可以提升上传效率，但是请求过多时，会占用操作系统大部分资源。
+   
+   插件[promise-queue-plus](https://github.com/cnwhy/promise-queue-plus)用于控制分片上传的并发数，以及对上传错误的分片进行重试。
+   
+   

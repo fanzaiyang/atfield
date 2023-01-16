@@ -30,4 +30,6 @@ public interface BreezeAdminAttachmentService {
     JsonContent<BreezePutMultipartFileResponse> uploadMultipartInit(BreezePutMultipartFileArgs args);
 
     JsonContent<SysFile> uploadMultipartMerge(String identifier,String minioConfigName);
+
+    JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName);
 }

@@ -22,8 +22,8 @@ public class UploadController {
         return JsonContent.success(upload);
     }
     @GetMapping("/list")
-    public JsonContent<Object> list(String uploadId){
-        return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId));
+    public JsonContent<Object> list(String uploadId,String minioConfigName){
+        return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId,minioConfigName));
     }
     @GetMapping("/merge")
     public JsonContent<BreezeMinioResponse> merge(String identifier){

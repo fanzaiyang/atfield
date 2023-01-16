@@ -130,4 +130,10 @@ public class BreezeAdminAttachmentServiceImpl implements BreezeAdminAttachmentSe
                 .build();
         return JsonContent.success(sysFile);
     }
+
+    @Override
+    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        String url = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+        return JsonContent.success(url);
+    }
 }

@@ -35,7 +35,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
     @Override
     public BreezePutMultipartFileResponse beforeUpload(BreezePutMultipartFileArgs args) {
         Assert.notBlank(args.getIdentifier(), "参与文件MD5值（identifier）不能为空！");
-        String sql = "select * from "+getTableName()+" t where t.del_flag=0 and t.identifier=? limit 1";
+        String sql = "select * from " + getTableName() + " t where t.del_flag=0 and t.identifier=? limit 1";
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), args.getIdentifier());
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(args.getMinioConfigName());
         List<BreezePutMultipartFileResponse.PartFile> partList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                         .finished(false)
                         .build());
             }
-            String insSql = "insert into "+getTableName()+" (id, identifier, upload_id, file_name, bucket_host, bucket_name, object_name, total_chunk_num, total_file_size,chunk_size, begin_time, end_time, spend_second, status, create_by, create_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String insSql = "insert into " + getTableName() + " (id, identifier, upload_id, file_name, bucket_host, bucket_name, object_name, total_chunk_num, total_file_size,chunk_size, begin_time, end_time, spend_second, status, create_by, create_time) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             jdbcTemplate.update(insSql, IdUtil.getSnowflakeNextIdStr(), args.getIdentifier(), uploadId, args.getFileName(), minioService.getBucketHost(),
                     minioService.getBucket(), args.getObjectName(), args.getTotalChunks(), args.getFileSize(), args.getChunkSize(), new Date(),
                     null, null, 0, "MINIO_SERVER", new Date());
@@ -129,14 +129,31 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
     }
 
     @Override
-    public List<PartSummary> queryListPart(String uploadId) {
-        BreezeMinioService minioService = BreezeMinioConfiguration.instance();
+    public String getPresignedObjectUrl(String identifier, int partNumber,String minioConfigName) {
+        if (partNumber < 1) {
+            throw new RuntimeException("partNumber不能小于1");
+        }
+        String sql = "select * from " + getTableName() + " t where t.del_flag=0 and t.identifier=? limit 1";
+        List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), identifier);
+        Assert.notEmpty(query, "该上传任务不存在，请先初始化！");
+        BreezeMultipartFileEntity file = query.get(0);
+        BreezeMinioService minioService = BreezeMinioConfiguration.instance(minioConfigName);
+        Map<String, String> param = new HashMap<>();
+        param.put("uploadId", file.getUploadId());
+        param.put("partNumber", partNumber + "");
+        String url = minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param);
+        return url;
+    }
+
+    @Override
+    public List<PartSummary> queryListPart(String uploadId,String minioConfigName) {
+        BreezeMinioService minioService = BreezeMinioConfiguration.instance(minioConfigName);
         return minioService.listParts("2023/01/16/63c4bf2bdf9447a45b35e754.log", uploadId);
     }
 
     @Override
     public BreezeMinioResponse mergeChunk(String identifier, String minioConfigName) {
-        String sql = "select * from "+getTableName()+" t where t.del_flag=0 and (t.identifier=? or t.upload_id=?) limit 1";
+        String sql = "select * from " + getTableName() + " t where t.del_flag=0 and (t.identifier=? or t.upload_id=?) limit 1";
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), identifier, identifier);
         Assert.notEmpty(query, "未找到合并文件！");
         BreezeMultipartFileEntity file = query.get(0);
@@ -145,7 +162,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         Assert.notEmpty(partList, "分片尚未完成，无法执行合并！");
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
         CompleteMultipartUploadResult response = minioService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
-        jdbcTemplate.update("update "+getTableName()+" set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
+        jdbcTemplate.update("update " + getTableName() + " set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
         BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
         return BreezeMinioResponse.builder()
                 .etag(response.getETag())
@@ -157,7 +174,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                 .build();
     }
 
-    private String getTableName(){
+    private String getTableName() {
         return properties.getApi().getTableName();
     }
 }

@@ -24,9 +24,16 @@ public class BreezeMinioController {
         BreezePutMultipartFileResponse response = breezeMultipartFileService.beforeUpload(args);
         return JsonContent.success(response);
     }
+
+    @GetMapping("${breeze.minio.api.presigned:/breeze/minio/multipart/presigned}")
+    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        String url = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+        return JsonContent.success(url);
+    }
+
     @GetMapping("${breeze.minio.api.merge:/breeze/minio/multipart/merge}")
-    public JsonContent<BreezeMinioResponse> merge(String identifier){
-        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
+    public JsonContent<BreezeMinioResponse> merge(String identifier) {
+        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier, null);
         return JsonContent.success(response);
     }
 }
