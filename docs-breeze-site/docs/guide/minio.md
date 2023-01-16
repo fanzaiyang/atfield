@@ -8,7 +8,7 @@ order: 4
 
 ## 组件说明
 
-MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.2.2`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
+MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.5.1`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
 
 ## 快速开始
 
@@ -387,7 +387,7 @@ public interface BreezeMinioService {
   
   * 断点续传：后台返回的分片数据中有部分标识为完成的前端不用再对此分片进行操作，直接完成即可。
 
-### 开始使用
+### 后端使用
 
 #### 创建数据库表
 
@@ -460,7 +460,7 @@ public class UploadController {
 
 3. 当与admin组件配合使用时建议使用admin组件附件模块**「推荐」**
 
-#### 前端使用
+### 前端使用
 
 1. 计算文件MD5
    
@@ -533,10 +533,289 @@ const identifier = await md5(file)
 console.log(`文件MD5值：${identifier}`);
 ```
 
-2. 前端并发数限制，以及错误重试
+2. vue代码，使用了ElementPlus的上传组件，其它上传组件同理。
+   
+   ```vue
+   <template>
+     <main>
+       <el-card style="width: 400px; margin: 80px auto" header="文件分片上传">
+         <el-upload
+             class="upload-demo"
+             drag
+             action="/"
+             multiple
+             :http-request="handleHttpRequest"
+             :on-remove="handleRemoveFile">
+           <el-icon class="el-icon--upload">
+             <upload-filled/>
+           </el-icon>
+           <div class="el-upload__text">
+             请拖拽文件到此处或 <em>点击此处上传</em>
+           </div>
+         </el-upload>
+       </el-card>
+     </main>
+   </template>
+   <script setup lang="ts">
+   import {UploadFilled} from '@element-plus/icons-vue'
+   import Queue from 'promise-queue-plus'
+   import md5 from "@/utils/md5";
+   import {initTask, merge} from '@/utils/api';
+   import {ElNotification} from "element-plus";
+   import axios from 'axios'
+   import {ref} from 'vue'
+   
+   // 文件上传分块任务的队列（用于移除文件时，停止该文件的上传队列） key：fileUid value： queue object
+   const fileUploadChunkQueue = ref<any>({}).value
+   
+   /**
+    * 获取一个上传任务，没有则初始化一个
+    */
+   const getTaskInfo = async (file: any) => {
+     let task:any;
+     const identifier = await md5(file)
+     console.log(`文件MD5值：${identifier}`);
+     const initTaskData = {
+       identifier,
+       fileName: file.name,
+       fileSize: file.size,
+       chunkSize: 5 * 1024 * 1024
+     }
+     const {code, data, message}: any = await initTask(initTaskData)
+     if (code === 200) {
+       task = data
+     } else {
+       ElNotification.error({
+         title: '文件上传错误',
+         message: message
+       })
+     }
+     return task
+   }
+   
+   interface TaskRecord {
+     identifier: string;
+     finished: boolean;
+     chunkSize: number;
+     totalChunks: number;
+     partList: Array<any>;
+   }
+   
+   /**
+    * 上传逻辑处理，如果文件已经上传完成（完成分块合并操作），则不会进入到此方法中
+    */
+   const handleUpload = (file: any, taskRecord: TaskRecord, options: any) => {
+     let lastUploadedSize = 0; // 上次断点续传时上传的总大小
+     let uploadedSize = 0 // 已上传的大小
+     const totalSize = file.size || 0 // 文件总大小
+     let startMs = new Date().getTime(); // 开始上传的时间
+     const {partList, chunkSize, totalChunks, identifier} = taskRecord
+     console.log('taskRecord',taskRecord);
+   
+     // 获取从开始上传到现在的平均速度（byte/s）
+     const getSpeed = () => {
+       // 已上传的总大小 - 上次上传的总大小（断点续传）= 本次上传的总大小（byte）
+       const intervalSize = uploadedSize - lastUploadedSize
+       const nowMs = new Date().getTime()
+       // 时间间隔（s）
+       const intervalTime = (nowMs - startMs) / 1000
+       return intervalSize / intervalTime
+     }
+   
+     const uploadNext = async (partNumber: number) => {
+       console.log(`uploadNext->${partNumber}`);
+       const start = chunkSize * (partNumber - 1)
+       const end = start + chunkSize
+       const blob = file.slice(start, end)
+       console.log(start,end,blob);
+       let filter = partList.filter(item=>item.currentPartNumber==partNumber);
+       if(filter.length===0){
+         return Promise.reject("未找到分片「"+partNumber+"」上传地址");
+       }
+       if(filter[0].finished){
+         return Promise.resolve({partNumber: partNumber, uploadedSize: blob.size});
+       }
+       await axios.request({
+         url: filter[0].uploadUrl,
+         method: 'PUT',
+         data: blob,
+         headers: {'Content-Type': 'application/octet-stream'}
+       })
+       return Promise.resolve({partNumber: partNumber, uploadedSize: blob.size})
+     }
+   
+     /**
+      * 更新上传进度
+      * @param increment 为已上传的进度增加的字节量
+      */
+     const updateProcess = (increment: number) => {
+       const {onProgress} = options
+       let factor = 1000; // 每次增加1000 byte
+       let from = 0;
+       // 通过循环一点一点的增加进度
+       while (from <= increment) {
+         from += factor
+         uploadedSize += factor
+         const percent = Math.round(uploadedSize / totalSize * 100).toFixed(2);
+         onProgress({percent: percent})
+       }
+   
+       const speed = getSpeed();
+       const remainingTime = speed != 0 ? Math.ceil((totalSize - uploadedSize) / speed) + 's' : '未知'
+       console.log('剩余大小：', (totalSize - uploadedSize) / 1024 / 1024, 'mb');
+       console.log('当前速度：', (speed / 1024 / 1024).toFixed(2), 'mbps');
+       console.log('预计完成：', remainingTime);
+     }
+   
+     return new Promise(resolve => {
+       const failArr: Array<any> = [];
+       const queue = Queue(5, {
+         "retry": 3,               //Number of retries
+         "retryIsJump": false,     //retry now?
+         "workReject": function (reason, queue) {
+           failArr.push(reason)
+         },
+         "queueEnd": function (queue: any) {
+           resolve(failArr);
+         }
+       })
+       fileUploadChunkQueue[file.uid] = queue
+       console.log(`总分片：${totalChunks}`);
+       for (let partNumber = 1; partNumber <= totalChunks; partNumber++) {
+         const exitPart = (partList || []).find((exitPart: { currentPartNumber: number; size: number;finished:boolean }) => exitPart.finished)
+         console.log(`分片${partNumber}是否存在：${exitPart}`);
+         if (exitPart) {
+           // 分片已上传完成，累计到上传完成的总额中,同时记录一下上次断点上传的大小，用于计算上传速度
+           lastUploadedSize += exitPart.size
+           updateProcess(exitPart.size)
+         } else {
+           queue.push(() => uploadNext(partNumber).then(res => {
+             // 单片文件上传完成再更新上传进度
+             updateProcess(res.uploadedSize)
+           }))
+         }
+       }
+       if (queue.getLength() == 0) {
+         // 所有分片都上传完，但未合并，直接return出去，进行合并操作
+         resolve(failArr);
+         return;
+       }
+       queue.start()
+     })
+   }
+   
+   /**
+    * el-upload 自定义上传方法入口
+    */
+   const handleHttpRequest = async (options: any) => {
+     const file = options.file
+     const task = await getTaskInfo(file)
+     if (task) {
+       const {finished, path, partList, identifier} = task
+       if (finished) {
+         return path
+       } else {
+         const errorList: any = await handleUpload(file, task, options)
+         if (errorList.length > 0) {
+           ElNotification.error({
+             title: '文件上传错误',
+             message: '部分分片上次失败，请尝试重新上传文件'
+           })
+           return;
+         }
+         const {code, data, message}: any = await merge(identifier)
+         if (code === 200) {
+           return path;
+         } else {
+           ElNotification.error({
+             title: '文件上传错误',
+             message: message
+           })
+         }
+       }
+     } else {
+       ElNotification.error({
+         title: '文件上传错误',
+         message: '获取上传任务失败'
+       })
+     }
+   }
+   
+   /**
+    * 移除文件列表中的文件
+    * 如果文件存在上传队列任务对象，则停止该队列的任务
+    */
+   const handleRemoveFile = (uploadFile: any, uploadFiles: any) => {
+     const queueObject = fileUploadChunkQueue[uploadFile.uid]
+     if (queueObject) {
+       queueObject.stop()
+       fileUploadChunkQueue[uploadFile.uid] = undefined
+     }
+   }
+   </script>
+   
+   ```
+   
+   axios请求代码
+   
+   ```ts
+   import axios from 'axios'
+   // @ts-ignore
+   import axiosExtra from 'axios-extra'
+   const baseUrl = 'http://localhost:8080'
+   
+   const http = axios.create({
+       baseURL: baseUrl
+   })
+   
+   const httpExtra = axiosExtra.create({
+       maxConcurrent: 5, //并发为1
+       queueOptions: {
+           retry: 3, //请求失败时,最多会重试3次
+           retryIsJump: false //是否立即重试, 否则将在请求队列尾部插入重试请求
+       }
+   })
+   
+   http.interceptors.response.use(response => {
+       return response.data
+   })
+   
+   
+   /**
+    * 初始化一个分片上传任务
+    * @param data data
+    * @returns {Promise<AxiosResponse<any>>}
+    */
+   const initTask = (data:any) => {
+       return http.post('/upload/before', data)
+   }
+   
+   
+   /**
+    * 合并分片
+    * @param data
+    * @returns {Promise<AxiosResponse<any>>}
+    */
+   const merge = (identifier:string) => {
+       return http.get(`/upload/merge?identifier=${identifier}`)
+   }
+   
+   export {
+       initTask,
+       merge,
+       httpExtra
+   }
+   
+   ```
+   
+   #### 常见问题
+   
+   1.  前端并发数限制，以及错误重试
    
    > 前端实现这部分比较麻烦的是在分片上传的时候要控制请求的并发数，让多个分片并发上传可以提升上传效率，但是请求过多时，会占用操作系统大部分资源。
    
    插件[promise-queue-plus](https://github.com/cnwhy/promise-queue-plus)用于控制分片上传的并发数，以及对上传错误的分片进行重试。
    
-   
+   2. 关于后端批量生成的预签名上传地址
+      
+      预签名地址是有有效期的，使用批量生成的预签名地址若长时间不用会失效，未了保险起见，前端可以在分片上传时，再次请求后端获取预签名地址的接口。
