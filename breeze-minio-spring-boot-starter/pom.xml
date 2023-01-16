@@ -38,5 +38,10 @@
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>cn.fanzy.breeze</groupId>
+            <artifactId>breeze-web-spring-boot-starter</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>

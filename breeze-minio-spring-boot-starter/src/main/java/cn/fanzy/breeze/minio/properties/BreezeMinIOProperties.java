@@ -28,6 +28,7 @@ public class BreezeMinIOProperties implements Serializable {
      */
     private Map<String, MinioServerConfig> servers = new LinkedHashMap<>();
 
+    private MinioApi api;
     @Data
     public static class MinioServerConfig {
         /**
@@ -62,4 +63,15 @@ public class BreezeMinIOProperties implements Serializable {
         }
     }
 
+    @Data
+    public static class MinioApi{
+        /**
+         * 上传初始化接口名称，默认：/breeze/minio/multipart/init
+         */
+        private String init;
+        /**
+         * 上传合并接口名称，默认：/breeze/minio/multipart/merge
+         */
+        private String merge;
+    }
 }

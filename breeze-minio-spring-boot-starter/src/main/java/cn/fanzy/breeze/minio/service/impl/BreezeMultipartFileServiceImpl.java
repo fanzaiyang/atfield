@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Slf4j
@@ -142,11 +144,14 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
         CompleteMultipartUploadResult response = minioService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
         jdbcTemplate.update("update sys_multipart_file_info set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
+        BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
         return BreezeMinioResponse.builder()
                 .etag(response.getETag())
                 .bucket(minioService.getBucket())
                 .objectName(response.getKey())
                 .previewUrl(minioService.getPreviewUrl(response.getKey()))
+                .fileName(file.getFileName())
+                .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
                 .build();
     }
 
