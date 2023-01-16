@@ -23,7 +23,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import com.google.common.collect.Multimap;
 import io.minio.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -432,7 +430,7 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public String getUploadId(String objectName) {
+    public String initiateMultipartUpload(String objectName) {
         String contentType = MediaTypeFactory.getMediaType(objectName).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(contentType);
@@ -442,21 +440,12 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public String removeMultipartUpload(String bucket, String region, String object, String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
-        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
-                .endpoint(config.getEndpoint())
-                .credentials(config.getAccessKey(), config.getSecretKey())
-                .build();
-        try {
-            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
-            return template.removeMultipartUpload(bucket, region, object, uploadId, headers, extraQueryParams);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void abortMultipartUpload(String objectName, String uploadId) {
+        amazonS3.abortMultipartUpload(new AbortMultipartUploadRequest(bucket, objectName, uploadId));
     }
 
     @Override
-    public CompleteMultipartUploadResult mergeMultipart(String objectName, String uploadId, List<PartSummary> parts) {
+    public CompleteMultipartUploadResult completeMultipartUpload(String objectName, String uploadId, List<PartSummary> parts) {
         CompleteMultipartUploadRequest completeMultipartUploadRequest = new CompleteMultipartUploadRequest()
                 .withUploadId(uploadId)
                 .withKey(objectName)
@@ -466,27 +455,10 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public List<PartSummary> listMultipart(String objectName, String uploadId) {
+    public List<PartSummary> listParts(String objectName, String uploadId) {
         ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, objectName, uploadId);
         PartListing parts = amazonS3.listParts(listPartsRequest);
         return parts.getParts();
-    }
-
-    @Override
-    public Map<String, String> getPresignedPostFormData(String objectName) {
-        try {
-            // 为存储桶创建一个上传策略，过期时间为1天
-            PostPolicy policy = new PostPolicy(bucket, ZonedDateTime.now().plusDays(1));
-            // 设置一个参数key，值为上传对象的名称
-            policy.addEqualsCondition("key", objectName);
-            // 添加Content-Type，例如以"image/"开头，表示只能上传照片，这里所有类型
-            policy.addStartsWithCondition("Content-Type", MediaType.ALL_VALUE);
-            // 设置上传文件的大小 64kiB to 10MiB.
-            //policy.addContentLengthRangeCondition(64 * 1024, 10 * 1024 * 1024);
-            return client.getPresignedPostFormData(policy);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override

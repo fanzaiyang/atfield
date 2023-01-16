@@ -18,30 +18,31 @@ public class BreezePutMultipartFileArgs {
      */
     private String bucketName;
     /**
-     * 文件名称
+     * 文件名称:必填项
      */
     private String fileName;
     /**
-     * 合并后的文件名称唯一
+     * 合并后的文件名称唯一，不传自动生成yyyy/MM/dd/uuid.fileType
      */
     private String objectName;
 
     /**
-     * 文件总大小
+     * 文件总大小byte:必填项
      */
     private Long fileSize;
     /**
-     * 每个分片大小
+     * 每个分片大小byte：必填项
      */
     private long chunkSize;
     /**
-     * 分片总个数
+     * 分片总个数：非必填，不传根据文件大小和分片大小计算
      */
     private Integer totalChunks;
     /**
-     * 文件唯一值MD5
+     * 文件唯一值MD5：必填项
      */
     private String identifier;
+
     public int getTotalChunks() {
         if (totalChunks == null || totalChunks == 0) {
             return (int) Math.ceil(fileSize * 1.0 / chunkSize);

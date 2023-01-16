@@ -7,7 +7,6 @@ import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
 import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
 import com.amazonaws.services.s3.model.PartSummary;
-import com.google.common.collect.Multimap;
 import io.minio.ComposeObjectArgs;
 import io.minio.MinioClient;
 import io.minio.http.Method;
@@ -217,57 +216,46 @@ public interface BreezeMinioService {
 
     /**
      * 分片上传，获取上传ID
-     * @param region region
      * @param objectName 对象名唯一
      * @return String
      */
-    String getUploadId(String objectName);
+    String initiateMultipartUpload(String objectName);
 
 
     /**
      * 删除上传的分片任务
-     * @param bucket 存储桶
-     * @param region region
-     * @param object 对象名唯一
-     * @param uploadId 上传ID
-     * @param headers 头
-     * @param extraQueryParams 额外参数
-     * @return String
+     * @param objectName object
+     * @param uploadId uploadId
      */
-    String removeMultipartUpload(String bucket, String region, String object,String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
+    void abortMultipartUpload(String objectName, String uploadId);
 
     /**
      * 合并分片
-     * @param region region
-     * @param objectName 对象名唯一
-     * @param uploadId 上传ID
-     * @param parts 分片数组
-     * @param extraHeaders 头
-     * @param extraQueryParams 参数
-     * @return
+     * @param objectName objectName
+     * @param uploadId uploadId
+     * @param parts List {@link PartSummary}
+     * @return CompleteMultipartUploadResult
      */
-    CompleteMultipartUploadResult mergeMultipart(String objectName, String uploadId, List<PartSummary> parts);
+    CompleteMultipartUploadResult completeMultipartUpload(String objectName, String uploadId, List<PartSummary> parts);
 
     /**
      * 查询分片
-     * @param region region
-     * @param objectName 对象名唯一
-     * @param maxParts 最大分片个数
-     * @param partNumberMarker partNumberMaker
-     * @param uploadId 上传ID
-     * @param extraHeaders 头
-     * @param extraQueryParams 参数
-     * @return
+     * @param objectName objectName
+     * @param uploadId uploadId
+     * @return List {@link PartSummary}
      */
-    List<PartSummary> listMultipart(String objectName, String uploadId);
+    List<PartSummary> listParts(String objectName, String uploadId);
+
 
     /**
-     *  获取带签名的临时上传元数据对象，前端可获取后，直接上传到Minio
+     * 获取上传路径
+     * @param method {@link Method}
      * @param objectName objectName
-     * @return Map
+     * @param expireDuration expireDuration
+     * @param timeUnit {@link TimeUnit}
+     * @param extraQueryParams Map
+     * @return String
      */
-    Map<String, String> getPresignedPostFormData(String objectName);
-
     String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit, Map<String, String> extraQueryParams);
 
 }

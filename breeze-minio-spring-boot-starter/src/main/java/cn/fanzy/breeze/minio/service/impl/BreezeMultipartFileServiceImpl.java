@@ -40,7 +40,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         }
         if (CollUtil.isEmpty(query)) {
             // 不存在，需要新的上传
-            String uploadId = minioService.getUploadId(args.getObjectName());
+            String uploadId = minioService.initiateMultipartUpload(args.getObjectName());
             Map<String, String> param = new HashMap<>();
             param.put("uploadId", uploadId);
             for (int i = 1; i <= args.getTotalChunks(); i++) {
@@ -56,7 +56,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                     minioService.getBucket(), args.getObjectName(), args.getTotalChunks(), args.getFileSize(), args.getChunkSize(), new Date(),
                     null, null, 0, "MINIO_SERVER", new Date());
             return BreezePutMultipartFileResponse.builder()
-                    .uploadId(uploadId).bucketName(minioService.getBucket()).finished(false)
+                    .bucketName(minioService.getBucket()).finished(false)
                     .totalChunks(args.getTotalChunks())
                     .objectName(args.getObjectName())
                     .partList(partList)
@@ -68,7 +68,8 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         BreezeMultipartFileEntity file = query.get(0);
         if (file.getStatus() == 1) {
             return BreezePutMultipartFileResponse.builder()
-                    .uploadId(file.getUploadId()).bucketName(file.getBucketName()).finished(true)
+                    .bucketName(file.getBucketName())
+                    .finished(true)
                     .objectName(file.getObjectName())
                     .identifier(args.getIdentifier())
                     .chunkSize(args.getChunkSize())
@@ -76,7 +77,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                     .build();
         }
         // 断点续传，已上传部分
-        List<PartSummary> partedList = minioService.listMultipart(file.getObjectName(), file.getUploadId());
+        List<PartSummary> partedList = minioService.listParts(file.getObjectName(), file.getUploadId());
         if (CollUtil.isNotEmpty(partedList)) {
             Map<String, String> param = new HashMap<>();
             param.put("uploadId", file.getUploadId());
@@ -89,6 +90,8 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                             .currentPartNumber(i)
                             .uploadUrl(null)
                             .finished(true)
+                            .etag(first.get().getETag())
+                            .size(first.get().getSize())
                             .build());
                     continue;
                 }
@@ -112,18 +115,19 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
             }
         }
         return BreezePutMultipartFileResponse.builder()
-                .uploadId(file.getUploadId()).bucketName(args.getBucketName()).finished(false)
-                .objectName(args.getObjectName()).partList(partList)
+                .bucketName(args.getBucketName()).finished(false)
+                .objectName(args.getObjectName())
                 .identifier(args.getIdentifier())
                 .totalChunks(args.getTotalChunks())
                 .chunkSize(args.getChunkSize())
+                .partList(partList)
                 .build();
     }
 
     @Override
     public List<PartSummary> queryListPart(String uploadId) {
         BreezeMinioService minioService = BreezeMinioConfiguration.instance();
-        return minioService.listMultipart("2023/01/16/63c4bf2bdf9447a45b35e754.log", uploadId);
+        return minioService.listParts("2023/01/16/63c4bf2bdf9447a45b35e754.log", uploadId);
     }
 
     @Override
@@ -133,10 +137,10 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         Assert.notEmpty(query, "未找到合并文件！");
         BreezeMultipartFileEntity file = query.get(0);
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(minioConfigName);
-        List<PartSummary> partList = minioService.listMultipart(file.getObjectName(), file.getUploadId());
+        List<PartSummary> partList = minioService.listParts(file.getObjectName(), file.getUploadId());
         Assert.notEmpty(partList, "分片尚未完成，无法执行合并！");
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
-        CompleteMultipartUploadResult response = minioService.mergeMultipart(file.getObjectName(), file.getUploadId(), partList);
+        CompleteMultipartUploadResult response = minioService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
         jdbcTemplate.update("update sys_multipart_file_info set status = 1,update_by='MINIO_SERVER',update_time=now() where id=?", file.getId());
         return BreezeMinioResponse.builder()
                 .etag(response.getETag())
