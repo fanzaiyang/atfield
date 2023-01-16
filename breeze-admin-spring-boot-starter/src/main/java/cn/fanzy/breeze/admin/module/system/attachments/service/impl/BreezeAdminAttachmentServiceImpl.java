@@ -6,6 +6,7 @@ import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmen
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
+import cn.fanzy.breeze.minio.model.BreezePutMultiPartFile;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
@@ -132,8 +133,8 @@ public class BreezeAdminAttachmentServiceImpl implements BreezeAdminAttachmentSe
     }
 
     @Override
-    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
-        String url = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
-        return JsonContent.success(url);
+    public JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        BreezePutMultiPartFile partFile = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+        return JsonContent.success(partFile);
     }
 }

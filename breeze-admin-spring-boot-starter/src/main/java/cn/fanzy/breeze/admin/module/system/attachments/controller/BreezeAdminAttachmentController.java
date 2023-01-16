@@ -7,6 +7,7 @@ import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttach
 import cn.fanzy.breeze.admin.module.system.attachments.vo.TinyMCEVo;
 import cn.fanzy.breeze.admin.module.system.attachments.vo.WangEditorVo;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
+import cn.fanzy.breeze.minio.model.BreezePutMultiPartFile;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
@@ -64,7 +65,7 @@ public class BreezeAdminAttachmentController {
             @Parameter(name = "minioConfigName", description = "后端多minio服务端是填写，默认第一个。")
     })
     @GetMapping("/upload/multipart/presigned}")
-    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+    public JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
         return breezeAdminAttachmentService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
     }
     @Operation(summary = "分片合并", description = "基于minio的分片上传，支持断点续传、秒传等。")

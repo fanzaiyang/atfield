@@ -1,10 +1,7 @@
 package cn.fanzy.breeze.minio.service.impl;
 
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
-import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
-import cn.fanzy.breeze.minio.model.BreezeMultipartFileEntity;
-import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
-import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
+import cn.fanzy.breeze.minio.model.*;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
@@ -38,7 +35,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         String sql = "select * from " + getTableName() + " t where t.del_flag=0 and t.identifier=? limit 1";
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), args.getIdentifier());
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(args.getMinioConfigName());
-        List<BreezePutMultipartFileResponse.PartFile> partList = new ArrayList<>();
+        List<BreezePutMultiPartFile> partList = new ArrayList<>();
         if (StrUtil.isBlank(args.getObjectName())) {
             args.setObjectName(BreezeObjectGenerate.objectName(BreezeFileTypeUtil.getFileType(args.getFileName())));
         }
@@ -49,7 +46,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
             param.put("uploadId", uploadId);
             for (int i = 1; i <= args.getTotalChunks(); i++) {
                 param.put("partNumber", i + "");
-                partList.add(BreezePutMultipartFileResponse.PartFile.builder()
+                partList.add(BreezePutMultiPartFile.builder()
                         .currentPartNumber(i)
                         .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, args.getObjectName(), null, null, param))
                         .finished(false)
@@ -90,7 +87,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                 Optional<PartSummary> first = partedList.stream().filter(item -> item.getPartNumber() == finalI).findFirst();
                 // 如果该分片已经上传过了，则返回完成
                 if (first.isPresent()) {
-                    partList.add(BreezePutMultipartFileResponse.PartFile.builder()
+                    partList.add(BreezePutMultiPartFile.builder()
                             .currentPartNumber(i)
                             .uploadUrl(null)
                             .finished(true)
@@ -100,7 +97,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                     continue;
                 }
                 param.put("partNumber", i + "");
-                partList.add(BreezePutMultipartFileResponse.PartFile.builder()
+                partList.add(BreezePutMultiPartFile.builder()
                         .currentPartNumber(i)
                         .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
                         .finished(false)
@@ -111,7 +108,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
             param.put("uploadId", file.getUploadId());
             for (int i = 1; i <= args.getTotalChunks(); i++) {
                 param.put("partNumber", i + "");
-                partList.add(BreezePutMultipartFileResponse.PartFile.builder()
+                partList.add(BreezePutMultiPartFile.builder()
                         .currentPartNumber(i)
                         .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
                         .finished(false)
@@ -129,7 +126,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
     }
 
     @Override
-    public String getPresignedObjectUrl(String identifier, int partNumber,String minioConfigName) {
+    public BreezePutMultiPartFile getPresignedObjectUrl(String identifier, int partNumber, String minioConfigName) {
         if (partNumber < 1) {
             throw new RuntimeException("partNumber不能小于1");
         }
@@ -137,18 +134,34 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         List<BreezeMultipartFileEntity> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(BreezeMultipartFileEntity.class), identifier);
         Assert.notEmpty(query, "该上传任务不存在，请先初始化！");
         BreezeMultipartFileEntity file = query.get(0);
+        List<PartSummary> partSummaryList = queryListPart(file.getUploadId(), file.getObjectName(), minioConfigName);
+        if (CollUtil.isNotEmpty(partSummaryList)) {
+            Optional<PartSummary> first = partSummaryList.stream().filter(item -> item.getPartNumber() == partNumber).findFirst();
+            if (first.isPresent()) {
+                // 已上传完成
+                return BreezePutMultiPartFile.builder()
+                        .finished(true).size(first.get().getSize())
+                        .etag(first.get().getETag())
+                        .currentPartNumber(partNumber)
+                        .build();
+            }
+        }
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(minioConfigName);
         Map<String, String> param = new HashMap<>();
         param.put("uploadId", file.getUploadId());
         param.put("partNumber", partNumber + "");
         String url = minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param);
-        return url;
+        return BreezePutMultiPartFile.builder()
+                .finished(false)
+                .currentPartNumber(partNumber)
+                .uploadUrl(url)
+                .build();
     }
 
     @Override
-    public List<PartSummary> queryListPart(String uploadId,String minioConfigName) {
+    public List<PartSummary> queryListPart(String uploadId, String objectName, String minioConfigName) {
         BreezeMinioService minioService = BreezeMinioConfiguration.instance(minioConfigName);
-        return minioService.listParts("2023/01/16/63c4bf2bdf9447a45b35e754.log", uploadId);
+        return minioService.listParts(objectName, uploadId);
     }
 
     @Override

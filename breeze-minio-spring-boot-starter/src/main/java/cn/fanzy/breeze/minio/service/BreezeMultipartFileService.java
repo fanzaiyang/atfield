@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.minio.service;
 
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
+import cn.fanzy.breeze.minio.model.BreezePutMultiPartFile;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
 import com.amazonaws.services.s3.model.PartSummary;
@@ -28,9 +29,9 @@ public interface BreezeMultipartFileService {
      * @param partNumber 分片索引，1开始
      * @return 上传地址
      */
-    String getPresignedObjectUrl(String identifier,int partNumber,String minioConfigName);
+    BreezePutMultiPartFile getPresignedObjectUrl(String identifier, int partNumber, String minioConfigName);
 
-    List<PartSummary> queryListPart(String uploadId,String minioConfigName);
+    List<PartSummary> queryListPart(String uploadId,String objectName,String minioConfigName);
 
     /**
      * 根据文件的MD5合并文件

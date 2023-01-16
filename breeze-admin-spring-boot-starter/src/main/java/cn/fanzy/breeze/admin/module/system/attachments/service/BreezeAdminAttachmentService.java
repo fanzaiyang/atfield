@@ -3,6 +3,7 @@ package cn.fanzy.breeze.admin.module.system.attachments.service;
 import cn.fanzy.breeze.admin.module.entity.SysFile;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentBatchArgs;
 import cn.fanzy.breeze.admin.module.system.attachments.args.BreezeAdminAttachmentQueryArgs;
+import cn.fanzy.breeze.minio.model.BreezePutMultiPartFile;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
 import cn.fanzy.breeze.web.model.JsonContent;
@@ -31,5 +32,5 @@ public interface BreezeAdminAttachmentService {
 
     JsonContent<SysFile> uploadMultipartMerge(String identifier,String minioConfigName);
 
-    JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName);
+    JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName);
 }

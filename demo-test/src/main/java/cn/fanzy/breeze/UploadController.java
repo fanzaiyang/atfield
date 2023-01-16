@@ -16,18 +16,21 @@ import org.springframework.web.bind.annotation.*;
 public class UploadController {
 
     private final BreezeMultipartFileService breezeMultipartFileService;
+
     @PostMapping("/before")
-    public JsonContent<BreezePutMultipartFileResponse> before(@RequestBody BreezePutMultipartFileArgs args){
+    public JsonContent<BreezePutMultipartFileResponse> before(@RequestBody BreezePutMultipartFileArgs args) {
         BreezePutMultipartFileResponse upload = breezeMultipartFileService.beforeUpload(args);
         return JsonContent.success(upload);
     }
+
     @GetMapping("/list")
-    public JsonContent<Object> list(String uploadId,String minioConfigName){
-        return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId,minioConfigName));
+    public JsonContent<Object> list(String uploadId, String objectName, String minioConfigName) {
+        return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId, objectName, minioConfigName));
     }
+
     @GetMapping("/merge")
-    public JsonContent<BreezeMinioResponse> merge(String identifier){
-        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
+    public JsonContent<BreezeMinioResponse> merge(String identifier) {
+        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier, null);
         return JsonContent.success(response);
     }
 }
