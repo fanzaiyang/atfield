@@ -1,6 +1,5 @@
 package cn.fanzy.breeze.minio.model;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
 /**
@@ -11,7 +10,11 @@ import lombok.Data;
 @Data
 public class BreezePutMultipartFileArgs {
     /**
-     * 合并后的文件存储桶名 称
+     * 配置文件中使用那个minio实例
+     */
+    private String minioConfigName;
+    /**
+     * 合并后的文件存储桶名称
      */
     private String bucketName;
     /**
@@ -22,6 +25,11 @@ public class BreezePutMultipartFileArgs {
      * 合并后的文件名称唯一
      */
     private String objectName;
+
+    /**
+     * 文件总大小
+     */
+    private Long fileSize;
     /**
      * 每个分片大小
      */
@@ -29,16 +37,15 @@ public class BreezePutMultipartFileArgs {
     /**
      * 分片总个数
      */
-    private int totalChunks;
+    private Integer totalChunks;
     /**
      * 文件唯一值MD5
      */
     private String identifier;
-
-    public String getFileName() {
-        if (StrUtil.isBlank(fileName)) {
-            return "";
+    public int getTotalChunks() {
+        if (totalChunks == null || totalChunks == 0) {
+            return (int) Math.ceil(fileSize * 1.0 / chunkSize);
         }
-        return "_" + fileName;
+        return totalChunks;
     }
 }

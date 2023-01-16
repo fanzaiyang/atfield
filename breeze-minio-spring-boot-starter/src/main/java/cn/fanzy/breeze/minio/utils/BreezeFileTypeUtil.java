@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.minio.utils;
 
 import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,5 +47,9 @@ public class BreezeFileTypeUtil {
             return fileName.substring(fileName.lastIndexOf(".")+1);
         }
         return type;
+    }
+    public static String getFileType(String fileName) {
+        Assert.notBlank(fileName,"文件名称不能为空！");
+        return fileName.substring(fileName.lastIndexOf(".")+1);
     }
 }

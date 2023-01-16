@@ -5,17 +5,17 @@ import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
+import com.amazonaws.services.s3.model.PartSummary;
 import com.google.common.collect.Multimap;
 import io.minio.ComposeObjectArgs;
-import io.minio.ListPartsResponse;
 import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
 import io.minio.http.Method;
-import io.minio.messages.Part;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -46,8 +46,9 @@ public interface BreezeMinioService {
      */
     BreezeMinioServiceImpl bucket(String bucket);
 
-    String getBucket();
 
+    String getBucket();
+    String getBucketHost();
     /**
      * 桶存在和创造
      *
@@ -218,11 +219,9 @@ public interface BreezeMinioService {
      * 分片上传，获取上传ID
      * @param region region
      * @param objectName 对象名唯一
-     * @param headers 头
-     * @param extraQueryParams 额外参数
      * @return String
      */
-    String getUploadId(String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams);
+    String getUploadId(String objectName);
 
 
     /**
@@ -247,7 +246,7 @@ public interface BreezeMinioService {
      * @param extraQueryParams 参数
      * @return
      */
-    ObjectWriteResponse mergeMultipart(String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+    CompleteMultipartUploadResult mergeMultipart(String objectName, String uploadId, List<PartSummary> parts);
 
     /**
      * 查询分片
@@ -260,7 +259,7 @@ public interface BreezeMinioService {
      * @param extraQueryParams 参数
      * @return
      */
-    ListPartsResponse listMultipart(String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams);
+    List<PartSummary> listMultipart(String objectName, String uploadId);
 
     /**
      *  获取带签名的临时上传元数据对象，前端可获取后，直接上传到Minio
@@ -269,7 +268,6 @@ public interface BreezeMinioService {
      */
     Map<String, String> getPresignedPostFormData(String objectName);
 
-    String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit);
-
+    String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit, Map<String, String> extraQueryParams);
 
 }

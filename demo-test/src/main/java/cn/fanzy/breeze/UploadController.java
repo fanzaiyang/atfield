@@ -1,6 +1,5 @@
 package cn.fanzy.breeze;
 
-import cn.fanzy.breeze.minio.model.BreezeMergeMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
@@ -8,10 +7,7 @@ import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.web.model.JsonContent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -25,9 +21,13 @@ public class UploadController {
         BreezePutMultipartFileResponse upload = breezeMultipartFileService.beforeUpload(args);
         return JsonContent.success(upload);
     }
-    @PostMapping("/merge")
-    public JsonContent<BreezeMinioResponse> merge(@RequestBody BreezeMergeMultipartFileArgs args){
-        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(args);
+    @GetMapping("/list")
+    public JsonContent<Object> list(String uploadId){
+        return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId));
+    }
+    @GetMapping("/merge")
+    public JsonContent<BreezeMinioResponse> merge(String identifier){
+        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
         return JsonContent.success(response);
     }
 }

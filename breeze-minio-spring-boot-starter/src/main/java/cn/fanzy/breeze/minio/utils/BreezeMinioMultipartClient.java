@@ -1,16 +1,14 @@
 package cn.fanzy.breeze.minio.utils;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import io.minio.*;
-import io.minio.errors.*;
 import io.minio.messages.Part;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
+@Slf4j
 public class BreezeMinioMultipartClient extends MinioAsyncClient {
 
 
@@ -18,22 +16,42 @@ public class BreezeMinioMultipartClient extends MinioAsyncClient {
         super(client);
     }
 
-    public String getUploadId(String bucketName, String region, String objectName,Multimap<String, String> headers, Multimap<String, String> extraQueryParams) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, XmlParserException, InvalidResponseException, InternalException {
-        CreateMultipartUploadResponse response = this.createMultipartUpload(bucketName, region, objectName, headers, extraQueryParams);
-
-        return response.result().uploadId();
+    public String getUploadId(String bucketName, String region, String objectName) {
+        try {
+            HashMultimap<String, String> headers = HashMultimap.create();
+            headers.put("Content-Type", "application/octet-stream");
+            CompletableFuture<CreateMultipartUploadResponse> future = super.createMultipartUploadAsync(bucketName, region, objectName, headers, null);
+            log.info("生成uploadId:{},objectName:{},bucketName:{}", future.get().result().uploadId(),future.get().result().objectName(),future.get().result().bucketName());
+            return future.get().result().uploadId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public String removeMultipartUpload(String bucket, String region, String object,String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) throws IOException, InvalidKeyException, NoSuchAlgorithmException, InsufficientDataException, ServerException, InternalException, XmlParserException, InvalidResponseException, ErrorResponseException, ExecutionException, InterruptedException {
-        CompletableFuture<AbortMultipartUploadResponse> response = this.abortMultipartUploadAsync(bucket, region, object, uploadId,headers, extraQueryParams);
-        return response.get().uploadId();
-    }
-    public ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, XmlParserException, InvalidResponseException, InternalException {
-        return this.completeMultipartUpload(bucketName, region, objectName, uploadId, parts,extraHeaders, extraQueryParams);
+    public String removeMultipartUpload(String bucket, String region, String object, String uploadId, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
+        try {
+            CompletableFuture<AbortMultipartUploadResponse> response = this.abortMultipartUploadAsync(bucket, region, object, uploadId, headers, extraQueryParams);
+            return response.get().uploadId();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ListPartsResponse listMultipart(String bucketName, String region, String objectName, Integer maxParts, Integer partNumberMaker,
-                                           String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) throws ServerException, InsufficientDataException, ErrorResponseException, NoSuchAlgorithmException, IOException, InvalidKeyException, XmlParserException, InvalidResponseException, InternalException {
-        return this.listParts(bucketName, region, objectName, maxParts, partNumberMaker, uploadId, extraHeaders, extraQueryParams);
+    public ObjectWriteResponse mergeMultipart(String bucketName, String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
+        try {
+            CompletableFuture<ObjectWriteResponse> future = super.completeMultipartUploadAsync(bucketName, region, objectName, uploadId, parts, extraHeaders, extraQueryParams);
+            return future.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ListPartsResponse listMultipart(String bucketName, String region, String objectName, String uploadId) {
+        try {
+            CompletableFuture<ListPartsResponse> future = super.listPartsAsync(bucketName, region, objectName, null, null, uploadId, null, null);
+            return future.get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

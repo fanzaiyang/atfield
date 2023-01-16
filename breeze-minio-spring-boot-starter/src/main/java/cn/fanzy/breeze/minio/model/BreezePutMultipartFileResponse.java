@@ -17,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BreezePutMultipartFileResponse {
     private String uploadId;
+
+    private String identifier;
     /**
      * 是否完成
      */
@@ -29,6 +31,10 @@ public class BreezePutMultipartFileResponse {
      * 合并后的文件名称唯一
      */
     private String objectName;
+
+    private int totalChunks;
+
+    private long chunkSize;
 
     /**
      * 已上传的分片

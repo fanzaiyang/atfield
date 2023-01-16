@@ -6,17 +6,29 @@ import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.utils.*;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.HttpMethod;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.*;
 import com.google.common.collect.Multimap;
 import io.minio.*;
 import io.minio.http.Method;
-import io.minio.messages.Part;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +37,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -41,6 +55,8 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
 
     private String bucket;
 
+    private AmazonS3 amazonS3;
+
 
     @Override
     public void setConfig(BreezeMinIOProperties.MinioServerConfig config) {
@@ -55,6 +71,22 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
                 .endpoint(config.getInnerEndpoint())
                 .credentials(config.getAccessKey(), config.getSecretKey())
                 .build();
+        //设置连接时的参数
+        ClientConfiguration configs = new ClientConfiguration();
+        //设置连接方式为HTTP，可选参数为HTTP和HTTPS
+        configs.setProtocol(Protocol.HTTP);
+        //设置网络访问超时时间
+        configs.setConnectionTimeout(5000);
+        configs.setUseExpectContinue(true);
+        AWSCredentials credentials = new BasicAWSCredentials(config.getAccessKey(), config.getSecretKey());
+        //设置Endpoint
+        AwsClientBuilder.EndpointConfiguration end_point = new AwsClientBuilder.EndpointConfiguration(config.getEndpoint(), Regions.DEFAULT_REGION.name());
+        amazonS3 = AmazonS3ClientBuilder.standard()
+                .withClientConfiguration(configs)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withEndpointConfiguration(end_point)
+                .withPathStyleAccessEnabled(true).build();
+
     }
 
     @Override
@@ -80,6 +112,11 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     @Override
     public String getBucket() {
         return this.bucket;
+    }
+
+    @Override
+    public String getBucketHost() {
+        return this.config.getEndpoint();
     }
 
     @Override
@@ -395,17 +432,13 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public String getUploadId(String region, String objectName, Multimap<String, String> headers, Multimap<String, String> extraQueryParams) {
-        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
-                .endpoint(config.getEndpoint())
-                .credentials(config.getAccessKey(), config.getSecretKey())
-                .build();
-        try {
-            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
-            return template.getUploadId(bucket, region, objectName, headers, extraQueryParams);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public String getUploadId(String objectName) {
+        String contentType = MediaTypeFactory.getMediaType(objectName).orElse(MediaType.APPLICATION_OCTET_STREAM).toString();
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(contentType);
+        InitiateMultipartUploadResult result = amazonS3.initiateMultipartUpload(new InitiateMultipartUploadRequest(bucket, objectName)
+                .withObjectMetadata(objectMetadata));
+        return result.getUploadId();
     }
 
     @Override
@@ -423,31 +456,20 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public ObjectWriteResponse mergeMultipart(String region, String objectName, String uploadId, Part[] parts, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
-        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
-                .endpoint(config.getEndpoint())
-                .credentials(config.getAccessKey(), config.getSecretKey())
-                .build();
-        try {
-            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
-            return template.mergeMultipart(bucket, region, objectName, uploadId, parts, extraHeaders, extraQueryParams);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public CompleteMultipartUploadResult mergeMultipart(String objectName, String uploadId, List<PartSummary> parts) {
+        CompleteMultipartUploadRequest completeMultipartUploadRequest = new CompleteMultipartUploadRequest()
+                .withUploadId(uploadId)
+                .withKey(objectName)
+                .withBucketName(bucket)
+                .withPartETags(parts.stream().map(partSummary -> new PartETag(partSummary.getPartNumber(), partSummary.getETag())).collect(Collectors.toList()));
+        return amazonS3.completeMultipartUpload(completeMultipartUploadRequest);
     }
 
     @Override
-    public ListPartsResponse listMultipart(String region, String objectName, Integer maxParts, Integer partNumberMarker, String uploadId, Multimap<String, String> extraHeaders, Multimap<String, String> extraQueryParams) {
-        MinioAsyncClient asyncClient = MinioAsyncClient.builder()
-                .endpoint(config.getEndpoint())
-                .credentials(config.getAccessKey(), config.getSecretKey())
-                .build();
-        try {
-            BreezeMinioMultipartClient template = new BreezeMinioMultipartClient(asyncClient);
-            return template.listMultipart(bucket, region, objectName, maxParts, partNumberMarker, uploadId, extraHeaders, extraQueryParams);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public List<PartSummary> listMultipart(String objectName, String uploadId) {
+        ListPartsRequest listPartsRequest = new ListPartsRequest(bucket, objectName, uploadId);
+        PartListing parts = amazonS3.listParts(listPartsRequest);
+        return parts.getParts();
     }
 
     @Override
@@ -468,18 +490,13 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
     }
 
     @Override
-    public String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit) {
-        try {
-            if (expireDuration == null) {
-                expireDuration = 1;
-                timeUnit = TimeUnit.DAYS;
-            }
-            return client.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucket)
-                    .method(method).object(objectName).expiry(expireDuration, timeUnit)
-                    .build());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit, Map<String, String> extraQueryParams) {
+        GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, objectName)
+                .withExpiration(DateUtil.offsetDay(new Date(), 1)).withMethod(HttpMethod.PUT);
+        if (extraQueryParams != null) {
+            extraQueryParams.forEach((key, val) -> request.addRequestParameter(key, val));
         }
+        URL url = amazonS3.generatePresignedUrl(request);
+        return url.toString();
     }
 }

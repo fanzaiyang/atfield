@@ -1,9 +1,11 @@
 package cn.fanzy.breeze.minio.service;
 
-import cn.fanzy.breeze.minio.model.BreezeMergeMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
+import com.amazonaws.services.s3.model.PartSummary;
+
+import java.util.List;
 
 /**
  * 分片上传接口
@@ -20,12 +22,14 @@ public interface BreezeMultipartFileService {
      */
     BreezePutMultipartFileResponse beforeUpload(BreezePutMultipartFileArgs args);
 
+    List<PartSummary> queryListPart(String uploadId);
 
     /**
      * 根据文件的MD5合并文件
-     * @param args {@link BreezeMergeMultipartFileArgs}
+     * @param identifier 文件MD5
+     * @param minioConfigName minio配置文件名
      * @return 合并结果
      */
-    BreezeMinioResponse mergeChunk(BreezeMergeMultipartFileArgs args);
+    BreezeMinioResponse mergeChunk(String identifier,String minioConfigName);
     
 }
