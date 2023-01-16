@@ -29,7 +29,7 @@
     </modules>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.0.3</revision>
+        <revision>2.1.0</revision>
         <java.version>8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
