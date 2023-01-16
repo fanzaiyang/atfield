@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.minio.controller;
 
 import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
+import cn.fanzy.breeze.minio.model.BreezePutMultiPartFile;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileArgs;
 import cn.fanzy.breeze.minio.model.BreezePutMultipartFileResponse;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
@@ -26,9 +27,9 @@ public class BreezeMinioController {
     }
 
     @GetMapping("${breeze.minio.api.presigned:/breeze/minio/multipart/presigned}")
-    public JsonContent<String> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
-        String url = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
-        return JsonContent.success(url);
+    public JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        BreezePutMultiPartFile partFile = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+        return JsonContent.success(partFile);
     }
 
     @GetMapping("${breeze.minio.api.merge:/breeze/minio/multipart/merge}")
