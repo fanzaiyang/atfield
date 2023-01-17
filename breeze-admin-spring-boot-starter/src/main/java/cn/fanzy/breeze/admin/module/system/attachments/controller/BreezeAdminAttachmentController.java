@@ -64,7 +64,7 @@ public class BreezeAdminAttachmentController {
             @Parameter(name = "partNumber", description = "分片索引，1开始"),
             @Parameter(name = "minioConfigName", description = "后端多minio服务端是填写，默认第一个。")
     })
-    @GetMapping("/upload/multipart/presigned}")
+    @GetMapping("/upload/multipart/presigned")
     public JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
         return breezeAdminAttachmentService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
     }

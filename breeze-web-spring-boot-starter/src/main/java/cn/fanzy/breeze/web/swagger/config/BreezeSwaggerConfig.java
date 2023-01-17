@@ -49,7 +49,7 @@ public class BreezeSwaggerConfig implements WebMvcConfigurer {
         return GroupedOpenApi.builder()
                 .group("-默认分组-")
                 .pathsToMatch("/**")
-                .packagesToScan(properties.getPackagesToScan().toArray(new String[0]))
+                .packagesToScan(properties.getPackagesToScan().toArray(new String[properties.getPackagesToScan().size()]))
                 .build();
     }
 

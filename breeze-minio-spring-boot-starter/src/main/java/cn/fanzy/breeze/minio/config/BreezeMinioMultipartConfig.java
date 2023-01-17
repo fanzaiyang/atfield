@@ -45,7 +45,7 @@ public class BreezeMinioMultipartConfig {
         return GroupedOpenApi.builder()
                 .group("-默认分组-")
                 .pathsToMatch("/**")
-                .packagesToScan(packagesToScan.toArray(new String[0]))
+                .packagesToScan(packagesToScan.toArray(new String[packagesToScan.size()]))
                 .build();
     }
 

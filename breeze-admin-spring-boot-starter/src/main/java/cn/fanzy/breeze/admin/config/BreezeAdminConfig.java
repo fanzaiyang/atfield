@@ -44,13 +44,13 @@ public class BreezeAdminConfig {
         if (packagesToScan == null) {
             packagesToScan = CollUtil.newArrayList("cn.fanzy.breeze.minio.controller", "cn.fanzy.breeze.admin.module");
         } else {
-            packagesToScan.add("cn.fanzy.breeze.minio.controller");
             packagesToScan.add("cn.fanzy.breeze.admin.module");
+            packagesToScan.add("cn.fanzy.breeze.minio.controller");
         }
         return GroupedOpenApi.builder()
                 .group("-默认分组-")
                 .pathsToMatch("/**")
-                .packagesToScan(packagesToScan.toArray(new String[0]))
+                .packagesToScan(packagesToScan.toArray(new String[packagesToScan.size()]))
                 .build();
     }
 
