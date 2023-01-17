@@ -745,7 +745,7 @@ breeze:
 
 默认情况已经启用了swagger，你不需要做额外引入，只需要在配置文件中配置扫描的包即可。
 
-### 配置文件方式
+### Springdoc配置文件方式
 
 这里使用[springdoc](https://springdoc.org/)配置文件。
 
@@ -772,6 +772,19 @@ public class BreezeAdminSwaggerConfig {
                 .build();
     }
 }
+```
+
+### 简单模式
+
+> 如果不需要非常复杂的接口分组可以使用这种方式。
+> 
+> 当配置了`breeze.web.swagger.packages-to-scan`后该功能生效。可以与以上两种方式共存。
+
+```yml
+breeze:
+  web:
+    swagger:
+      packages-to-scan: com.package1,com.package2 # 支持多个包的扫描，逗号分隔
 ```
 
 ### OpenAPI3规范

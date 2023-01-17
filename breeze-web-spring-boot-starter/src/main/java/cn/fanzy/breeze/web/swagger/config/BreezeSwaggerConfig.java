@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Info;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.GroupedOpenApi;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -42,12 +43,13 @@ public class BreezeSwaggerConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @ConditionalOnMissingBean(name = "breezeDefaultApi")
     @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"packages-to-scan"})
     public GroupedOpenApi breezeDefaultApi() {
         return GroupedOpenApi.builder()
                 .group("-默认分组-")
                 .pathsToMatch("/**")
-                .packagesToScan(properties.getPackagesToScan())
+                .packagesToScan(properties.getPackagesToScan().toArray(new String[0]))
                 .build();
     }
 

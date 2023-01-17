@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +23,7 @@ public class BreezeSwaggerProperties implements Serializable {
 
     private Boolean enable;
 
-    private String[] packagesToScan;
+    private List<String> packagesToScan;
 
     /**
      * 标题
