@@ -67,6 +67,10 @@ public class BreezeMinIOProperties implements Serializable {
     @Data
     public static class MinioApi{
         /**
+         * 是否启用controller接口，默认：true开启
+         */
+        private Boolean enable;
+        /**
          * 上传初始化接口名称，默认：/breeze/minio/multipart/init
          */
         private String init;

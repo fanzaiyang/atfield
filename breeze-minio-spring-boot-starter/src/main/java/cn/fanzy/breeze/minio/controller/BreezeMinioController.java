@@ -8,6 +8,7 @@ import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.web.model.JsonContent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @RestController
 @RequestMapping
+@ConditionalOnProperty(prefix = "breeze.minio.api", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeMinioController {
 
     private final BreezeMultipartFileService breezeMultipartFileService;
