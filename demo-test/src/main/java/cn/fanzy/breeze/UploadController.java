@@ -23,7 +23,7 @@ public class UploadController {
         return JsonContent.success(upload);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/presigned")
     public JsonContent<Object> list(String uploadId, String objectName, String minioConfigName) {
         return JsonContent.success(breezeMultipartFileService.queryListPart(uploadId, objectName, minioConfigName));
     }

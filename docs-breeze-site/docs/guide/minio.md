@@ -513,7 +513,7 @@ CREATE TABLE `sys_multipart_file_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 ```
 
-#### 后端使用
+#### 使用方式
 
 1. 方式一，自定义请求接口`controller`。
 
@@ -532,7 +532,11 @@ public class UploadController {
         BreezePutMultipartFileResponse upload = breezeMultipartFileService.beforeUpload(args);
         return JsonContent.success(upload);
     }
-
+    @GetMapping("/presigned")
+    public JsonContent<BreezePutMultiPartFile> getPresignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
+        BreezePutMultiPartFile partFile = breezeMultipartFileService.getPresignedObjectUrl(identifier, partNumber, minioConfigName);
+        return JsonContent.success(partFile);
+    }
     @GetMapping("/merge")
     public JsonContent<BreezeMinioResponse> merge(String identifier){
         BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
@@ -547,24 +551,58 @@ public class UploadController {
    
    * 初始化：/breeze/minio/multipart/init
    
+   * 获取分片上传地址：/breeze/minio/multipart/presigned
+   
    * 合并：/breeze/minio/multipart/merge
 
-3. 当与admin组件配合使用时建议使用admin组件附件模块**「推荐」**
+3. 当与admin组件配合使用时建议使用admin组件<u>附件模块</u> **「推荐」**
 
 ### 前端使用
 
 > 前端demo代码地址：[breeze-spring-cloud: SpringBoot组件 - Gitee.com](https://gitee.com/it-xiaofan/breeze-spring-cloud/tree/2.1.x/upload-demo)
+> 
+> 前端分片建议每片**大于等于5Mb**。对于小文件上传不建议使用分片上传。
 
-1. 计算文件MD5
-   
-   安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
-   
-   ```shell
-   npm install --save spark-md5
-   
-   # ts同学还需添加@types/spark-md5
-   npm install --save @types/spark-md5
-   ```
+前端接入步骤
+
+```mermaid
+graph LR
+
+b(计算文件MD5)-->c(调用上传初始化接口)-->d(前端文件分割+并发上传)-->e(所有片段上传完成)
+-->f(调用合并接口)
+```
+
+* 步骤说明
+  
+  * 使用SparkMd5计算文件md5
+  
+  * 调用上传初始化接口需要传递md5、文件名、每片大小等参数。
+  
+  * 接口会返回该文件上传状态
+    
+    * 响应结果finished是true时，说明该文件已上传完成，前端可立即显示完成状态。「秒传原理」
+    
+    * 响应结果finished时false时，前端需要解析partList集合字段，该字段是所有分片上传情况。
+      
+      * 若partList集合中数据finished是true时，说明该片段已上传完成。「断点续传」
+      
+      * 若partList集合中数据finished是false时，说明该片段未上传，上传地址是uploadUrl字段。
+      
+      * uploadUrl是有有效期的，为了保险起见，可以在分片上传时再次调用获取分片上传地址接口 **「获取分片预签名上传地址」**。
+    
+    * 等待所有分片上传完成。
+  
+  * 调用合并分片接口，完成最好的上传。
+1. **计算文件MD5**
+
+安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
+
+```shell
+npm install --save spark-md5
+
+# ts同学还需添加@types/spark-md5
+npm install --save @types/spark-md5
+```
 
 > 注意：
 > 
@@ -626,7 +664,9 @@ const identifier = await md5(file)
 console.log(`文件MD5值：${identifier}`);
 ```
 
-2. vue代码，使用了ElementPlus的上传组件，其它上传组件同理。
+2. **vue代码，使用了ElementPlus的上传组件，其它上传组件同理。**
+   
+   vue模板
    
    ```vue
    <template>
@@ -649,6 +689,11 @@ console.log(`文件MD5值：${identifier}`);
        </el-card>
      </main>
    </template>
+   ```
+   
+   script代码
+   
+   ```ts
    <script setup lang="ts">
    import {UploadFilled} from '@element-plus/icons-vue'
    import Queue from 'promise-queue-plus'
@@ -715,19 +760,25 @@ console.log(`文件MD5值：${identifier}`);
        return intervalSize / intervalTime
      }
    
+     // 「核心」这里是每一片上传的逻辑代码
      const uploadNext = async (partNumber: number) => {
-       console.log(`uploadNext->${partNumber}`);
+       // 文件第partNumber片，分割起始位置
        const start = chunkSize * (partNumber - 1)
+       // 文件第partNumber片，分割结束位置
        const end = start + chunkSize
+       // 文件分割slice
        const blob = file.slice(start, end)
-       console.log(start,end,blob);
+       // 在这里可以调用获取分片预签名上传地址接口并替换下方代码
+       // 判断该片段是否在初始化任务中定义，
        let filter = partList.filter(item=>item.currentPartNumber==partNumber);
        if(filter.length===0){
          return Promise.reject("未找到分片「"+partNumber+"」上传地址");
        }
+       // 第partNumber片文件上传是否完成。
        if(filter[0].finished){
          return Promise.resolve({partNumber: partNumber, uploadedSize: blob.size});
        }
+       // 分片上传代码
        await axios.request({
          url: filter[0].uploadUrl,
          method: 'PUT',
@@ -871,13 +922,11 @@ console.log(`文件MD5值：${identifier}`);
    http.interceptors.response.use(response => {
        return response.data
    })
-   ```
-   
    /**
    
-   * 初始化一个分片上传任务
-   * @param data data
-   * @returns {Promise<AxiosResponse<any>>}
+   - 初始化一个分片上传任务
+   - @param data data
+   - @returns {Promise<AxiosResponse<any>>}
      */
      const initTask = (data:any) => {
       return http.post('/upload/before', data)
@@ -885,32 +934,24 @@ console.log(`文件MD5值：${identifier}`);
    
    /**
    
-   * 合并分片
-   * @param data
-   * @returns {Promise<AxiosResponse<any>>}
+   - 合并分片
+   - @param data
+   - @returns {Promise<AxiosResponse<any>>}
      */
      const merge = (identifier:string) => {
       return http.get(`/upload/merge?identifier=${identifier}`)
      }
-   
-   export {
-   
-       initTask,
-       merge,
-       httpExtra
-   
-   }
+   export {initTask,merge,httpExtra}
+   ```
 
-```
 #### 常见问题
 
-1.  前端并发数限制，以及错误重试
+1. 前端并发数限制，以及错误重试
 
 > 前端实现这部分比较麻烦的是在分片上传的时候要控制请求的并发数，让多个分片并发上传可以提升上传效率，但是请求过多时，会占用操作系统大部分资源。
 
 插件[promise-queue-plus](https://github.com/cnwhy/promise-queue-plus)用于控制分片上传的并发数，以及对上传错误的分片进行重试。
 
 2. 关于后端批量生成的预签名上传地址
-
+   
    预签名地址是有有效期的，使用批量生成的预签名地址若长时间不用会失效，未了保险起见，前端可以在分片上传时，再次请求后端获取预签名地址的接口。
-```
