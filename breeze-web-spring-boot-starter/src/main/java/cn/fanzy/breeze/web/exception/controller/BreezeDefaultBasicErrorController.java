@@ -4,13 +4,13 @@ import cn.fanzy.breeze.web.model.JsonContent;
 import cn.hutool.core.bean.BeanUtil;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
-import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,30 +26,18 @@ import java.util.Map;
 /**
  * @author fanzaiyang
  */
-//@Controller
+@Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BreezeDefaultBasicErrorController extends AbstractErrorController {
 
     private final ErrorProperties errorProperties;
-    /**
-     * Create a new {@link BasicErrorController} instance.
-     *
-     * @param errorAttributes the error attributes
-     * @param errorProperties configuration properties
-     */
+
     public BreezeDefaultBasicErrorController(ErrorAttributes errorAttributes, ErrorProperties errorProperties) {
         this(errorAttributes, errorProperties, Collections.emptyList());
     }
 
-    /**
-     * Create a new {@link BasicErrorController} instance.
-     *
-     * @param errorAttributes    the error attributes
-     * @param errorProperties    configuration properties
-     * @param errorViewResolvers error view resolvers
-     */
     public BreezeDefaultBasicErrorController(ErrorAttributes errorAttributes, ErrorProperties errorProperties,
-                                             List<ErrorViewResolver> errorViewResolvers) {
+                                List<ErrorViewResolver> errorViewResolvers) {
         super(errorAttributes, errorViewResolvers);
         Assert.notNull(errorProperties, "ErrorProperties must not be null");
         this.errorProperties = errorProperties;

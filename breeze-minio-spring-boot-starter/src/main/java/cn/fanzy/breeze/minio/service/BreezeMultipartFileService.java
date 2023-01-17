@@ -27,6 +27,7 @@ public interface BreezeMultipartFileService {
      * 获取上传预签名地址
      * @param identifier 文件MD5
      * @param partNumber 分片索引，1开始
+     * @param minioConfigName 配置文件名
      * @return 上传地址
      */
     BreezePutMultiPartFile getPresignedObjectUrl(String identifier, int partNumber, String minioConfigName);

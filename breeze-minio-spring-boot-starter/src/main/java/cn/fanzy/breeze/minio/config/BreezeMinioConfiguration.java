@@ -3,18 +3,14 @@ package cn.fanzy.breeze.minio.config;
 import cn.fanzy.breeze.minio.controller.BreezeMinioController;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
-import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
-import cn.fanzy.breeze.minio.service.impl.BreezeMultipartFileServiceImpl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
@@ -30,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @AllArgsConstructor
 @Configuration
-@ImportAutoConfiguration({BreezeMinioController.class})
+@ImportAutoConfiguration({BreezeMinioController.class, BreezeMinioMultipartConfig.class})
 @EnableConfigurationProperties({BreezeMinIOProperties.class})
 public class BreezeMinioConfiguration {
     private final BreezeMinIOProperties properties;
@@ -61,10 +57,6 @@ public class BreezeMinioConfiguration {
         return serviceMap.get(name);
     }
 
-    @Bean
-    public BreezeMultipartFileService breezeMultipartFileService(JdbcTemplate jdbcTemplate) {
-        return new BreezeMultipartFileServiceImpl(jdbcTemplate, properties);
-    }
 
     /**
      * 配置检查

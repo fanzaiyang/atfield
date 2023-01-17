@@ -39,7 +39,7 @@ public class BreezeStaticView implements View {
                 .append("<meta charset=\"UTF-8\" />")
                 .append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />")
                 .append(StrUtil.format("<title>{}</title>", "默认错误页 - 微风组件"))
-                .append("<link href=\"https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css\" rel=\"stylesheet\">")
+                .append("<link href=\"https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/tailwindcss/2.2.19/tailwind.min.css\" rel=\"stylesheet\">")
                 .append("</head><body class=\"h-full\">")
                 .append("<div class=\"min-h-full flex justify-center py-12 px-4 sm:px-6 lg:px-8\">");
         builder.append("<div class=\"max-w-md w-full space-y-8\">");
