@@ -14,11 +14,11 @@ import javax.annotation.PostConstruct;
 /**
  * <pre>
  *     返回前端的JSON NULL处理配置
- *     1. 字符串null->""
- *     2. 集合null->[]
- *     3. Boolean null ->false
- *     4. 数字null->0
- *     5. 实体对象null->{}
+ *     1. 字符串null转为""
+ *     2. 集合null转为[]
+ *     3. 布尔null 转为false
+ *     4. 数字null转为0
+ *     5. 实体null转json对象
  * </pre>
  * @author fanzaiyang
  */

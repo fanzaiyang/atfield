@@ -22,6 +22,10 @@ title: 更新日志
   
   * breeze-admin-spring-boot-starter
 
+* 🎉 新增JSON消息空处理，null转换为对应类型返回到前端。
+  
+  * breeze-web-spring-boot-starter
+
 ## v2.0.3
 
 * 修复`SpringUtils`获取请求参数的方法，在获取Post Json List时异常。
