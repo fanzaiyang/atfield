@@ -31,6 +31,9 @@ public class SysFile extends IBaseEntity {
     @Column(name = "id", type = Types.VARCHAR, length = 36)
     @Schema(description = "主键")
     private String id;
+    @Schema(description = "文件唯一值MD5")
+    @Column(name = "identifier", type = Types.VARCHAR, length = 64)
+    private String identifier;
 
     /**
      * 文件的名称

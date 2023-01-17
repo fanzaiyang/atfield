@@ -14,6 +14,18 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.1.0
+
+* 🎉 新增基于MinIO的分片上传、断点续传、秒传功能组件。涉及以下组件。🐶
+  
+  * breeze-minio-spring-boot-starter
+  
+  * breeze-admin-spring-boot-starter
+
+* 🎉 新增JSON消息空处理，null转换为对应类型返回到前端。
+  
+  * breeze-web-spring-boot-starter
+
 ## v2.0.3
 
 * 修复`SpringUtils`获取请求参数的方法，在获取Post Json List时异常。

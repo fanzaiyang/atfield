@@ -8,7 +8,7 @@ order: 4
 
 ## 组件说明
 
-MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.2.2`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
+MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.5.1`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
 
 ## 快速开始
 
@@ -21,18 +21,9 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
     <dependency>
         <groupId>cn.fanzy.breeze</groupId>
         <artifactId>breeze-minio-spring-boot-starter</artifactId>
-        <version>最新版本</version>
     </dependency>
  ... ...
 </dependencies>
-<!-- maven私服 -->
-<repositories>
-    <repository>
-        <id>yinfengMaven</id>
-        <name>nexus repository</name>
-        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
-    </repository>
-</repositories>
 ```
 
 2. 修改配置
@@ -44,6 +35,10 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
 ```yaml
 breeze:
   minio:
+    api:
+      init: /breeze/minio/multipart/init # 默认此地址
+      merge: /breeze/minio/multipart/merge # 默认此地址
+      table-name: sys_multipart_file_info #默认此名称
     servers:
       # 第一个minio服务配置
       test:
@@ -367,3 +362,555 @@ public interface BreezeMinioService {
   * 存储桶
     
     在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
+
+## 分片上传
+
+> 这是基于MinIO的分片上传，上传和业务逻辑分离，提高上传效率。支持秒传、断点续传。
+
+### 上传原理
+
+![上传原理](https://breeze.fanzy.cn/uploader-flow.png)
+
+对于前端开发者而言，需要做一下工作。
+
+> **注意：**
+> 
+> 后台返回的数据中，包含各个分片上传状态和具体的每一片上传地址，前端需要针对不同分片上传不同地址。
+
+* 计算文件md5，可以使用npm包`spark-md5`，对于ts用户可能还需要安装`@types/spark-md5`
+
+* 计算好md5后需要把md5传给后台，校验文件上传进度。
+
+* 根据前端返回数据，进行下一步工作。
+  
+  * 秒传：当后台返回完成时，直接完成即可。
+  
+  * 断点续传：后台返回的分片数据中有部分标识为完成的前端不用再对此分片进行操作，直接完成即可。
+
+#### 接口设计
+
+1. **根据文件唯一值初始化上传任务**
+   
+   主要流程是查询数据库记录，判断是否存在文件对象。
+   
+   * 接口地址：/breeze/minio/multipart/init
+   
+   * 请求方式：POST  JSON
+   
+   * 请求参数：
+     
+     | 字段              | 数据类型   | 必填  | 说明                                         |
+     | --------------- | ------ | --- | ------------------------------------------ |
+     | identifier      | string | 是   | 文件唯一值MD5                                   |
+     | fileName        | string | 是   | 文件名称                                       |
+     | fileSize        | long   | 是   | 文件大小byte                                   |
+     | chunkSize       | long   | 是   | 每个分片大小byte                                 |
+     | objectName      | string | 否   | 上传到minio上文件的唯一名称，默认地址：yyyy/MM/dd/uuid.文件格式 |
+     | bucketName      | string | 否   | 上传到minio上的哪个存储桶                            |
+     | totalChunks     | int    | 否   | 总分片个数，后台根据大小大小和每片大小后台计算。                   |
+     | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。                |
+   
+   * 响应参数
+     
+     | 字段          | 数据类型             | 说明                      |
+     | ----------- | ---------------- | ----------------------- |
+     | identifier  | string           | 文件唯一标识                  |
+     | finished    | boolean          | 是否上传完成，true-是，false-未完成 |
+     | bucketName  | string           | 文件存在的存储桶                |
+     | objectName  | string           | 文件唯一名称                  |
+     | totalChunks | int              | 总分片数                    |
+     | chunkSize   | long             | 每片大小byte                |
+     | partList    | List of PartFile | 已上传和分片上传地址的分片           |
+     
+     PartFile说明
+     
+     | 字段                | 数据类型    | 说明                                |
+     | ----------------- | ------- | --------------------------------- |
+     | currentPartNumber | int     | 当前分片序号                            |
+     | uploadUrl         | string  | 前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
+     | finished          | boolean | 是否已上传完成                           |
+     | etag              | string  | 当前分片唯一值                           |
+     | size              | Long    | 当前分片大小                            |
+
+2. 获取分片预签名上传地址
+   
+   * 接口地址：/breeze/minio/multipart/presigned
+   
+   * 请求方式：GET
+   
+   * 请求参数：
+     
+     | 字段              | 数据类型   | 必填  | 说明                          |
+     | --------------- | ------ | --- | --------------------------- |
+     | identifier      | string | 是   | 文件唯一标识md5                   |
+     | partNumber      | int    | 是   | 分片索引，1开始                    |
+     | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。 |
+   
+   * 响应参数PartFile
+     
+     | 字段                | 数据类型    | 说明                                 |
+     | ----------------- | ------- | ---------------------------------- |
+     | currentPartNumber | int     | 当前分片序号                             |
+     | uploadUrl         | string  | 当前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
+     | finished          | boolean | 是否已上传完成                            |
+
+3. 合并分片
+   
+   * 请求地址：/breeze/minio/multipart/merge
+   
+   * 请求方式：GET
+   
+   * 请求参数：
+     
+     | 字段         | 数据类型   | 必填  | 说明        |
+     | ---------- | ------ | --- | --------- |
+     | identifier | string | 是   | 文件唯一标识MD5 |
+   
+   * 响应参数
+     
+     | 字段         | 数据类型   | 说明             |
+     | ---------- | ------ | -------------- |
+     | etag       | string | 文件唯一标识，minio返回 |
+     | endpoint   | string | minio地址        |
+     | bucket     | string | 存储桶            |
+     | objectName | string | 对象名            |
+     | fileName   | string | 文件名            |
+     | fileMbSize | double | 文件大小Mb         |
+     | previewUrl | string | 预览地址           |
+
+### 后端使用
+
+#### 创建数据库表
+
+> 断点续传和秒传需要数据库支持。
+
+这里的数据库表名可以自定义，需要在配置文件中声明表名`breeze.minio.api.table-name`，组件默认表名是：`sys_multipart_file_info`
+
+```sql
+CREATE TABLE `sys_multipart_file_info` (
+  `id` varchar(36) NOT NULL,
+  `identifier` varchar(64) DEFAULT NULL COMMENT '文件的唯一标识identifier（md5摘要）',
+  `upload_id` varchar(128) DEFAULT NULL COMMENT 'MinIO上传ID',
+  `file_name` varchar(512) DEFAULT NULL,
+  `bucket_host` varchar(255) DEFAULT NULL COMMENT '存储桶host地址',
+  `bucket_name` varchar(200) DEFAULT NULL COMMENT '存储桶名称',
+  `object_name` varchar(1024) DEFAULT NULL,
+  `total_chunk_num` int(11) DEFAULT NULL COMMENT '分片个数',
+  `total_file_size` bigint(20) DEFAULT NULL,
+  `chunk_size` bigint(20) DEFAULT NULL COMMENT '每片按照多大分割',
+  `begin_time` datetime DEFAULT NULL COMMENT '上传开始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '上传结束时间',
+  `spend_second` int(11) DEFAULT NULL COMMENT '后台上传耗时',
+  `status` smallint(1) DEFAULT NULL COMMENT '文件状态：0-上传中，1-上传完成',
+  `del_flag` int(1) DEFAULT '0' COMMENT '删除标志,0:未删除 1:已删除',
+  `create_by` varchar(36) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(36) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `revision` int(11) DEFAULT NULL,
+  `tenant_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+```
+
+#### 后端使用
+
+1. 方式一，自定义请求接口`controller`。
+
+只需要在需要位置注入`BreezeMultipartFileService`即可，示例如下：
+
+```java
+@RestController
+@Slf4j
+@AllArgsConstructor
+@RequestMapping("/upload")
+public class UploadController {
+
+    private final BreezeMultipartFileService breezeMultipartFileService;
+    @PostMapping("/before")
+    public JsonContent<BreezePutMultipartFileResponse> before(@RequestBody BreezePutMultipartFileArgs args){
+        BreezePutMultipartFileResponse upload = breezeMultipartFileService.beforeUpload(args);
+        return JsonContent.success(upload);
+    }
+
+    @GetMapping("/merge")
+    public JsonContent<BreezeMinioResponse> merge(String identifier){
+        BreezeMinioResponse response = breezeMultipartFileService.mergeChunk(identifier,null);
+        return JsonContent.success(response);
+    }
+}
+```
+
+2. 方式二，使用组件的controller。**「推荐」**
+   
+   该方式可以通过配置文件修改接口地址，默认组件上传的两个接口地址分别是：
+   
+   * 初始化：/breeze/minio/multipart/init
+   
+   * 合并：/breeze/minio/multipart/merge
+
+3. 当与admin组件配合使用时建议使用admin组件附件模块**「推荐」**
+
+### 前端使用
+
+> 前端demo代码地址：[breeze-spring-cloud: SpringBoot组件 - Gitee.com](https://gitee.com/it-xiaofan/breeze-spring-cloud/tree/2.1.x/upload-demo)
+
+1. 计算文件MD5
+   
+   安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
+   
+   ```shell
+   npm install --save spark-md5
+   
+   # ts同学还需添加@types/spark-md5
+   npm install --save @types/spark-md5
+   ```
+
+> 注意：
+> 
+> 当文件比较大时，直接计算md5会导致内存不足，浏览器奔溃。需要对文件进行分割，逐步计算。
+
+使用`spark-md5`计算文件md5的工具类如下：
+
+```ts
+import SparkMD5 from 'spark-md5'
+// 默认分割大小，与上传时分割大小可以不一致
+const DEFAULT_SIZE = 20 * 1024 * 1024
+const md5 = (file:any, chunkSize = DEFAULT_SIZE) => {
+    return new Promise((resolve, reject) => {
+        const startMs = new Date().getTime();
+        let blobSlice =
+            File.prototype.slice ||
+            File.prototype?.mozSlice ||
+            File.prototype?.webkitSlice;
+        let chunks = Math.ceil(file.size / chunkSize);
+        let currentChunk = 0;
+        let spark = new SparkMD5.ArrayBuffer(); //追加数组缓冲区。
+        let fileReader = new FileReader(); //读取文件
+        fileReader.onload = function (e) {
+            spark.append(e.target?.result);
+            currentChunk++;
+            if (currentChunk < chunks) {
+                loadNext();
+            } else {
+                const md5 = spark.end(); //完成md5的计算，返回十六进制结果。
+                console.log('文件md5计算结束，总耗时：', (new Date().getTime() - startMs) / 1000, 's')
+                resolve(md5);
+            }
+        };
+        fileReader.onerror = function (e) {
+            reject(e);
+        };
+
+        function loadNext() {
+            console.log('当前part number：', currentChunk, '总块数：', chunks);
+            let start = currentChunk * chunkSize;
+            let end = start + chunkSize;
+            (end > file.size) && (end = file.size);
+            fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+        }
+        loadNext();
+    });
+}
+
+export default md5
+```
+
+如何使用此工具类
+
+```ts
+// 这里假设工具放到了utils包下，且名为md5.ts
+import md5 from "@/utils/md5";
+// 这里file为选择的文件Blob格式
+const identifier = await md5(file)
+console.log(`文件MD5值：${identifier}`);
+```
+
+2. vue代码，使用了ElementPlus的上传组件，其它上传组件同理。
+   
+   ```vue
+   <template>
+     <main>
+       <el-card style="width: 400px; margin: 80px auto" header="文件分片上传">
+         <el-upload
+             class="upload-demo"
+             drag
+             action="/"
+             multiple
+             :http-request="handleHttpRequest"
+             :on-remove="handleRemoveFile">
+           <el-icon class="el-icon--upload">
+             <upload-filled/>
+           </el-icon>
+           <div class="el-upload__text">
+             请拖拽文件到此处或 <em>点击此处上传</em>
+           </div>
+         </el-upload>
+       </el-card>
+     </main>
+   </template>
+   <script setup lang="ts">
+   import {UploadFilled} from '@element-plus/icons-vue'
+   import Queue from 'promise-queue-plus'
+   import md5 from "@/utils/md5";
+   import {initTask, merge} from '@/utils/api';
+   import {ElNotification} from "element-plus";
+   import axios from 'axios'
+   import {ref} from 'vue'
+   
+   // 文件上传分块任务的队列（用于移除文件时，停止该文件的上传队列） key：fileUid value： queue object
+   const fileUploadChunkQueue = ref<any>({}).value
+   
+   /**
+    * 获取一个上传任务，没有则初始化一个
+    */
+   const getTaskInfo = async (file: any) => {
+     let task:any;
+     const identifier = await md5(file)
+     console.log(`文件MD5值：${identifier}`);
+     const initTaskData = {
+       identifier,
+       fileName: file.name,
+       fileSize: file.size,
+       chunkSize: 5 * 1024 * 1024
+     }
+     const {code, data, message}: any = await initTask(initTaskData)
+     if (code === 200) {
+       task = data
+     } else {
+       ElNotification.error({
+         title: '文件上传错误',
+         message: message
+       })
+     }
+     return task
+   }
+   
+   interface TaskRecord {
+     identifier: string;
+     finished: boolean;
+     chunkSize: number;
+     totalChunks: number;
+     partList: Array<any>;
+   }
+   
+   /**
+    * 上传逻辑处理，如果文件已经上传完成（完成分块合并操作），则不会进入到此方法中
+    */
+   const handleUpload = (file: any, taskRecord: TaskRecord, options: any) => {
+     let lastUploadedSize = 0; // 上次断点续传时上传的总大小
+     let uploadedSize = 0 // 已上传的大小
+     const totalSize = file.size || 0 // 文件总大小
+     let startMs = new Date().getTime(); // 开始上传的时间
+     const {partList, chunkSize, totalChunks, identifier} = taskRecord
+     console.log('taskRecord',taskRecord);
+   
+     // 获取从开始上传到现在的平均速度（byte/s）
+     const getSpeed = () => {
+       // 已上传的总大小 - 上次上传的总大小（断点续传）= 本次上传的总大小（byte）
+       const intervalSize = uploadedSize - lastUploadedSize
+       const nowMs = new Date().getTime()
+       // 时间间隔（s）
+       const intervalTime = (nowMs - startMs) / 1000
+       return intervalSize / intervalTime
+     }
+   
+     const uploadNext = async (partNumber: number) => {
+       console.log(`uploadNext->${partNumber}`);
+       const start = chunkSize * (partNumber - 1)
+       const end = start + chunkSize
+       const blob = file.slice(start, end)
+       console.log(start,end,blob);
+       let filter = partList.filter(item=>item.currentPartNumber==partNumber);
+       if(filter.length===0){
+         return Promise.reject("未找到分片「"+partNumber+"」上传地址");
+       }
+       if(filter[0].finished){
+         return Promise.resolve({partNumber: partNumber, uploadedSize: blob.size});
+       }
+       await axios.request({
+         url: filter[0].uploadUrl,
+         method: 'PUT',
+         data: blob,
+         headers: {'Content-Type': 'application/octet-stream'}
+       })
+       return Promise.resolve({partNumber: partNumber, uploadedSize: blob.size})
+     }
+   
+     /**
+      * 更新上传进度
+      * @param increment 为已上传的进度增加的字节量
+      */
+     const updateProcess = (increment: number) => {
+       const {onProgress} = options
+       let factor = 1000; // 每次增加1000 byte
+       let from = 0;
+       // 通过循环一点一点的增加进度
+       while (from <= increment) {
+         from += factor
+         uploadedSize += factor
+         const percent = Math.round(uploadedSize / totalSize * 100).toFixed(2);
+         onProgress({percent: percent})
+       }
+   
+       const speed = getSpeed();
+       const remainingTime = speed != 0 ? Math.ceil((totalSize - uploadedSize) / speed) + 's' : '未知'
+       console.log('剩余大小：', (totalSize - uploadedSize) / 1024 / 1024, 'mb');
+       console.log('当前速度：', (speed / 1024 / 1024).toFixed(2), 'mbps');
+       console.log('预计完成：', remainingTime);
+     }
+   
+     return new Promise(resolve => {
+       const failArr: Array<any> = [];
+       const queue = Queue(5, {
+         "retry": 3,               //Number of retries
+         "retryIsJump": false,     //retry now?
+         "workReject": function (reason, queue) {
+           failArr.push(reason)
+         },
+         "queueEnd": function (queue: any) {
+           resolve(failArr);
+         }
+       })
+       fileUploadChunkQueue[file.uid] = queue
+       console.log(`总分片：${totalChunks}`);
+       for (let partNumber = 1; partNumber <= totalChunks; partNumber++) {
+         const exitPart = (partList || []).find((exitPart: { currentPartNumber: number; size: number;finished:boolean }) => exitPart.finished)
+         console.log(`分片${partNumber}是否存在：${exitPart}`);
+         if (exitPart) {
+           // 分片已上传完成，累计到上传完成的总额中,同时记录一下上次断点上传的大小，用于计算上传速度
+           lastUploadedSize += exitPart.size
+           updateProcess(exitPart.size)
+         } else {
+           queue.push(() => uploadNext(partNumber).then(res => {
+             // 单片文件上传完成再更新上传进度
+             updateProcess(res.uploadedSize)
+           }))
+         }
+       }
+       if (queue.getLength() == 0) {
+         // 所有分片都上传完，但未合并，直接return出去，进行合并操作
+         resolve(failArr);
+         return;
+       }
+       queue.start()
+     })
+   }
+   
+   /**
+    * el-upload 自定义上传方法入口
+    */
+   const handleHttpRequest = async (options: any) => {
+     const file = options.file
+     const task = await getTaskInfo(file)
+     if (task) {
+       const {finished, path, partList, identifier} = task
+       if (finished) {
+         return path
+       } else {
+         const errorList: any = await handleUpload(file, task, options)
+         if (errorList.length > 0) {
+           ElNotification.error({
+             title: '文件上传错误',
+             message: '部分分片上次失败，请尝试重新上传文件'
+           })
+           return;
+         }
+         const {code, data, message}: any = await merge(identifier)
+         if (code === 200) {
+           return path;
+         } else {
+           ElNotification.error({
+             title: '文件上传错误',
+             message: message
+           })
+         }
+       }
+     } else {
+       ElNotification.error({
+         title: '文件上传错误',
+         message: '获取上传任务失败'
+       })
+     }
+   }
+   
+   /**
+    * 移除文件列表中的文件
+    * 如果文件存在上传队列任务对象，则停止该队列的任务
+    */
+   const handleRemoveFile = (uploadFile: any, uploadFiles: any) => {
+     const queueObject = fileUploadChunkQueue[uploadFile.uid]
+     if (queueObject) {
+       queueObject.stop()
+       fileUploadChunkQueue[uploadFile.uid] = undefined
+     }
+   }
+   </script>
+   ```
+   
+   axios请求代码
+   
+   ```ts
+   import axios from 'axios'
+   // @ts-ignore
+   import axiosExtra from 'axios-extra'
+   const baseUrl = 'http://localhost:8080'
+   
+   const http = axios.create({
+       baseURL: baseUrl
+   })
+   
+   const httpExtra = axiosExtra.create({
+       maxConcurrent: 5, //并发为1
+       queueOptions: {
+           retry: 3, //请求失败时,最多会重试3次
+           retryIsJump: false //是否立即重试, 否则将在请求队列尾部插入重试请求
+       }
+   })
+   
+   http.interceptors.response.use(response => {
+       return response.data
+   })
+   ```
+   
+   /**
+   
+   * 初始化一个分片上传任务
+   * @param data data
+   * @returns {Promise<AxiosResponse<any>>}
+     */
+     const initTask = (data:any) => {
+      return http.post('/upload/before', data)
+     }
+   
+   /**
+   
+   * 合并分片
+   * @param data
+   * @returns {Promise<AxiosResponse<any>>}
+     */
+     const merge = (identifier:string) => {
+      return http.get(`/upload/merge?identifier=${identifier}`)
+     }
+   
+   export {
+   
+       initTask,
+       merge,
+       httpExtra
+   
+   }
+
+```
+#### 常见问题
+
+1.  前端并发数限制，以及错误重试
+
+> 前端实现这部分比较麻烦的是在分片上传的时候要控制请求的并发数，让多个分片并发上传可以提升上传效率，但是请求过多时，会占用操作系统大部分资源。
+
+插件[promise-queue-plus](https://github.com/cnwhy/promise-queue-plus)用于控制分片上传的并发数，以及对上传错误的分片进行重试。
+
+2. 关于后端批量生成的预签名上传地址
+
+   预签名地址是有有效期的，使用批量生成的预签名地址若长时间不用会失效，未了保险起见，前端可以在分片上传时，再次请求后端获取预签名地址的接口。
+```

@@ -41,6 +41,4 @@ public class BreezeMinioResponse {
      */
     private String previewUrl;
 
-
-
 }

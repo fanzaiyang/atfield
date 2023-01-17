@@ -3,6 +3,7 @@
  */
 package cn.fanzy.breeze.minio.properties;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -28,6 +29,7 @@ public class BreezeMinIOProperties implements Serializable {
      */
     private Map<String, MinioServerConfig> servers = new LinkedHashMap<>();
 
+    private MinioApi api=new MinioApi();
     @Data
     public static class MinioServerConfig {
         /**
@@ -62,4 +64,30 @@ public class BreezeMinIOProperties implements Serializable {
         }
     }
 
+    @Data
+    public static class MinioApi{
+        /**
+         * 是否启用controller接口，默认：true开启
+         */
+        private Boolean enable;
+        /**
+         * 上传初始化接口名称，默认：/breeze/minio/multipart/init
+         */
+        private String init;
+        /**
+         * 上传合并接口名称，默认：/breeze/minio/multipart/merge
+         */
+        private String merge;
+        /**
+         * 获取某分片上传地址，默认：/breeze/minio/multipart/presigned
+         */
+        private String presigned;
+
+        private String tableName;
+
+
+        public String getTableName() {
+            return StrUtil.blankToDefault(tableName,"sys_multipart_file_info");
+        }
+    }
 }

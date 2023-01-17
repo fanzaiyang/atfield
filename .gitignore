@@ -49,3 +49,5 @@ build/
 /docs-breeze-site/node_modules/
 /docs-breeze-site/dist/
 /logs/
+/upload-demo/node_modules/
+/upload-demo/yarn.lock

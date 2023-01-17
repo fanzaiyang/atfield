@@ -63,3 +63,13 @@ breeze:
 3. 使用
    
    启用项目，访问文档地址(/doc.html)：http://localhost:PORT/doc.html
+
+### 附件管理
+
+minio模块的所有功能均可食用，并且分片上传。默认接口地址分别为：
+
+* 初始化任务：sys/attachment/upload/multipart/init
+
+* 获取分片上传地址：sys/attachment/upload/multipart/presigned
+
+* 合并分片：sys/attachment/upload/multipart/merge

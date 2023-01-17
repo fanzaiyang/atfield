@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +22,8 @@ public class BreezeSwaggerProperties implements Serializable {
     private static final long serialVersionUID = -3642562913132999859L;
 
     private Boolean enable;
+
+    private List<String> packagesToScan;
 
     /**
      * 标题

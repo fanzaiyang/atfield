@@ -4,6 +4,7 @@ import cn.fanzy.breeze.admin.module.system.attachments.controller.BreezeAdminAtt
 import cn.fanzy.breeze.admin.module.system.attachments.service.BreezeAdminAttachmentService;
 import cn.fanzy.breeze.admin.module.system.attachments.service.impl.BreezeAdminAttachmentServiceImpl;
 import cn.fanzy.breeze.minio.config.BreezeMinioConfiguration;
+import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -30,8 +31,8 @@ public class BreezeAdminAttachmentConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public BreezeAdminAttachmentService breezeAdminAttachmentService(SqlToyHelperDao sqlToyHelperDao) {
-        return new BreezeAdminAttachmentServiceImpl(sqlToyHelperDao);
+    public BreezeAdminAttachmentService breezeAdminAttachmentService(SqlToyHelperDao sqlToyHelperDao, BreezeMultipartFileService breezeMultipartFileService) {
+        return new BreezeAdminAttachmentServiceImpl(sqlToyHelperDao,breezeMultipartFileService);
     }
 
     @PostConstruct

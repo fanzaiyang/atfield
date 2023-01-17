@@ -14,6 +14,7 @@ WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置。
 | 缓存管理     | 默认实现了内存，Redis缓存。开发者可快速使用缓存。                     |
 | 全局异常     | 重写了SpringBoot默认异常处理机制，拦截日常中常用的异常。封装成结构化数据，返回前端。 |
 | 全局响应     | 封装全局响应类。规范所有响应结果。开发者可通过配置设置成功失败code。            |
+| JSON转换   | 将返回前端的null处理成对应类型，string->null，object->{}       |
 | 全局过滤器    | 拦截过滤器中的异常，并返回给前端结构化数据。复制body请求参数，防止只取一次缺陷。      |
 | Redis序列化 | 解决使用RedisTemplate保存的内容乱码问题。                     |
 | 分布式锁     | 通过一个注解实现分布式锁。                                   |
@@ -246,6 +247,29 @@ breeze:
       success-message: 操作成功！ #成功的响应消息，默认：操作成功！
       error-code: -100 # 失败code，默认-100
       error-message: 操作失败！ #失败的响应消息，默认：操作失败！
+```
+
+## JSON转换
+
+> 该模块用于处理返回前端的json中null。
+> 
+> * null字符串->""
+> 
+> * null数字->0
+> 
+> * null集合->[]
+> 
+> * null布尔->false
+> 
+> * null实体->{}
+
+该默认默认启用，关闭需要在配置文件中添加如下配置`breeze.web.json.enable=false`
+
+```yml
+breeze:
+  web:
+    json:
+      enable: false # 默认true表示启用
 ```
 
 ## 过滤器
@@ -721,7 +745,7 @@ breeze:
 
 默认情况已经启用了swagger，你不需要做额外引入，只需要在配置文件中配置扫描的包即可。
 
-### 配置文件方式
+### Springdoc配置文件方式
 
 这里使用[springdoc](https://springdoc.org/)配置文件。
 
@@ -748,6 +772,19 @@ public class BreezeAdminSwaggerConfig {
                 .build();
     }
 }
+```
+
+### 简单模式
+
+> 如果不需要非常复杂的接口分组可以使用这种方式。
+> 
+> 当配置了`breeze.web.swagger.packages-to-scan`后该功能生效。可以与以上两种方式共存。
+
+```yml
+breeze:
+  web:
+    swagger:
+      packages-to-scan: com.package1,com.package2 # 支持多个包的扫描，逗号分隔
 ```
 
 ### OpenAPI3规范

@@ -5,15 +5,18 @@ import cn.fanzy.breeze.minio.model.BreezeMinioResponse;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.impl.BreezeMinioServiceImpl;
 import cn.fanzy.breeze.minio.utils.BreezeBucketEffectEnum;
+import com.amazonaws.services.s3.model.CompleteMultipartUploadResult;
+import com.amazonaws.services.s3.model.PartSummary;
+import io.minio.ComposeObjectArgs;
 import io.minio.MinioClient;
-import io.minio.errors.*;
+import io.minio.http.Method;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public interface BreezeMinioService {
 
@@ -42,6 +45,9 @@ public interface BreezeMinioService {
      */
     BreezeMinioServiceImpl bucket(String bucket);
 
+
+    String getBucket();
+    String getBucketHost();
     /**
      * 桶存在和创造
      *
@@ -117,6 +123,8 @@ public interface BreezeMinioService {
      * @return {@link BreezeMinioResponse}
      */
     BreezeMinioResponse upload(InputStream inputStream, String objectName, String fileName, String contentType);
+
+    BreezeMinioResponse merge(ComposeObjectArgs args);
     /**
      * 得到对象
      *
@@ -177,7 +185,7 @@ public interface BreezeMinioService {
      *
      * @param args   arg游戏
      */
-    void setBucketPolicy(BreezeBucketPolicy args)    ;
+    void setBucketPolicy(BreezeBucketPolicy args);
 
     /**
      * 删除桶政策
@@ -204,4 +212,50 @@ public interface BreezeMinioService {
      * @return {@link String}
      */
     String getPublicPreviewUrl(String objectName);
+
+
+    /**
+     * 分片上传，获取上传ID
+     * @param objectName 对象名唯一
+     * @return String
+     */
+    String initiateMultipartUpload(String objectName);
+
+
+    /**
+     * 删除上传的分片任务
+     * @param objectName object
+     * @param uploadId uploadId
+     */
+    void abortMultipartUpload(String objectName, String uploadId);
+
+    /**
+     * 合并分片
+     * @param objectName objectName
+     * @param uploadId uploadId
+     * @param parts List {@link PartSummary}
+     * @return CompleteMultipartUploadResult
+     */
+    CompleteMultipartUploadResult completeMultipartUpload(String objectName, String uploadId, List<PartSummary> parts);
+
+    /**
+     * 查询分片
+     * @param objectName objectName
+     * @param uploadId uploadId
+     * @return List {@link PartSummary}
+     */
+    List<PartSummary> listParts(String objectName, String uploadId);
+
+
+    /**
+     * 获取上传路径
+     * @param method {@link Method}
+     * @param objectName objectName
+     * @param expireDuration expireDuration
+     * @param timeUnit {@link TimeUnit}
+     * @param extraQueryParams Map
+     * @return String
+     */
+    String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit, Map<String, String> extraQueryParams);
+
 }
