@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,7 @@ import javax.annotation.PostConstruct;
 @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeSwaggerConfig implements WebMvcConfigurer {
     private final BreezeSwaggerProperties properties;
+
     @Bean
     public OpenAPI breezeCustomOpenAPI() {
         return new OpenAPI()
@@ -38,6 +40,17 @@ public class BreezeSwaggerConfig implements WebMvcConfigurer {
                         .extensions(properties.getExtensions())
                 );
     }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"packages-to-scan"})
+    public GroupedOpenApi breezeDefaultApi() {
+        return GroupedOpenApi.builder()
+                .group("-默认分组-")
+                .pathsToMatch("/**")
+                .packagesToScan(properties.getPackagesToScan())
+                .build();
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
@@ -57,6 +70,7 @@ public class BreezeSwaggerConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/static/");
     }
+
     @PostConstruct
     public void checkConfig() {
         log.info("「微风组件」开启 <Swagger3> 相关的配置。");

@@ -22,6 +22,8 @@ public class BreezeSwaggerProperties implements Serializable {
 
     private Boolean enable;
 
+    private String[] packagesToScan;
+
     /**
      * 标题
      */
