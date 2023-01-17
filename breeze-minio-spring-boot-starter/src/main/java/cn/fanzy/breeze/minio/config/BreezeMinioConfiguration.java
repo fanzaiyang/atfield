@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.minio.config;
 
+import cn.fanzy.breeze.minio.controller.BreezeMinioController;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMinioService;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
@@ -9,6 +10,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +28,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 2022-08-22
  */
 @Slf4j
-@Configuration
 @AllArgsConstructor
+@Configuration
+@ImportAutoConfiguration({BreezeMinioController.class})
 @EnableConfigurationProperties({BreezeMinIOProperties.class})
 public class BreezeMinioConfiguration {
     private final BreezeMinIOProperties properties;
@@ -52,15 +55,15 @@ public class BreezeMinioConfiguration {
      * @return {@link BreezeMinioService}
      */
     public static BreezeMinioService instance(String name) {
-        if(StrUtil.isBlank(name)){
+        if (StrUtil.isBlank(name)) {
             return instance();
         }
         return serviceMap.get(name);
     }
 
     @Bean
-    public BreezeMultipartFileService breezeMultipartFileService(JdbcTemplate jdbcTemplate){
-        return new BreezeMultipartFileServiceImpl(jdbcTemplate,properties);
+    public BreezeMultipartFileService breezeMultipartFileService(JdbcTemplate jdbcTemplate) {
+        return new BreezeMultipartFileServiceImpl(jdbcTemplate, properties);
     }
 
     /**
