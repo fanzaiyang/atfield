@@ -559,7 +559,7 @@ public class UploadController {
 
 ### 前端使用
 
-> 前端demo代码地址：[breeze-spring-cloud: SpringBoot组件 - Gitee.com](https://gitee.com/it-xiaofan/breeze-spring-cloud/tree/2.1.x/upload-demo)
+> 前端demo代码地址：[vue-upload-demo](https://gitee.com/it-xiaofan/breeze-spring-cloud-demo/tree/main/vue-upload-demo)
 > 
 > 前端分片建议每片**大于等于5Mb**。对于小文件上传不建议使用分片上传。
 
