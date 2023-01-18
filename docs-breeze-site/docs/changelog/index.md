@@ -16,7 +16,7 @@ title: 更新日志
 
 ## v2.1.1
 
-* 修改pom.xml的build方式，减少使用parent时的profile心智。
+* 修复项目build方式。
 
 ## v2.1.0
 
