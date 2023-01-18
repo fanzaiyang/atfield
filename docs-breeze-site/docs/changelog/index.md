@@ -14,6 +14,10 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.1.2
+
+- 修复分片上传合并方法未更新结束时间和花费描述字段。
+
 ## v2.1.1
 
 * 修复项目build方式。
