@@ -177,8 +177,9 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         Assert.notEmpty(partList, "分片尚未完成，无法执行合并！");
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
         CompleteMultipartUploadResult response = minioService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
-        long between = DateUtil.between(file.getBeginTime(), new Date(), DateUnit.SECOND);
-        jdbcTemplate.update("update " + getTableName() + " set status = 1,end_time=now(),spend_second=?,update_by='MINIO_SERVER',update_time=now() where id=?", between, file.getId());
+        Date now = new Date();
+        long between = DateUtil.between(file.getBeginTime(), now, DateUnit.SECOND);
+        jdbcTemplate.update("update " + getTableName() + " set status = 1,end_time=?,spend_second=?,update_by='MINIO_SERVER',update_time=? where id=?", now, between, now, file.getId());
         BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
         return BreezeMinioResponse.builder()
                 .etag(response.getETag())
