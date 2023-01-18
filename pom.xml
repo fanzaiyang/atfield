@@ -25,7 +25,6 @@
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
         <module>breeze-spring-cloud-dependencies</module>
-<!--        <module>demo-test</module>-->
     </modules>
     <packaging>pom</packaging>
     <properties>
@@ -310,11 +309,6 @@
         </developer>
     </developers>
     <distributionManagement>
-        <!--<repository>
-            <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/fanzaiyang/breeze-spring-cloud</url>
-        </repository>-->
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
