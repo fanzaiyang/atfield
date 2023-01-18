@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BreezeMinioResponse {
     /**
+     * 文件在数据库中的ID
+     */
+    private String id;
+    /**
      * 标识
      */
     private String etag;

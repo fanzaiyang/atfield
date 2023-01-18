@@ -70,6 +70,8 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         // 文件上传过，秒传
         BreezeMultipartFileEntity file = query.get(0);
         if (file.getStatus() == 1) {
+            BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
+
             return BreezePutMultipartFileResponse.builder()
                     .bucketName(file.getBucketName())
                     .finished(true)
@@ -77,6 +79,15 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                     .identifier(args.getIdentifier())
                     .chunkSize(args.getChunkSize())
                     .totalChunks(args.getTotalChunks())
+                    .finishedFile(BreezeMinioResponse.builder()
+                            .id(file.getId())
+                            .etag(file.getId())
+                            .bucket(file.getBucketName())
+                            .objectName(file.getObjectName())
+                            .previewUrl(minioService.getPreviewUrl(file.getObjectName()))
+                            .fileName(file.getFileName())
+                            .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
+                            .build())
                     .build();
         }
         // 断点续传，已上传部分
@@ -182,6 +193,7 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
         jdbcTemplate.update("update " + getTableName() + " set status = 1,end_time=?,spend_second=?,update_by='MINIO_SERVER',update_time=? where id=?", now, between, now, file.getId());
         BigDecimal decimal = new BigDecimal(file.getTotalFileSize()).divide(new BigDecimal(1048576));
         return BreezeMinioResponse.builder()
+                .id(file.getId())
                 .etag(response.getETag())
                 .bucket(minioService.getBucket())
                 .objectName(response.getKey())
