@@ -14,6 +14,10 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.1.1
+
+* 修改pom.xml的build方式，减少使用parent时的profile心智。
+
 ## v2.1.0
 
 * 🎉 新增基于MinIO的分片上传、断点续传、秒传功能组件。涉及以下组件。🐶
