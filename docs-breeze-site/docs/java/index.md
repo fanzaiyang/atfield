@@ -9,7 +9,7 @@ order: 1
 
 > **SpringBoot3.x默认JDK版本是17。**
 
-Java版本时间
+Java版本时间，Java8竟然到2030年🐶，而java17才到2029年。
 
 ![Java版本时间](https://breeze.fanzy.cn/java_timeline.png)
 
@@ -126,7 +126,7 @@ var c = 88888888L;
 var d = new Object();
 ```
 
-## Java11
+## Java11 LTS
 
 ### 直接运行
 
