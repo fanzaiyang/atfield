@@ -98,8 +98,8 @@ public class CertNoUtil {
             String dateStr = StrUtil.sub(idCard.trim(), 6, 14);
             return LocalDate.parse(dateStr, DateTimeFormatter.BASIC_ISO_DATE);
         } catch (Exception e) {
-            log.info("【公共工具】从身份证号{}中提取出生日期时出现异常，出现异常的原因为 {}", idCard.trim(), e.getMessage());
-            throw new CustomException(-9000, "身份证号出生日期格式不正确");
+            log.info("从身份证号{}中提取出生日期时出现异常，出现异常的原因为 {}", idCard.trim(), e.getMessage());
+            throw new CustomException(400, "身份证号出生日期格式不正确");
         }
     }
 
