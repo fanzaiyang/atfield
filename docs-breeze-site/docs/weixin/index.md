@@ -1,13 +1,17 @@
 ---
 title: 起步
 order: 1
+
 ---
+
 # 起步
+
 ## 介绍
+
 微信开发 Java SDK，支持微信支付、开放平台、公众号、企业号/企业微信、小程序等的后端开发。本插件基于[WxJava](https://gitee.com/binary/weixin-java-tools)开发。
 
 > ⚠️注意：
->
+> 
 > 为了更好的快速使用本插件，微信官方文档需要了解。
 
 * 企业微信
@@ -58,18 +62,18 @@ order: 1
 </dependencies>
 <!-- maven私服 -->
 <repositories>
-	<repository>
-		<id>yinfengMaven</id>
-		<name>nexus repository</name>
-		<url>http://maven.yinfengnet.com/repository/maven-public/</url>
-	</repository>
+    <repository>
+        <id>yinfengMaven</id>
+        <name>nexus repository</name>
+        <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+    </repository>
 </repositories>
 ```
 
 2. 添加配置
-
+   
    > **注意：**
-   >
+   > 
    > 微信组件需要添加配置文件才能使用。
 
 ```yaml
@@ -111,4 +115,3 @@ breeze:
       key-path: key_path #apiclient_cert.p12文件的绝对路径，或者如果放在项目中，请以classpath:开头指定
       use-sandbox-env: false #以指定是否使用沙箱环境,默认false
 ```
-
