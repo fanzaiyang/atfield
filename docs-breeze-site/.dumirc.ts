@@ -12,6 +12,7 @@ export default defineConfig({
       {title: '指南', link: '/guide'},
       {title: '微信', link: '/weixin'},
       {title: '更新日志', link: '/changelog'},
+      {title: 'Java新特性', link: '/java'},
     ],
     footer:'Powered by <a href="https://github.com/fanzaiyang/breeze-spring-cloud" target="_blank">小范同学</a>'
   },
