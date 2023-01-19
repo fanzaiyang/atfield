@@ -14,9 +14,15 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.1.3
+
+* 分片上传初始化接口添加秒传响应对象
+  
+  * 方便前端拿到已上传的文件信息，方便回传后台。
+
 ## v2.1.2
 
-- 修复分片上传合并方法未更新结束时间和花费描述字段。
+- 修复分片上传合并方法未更新结束时间和花费时间两个字段。
 
 ## v2.1.1
 

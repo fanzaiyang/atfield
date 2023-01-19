@@ -89,12 +89,12 @@ String中增加了下面2个成员变量
 
 该注解用于标识废弃的内容，在jdk9中新增了2个内容：
 
-- String since() default “”：标识是从哪个版本开始废弃
-- boolean forRemoval() default false：标识该废弃的内容会在未来的某个版本中移除
+- `String since() default ""`：标识是从哪个版本开始废弃
+- `boolean forRemoval() default false`：标识该废弃的内容会在未来的某个版本中移除
 
 ### 模块化
 
-**模块化带来的直观感受是jvm内存减少，如在开发web项目中，不需要awt包，现在可以不加在。**
+**模块化带来的直观感受是jvm内存减少，如在开发web项目中，不需要awt包，现在可以不引入。**
 
 java8中有个非常重要的包rt.jar，里面涵盖了java提供的类文件，在程序员运行java程序时jvm会加载rt.jar。这里有个问题是rt.jar中的某些文件我们是不会使用的，比如使用java开发服务器端程序的时候通常用不到图形化界面的库java.awt），这就造成了内存的浪费。
 

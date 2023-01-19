@@ -48,4 +48,10 @@ public class BreezePutMultipartFileResponse {
      * 已上传的分片
      */
     private List<BreezePutMultiPartFile> partList;
+
+    /**
+     * 已上传完成的文件信息
+     * 用于前端拿到文件信息后向后端传参数。
+     */
+    private BreezeMinioResponse finishedFile;
 }
