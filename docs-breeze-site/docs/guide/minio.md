@@ -412,15 +412,16 @@ public interface BreezeMinioService {
    
    * 响应参数
      
-     | 字段          | 数据类型             | 说明                      |
-     | ----------- | ---------------- | ----------------------- |
-     | identifier  | string           | 文件唯一标识                  |
-     | finished    | boolean          | 是否上传完成，true-是，false-未完成 |
-     | bucketName  | string           | 文件存在的存储桶                |
-     | objectName  | string           | 文件唯一名称                  |
-     | totalChunks | int              | 总分片数                    |
-     | chunkSize   | long             | 每片大小byte                |
-     | partList    | List of PartFile | 已上传和分片上传地址的分片           |
+     | 字段           | 数据类型                | 说明                      |
+     | ------------ | ------------------- | ----------------------- |
+     | identifier   | string              | 文件唯一标识                  |
+     | finished     | boolean             | 是否上传完成，true-是，false-未完成 |
+     | bucketName   | string              | 文件存在的存储桶                |
+     | objectName   | string              | 文件唯一名称                  |
+     | totalChunks  | int                 | 总分片数                    |
+     | chunkSize    | long                | 每片大小byte                |
+     | partList     | List of PartFile    | 已上传和分片上传地址的分片           |
+     | finishedFile | BreezeMinioResponse | 已上传完成的文件信息(秒传)          |
      
      PartFile说明
      
@@ -431,6 +432,8 @@ public interface BreezeMinioService {
      | finished          | boolean | 是否已上传完成                           |
      | etag              | string  | 当前分片唯一值                           |
      | size              | Long    | 当前分片大小                            |
+     
+     BreezeMinioResponse同合并后的响应对象。
 
 2. 获取分片预签名上传地址
    
