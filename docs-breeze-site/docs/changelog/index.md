@@ -14,6 +14,14 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.1.4
+
+### 🐛问题修复
+
+* admin组件，修复接口地址404问题。
+
+* minio组件，优化接口返回数据。
+
 ## v2.1.3
 
 * 分片上传初始化接口添加秒传响应对象

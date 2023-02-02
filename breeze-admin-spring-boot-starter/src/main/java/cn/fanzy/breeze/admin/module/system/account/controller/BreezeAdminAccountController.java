@@ -26,7 +26,7 @@ import java.util.List;
 @ApiSupport(author = "微风组件", order = 992001)
 @AllArgsConstructor
 @RestController
-@RequestMapping("${breeze.admin.prefix.api:/}${breeze.admin.prefix.account:/sys/account}")
+@RequestMapping("${breeze.admin.prefix.api:/}${breeze.admin.prefix.account:sys/account}")
 public class BreezeAdminAccountController {
 
     private final BreezeAdminAccountService breezeAdminAccountService;
