@@ -412,16 +412,16 @@ public interface BreezeMinioService {
    
    * 响应参数
      
-     | 字段           | 数据类型                | 说明                      |
-     | ------------ | ------------------- | ----------------------- |
-     | identifier   | string              | 文件唯一标识                  |
-     | finished     | boolean             | 是否上传完成，true-是，false-未完成 |
-     | bucketName   | string              | 文件存在的存储桶                |
-     | objectName   | string              | 文件唯一名称                  |
-     | totalChunks  | int                 | 总分片数                    |
-     | chunkSize    | long                | 每片大小byte                |
-     | partList     | List of PartFile    | 已上传和分片上传地址的分片           |
-     | finishedFile | BreezeMinioResponse | 已上传完成的文件信息(秒传)          |
+     | 字段           | 数据类型                | 说明                                                   |
+     | ------------ | ------------------- | ---------------------------------------------------- |
+     | identifier   | string              | 文件唯一标识                                               |
+     | finished     | boolean             | 是否上传完成，true-是，false-未完成                              |
+     | bucketName   | string              | 文件存在的存储桶                                             |
+     | objectName   | string              | 文件唯一名称                                               |
+     | totalChunks  | int                 | 总分片数                                                 |
+     | chunkSize    | long                | 每片大小byte                                             |
+     | partList     | List of PartFile    | 已上传和分片上传地址的分片                                        |
+     | finishedFile | BreezeMinioResponse | 已上传完成的文件信息(秒传),版本大于等于`2.1.3`。当finished为true时，此字段不为空。 |
      
      PartFile说明
      
