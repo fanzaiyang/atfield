@@ -371,6 +371,8 @@ public interface BreezeMinioService {
 
 ![上传原理](https://breeze.fanzy.cn/uploader-flow.png)
 
+![上传示例](https://breeze.fanzy.cn/upload-demo.gif)
+
 对于前端开发者而言，需要做一下工作。
 
 > **注意：**
