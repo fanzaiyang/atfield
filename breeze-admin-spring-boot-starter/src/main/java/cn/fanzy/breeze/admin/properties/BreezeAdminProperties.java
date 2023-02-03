@@ -74,6 +74,10 @@ public class BreezeAdminProperties implements Serializable {
          */
         private String account;
         /**
+         * 附件管理模块前缀,默认：/sys/attachment
+         */
+        private String attachment;
+        /**
          * 角色管理模块前缀,默认：/sys/role
          */
         private String role;
@@ -93,13 +97,16 @@ public class BreezeAdminProperties implements Serializable {
 
     public enum ErrorEnum {
         /**
-         * 所有
+         * 所有日志到数据库
          */
         all,
         /**
-         * 仅记录错误
+         * 仅记录错误日志到数据库
          */
         error,
+        /**
+         * 不记录日志到数据库
+         */
         none;
     }
 }
