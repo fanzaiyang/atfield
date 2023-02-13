@@ -73,7 +73,7 @@ public class BreezeSensitiveSerialize extends JsonSerializer<Object> implements 
             }
             return serializerProvider.findValueSerializer(beanProperty.getType(), beanProperty);
         }
-        return serializerProvider.findNullValueSerializer(beanProperty);
+        return serializerProvider.findNullValueSerializer(null);
 
     }
 }
