@@ -43,8 +43,9 @@ public class BreezeNullValueSerializer extends JsonSerializer<Object> {
                 gen.writeNull();
                 return;
             }
+            // Boolean =>false
             if(Objects.equals(field.getType(),Boolean.class)){
-                gen.writeNull();
+                gen.writeBoolean(false);
                 return;
             }
             //其他Object默认返回{}
