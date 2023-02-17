@@ -2,6 +2,7 @@ package cn.fanzy.breeze.admin.module.system.account.service;
 
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.system.account.args.*;
+import cn.fanzy.breeze.admin.module.system.account.vo.SysAccountVo;
 import cn.fanzy.breeze.web.model.JsonContent;
 import org.sagacity.sqltoy.model.Page;
 
@@ -25,4 +26,6 @@ public interface BreezeAdminAccountService {
     JsonContent<Object> doRestAccountPwd(BreezeAdminAccountBatchArgs args);
 
     JsonContent<Object> doChangeAccountPwd(BreezeAdminAccountPwdChangeArgs args);
+
+    JsonContent<SysAccountVo> getAccountInfo(String id);
 }
