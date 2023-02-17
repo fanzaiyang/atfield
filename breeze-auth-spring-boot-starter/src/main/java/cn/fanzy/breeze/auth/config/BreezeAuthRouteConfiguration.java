@@ -32,13 +32,13 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
 
     @Bean
     @ConditionalOnMissingBean
-    public SaParamFunction saRouteFunction() {
+    public SaParamFunction saParamFunction() {
         return new BreezeDefaultRouteFunction();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaInterceptor(saRouteFunction()))
+        registry.addInterceptor(new SaInterceptor(saParamFunction()))
                 .addPathPatterns(properties.getRoute().getPathPatterns())
                 .excludePathPatterns(properties.getRoute().getExcludePathPatterns());
     }
