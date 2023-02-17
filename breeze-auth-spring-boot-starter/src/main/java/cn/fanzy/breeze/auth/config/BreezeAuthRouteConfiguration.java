@@ -31,7 +31,7 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
     private final BreezeAuthProperties properties;
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(SaParamFunction.class)
     public SaParamFunction saParamFunction() {
         return new BreezeDefaultRouteFunction();
     }
