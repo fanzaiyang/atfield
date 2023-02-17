@@ -28,7 +28,7 @@ public class BreezeAuthJwtConfiguration {
     private final BreezeAuthJwtProperties properties;
 
     @Bean
-    public StpLogic getStpLogicJwtSimple() {
+    public StpLogic getStpLogicJwt() {
         BreezeAuthJwtProperties.JwtMode jwtMode = properties.getMode();
         if (jwtMode.equals(BreezeAuthJwtProperties.JwtMode.simple)) {
             log.info("Simple 模式：Token 风格替换");
