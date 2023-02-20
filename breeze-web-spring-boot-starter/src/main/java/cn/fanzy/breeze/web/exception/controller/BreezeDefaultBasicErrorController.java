@@ -56,10 +56,10 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         HttpStatus status = getStatus(request);
         if (status == HttpStatus.NO_CONTENT) {
-            throw new CustomException(status.getReasonPhrase());
+            throw new CustomException(status.value(), status.getReasonPhrase());
         }
         Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
-        throw new RuntimeException(body.get("error").toString());
+        throw new CustomException((int) body.get("code"), body.get("error").toString());
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
