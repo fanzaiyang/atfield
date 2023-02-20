@@ -1,7 +1,6 @@
 package cn.fanzy.breeze.web.exception.controller;
 
-import cn.fanzy.breeze.web.model.JsonContent;
-import cn.hutool.core.bean.BeanUtil;
+import cn.fanzy.breeze.core.exception.CustomException;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -37,7 +36,7 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
     }
 
     public BreezeDefaultBasicErrorController(ErrorAttributes errorAttributes, ErrorProperties errorProperties,
-                                List<ErrorViewResolver> errorViewResolvers) {
+                                             List<ErrorViewResolver> errorViewResolvers) {
         super(errorAttributes, errorViewResolvers);
         Assert.notNull(errorProperties, "ErrorProperties must not be null");
         this.errorProperties = errorProperties;
@@ -57,11 +56,10 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         HttpStatus status = getStatus(request);
         if (status == HttpStatus.NO_CONTENT) {
-            return new ResponseEntity<>(status);
+            throw new CustomException(status.getReasonPhrase());
         }
         Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
-        JsonContent<Object> content = new JsonContent<>(Integer.parseInt(body.get("status").toString()), body.get("error").toString(), body.get("path"));
-        return new ResponseEntity<>(BeanUtil.beanToMap(content), status);
+        throw new RuntimeException(body.get("error").toString());
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
