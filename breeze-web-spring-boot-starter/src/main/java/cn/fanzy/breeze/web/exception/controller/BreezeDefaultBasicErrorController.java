@@ -1,7 +1,5 @@
 package cn.fanzy.breeze.web.exception.controller;
 
-import cn.fanzy.breeze.core.exception.CustomException;
-import cn.hutool.core.util.ObjectUtil;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -53,18 +51,18 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
         return (modelAndView != null) ? modelAndView : new ModelAndView("breezeView", model);
     }
 
-    @RequestMapping
-    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        HttpStatus status = getStatus(request);
-        if (status == HttpStatus.NO_CONTENT) {
-            throw new CustomException(status.value(), status.getReasonPhrase());
-        }
-        Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
-        if(body==null){
-            throw new CustomException(status.value(), status.getReasonPhrase());
-        }
-        throw new CustomException(ObjectUtil.isNotNull(body.get("code")) ? (int) body.get("code") : status.value(), ObjectUtil.isNotNull(body.get("error"))?body.get("error").toString():status.getReasonPhrase());
-    }
+//    @RequestMapping
+//    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
+//        HttpStatus status = getStatus(request);
+//        if (status == HttpStatus.NO_CONTENT) {
+//            throw new CustomException(status.value(), status.getReasonPhrase());
+//        }
+//        Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
+//        if(body==null){
+//            throw new CustomException(status.value(), status.getReasonPhrase());
+//        }
+//        throw new CustomException(ObjectUtil.isNotNull(body.get("code")) ? (int) body.get("code") : status.value(), ObjectUtil.isNotNull(body.get("error"))?body.get("error").toString():status.getReasonPhrase());
+//    }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     public ResponseEntity<String> mediaTypeNotAcceptable(HttpServletRequest request) {
