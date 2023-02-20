@@ -60,6 +60,9 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
             throw new CustomException(status.value(), status.getReasonPhrase());
         }
         Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
+        if(body==null){
+            throw new CustomException(status.value(), status.getReasonPhrase());
+        }
         throw new CustomException(ObjectUtil.isNotNull(body.get("code")) ? (int) body.get("code") : status.value(), ObjectUtil.isNotNull(body.get("error"))?body.get("error").toString():status.getReasonPhrase());
     }
 
