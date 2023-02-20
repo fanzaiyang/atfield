@@ -1,6 +1,7 @@
 package cn.fanzy.breeze.web.exception.controller;
 
 import cn.fanzy.breeze.core.exception.CustomException;
+import cn.hutool.core.util.ObjectUtil;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -59,7 +60,7 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
             throw new CustomException(status.value(), status.getReasonPhrase());
         }
         Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
-        throw new CustomException((int) body.get("code"), body.get("error").toString());
+        throw new CustomException(ObjectUtil.isNotNull(body.get("code")) ? (int) body.get("code") : status.value(), body.get("error").toString());
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
