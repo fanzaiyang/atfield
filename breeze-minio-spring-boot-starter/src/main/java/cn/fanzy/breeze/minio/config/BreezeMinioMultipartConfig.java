@@ -4,19 +4,15 @@ import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.minio.service.impl.BreezeMultipartFileServiceImpl;
 import cn.fanzy.breeze.web.swagger.properties.BreezeSwaggerProperties;
-import cn.hutool.core.collection.CollUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.GroupedOpenApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -33,21 +29,22 @@ public class BreezeMinioMultipartConfig {
         return new BreezeMultipartFileServiceImpl(jdbcTemplate, properties);
     }
 
-    @Bean
-    @ConditionalOnMissingBean(name = "breezeDefaultApi")
-    public GroupedOpenApi breezeDefaultApi() {
-        List<String> packagesToScan = breezeSwaggerProperties.getPackagesToScan();
-        if (packagesToScan == null) {
-            packagesToScan = CollUtil.newArrayList("cn.fanzy.breeze.minio.controller");
-        } else {
-            packagesToScan.add("cn.fanzy.breeze.minio.controller");
-        }
-        return GroupedOpenApi.builder()
-                .group("-默认分组-")
-                .pathsToMatch("/**")
-                .packagesToScan(packagesToScan.toArray(new String[packagesToScan.size()]))
-                .build();
-    }
+//    @Bean
+//    @ConditionalOnMissingBean(name = "breezeDefaultApi")
+//    @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"packages-to-scan"})
+//    public GroupedOpenApi breezeDefaultApi() {
+//        List<String> packagesToScan = breezeSwaggerProperties.getPackagesToScan();
+//        if (packagesToScan == null) {
+//            packagesToScan = CollUtil.newArrayList("cn.fanzy.breeze.minio.controller");
+//        } else {
+//            packagesToScan.add("cn.fanzy.breeze.minio.controller");
+//        }
+//        return GroupedOpenApi.builder()
+//                .group("-默认分组-")
+//                .pathsToMatch("/**")
+//                .packagesToScan(packagesToScan.toArray(new String[packagesToScan.size()]))
+//                .build();
+//    }
 
     @PostConstruct
     public void init() {
