@@ -5,6 +5,7 @@ import cn.fanzy.breeze.web.web.json.jackson.BreezeNullValueSerializer;
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -45,12 +46,15 @@ public class BreezeJacksonWebConfig {
         log.info("mappingJackson2HttpMessageConverter....");
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
+        //现在需要在中间加一个
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setDateFormat(new SimpleDateFormat(dateTimeFormat));
         /** 为objectMapper注册一个带有SerializerModifier的Factory */
         objectMapper.setSerializerFactory(objectMapper.getSerializerFactory()
                 .withSerializerModifier(new BreezeBeanSerializerModifier()));
         SerializerProvider serializerProvider = objectMapper.getSerializerProvider();
         serializerProvider.setNullValueSerializer(new BreezeNullValueSerializer());
+
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);  // 设置objectMapper
         return mappingJackson2HttpMessageConverter;
     }
