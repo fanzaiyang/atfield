@@ -3,7 +3,7 @@ title: Admin组件
 order: 5
 ---
 
-该组件是集成授权组件、web组件、MinIO组件、Swagger2的一个快速搭建信息系统的组件，配合前端[breeze-admin-web-arco](https://gitee.com/it-xiaofan/breeze-admin-web-arco)使用。
+该组件是集成授权组件、web组件、MinIO组件、Swagger3的一个快速搭建信息系统的组件，配合前端[breeze-admin-web-arco](https://gitee.com/it-xiaofan/breeze-admin-web-arco)使用。
 
 ## 组件说明
 
@@ -53,6 +53,7 @@ breeze:
     prefix:
       api: / # 全局接口前缀，适用于本组件的前缀。
       account: /sys/account # 系统管理/账户管理模块的接口，默认：/sys/account
+      attachment: /sys/attachment # 系统管理/附件管理模块的接口，默认：/sys/attachment
       auth: /auth # 授权登录模块的接口，默认：/auth
       dict: /sys/dict # 系统管理/字典管理模块，默认：/sys/dict
       menu: /sys/menu # 系统管理/菜单管理模块，默认：/sys/menu

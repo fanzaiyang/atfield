@@ -1,7 +1,8 @@
 package cn.fanzy.breeze.web.exception.controller;
 
-import cn.fanzy.breeze.web.model.JsonContent;
-import cn.hutool.core.bean.BeanUtil;
+import cn.fanzy.breeze.core.exception.CustomException;
+import cn.hutool.core.util.ObjectUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.AbstractErrorController;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
@@ -26,6 +27,7 @@ import java.util.Map;
 /**
  * @author fanzaiyang
  */
+@Slf4j
 @Controller
 @RequestMapping("${server.error.path:${error.path:/error}}")
 public class BreezeDefaultBasicErrorController extends AbstractErrorController {
@@ -37,7 +39,7 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
     }
 
     public BreezeDefaultBasicErrorController(ErrorAttributes errorAttributes, ErrorProperties errorProperties,
-                                List<ErrorViewResolver> errorViewResolvers) {
+                                             List<ErrorViewResolver> errorViewResolvers) {
         super(errorAttributes, errorViewResolvers);
         Assert.notNull(errorProperties, "ErrorProperties must not be null");
         this.errorProperties = errorProperties;
@@ -57,11 +59,13 @@ public class BreezeDefaultBasicErrorController extends AbstractErrorController {
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         HttpStatus status = getStatus(request);
         if (status == HttpStatus.NO_CONTENT) {
-            return new ResponseEntity<>(status);
+            throw new CustomException(status.value(), status.getReasonPhrase());
         }
         Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
-        JsonContent<Object> content = new JsonContent<>(Integer.parseInt(body.get("status").toString()), body.get("error").toString(), body.get("path"));
-        return new ResponseEntity<>(BeanUtil.beanToMap(content), status);
+        if(body==null){
+            throw new CustomException(status.value(), status.getReasonPhrase());
+        }
+        throw new CustomException(ObjectUtil.isNotNull(body.get("code")) ? (int) body.get("code") : status.value(), ObjectUtil.isNotNull(body.get("error"))?body.get("error").toString():status.getReasonPhrase());
     }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)

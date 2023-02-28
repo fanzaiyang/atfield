@@ -4,7 +4,9 @@ import cn.fanzy.breeze.admin.module.auth.utils.BreezeAuthUtil;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.entity.SysAccountRole;
 import cn.fanzy.breeze.admin.module.entity.SysOrg;
+import cn.fanzy.breeze.admin.module.entity.SysRole;
 import cn.fanzy.breeze.admin.module.system.account.args.*;
+import cn.fanzy.breeze.admin.module.system.account.vo.SysAccountVo;
 import cn.fanzy.breeze.admin.properties.BreezeAdminProperties;
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.sqltoy.model.IBaseEntity;
@@ -22,6 +24,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagacity.sqltoy.dao.SqlToyLazyDao;
+import org.sagacity.sqltoy.model.MapKit;
 import org.sagacity.sqltoy.model.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -225,5 +229,18 @@ public class BreezeAdminAccountServiceImpl implements BreezeAdminAccountService 
                 .set(SysAccount::getPassword, encoder.encode(args.getNewPassword()))
                 .eq(SysAccount::getId, id));
         return JsonContent.success();
+    }
+
+    @Override
+    public JsonContent<SysAccountVo> getAccountInfo(String id) {
+        SysAccount account = sqlToyHelperDao.findOne(Wrappers.lambdaWrapper(SysAccount.class)
+                .eq(SysAccount::getId, id).eq(IBaseEntity::getDelFlag, 0));
+        Assert.notNull(account,"未找到ID为「{}」的账户！",id);
+        SysAccountVo vo = BeanUtil.copyProperties(account, SysAccountVo.class);
+        SqlToyLazyDao sqlToyLazyDao = SpringUtils.getBean(SqlToyLazyDao.class);
+        String sql="select t.* from sys_role t inner join sys_account_role r on r.role_id=t.id and r.account_id=:account_id where t.del_flag=0 order by node_level";
+        List<SysRole> roleList = sqlToyLazyDao.findBySql(sql, MapKit.map("account_id", id), SysRole.class);
+        vo.setRoleList(roleList);
+        return JsonContent.success(vo);
     }
 }

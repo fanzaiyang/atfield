@@ -26,7 +26,7 @@ public class MergeSegments implements ISqlSegment {
         String sql = null;
         if (normal.isEmpty()) {
             if (!groupBy.isEmpty() || !orderBy.isEmpty()) {
-                sql = groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
+                sql = "1 = 1 " + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
             }
         } else {
             sql = normal.getSqlSegment() + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
