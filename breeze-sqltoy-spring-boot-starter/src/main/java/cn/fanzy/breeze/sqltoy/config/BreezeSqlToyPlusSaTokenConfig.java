@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @Configuration
-@AutoConfigureBefore({BreezeSqlToyPlusConfig.class, BreezeSqlToyPlusSessionConfig.class})
+@AutoConfigureBefore({BreezeSqlToyPlusConfig.class})
 @ConditionalOnClass(StpUtil.class)
 public class BreezeSqlToyPlusSaTokenConfig {
     @Bean
