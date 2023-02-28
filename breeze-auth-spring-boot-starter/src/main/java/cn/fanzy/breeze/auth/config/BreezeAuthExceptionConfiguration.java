@@ -137,7 +137,7 @@ public class BreezeAuthExceptionConfiguration {
         private String now = DateUtil.now();
 
         private boolean success = false;
-        private ErrorShowType errorShowType = ErrorShowType.SILENT;
+        private ErrorShowType errorShowType = ErrorShowType.MESSAGE_ERROR;
 
 
         public Response(int code, String message, String data) {
