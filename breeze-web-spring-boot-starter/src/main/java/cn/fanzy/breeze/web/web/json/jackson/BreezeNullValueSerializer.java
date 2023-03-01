@@ -14,12 +14,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * 微风null值序列化器
+ * <pre>这个有问题，已废弃</pre>
+ * @author fanzaiyang
+ * @date 2023-03-01
+ */
+@Deprecated
 public class BreezeNullValueSerializer extends JsonSerializer<Object> {
     @Override
     public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         String fieldName = gen.getOutputContext().getCurrentName();
         //反射获取字段
-        Field field = ReflectUtil.getField(gen.getCurrentValue().getClass(), fieldName);
+        Object currentValue = gen.getCurrentValue();
+        Field field = ReflectUtil.getField(currentValue.getClass(), fieldName);
         if (ObjectUtil.isNotNull(field)){
             // 数字类型Integer、Double、Long等返回null
             if (Number.class.isAssignableFrom(field.getType())){

@@ -1,6 +1,5 @@
 package cn.fanzy.breeze.web.web.json.config;
 
-import cn.fanzy.breeze.web.web.json.jackson.BreezeNullValueSerializer;
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +41,7 @@ public class BreezeJacksonWebConfig {
     @Primary
     @ConditionalOnMissingBean
     public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
-        objectMapper.getSerializerProvider().setNullValueSerializer(new BreezeNullValueSerializer());
-        return objectMapper;
+        return new BreezeJacksonObjectMapper();
     }
 
 //    @Bean
