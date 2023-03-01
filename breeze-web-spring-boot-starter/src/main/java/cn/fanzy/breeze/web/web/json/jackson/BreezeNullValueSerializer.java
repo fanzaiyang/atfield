@@ -18,7 +18,7 @@ import java.util.Objects;
  * 微风null值序列化器
  * 这个有问题，已废弃
  * @author fanzaiyang
- * @date 2023-03-01
+ * @since  2023-03-01
  */
 @Deprecated
 public class BreezeNullValueSerializer extends JsonSerializer<Object> {
