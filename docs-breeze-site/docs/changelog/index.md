@@ -14,7 +14,6 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 ## v2.1.7
-
 ### 🐛问题修复
 
 * 修改JSON序列化带来的诸多问题。
