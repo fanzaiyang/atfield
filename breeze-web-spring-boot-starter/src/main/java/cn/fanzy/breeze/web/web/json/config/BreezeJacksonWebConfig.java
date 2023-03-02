@@ -37,14 +37,17 @@ import java.util.List;
 @EnableConfigurationProperties({BreezeWebJsonProperties.class})
 @ConditionalOnProperty(prefix = "breeze.web.json", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeJacksonWebConfig implements WebMvcConfigurer {
-    @Value("${spring.jackson.date-format}")
+    @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
     private String jacksonDateFormat;
-
+    @Value("${spring.mvc.format.date:yyyy-MM-dd}")
+    private String mvcDateFormat;
+    @Value("${spring.mvc.format.time:HH:mm:ss}")
+    private String mvcTimeFormat;
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new BreezeJacksonObjectMapper(jacksonDateFormat));
+        converter.setObjectMapper(new BreezeJacksonObjectMapper(jacksonDateFormat,mvcDateFormat,mvcTimeFormat));
         converters.add(0, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }

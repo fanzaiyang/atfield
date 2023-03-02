@@ -23,7 +23,7 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
 
 public class BreezeJacksonObjectMapper extends ObjectMapper {
     private static final long serialVersionUID = 4349248944480408489L;
-    public BreezeJacksonObjectMapper(String dateFormat) {
+    public BreezeJacksonObjectMapper(String jacksonDateFormat,String mvcDateFormat, String mvcTimeFormat) {
         super();
         // 收到未知属性时不报异常
         this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -36,17 +36,18 @@ public class BreezeJacksonObjectMapper extends ObjectMapper {
         this.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         //日期序列化
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(jacksonDateFormat)));
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(mvcDateFormat)));
+        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(mvcTimeFormat)));
         //日期反序列化
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(jacksonDateFormat)));
+        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(mvcDateFormat)));
+        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(mvcTimeFormat)));
         this.setSerializerFactory(this.getSerializerFactory()
                 .withSerializerModifier(new BreezeBeanSerializerModifier()));
         this.getSerializerProvider()
                 .setNullValueSerializer(new BreezeCustomizeNullJsonSerializer.NullObjectJsonSerializer());
         this.registerModules(simpleModule, javaTimeModule);
     }
+
 }
