@@ -13,6 +13,11 @@ title: 更新日志
 ## 最新版本
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
+## v2.1.8
+### 🐛问题修复
+
+* 修改JSON序列化LocalDate问题。
+
 ## v2.1.7
 ### 🐛问题修复
 
