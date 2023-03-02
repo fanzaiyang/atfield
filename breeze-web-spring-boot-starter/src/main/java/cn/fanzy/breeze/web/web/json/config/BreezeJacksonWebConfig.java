@@ -47,9 +47,11 @@ public class BreezeJacksonWebConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new BreezeJacksonObjectMapper(StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime())
-                , webMvcProperties.getFormat().getDate(),
-                webMvcProperties.getFormat().getTime()));
+        String format = StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
+        converter.setObjectMapper(new BreezeJacksonObjectMapper(
+                StrUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss"),
+                StrUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
+                StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss")));
         converters.add(0, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
