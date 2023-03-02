@@ -47,6 +47,7 @@ public class BreezeJacksonWebConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        log.info("spring.jackson.date-format:{}",jacksonDateFormat);
         converter.setObjectMapper(new BreezeJacksonObjectMapper(jacksonDateFormat,mvcDateFormat,mvcTimeFormat));
         converters.add(0, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
