@@ -1,12 +1,14 @@
 package cn.fanzy.breeze.web.web.json.config;
 
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -37,18 +39,17 @@ import java.util.List;
 @EnableConfigurationProperties({BreezeWebJsonProperties.class})
 @ConditionalOnProperty(prefix = "breeze.web.json", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class BreezeJacksonWebConfig implements WebMvcConfigurer {
-    @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
-    private String jacksonDateFormat;
-    @Value("${spring.mvc.format.date:yyyy-MM-dd}")
-    private String mvcDateFormat;
-    @Value("${spring.mvc.format.time:HH:mm:ss}")
-    private String mvcTimeFormat;
+    private final JacksonProperties jacksonProperties;
+
+    private final WebMvcProperties webMvcProperties;
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        log.info("spring.jackson.date-format:{}",jacksonDateFormat);
-        converter.setObjectMapper(new BreezeJacksonObjectMapper(jacksonDateFormat,mvcDateFormat,mvcTimeFormat));
+        converter.setObjectMapper(new BreezeJacksonObjectMapper(StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime())
+                , webMvcProperties.getFormat().getDate(),
+                webMvcProperties.getFormat().getTime()));
         converters.add(0, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
