@@ -1,7 +1,10 @@
 package cn.fanzy.breeze.sqltoy.plus.dao;
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
+import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
@@ -86,7 +89,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * 组装更新条件
      *
      * @param updateWrapper - 更新条件
-     * @param <T> T
+     * @param <T>           T
      * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(Wrapper<T> updateWrapper) {
@@ -98,7 +101,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * @param t                - 更新元数据
      * @param queryWrapper     - 更新的查询条件
      * @param forceUpdateProps - 忽略字段
-     * @param <T> T
+     * @param <T>              T
      * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(T t, Wrapper<T> queryWrapper, String... forceUpdateProps) {
@@ -120,7 +123,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
      * 组装更新条件
      *
      * @param queryWrapper - 更新的查询条件
-     * @param <T> T
+     * @param <T>          T
      * @return EntityUpdate
      */
     private <T> EntityUpdate getEntityUpdate(Map<String, Object> setMap, Wrapper<T> queryWrapper) {
@@ -192,5 +195,14 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
             }
         }
         return tempMap;
+    }
+
+    @Override
+    public <T> Long remove(Wrapper<T> wrapper) {
+        BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
+        Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
+        Map<String, Object> setMap = new HashMap<>(1);
+        setMap.put(properties.getLogicDeleteField(), properties.getLogicNotDeleteValue());
+        return super.updateByQuery(wrapper.entityClass(), getEntityUpdate(setMap, wrapper));
     }
 }
