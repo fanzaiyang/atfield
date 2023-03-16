@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.sqltoy.properties;
 
+import cn.fanzy.breeze.sqltoy.enums.LogicalDeleteEnum;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +36,10 @@ public class BreezeSqlToyProperties implements Serializable {
      */
     private String logicDeleteValue;
     /**
+     * 已删除值生成策略
+     */
+    private LogicalDeleteEnum deleteValueStrategy;
+    /**
      * 逻辑不删除值
      */
     private String logicNotDeleteValue;
@@ -48,5 +53,12 @@ public class BreezeSqlToyProperties implements Serializable {
 
     public Boolean getSkipSqlMode() {
         return skipSqlMode == null || skipSqlMode;
+    }
+
+    public LogicalDeleteEnum getDeleteValueStrategy() {
+        if (deleteValueStrategy == null) {
+            return LogicalDeleteEnum.value;
+        }
+        return deleteValueStrategy;
     }
 }

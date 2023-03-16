@@ -1,8 +1,10 @@
 package cn.fanzy.breeze.sqltoy.plus.dao;
 
+import cn.fanzy.breeze.sqltoy.enums.LogicalDeleteEnum;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
 import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -202,7 +204,23 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
         BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
         Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
         Map<String, Object> setMap = new HashMap<>(1);
-        setMap.put(properties.getLogicDeleteField(), properties.getLogicNotDeleteValue());
+        setMap.put(properties.getLogicDeleteField(), getDeleteValue(properties));
         return super.updateByQuery(wrapper.entityClass(), getEntityUpdate(setMap, wrapper));
+    }
+
+    private String getDeleteValue(BreezeSqlToyProperties properties) {
+        if (LogicalDeleteEnum.value.equals(properties.getDeleteValueStrategy())) {
+            return properties.getLogicDeleteValue();
+        }
+        if (LogicalDeleteEnum.uuid.equals(properties.getDeleteValueStrategy())) {
+            return IdUtil.randomUUID();
+        }
+        if (LogicalDeleteEnum.nanoTime.equals(properties.getDeleteValueStrategy())) {
+            return IdUtil.nanoId();
+        }
+        if (LogicalDeleteEnum.snowflake.equals(properties.getDeleteValueStrategy())) {
+            return IdUtil.getSnowflakeNextId() + "";
+        }
+        throw new RuntimeException("未知的删除值生成逻辑！");
     }
 }
