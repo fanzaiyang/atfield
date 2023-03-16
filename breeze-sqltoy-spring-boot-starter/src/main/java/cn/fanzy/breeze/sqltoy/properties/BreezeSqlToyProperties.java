@@ -19,6 +19,8 @@ public class BreezeSqlToyProperties implements Serializable {
     private static final long serialVersionUID = -3642562913132999859L;
 
     private boolean skip;
+
+    private Boolean skipSqlMode;
     /**
      * 别名，用于负责查询中列的别名.
      */
@@ -42,5 +44,9 @@ public class BreezeSqlToyProperties implements Serializable {
             return "";
         }
         return alias.concat(".");
+    }
+
+    public Boolean getSkipSqlMode() {
+        return skipSqlMode == null || skipSqlMode;
     }
 }

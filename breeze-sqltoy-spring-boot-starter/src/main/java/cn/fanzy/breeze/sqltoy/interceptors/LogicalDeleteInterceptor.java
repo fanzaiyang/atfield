@@ -34,6 +34,13 @@ public class LogicalDeleteInterceptor implements SqlInterceptor {
             log.warn("用户选择跳过逻辑删除！");
             return sqlToyResult;
         }
+        if(properties.getSkipSqlMode()){
+            if(operateType.equals(OperateType.count) || operateType.equals(OperateType.search) ||
+                    operateType.equals(OperateType.page) || operateType.equals(OperateType.top) ||
+                    operateType.equals(OperateType.random)){
+                return sqlToyResult;
+            }
+        }
         String logicDeleteField = properties.getAlias() + properties.getLogicDeleteField();
         String logicDeleteValue = properties.getLogicDeleteValue();
         String logicNotDeleteValue = properties.getLogicNotDeleteValue();
