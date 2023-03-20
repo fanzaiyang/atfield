@@ -58,16 +58,16 @@ public enum CompareEnum {
     },
 
     LIKE_LEFT(SqlKeyword.LIKE) {
+        //"code like concat('%', :code)"
         public String getMetaSql(String paramName, String columnName) {
-            //"code like concat(:code,'%')"
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.COLON + paramName+ "," + StringPool.PERCENT + ")";
+            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.PERCENT  + "," + StringPool.COLON + paramName + ")";
         }
     },
 
     LIKE_RIGHT(SqlKeyword.LIKE) {
-        //"code like concat('%', :code)"
         public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.PERCENT  + "," + StringPool.COLON + paramName + ")";
+            //"code like concat(:code,'%')"
+            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.COLON + paramName+ "," + StringPool.PERCENT + ")";
         }
     },
 
