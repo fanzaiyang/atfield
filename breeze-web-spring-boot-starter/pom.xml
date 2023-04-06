@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.yomahub</groupId>
             <artifactId>tlog-web-spring-boot-starter</artifactId>
-            <version>1.4.3</version>
+            <version>1.5.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>cn.hutool</groupId>
@@ -76,12 +76,12 @@
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.9</version>
+            <version>1.6.15</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
