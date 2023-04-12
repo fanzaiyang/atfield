@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -54,6 +55,7 @@ public class BreezeJacksonWebConfig implements WebMvcConfigurer {
                 StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss")));
         converters.add(0, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        converters.add(new ByteArrayHttpMessageConverter());
     }
 
     @PostConstruct
