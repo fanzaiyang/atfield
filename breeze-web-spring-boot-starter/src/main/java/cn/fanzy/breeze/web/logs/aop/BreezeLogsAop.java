@@ -73,7 +73,7 @@ public class BreezeLogsAop {
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
         if (annotation != null) {
             breezeRequestArgs.setBizName(annotation.value());
-            breezeRequestArgs.setModule(annotation.moduleName());
+            breezeRequestArgs.setModule(annotation.module());
             breezeRequestArgs.setLogType(annotation.type());
         }
     }

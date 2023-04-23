@@ -6,5 +6,10 @@ package cn.fanzy.breeze.sqltoy.plus.session;
 public interface BreezeCurrentSessionHandler {
     static final String DEFAULT_LOGIN_ID = "NONE_LOGIN_USER";
 
+    /**
+     * 得到当前登录id
+     *
+     * @return {@link String}
+     */
     String getCurrentLoginId();
 }
