@@ -2,7 +2,9 @@ package cn.fanzy.breeze.web.logs.aop;
 
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.web.logs.annotation.Log;
+import cn.fanzy.breeze.web.logs.model.AppInfoModel;
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
+import cn.fanzy.breeze.web.logs.model.UserInfoModel;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
@@ -59,7 +61,15 @@ public class BreezeLogsAop {
         }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
-        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}",clientIp, SpringUtils.getRequestUri(),JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, SpringUtils.getRequestUri(), JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo();
+        if (userInfo == null) {
+            userInfo = new UserInfoModel();
+        }
+        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo();
+        if (appInfo == null) {
+            appInfo = new AppInfoModel();
+        }
         breezeRequestArgs = BreezeRequestArgs.builder()
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
@@ -68,6 +78,10 @@ public class BreezeLogsAop {
                 .classMethod(JoinPointUtils.getMethodInfo(joinPoint))
                 .requestMethod(SpringUtils.getRequestMethod())
                 .requestUrl(SpringUtils.getRequestUri())
+                .userId(userInfo.getUserId())
+                .userName(userInfo.getUserName())
+                .appId(appInfo.getAppId())
+                .appName(appInfo.getAppName())
                 .success(true)
                 .build();
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);

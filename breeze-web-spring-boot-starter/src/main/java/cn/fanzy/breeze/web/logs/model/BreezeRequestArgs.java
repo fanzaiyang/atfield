@@ -17,6 +17,16 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BreezeRequestArgs {
+
+    /**
+     * 应用程序id
+     */
+    private String appId;
+
+    /**
+     * 应用程序名称
+     */
+    private String appName;
     /**
      * 模块名称
      */
@@ -39,7 +49,17 @@ public class BreezeRequestArgs {
      */
     private String clientIp;
     /**
-     * 当前用户信息
+     * 用户id
+     */
+    private String userId;
+
+    /**
+     * 用户名
+     */
+    private String userName;
+
+    /**
+     * 用户信息
      */
     private String userInfo;
     /**
