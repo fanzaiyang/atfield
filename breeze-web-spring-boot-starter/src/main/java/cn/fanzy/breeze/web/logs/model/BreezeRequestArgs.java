@@ -86,4 +86,10 @@ public class BreezeRequestArgs {
      */
     private boolean success;
 
+    public LogTypeEnum getLogType() {
+        if(logType==null){
+            return LogTypeEnum.NONE;
+        }
+        return logType;
+    }
 }
