@@ -13,6 +13,7 @@ import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.AntPathMatcher;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +90,13 @@ public class BreezeLogsAop {
             breezeRequestArgs.setBizName(annotation.value());
             breezeRequestArgs.setModule(annotation.module());
             breezeRequestArgs.setLogType(annotation.type());
+            if(StrUtil.isNotBlank(annotation.userIdKey())){
+                Object o = requestData.get(annotation.userIdKey());
+                if(o!=null){
+                    breezeRequestArgs.setUserName(o.toString());
+                }
+
+            }
         }
     }
 

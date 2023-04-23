@@ -32,4 +32,11 @@ public @interface Log {
      * @return {@link LogTypeEnum}
      */
     LogTypeEnum type() default LogTypeEnum.NONE;
+
+    /**
+     * 请求参数中的ID
+     *
+     * @return {@link String}
+     */
+    String userIdKey() default "";
 }
