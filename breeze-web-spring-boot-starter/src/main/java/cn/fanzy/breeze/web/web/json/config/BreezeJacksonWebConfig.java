@@ -1,7 +1,7 @@
 package cn.fanzy.breeze.web.web.json.config;
 
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.text.CharSequenceUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -46,16 +46,17 @@ public class BreezeJacksonWebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(0,new ByteArrayHttpMessageConverter());
         converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        String format = StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
+        String format = CharSequenceUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
         converter.setObjectMapper(new BreezeJacksonObjectMapper(
-                StrUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss"),
-                StrUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
-                StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss")));
-        converters.add(0, converter);
+                CharSequenceUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss"),
+                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
+                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss")));
+        converters.add(1, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        converters.add(new ByteArrayHttpMessageConverter());
+
     }
 
     @PostConstruct

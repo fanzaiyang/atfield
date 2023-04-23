@@ -24,7 +24,7 @@ public class JoinPointUtils {
      * @return {@link Map} {@link String}, {@link Object}
      */
     public static Map<String, Object> getParams(JoinPoint joinPoint) {
-        Map<String, Object> param = new HashMap<>();
+        Map<String, Object> param = new HashMap<>(2);
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String[] parameterNames = signature.getParameterNames();
         for (int i = 0; i < parameterNames.length; i++) {

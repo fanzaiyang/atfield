@@ -6,7 +6,6 @@ import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
-import cn.fanzy.breeze.web.utils.HttpUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
@@ -74,6 +73,8 @@ public class BreezeLogsAop {
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
         if (annotation != null) {
             breezeRequestArgs.setBizName(annotation.value());
+            breezeRequestArgs.setModule(annotation.moduleName());
+            breezeRequestArgs.setLogType(annotation.type());
         }
     }
 
@@ -102,7 +103,7 @@ public class BreezeLogsAop {
                     .startTime(new Date())
                     .requestMethod(SpringUtils.getRequestMethod())
                     .requestUrl(SpringUtils.getRequestUri())
-                    .success(true)
+                    .success(false)
                     .build();
         }
         breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 512));

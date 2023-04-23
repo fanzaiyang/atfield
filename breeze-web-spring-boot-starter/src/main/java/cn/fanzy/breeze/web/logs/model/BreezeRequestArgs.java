@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.logs.model;
 
+import cn.fanzy.breeze.web.logs.enums.LogTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +18,18 @@ import java.util.Map;
 @AllArgsConstructor
 public class BreezeRequestArgs {
     /**
+     * 模块名称
+     */
+    private String module;
+    /**
      * 业务名称
      */
     private String bizName;
+
+    /**
+     * 日志类型
+     */
+    private LogTypeEnum logType;
     /**
      * 线程ID
      */
