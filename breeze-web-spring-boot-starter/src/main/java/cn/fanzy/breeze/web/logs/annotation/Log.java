@@ -39,4 +39,11 @@ public @interface Log {
      * @return {@link String}
      */
     String userIdKey() default "";
+
+    /**
+     * 忽略
+     *
+     * @return boolean
+     */
+    boolean ignore() default false;
 }
