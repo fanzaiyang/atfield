@@ -113,13 +113,14 @@ public class BreezeLogsAop {
             return;
         }
         log.info("===响应结果：{}", JSONUtil.toJsonStr(obj));
+        if (breezeRequestArgs.isIgnore()) {
+            return;
+        }
         breezeRequestArgs.setResponseData(obj);
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(true);
-        if (!breezeRequestArgs.isIgnore()) {
-            breezeLogCallbackService.callback(breezeRequestArgs);
-        }
+        breezeLogCallbackService.callback(breezeRequestArgs);
 
     }
 
@@ -139,13 +140,14 @@ public class BreezeLogsAop {
                     .success(false)
                     .build();
         }
+        if (breezeRequestArgs.isIgnore()) {
+            return;
+        }
         breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 512));
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
-        if (!breezeRequestArgs.isIgnore()) {
-            breezeLogCallbackService.callback(breezeRequestArgs);
-        }
+        breezeLogCallbackService.callback(breezeRequestArgs);
     }
 
     public boolean skipSwagger() {
