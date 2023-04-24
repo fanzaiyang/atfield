@@ -61,13 +61,15 @@ public class BreezeLogsAop {
             return;
         }
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
-        if (annotation != null) {
-            breezeRequestArgs = new BreezeRequestArgs();
-            breezeRequestArgs.setIgnore(annotation.ignore());
-        }
+
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
         log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, SpringUtils.getRequestUri(), JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        if (annotation != null) {
+            breezeRequestArgs = new BreezeRequestArgs();
+            breezeRequestArgs.setIgnore(annotation.ignore());
+            return;
+        }
         UserInfoModel userInfo = breezeLogCallbackService.getUserInfo();
         if (userInfo == null) {
             userInfo = new UserInfoModel();
