@@ -62,6 +62,7 @@ public class BreezeLogsAop {
         }
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
         if (annotation != null) {
+            breezeRequestArgs = new BreezeRequestArgs();
             breezeRequestArgs.setIgnore(annotation.ignore());
         }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
