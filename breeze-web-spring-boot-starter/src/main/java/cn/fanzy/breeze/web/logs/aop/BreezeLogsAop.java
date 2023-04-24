@@ -60,6 +60,10 @@ public class BreezeLogsAop {
         if (skipSwagger()) {
             return;
         }
+        Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
+        if(annotation!=null){
+            breezeRequestArgs.setIgnore(annotation.ignore());
+        }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         String clientIp = SpringUtils.getClientIp();
         log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, SpringUtils.getRequestUri(), JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
@@ -85,7 +89,7 @@ public class BreezeLogsAop {
                 .appName(appInfo.getAppName())
                 .success(true)
                 .build();
-        Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
+
         if (annotation != null) {
             breezeRequestArgs.setBizName(annotation.value());
             breezeRequestArgs.setModule(annotation.module());
@@ -110,7 +114,10 @@ public class BreezeLogsAop {
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(true);
-        breezeLogCallbackService.callback(breezeRequestArgs);
+        if(!breezeRequestArgs.isIgnore()){
+            breezeLogCallbackService.callback(breezeRequestArgs);
+        }
+
     }
 
     @AfterThrowing(throwing = "e", value = "cut()")
@@ -132,7 +139,9 @@ public class BreezeLogsAop {
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
-        breezeLogCallbackService.callback(breezeRequestArgs);
+        if(!breezeRequestArgs.isIgnore()) {
+            breezeLogCallbackService.callback(breezeRequestArgs);
+        }
     }
 
     public boolean skipSwagger() {

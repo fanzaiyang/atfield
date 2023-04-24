@@ -106,6 +106,8 @@ public class BreezeRequestArgs {
      */
     private boolean success;
 
+    private boolean ignore;
+
     public LogTypeEnum getLogType() {
         if(logType==null){
             return LogTypeEnum.NONE;
