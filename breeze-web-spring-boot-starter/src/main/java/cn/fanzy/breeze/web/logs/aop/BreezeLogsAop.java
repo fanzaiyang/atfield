@@ -125,6 +125,7 @@ public class BreezeLogsAop {
         if (skipSwagger()) {
             return;
         }
+        log.info("===响应异常：{}", e.getMessage());
         if (breezeRequestArgs == null) {
             breezeRequestArgs = BreezeRequestArgs.builder()
                     .traceId(TLogContext.getTraceId())
