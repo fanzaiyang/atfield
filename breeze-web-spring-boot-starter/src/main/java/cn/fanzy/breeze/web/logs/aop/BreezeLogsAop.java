@@ -61,7 +61,7 @@ public class BreezeLogsAop {
             return;
         }
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
-        if(annotation!=null){
+        if (annotation != null) {
             breezeRequestArgs.setIgnore(annotation.ignore());
         }
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
@@ -94,9 +94,9 @@ public class BreezeLogsAop {
             breezeRequestArgs.setBizName(annotation.value());
             breezeRequestArgs.setModule(annotation.module());
             breezeRequestArgs.setLogType(annotation.type());
-            if(StrUtil.isNotBlank(annotation.userIdKey())){
+            if (StrUtil.isNotBlank(annotation.userIdKey())) {
                 Object o = requestData.get(annotation.userIdKey());
-                if(o!=null){
+                if (o != null) {
                     breezeRequestArgs.setUserName(o.toString());
                 }
 
@@ -114,7 +114,7 @@ public class BreezeLogsAop {
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(true);
-        if(!breezeRequestArgs.isIgnore()){
+        if (!breezeRequestArgs.isIgnore()) {
             breezeLogCallbackService.callback(breezeRequestArgs);
         }
 
@@ -139,7 +139,7 @@ public class BreezeLogsAop {
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
-        if(!breezeRequestArgs.isIgnore()) {
+        if (!breezeRequestArgs.isIgnore()) {
             breezeLogCallbackService.callback(breezeRequestArgs);
         }
     }
