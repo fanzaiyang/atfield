@@ -40,10 +40,21 @@ public @interface Log {
      */
     String userIdKey() default "";
 
+    String userName() default "";
+
     /**
      * 忽略
      *
      * @return boolean
      */
     boolean ignore() default false;
+
+    /**
+     * 应用id
+     *
+     * @return {@link String}
+     */
+    String appIdKey() default "";
+
+    String appName() default "";
 }

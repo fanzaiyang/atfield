@@ -72,11 +72,13 @@ public class BreezeLogsAop {
             breezeRequestArgs.setIgnore(annotation.ignore());
             return;
         }
-        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo();
+        String userId=annotation!=null?annotation.userIdKey():"";
+        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo(userId);
         if (userInfo == null) {
             userInfo = new UserInfoModel();
         }
-        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo();
+        String appId=annotation!=null?annotation.appIdKey():"";
+        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId);
         if (appInfo == null) {
             appInfo = new AppInfoModel();
         }
@@ -107,9 +109,13 @@ public class BreezeLogsAop {
                 Object o = requestData.get(annotation.userIdKey());
                 if (o != null) {
                     breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(),o.toString()));
-                    breezeRequestArgs.setAppName(StrUtil.blankToDefault(breezeRequestArgs.getAppName(),o.toString()));
                 }
-
+            }
+            if(StrUtil.isBlank(breezeRequestArgs.getUserName())){
+                breezeRequestArgs.setAppId(annotation.userName());
+            }
+            if(StrUtil.isBlank(breezeRequestArgs.getAppName())){
+                breezeRequestArgs.setAppId(annotation.appName());
             }
         }
     }

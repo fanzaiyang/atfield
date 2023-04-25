@@ -20,16 +20,19 @@ public interface BreezeLogCallbackService {
     void callback(BreezeRequestArgs args);
 
     /**
+     * 得到用户信息
      * 得到用户id
      *
-     * @return {@link String}
+     * @param userId 用户id
+     * @return {@link UserInfoModel}
      */
-    UserInfoModel getUserInfo();
+    UserInfoModel getUserInfo(String userId);
 
     /**
      * 得到应用程序信息
      *
+     * @param appId 应用程序id
      * @return {@link AppInfoModel}
      */
-    AppInfoModel getAppInfo();
+    AppInfoModel getAppInfo(String appId);
 }

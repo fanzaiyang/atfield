@@ -17,12 +17,12 @@ public class BreezeDefaultLogCallbackService implements BreezeLogCallbackService
     }
 
     @Override
-    public UserInfoModel getUserInfo() {
+    public UserInfoModel getUserInfo(String userId) {
         return new UserInfoModel();
     }
 
     @Override
-    public AppInfoModel getAppInfo() {
+    public AppInfoModel getAppInfo(String appId) {
         return new AppInfoModel();
     }
 }
