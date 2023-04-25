@@ -118,7 +118,7 @@ public class BreezeLogsAop {
             }
         }
         if (StrUtil.isBlank(breezeRequestArgs.getUserName())) {
-            breezeRequestArgs.setAppId(annotation.userName());
+            breezeRequestArgs.setUserName(annotation.userName());
         }
         if (StrUtil.isBlank(breezeRequestArgs.getAppName())) {
             breezeRequestArgs.setAppId(annotation.appName());
