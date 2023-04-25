@@ -161,7 +161,7 @@ public class BreezeLogsAop {
         if (breezeRequestArgs.isIgnore()) {
             return;
         }
-        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 512));
+        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 1024));
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
