@@ -106,8 +106,8 @@ public class BreezeLogsAop {
             if (StrUtil.isNotBlank(annotation.userIdKey())) {
                 Object o = requestData.get(annotation.userIdKey());
                 if (o != null) {
-                    breezeRequestArgs.setUserName(o.toString());
-                    breezeRequestArgs.setAppName(o.toString());
+                    breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(),o.toString()));
+                    breezeRequestArgs.setAppName(StrUtil.blankToDefault(breezeRequestArgs.getAppName(),o.toString()));
                 }
 
             }
