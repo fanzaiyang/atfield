@@ -90,7 +90,7 @@ public class BreezeLogsAop {
                 .requestData(requestData)
                 .startTime(new Date())
                 .classMethod(JoinPointUtils.getMethodInfo(joinPoint))
-                .requestMethod(SpringUtils.getRequestMethod())
+                .requestMethod(request.getMethod())
                 .requestUrl(requestUrl)
                 .userId(userInfo.getUserId())
                 .userName(userInfo.getUserName())
