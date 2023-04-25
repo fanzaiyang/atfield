@@ -66,7 +66,11 @@ public class BreezeLogsAop {
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
         HttpServletRequest request = SpringUtils.getRequest();
         String clientIp = SpringUtils.getClientIp(request);
-        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, request.getRequestURI(), JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
+        String requestUrl = request.getRequestURI();
+        if (StrUtil.isNotBlank(request.getQueryString())) {
+            requestUrl = requestUrl.concat("?").concat(request.getQueryString());
+        }
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, requestUrl, JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
         if (annotation != null && annotation.ignore()) {
             breezeRequestArgs = new BreezeRequestArgs();
             breezeRequestArgs.setIgnore(annotation.ignore());
@@ -85,10 +89,7 @@ public class BreezeLogsAop {
         if (appInfo == null) {
             appInfo = new AppInfoModel();
         }
-        String requestUrl = request.getRequestURI();
-        if (StrUtil.isNotBlank(request.getQueryString())) {
-            requestUrl = requestUrl.concat("?").concat(request.getQueryString());
-        }
+
         breezeRequestArgs = BreezeRequestArgs.builder()
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
