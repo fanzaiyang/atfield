@@ -72,13 +72,16 @@ public class BreezeLogsAop {
             breezeRequestArgs.setIgnore(annotation.ignore());
             return;
         }
-        String userId=annotation!=null?annotation.userIdKey():"";
-        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo(userId);
+        Map<String, Object> requestParams = SpringUtils.getRequestParams(request);
+        String userIdKey = annotation != null ? annotation.userIdKey() : "";
+        Object userId = requestParams.get(userIdKey);
+        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo(userId != null ? userId.toString() : "");
         if (userInfo == null) {
             userInfo = new UserInfoModel();
         }
-        String appId=annotation!=null?annotation.appIdKey():"";
-        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId);
+        String appIdKey = annotation != null ? annotation.appIdKey() : "";
+        Object appId = requestParams.get(appIdKey);
+        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId != null ? appId.toString() : "");
         if (appInfo == null) {
             appInfo = new AppInfoModel();
         }
@@ -108,13 +111,13 @@ public class BreezeLogsAop {
             if (StrUtil.isNotBlank(annotation.userIdKey())) {
                 Object o = requestData.get(annotation.userIdKey());
                 if (o != null) {
-                    breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(),o.toString()));
+                    breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(), o.toString()));
                 }
             }
-            if(StrUtil.isBlank(breezeRequestArgs.getUserName())){
+            if (StrUtil.isBlank(breezeRequestArgs.getUserName())) {
                 breezeRequestArgs.setAppId(annotation.userName());
             }
-            if(StrUtil.isBlank(breezeRequestArgs.getAppName())){
+            if (StrUtil.isBlank(breezeRequestArgs.getAppName())) {
                 breezeRequestArgs.setAppId(annotation.appName());
             }
         }
