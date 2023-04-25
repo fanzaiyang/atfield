@@ -105,22 +105,23 @@ public class BreezeLogsAop {
                 .success(true)
                 .build();
 
-        if (annotation != null) {
-            breezeRequestArgs.setBizName(annotation.value());
-            breezeRequestArgs.setModule(annotation.module());
-            breezeRequestArgs.setLogType(annotation.type());
-            if (StrUtil.isNotBlank(annotation.userIdKey())) {
-                Object o = requestData.get(annotation.userIdKey());
-                if (o != null) {
-                    breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(), o.toString()));
-                }
+        if (annotation == null) {
+            return;
+        }
+        breezeRequestArgs.setBizName(annotation.value());
+        breezeRequestArgs.setModule(annotation.module());
+        breezeRequestArgs.setLogType(annotation.type());
+        if (StrUtil.isNotBlank(annotation.userIdKey())) {
+            Object o = requestData.get(annotation.userIdKey());
+            if (o != null) {
+                breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(), o.toString()));
             }
-            if (StrUtil.isBlank(breezeRequestArgs.getUserName())) {
-                breezeRequestArgs.setAppId(annotation.userName());
-            }
-            if (StrUtil.isBlank(breezeRequestArgs.getAppName())) {
-                breezeRequestArgs.setAppId(annotation.appName());
-            }
+        }
+        if (StrUtil.isBlank(breezeRequestArgs.getUserName())) {
+            breezeRequestArgs.setAppId(annotation.userName());
+        }
+        if (StrUtil.isBlank(breezeRequestArgs.getAppName())) {
+            breezeRequestArgs.setAppId(annotation.appName());
         }
     }
 
