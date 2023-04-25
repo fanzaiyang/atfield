@@ -24,6 +24,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -63,8 +64,9 @@ public class BreezeLogsAop {
         Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
 
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
-        String clientIp = SpringUtils.getClientIp();
-        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, SpringUtils.getRequestUri(), JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        HttpServletRequest request = SpringUtils.getRequest();
+        String clientIp = SpringUtils.getClientIp(request);
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, request.getRequestURI(), JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
         if (annotation != null && annotation.ignore()) {
             breezeRequestArgs = new BreezeRequestArgs();
             breezeRequestArgs.setIgnore(annotation.ignore());
@@ -78,6 +80,10 @@ public class BreezeLogsAop {
         if (appInfo == null) {
             appInfo = new AppInfoModel();
         }
+        String requestUrl = request.getRequestURI();
+        if (StrUtil.isNotBlank(request.getQueryString())) {
+            requestUrl = requestUrl.concat("?").concat(request.getQueryString());
+        }
         breezeRequestArgs = BreezeRequestArgs.builder()
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
@@ -85,7 +91,7 @@ public class BreezeLogsAop {
                 .startTime(new Date())
                 .classMethod(JoinPointUtils.getMethodInfo(joinPoint))
                 .requestMethod(SpringUtils.getRequestMethod())
-                .requestUrl(SpringUtils.getRequestUrl())
+                .requestUrl(requestUrl)
                 .userId(userInfo.getUserId())
                 .userName(userInfo.getUserName())
                 .appId(appInfo.getAppId())

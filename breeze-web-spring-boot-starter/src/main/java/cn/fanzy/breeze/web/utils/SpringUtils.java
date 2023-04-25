@@ -87,6 +87,11 @@ public class SpringUtils extends SpringUtil {
 
     }
 
+    /**
+     * 得到请求uri
+     *
+     * @return {@link String}
+     */
     public static String getRequestUri() {
         try {
             return getRequest().getRequestURI();
@@ -95,6 +100,18 @@ public class SpringUtils extends SpringUtil {
         }
     }
 
+    /**
+     * 得到查询字符串
+     *
+     * @return {@link String}
+     */
+    public static String getQueryString() {
+        try {
+            return getRequest().getQueryString();
+        } catch (Exception e) {
+            return null;
+        }
+    }
     public static String getRequestUrl() {
         try {
             return getRequest().getRequestURL().toString();
@@ -139,9 +156,23 @@ public class SpringUtils extends SpringUtil {
         }
     }
 
+    /**
+     * 得到请求参数个数
+     *
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
     public static Map<String, Object> getRequestParams() {
+        return getRequestParams(getRequest());
+    }
+
+    /**
+     * 得到请求参数个数
+     *
+     * @param request 请求
+     * @return {@link Map}<{@link String}, {@link Object}>
+     */
+    public static Map<String, Object> getRequestParams(HttpServletRequest request) {
         Map<String, Object> params = new HashMap<>();
-        HttpServletRequest request = getRequest();
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (String key : parameterMap.keySet()) {
             String[] paramArr = parameterMap.get(key);
