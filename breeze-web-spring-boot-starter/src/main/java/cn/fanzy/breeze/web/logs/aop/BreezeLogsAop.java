@@ -84,8 +84,8 @@ public class BreezeLogsAop {
             userInfo = new UserInfoModel();
         }
         String appIdKey = annotation != null ? annotation.appIdKey() : "";
-        Object appId = requestParams.get(appIdKey);
-        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId != null ? appId.toString() : "");
+        String appId = requestParams.get(appIdKey)!=null?requestParams.get(appIdKey).toString():appIdKey;
+        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId);
         if (appInfo == null) {
             appInfo = new AppInfoModel();
         }
