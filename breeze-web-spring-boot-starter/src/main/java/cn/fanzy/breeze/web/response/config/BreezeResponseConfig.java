@@ -30,7 +30,7 @@ import java.util.Objects;
 @ControllerAdvice
 @EnableConfigurationProperties({ResponseWrapperProperties.class})
 @ConditionalOnProperty(prefix = "breeze.web.response.wrapper", name = {"enable"}, havingValue = "true")
-public class ResponseConfig implements ResponseBodyAdvice<Object> {
+public class BreezeResponseConfig implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
