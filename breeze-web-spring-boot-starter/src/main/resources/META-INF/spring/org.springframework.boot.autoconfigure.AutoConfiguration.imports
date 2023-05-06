@@ -13,3 +13,4 @@ cn.fanzy.breeze.web.logs.config.BreezeLogsConfiguration
 cn.fanzy.breeze.web.safe.config.BreezeSafeConfig
 cn.fanzy.breeze.web.swagger.config.BreezeSwaggerConfig
 cn.fanzy.breeze.web.web.json.config.BreezeJacksonWebConfig
+cn.fanzy.breeze.web.response.config.BreezeResponseConfig
