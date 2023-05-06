@@ -22,17 +22,44 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 import java.util.function.Predicate;
 
 /**
+ * 匹配段
  * 匹配片段
  *
+ * @author fanzaiyang
+ * @date 2023-05-06
  */
 public enum MatchSegment {
+    /**
+     * GROUP_BY
+     */
     GROUP_BY(i -> i == SqlKeyword.GROUP_BY),
+    /**
+     * ORDER_BY
+     */
     ORDER_BY(i -> i == SqlKeyword.ORDER_BY),
+    /**
+     * NOT
+     */
     NOT(i -> i == SqlKeyword.NOT),
+    /**
+     * AND
+     */
     AND(i -> i == SqlKeyword.AND),
+    /**
+     * OR
+     */
     OR(i -> i == SqlKeyword.OR),
+    /**
+     * AND_OR
+     */
     AND_OR(i -> i == SqlKeyword.AND || i == SqlKeyword.OR),
+    /**
+     * EXISTS
+     */
     EXISTS(i -> i == SqlKeyword.EXISTS),
+    /**
+     * HAVING
+     */
     HAVING(i -> i == SqlKeyword.HAVING);
 
     private final Predicate<ISqlSegment> predicate;

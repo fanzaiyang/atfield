@@ -8,7 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * 正常部分列表
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public class NormalSegmentList extends AbstractSegmentList {
+
+    private static final long serialVersionUID = 11574843943917156L;
 
     @Override
     public void addAll(List<ISqlSegment> iSqlSegments) {

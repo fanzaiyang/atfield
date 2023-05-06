@@ -3,16 +3,20 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.CompareEnum;
-import cn.hutool.core.lang.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * sql段元
  * 代码片段最小单元
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
  */
 public class SqlSegmentMeta implements ISqlSegment {
 
+    private static final long serialVersionUID = 6268438527351504845L;
     /**
      * 库字段名称
      */
@@ -34,27 +38,33 @@ public class SqlSegmentMeta implements ISqlSegment {
     private CompareEnum compareEnum;
 
     /**
-     * sql中变量键值对
+     * key值
      */
-    private Pair<String, Object> paramPair;
+    private String key;
+
+    /**
+     * value值
+     */
+    public Object value;
 
 
     public void putPair(String key, Object value) {
-        paramPair = new Pair<>(key, value);
+        this.key = key;
+        this.value = value;
     }
 
     @Override
     public String getSqlSegment() {
         if (compareEnum != null && paramName != null && columnName != null) {
-            return compareEnum.getMetaSql(paramName, columnName);
+            return compareEnum.getMetaSql(columnName, paramName);
         }
         return null;
     }
 
     @Override
     public Map<String, Object> getSqlSegmentParamMap() {
-        Map<String, Object> map = new HashMap<>();
-        map.put(paramPair.getKey(), paramPair.getValue());
+        Map<String, Object> map = new HashMap<>(1);
+        map.put(key, value);
         return map;
     }
 
@@ -88,13 +98,5 @@ public class SqlSegmentMeta implements ISqlSegment {
 
     public void setCompareEnum(CompareEnum compareEnum) {
         this.compareEnum = compareEnum;
-    }
-
-    public Pair<String, Object> getParamPair() {
-        return paramPair;
-    }
-
-    public void setParamPair(Pair<String, Object> paramPair) {
-        this.paramPair = paramPair;
     }
 }
