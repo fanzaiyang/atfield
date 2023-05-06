@@ -143,10 +143,10 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
                 String entityFiledName = columnsToString(column);
                 String val1Name = getParamName(entityFiledName);
                 String val2Name = getParamName(entityFiledName);
-                appendSqlSegments(() -> strategy.getColumnName(entityFiledName), SqlKeyword.BETWEEN, new ISqlSegment() {
+                appendSqlSegments(new ISqlSegment() {
                     @Override
                     public String getSqlSegment() {
-                        return val1Name + StringPool.SPACE + SqlKeyword.AND.getSqlSegment() + StringPool.SPACE + val2Name;
+                        return CompareEnum.BETWEEN.getMetaSql(strategy.getColumnName(entityFiledName), val1Name, val2Name);
                     }
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {

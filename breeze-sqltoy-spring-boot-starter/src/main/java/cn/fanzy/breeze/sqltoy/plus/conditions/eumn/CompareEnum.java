@@ -1,134 +1,210 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.eumn;
 
-import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
 import org.sagacity.sqltoy.exception.DataAccessException;
 
 import java.util.Collection;
 
 import static java.util.stream.Collectors.joining;
 
+
 /**
- * 条件枚举
- * @author 高总辉
- * @serial 2021-12-30 15:48
+ * 比较枚举
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
  */
 public enum CompareEnum {
-
-    EQ(SqlKeyword.EQ) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * ==
+     */
+    EQ(SqlKeyword.EQ, CompareConstant.EQ_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    NE(SqlKeyword.NE) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * !=
+     */
+    NE(SqlKeyword.NE, CompareConstant.NE_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    GT(SqlKeyword.GT) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * >
+     */
+    GT(SqlKeyword.GT, CompareConstant.GT_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    LT(SqlKeyword.LT) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * <
+     */
+    LT(SqlKeyword.LT, CompareConstant.LT_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    GE(SqlKeyword.GE) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * >=
+     */
+    GE(SqlKeyword.GE, CompareConstant.GE_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    LE(SqlKeyword.LE) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + StringPool.COLON + paramName;
+    /**
+     * <=
+     */
+    LE(SqlKeyword.LE, CompareConstant.LE_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    LIKE(SqlKeyword.LIKE) {
-        public String getMetaSql(String paramName, String columnName) {
-            //"code like concat('%', :code,'%')"
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.PERCENT  + "," + StringPool.COLON + paramName+ "," + StringPool.PERCENT + ")";
+    /**
+     * LIKE
+     */
+    LIKE(SqlKeyword.LIKE, CompareConstant.LIKE_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    LIKE_LEFT(SqlKeyword.LIKE) {
-        //"code like concat('%', :code)"
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.PERCENT  + "," + StringPool.COLON + paramName + ")";
+    /**
+     * 做模糊 *str
+     */
+    LIKE_LEFT(SqlKeyword.LIKE, CompareConstant.LIKE_LEFT_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    LIKE_RIGHT(SqlKeyword.LIKE) {
-        public String getMetaSql(String paramName, String columnName) {
-            //"code like concat(:code,'%')"
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + "concat(" + StringPool.COLON + paramName+ "," + StringPool.PERCENT + ")";
+    /**
+     * 右模糊
+     */
+    LIKE_RIGHT(SqlKeyword.LIKE, CompareConstant.LIKE_RIGHT_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    IN(SqlKeyword.IN) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + " (:" + paramName + ")";
+    /**
+     * NOT_LIKE
+     */
+    NOT_LIKE(SqlKeyword.NOT_LIKE, CompareConstant.NOT_LIKE_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    //多字段in语句
-    IN_BATCH(SqlKeyword.IN) {
-        public String getMetaSql(String paramName, String columnName) {
+    /**
+     * IN
+     */
+    IN(SqlKeyword.IN, CompareConstant.IN_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
+        }
+    },
+
+
+    /**
+     * 多字段in语句
+     */
+    IN_BATCH(SqlKeyword.IN, CompareConstant.IN_BATCH_SQL) {
+        public String getMetaSql(String... names) {
             throw new DataAccessException("多字段in操作不支持该数据类型！");
         }
 
         public String getBatchMetaSql(Collection<String> paramNames, Collection<String> columnNames) {
             String head = String.join(",", columnNames);
             String end = paramNames.stream().map(e -> ":" + e).collect(joining(","));
-            return "(" + head + ") " + getSymbol() + " (" + end + ")";
+            return String.format(getSqlContent(), head, end);
         }
     },
 
-    NOT_IN(SqlKeyword.NOT_IN) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol() + StringPool.SPACE + " (:" + paramName + ")";
+    /**
+     * NOT_IN
+     */
+    NOT_IN(SqlKeyword.NOT_IN, CompareConstant.NOT_IN_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1]);
         }
     },
 
-    IS_NULL(SqlKeyword.IS_NULL) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol();
+    /**
+     * IS_NULL
+     */
+    IS_NULL(SqlKeyword.IS_NULL, CompareConstant.IS_NULL_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0]);
         }
     },
 
-    IS_NOT_NULL(SqlKeyword.IS_NOT_NULL) {
-        public String getMetaSql(String paramName, String columnName) {
-            return columnName + StringPool.SPACE + getSymbol();
+    /**
+     * IS_NOT_NULL
+     */
+    IS_NOT_NULL(SqlKeyword.IS_NOT_NULL, CompareConstant.IS_NOT_NULL_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0]);
         }
     },
 
-   ;
+    /**
+     * BETWEEN
+     */
+    BETWEEN(SqlKeyword.BETWEEN, CompareConstant.BETWEEN_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1], names[2]);
+        }
+    },
 
-    SqlKeyword sqlKeyword;
+    /**
+     * NOT_BETWEEN
+     */
+    NOT_BETWEEN(SqlKeyword.NOT_BETWEEN, CompareConstant.NOT_BETWEEN_SQL) {
+        public String getMetaSql(String... names) {
+            return String.format(getSqlContent(), names[0], names[1], names[2]);
+        }
+    },
+    ;
 
-    public abstract String getMetaSql(String paramName, String columnName);
+    /**
+     * sql关键字
+     */
+    private final SqlKeyword sqlKeyword;
+
+    /**
+     * sql内容
+     */
+    private final String sqlContent;
+
+    public abstract String getMetaSql(String... names);
 
     public String getBatchMetaSql(Collection<String> paramNames, Collection<String> columnNames) {
         throw new DataAccessException("该操作类型不支持此种sql组装方式！");
     }
 
-    private CompareEnum( SqlKeyword sqlKeyword) {
+    CompareEnum(SqlKeyword sqlKeyword, String sqlContent) {
         this.sqlKeyword = sqlKeyword;
+        this.sqlContent = sqlContent;
     }
 
     public String getSymbol() {
         return sqlKeyword.getSqlSegment();
     }
 
+    public String getSqlContent() {
+        return sqlContent;
+    }
+
     public SqlKeyword getSqlKeyword() {
         return sqlKeyword;
     }
-
-
 }

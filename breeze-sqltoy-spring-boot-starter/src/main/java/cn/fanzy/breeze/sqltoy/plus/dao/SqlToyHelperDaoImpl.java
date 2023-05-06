@@ -76,11 +76,13 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
         EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
         //开始组装sql
         wrapper.assemble(entityMeta::getColumnName);
-        Map<String, Object> paramMap = wrapper.getSqlSegmentParamMap();
         EntityQuery entityQuery = EntityQuery.create().where(wrapper.getSqlSegment());
+        // fix where无参数，报org.sagacity.sqltoy.utils.SqlUtil：Parameter index out of range (1 > number of parameters, which is 0).问题
+        Map<String, Object> paramMap = wrapper.getSqlSegmentParamMap();
         if (paramMap != null && !paramMap.isEmpty()) {
-            entityQuery.values(wrapper.getSqlSegmentParamMap());
+            entityQuery.values(paramMap);
         }
+
         if (wrapper.getSelectColumns() != null && !wrapper.getSelectColumns().isEmpty()) {
             entityQuery.select(wrapper.getSelectColumns().toArray(new String[0]));
         }
