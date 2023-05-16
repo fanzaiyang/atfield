@@ -26,7 +26,8 @@ public class MergeSegments implements ISqlSegment {
     private final AbstractSegmentList having = new HavingSegmentList();
     private final AbstractSegmentList orderBy = new OrderBySegmentList();
 
-    private String lastSqlSegment="";
+    private String lastSqlSegment = "";
+
     @Override
     public String getSqlSegment() {
         String sql = null;
@@ -37,7 +38,7 @@ public class MergeSegments implements ISqlSegment {
         } else {
             sql = normal.getSqlSegment() + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
         }
-        return sql+lastSqlSegment;
+        return sql + lastSqlSegment;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class MergeSegments implements ISqlSegment {
         } else if (MatchSegment.HAVING.match(firstSqlSegment)) {
             having.addAll(list);
         } else if (firstSqlSegment.getSqlSegment().startsWith(SqlKeyword.LAST.name())) {
-            lastSqlSegment = " "+firstSqlSegment;
+            lastSqlSegment = firstSqlSegment.getSqlSegment().replace(SqlKeyword.LAST.name() + ":", " ");
         } else {
             normal.addAll(list);
         }
