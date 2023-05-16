@@ -11,7 +11,15 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 有部分列表
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public class HavingSegmentList extends AbstractSegmentList{
+
+    private static final long serialVersionUID = 9204999428205278086L;
 
     @Override
     public void merge() {

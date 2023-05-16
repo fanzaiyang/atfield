@@ -9,6 +9,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 微风sql玩具+会话配置
+ *
+ * @author fanzaiyang
+ * @date 2023-04-23
+ */
 @Slf4j
 @Configuration
 @AutoConfigureBefore({BreezeSqlToyPlusConfig.class,BreezeSqlToyPlusSaTokenConfig.class})

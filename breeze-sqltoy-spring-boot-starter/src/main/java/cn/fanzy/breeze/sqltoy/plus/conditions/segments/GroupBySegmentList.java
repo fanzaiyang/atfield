@@ -9,7 +9,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 集团根据段列表
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public class GroupBySegmentList extends AbstractSegmentList{
+
+    private static final long serialVersionUID = -6316805670741381215L;
 
     @Override
     public void merge() {

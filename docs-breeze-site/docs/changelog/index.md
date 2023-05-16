@@ -14,6 +14,31 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.2.2
+### 🐛修复last sql问题
+
+## v2.2.1
+### 🐛修复已知问题
+
+* 升级sqltoy依赖。
+* fix between问题
+
+## v2.2.0
+### 🐛修复大量已知问题
+
+* 修改JSON序列化Date问题。
+
+
+## v2.1.8
+### 🐛问题修复
+
+* 修改JSON序列化LocalDate问题。
+
+## v2.1.7
+### 🐛问题修复
+
+* 修改JSON序列化带来的诸多问题。
+
 ## v2.1.6
 
 ### 🐛问题修复

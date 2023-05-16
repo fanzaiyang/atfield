@@ -1,23 +1,25 @@
 package cn.fanzy.breeze.web.web.json.config;
 
-import cn.fanzy.breeze.web.web.json.jackson.BreezeBeanSerializerModifier;
-import cn.fanzy.breeze.web.web.json.jackson.BreezeNullValueSerializer;
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cn.hutool.core.text.CharSequenceUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * <pre>
@@ -33,31 +35,30 @@ import java.text.SimpleDateFormat;
  */
 @Slf4j
 @Configuration
-@AutoConfigureAfter(JacksonAutoConfiguration.class)
+@RequiredArgsConstructor
+@AutoConfigureBefore(JacksonAutoConfiguration.class)
 @EnableConfigurationProperties({BreezeWebJsonProperties.class})
-@ConditionalOnProperty(prefix = "breeze.web.json", name = {"enable"}, havingValue = "true",matchIfMissing = true)
-public class BreezeJacksonWebConfig {
+@ConditionalOnProperty(prefix = "breeze.web.json", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+public class BreezeJacksonWebConfig implements WebMvcConfigurer {
+    private final JacksonProperties jacksonProperties;
 
-    @Value("${spring.mvc.format.date-time:yyyy-MM-dd HH:mm:ss}")
-    private String dateTimeFormat;
+    private final WebMvcProperties webMvcProperties;
 
-    @Bean
-    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-        log.info("mappingJackson2HttpMessageConverter....");
-        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        //现在需要在中间加一个
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.setDateFormat(new SimpleDateFormat(dateTimeFormat));
-        /** 为objectMapper注册一个带有SerializerModifier的Factory */
-        objectMapper.setSerializerFactory(objectMapper.getSerializerFactory()
-                .withSerializerModifier(new BreezeBeanSerializerModifier()));
-        SerializerProvider serializerProvider = objectMapper.getSerializerProvider();
-        serializerProvider.setNullValueSerializer(new BreezeNullValueSerializer());
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(0,new ByteArrayHttpMessageConverter());
+        converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        String format = CharSequenceUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
+        converter.setObjectMapper(new BreezeJacksonObjectMapper(
+                CharSequenceUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss"),
+                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
+                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss")));
+        converters.add(1, converter);
+        converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
-        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);  // 设置objectMapper
-        return mappingJackson2HttpMessageConverter;
     }
+
     @PostConstruct
     public void checkConfig() {
         log.info("「微风组件」开启 <JSON转换器> 相关的配置。");

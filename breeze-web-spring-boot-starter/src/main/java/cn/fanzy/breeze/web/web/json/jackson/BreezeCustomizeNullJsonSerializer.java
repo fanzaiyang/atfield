@@ -44,7 +44,7 @@ public class BreezeCustomizeNullJsonSerializer {
         @Override
         public void serialize(Object value, JsonGenerator jsonGenerator,
                               SerializerProvider serializerProvider) throws IOException {
-            jsonGenerator.writeNull();
+            jsonGenerator.writeString("");
         }
     }
 

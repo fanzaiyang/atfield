@@ -81,18 +81,23 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
                 .set(SysAccount::getLastLoginIp, SpringUtils.getClientIp())
                 .set(SysAccount::getLastLoginDate, new Date())
                 .eq(SysAccount::getId, account.getId()));
-        StpUtil.getSession().set("userInfo", account);
+        try {
+            StpUtil.getSession().set("userInfo", account);
+        }catch (Exception ignored){}
         return JsonContent.success(StpUtil.getTokenInfo());
     }
 
     @Override
     public JsonContent<CurrentUserInfoVo> doGetCurrentUserInfo() {
-        SaSession session = StpUtil.getSession();
         String loginId = StpUtil.getLoginIdAsString();
-        Object o = session.get(loginId);
-        if (o instanceof CurrentUserInfoVo) {
-            return JsonContent.success((CurrentUserInfoVo) o);
-        }
+        SaSession session=null;
+        try {
+            session = StpUtil.getSession();
+            Object o = session.get(loginId);
+            if (o instanceof CurrentUserInfoVo) {
+                return JsonContent.success((CurrentUserInfoVo) o);
+            }
+        }catch (Exception ignored){}
         List<SysAccount> accountList = sqlToyHelperDao.loadByIds(SysAccount.class, loginId);
         if (CollUtil.isEmpty(accountList)) {
             throw new NotLoginException(StrUtil.format("未找到ID为「{}」的用户！", loginId), StpUtil.TYPE, NotLoginException.DEFAULT_MESSAGE);
@@ -102,7 +107,9 @@ public class BreezeAdminAuthServiceImpl implements BreezeAdminAuthService {
         String sql = "SELECT t.* FROM sys_role t INNER JOIN sys_account_role ar on ar.role_id=t.id and ar.del_flag=0 and ar.account_id=:accountId WHERE t.del_flag=0";
         List<SysRole> roleList = sqlToyHelperDao.findBySql(sql, MapKit.map("accountId", loginId), SysRole.class);
         currentUserInfoVo.setRoleList(roleList);
-        session.set(loginId, currentUserInfoVo);
+        if(session!=null){
+            session.set(loginId, currentUserInfoVo);
+        }
         return JsonContent.success(currentUserInfoVo);
     }
 

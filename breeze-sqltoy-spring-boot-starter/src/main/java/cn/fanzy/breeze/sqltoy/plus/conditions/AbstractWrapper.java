@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions;
 
+
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.CompareEnum;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 import cn.fanzy.breeze.sqltoy.plus.conditions.interfaces.Operated;
@@ -8,6 +9,8 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.segments.FiledValueFilterStrategy;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.MergeSegments;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.SqlSegmentMeta;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
+import cn.hutool.core.util.StrUtil;
+import org.sagacity.sqltoy.utils.StringUtil;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -143,10 +146,10 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
                 String entityFiledName = columnsToString(column);
                 String val1Name = getParamName(entityFiledName);
                 String val2Name = getParamName(entityFiledName);
-                appendSqlSegments(() -> strategy.getColumnName(entityFiledName), SqlKeyword.BETWEEN, new ISqlSegment() {
+                appendSqlSegments(new ISqlSegment() {
                     @Override
                     public String getSqlSegment() {
-                        return val1Name + StringPool.SPACE + SqlKeyword.AND.getSqlSegment() + StringPool.SPACE + val2Name;
+                        return CompareEnum.BETWEEN.getMetaSql(strategy.getColumnName(entityFiledName), val1Name, val2Name);
                     }
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {
@@ -170,10 +173,10 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
                 String entityFiledName = columnsToString(column);
                 String val1Name = getParamName(entityFiledName);
                 String val2Name = getParamName(entityFiledName);
-                appendSqlSegments(() -> strategy.getColumnName(entityFiledName), SqlKeyword.NOT_BETWEEN, new ISqlSegment() {
+                appendSqlSegments(new ISqlSegment() {
                     @Override
                     public String getSqlSegment() {
-                        return val1Name + StringPool.SPACE + SqlKeyword.AND.getSqlSegment() + StringPool.SPACE + val2Name;
+                        return CompareEnum.NOT_BETWEEN.getMetaSql(strategy.getColumnName(entityFiledName), val1Name, val2Name);
                     }
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {
@@ -200,7 +203,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         if (!validateFiledValue(val)) {
             return typedThis;
         }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE, val));
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_LIKE, val));
     }
 
     @Override
@@ -222,14 +225,14 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children isNull(boolean condition, R column) {
         return addAssembler((strategy) -> maybeDo(condition, () -> {
-            appendSqlSegments(() -> CompareEnum.IS_NULL.getMetaSql(null, columnToString(column)));
+            appendSqlSegments(() -> CompareEnum.IS_NULL.getMetaSql(columnToString(column)));
         }));
     }
 
     @Override
     public Children isNotNull(boolean condition, R column) {
         return addAssembler((strategy) -> maybeDo(condition, () -> {
-            appendSqlSegments(() -> CompareEnum.IS_NOT_NULL.getMetaSql(null, columnToString(column)));
+            appendSqlSegments(() -> CompareEnum.IS_NOT_NULL.getMetaSql(columnToString(column)));
         }));
     }
 
@@ -368,7 +371,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children last(boolean condition, String lastSql) {
         return addAssembler((strategy) -> {
-            maybeDo(condition, () -> appendSqlSegments(() -> lastSql));
+            maybeDo(condition, () -> appendSqlSegments(() -> StrUtil.format("{}:{}",SqlKeyword.LAST.name(),lastSql)));
         });
     }
 
@@ -411,8 +414,6 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     /**
      * 内部自用
      * <p>NOT 关键词</p>
-     * @param condition boolean
-     * @return Children
      */
     protected Children not(boolean condition) {
         return addAssembler((mappingStrategy -> {
@@ -446,12 +447,21 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         return;
     }
 
-
+    /**
+     * 获取 columnNames
+     */
     protected String columnsToString(R... columns) {
         return Arrays.stream(columns).map(this::columnToString).collect(joining(StringPool.COMMA));
     }
 
-
+    /**
+     * 普通查询条件
+     *
+     * @param condition  是否执行
+     * @param column     属性
+     * @param compareEnum SQL 关键词
+     * @param val        条件值
+     */
     protected Children addNeedValCondition(FiledMappingStrategy mappingStrategy, boolean condition, R column, CompareEnum compareEnum, Object val) {
         return maybeDo(condition, () -> addSqlSegment(mappingStrategy, column, compareEnum, val));
     }
@@ -481,7 +491,12 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         }));
     }
 
-
+    /**
+     * 设置查询条件封装的单元对象
+     * @param column
+     * @param compareEnum
+     * @param val
+     */
     protected void addSqlSegment(FiledMappingStrategy mappingStrategy, R column, CompareEnum compareEnum, Object val) {
         boolean isAllow = FiledValueFilterStrategy.FiledValueFilterStrategyHolder.getInstance().validate(val);
         if (isAllow) {
@@ -515,7 +530,13 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         expression.add(sqlSegments);
     }
 
-
+    /**
+     * 函数化的做事
+     *
+     * @param condition 做不做
+     * @param something 做什么
+     * @return Children
+     */
     protected final Children maybeDo(boolean condition, DoSomething something) {
         if (condition) {
             something.doIt();
@@ -523,17 +544,28 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         return typedThis;
     }
 
-
+    /**
+     * 获取 columnName
+     */
     protected final ISqlSegment columnToSqlSegment(R column) {
         return () -> columnToString(column);
     }
 
-
+    /**
+     * 字段 SQL 注入过滤处理，子类重写实现过滤逻辑
+     *
+     * @param column 字段内容
+     * @return
+     */
     protected R columnSqlInjectFilter(R column) {
         return column;
     }
 
-
+    /**
+     * 多重嵌套查询条件
+     *
+     * @param condition 查询条件值
+     */
     protected Children addNestedCondition(FiledMappingStrategy mappingStrategy, boolean condition, Function<Children, Children> function) {
         return maybeDo(condition, () -> {
             final Children instance = instance();
@@ -541,24 +573,29 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
             //获取组装器组装sql
             nested.assemble(mappingStrategy);
             String sql = instance.getSqlSegment();
-            Map<String, Object> paramMap = instance.getSqlSegmentParamMap();
-            appendSqlSegments(new ISqlSegment() {
-                @Override
-                public String getSqlSegment() {
-                    if (sql == null) {
-                        return StringPool.EMPTY;
+            if (StringUtil.isNotBlank(sql)) {
+                Map<String, Object> paramMap = instance.getSqlSegmentParamMap();
+                appendSqlSegments(new ISqlSegment() {
+                    @Override
+                    public String getSqlSegment() {
+                        if (sql == null) {
+                            return StringPool.EMPTY;
+                        }
+                        return StringPool.LEFT_BRACKET + sql + StringPool.RIGHT_BRACKET;
                     }
-                    return StringPool.LEFT_BRACKET + sql + StringPool.RIGHT_BRACKET;
-                }
-                @Override
-                public Map<String, Object> getSqlSegmentParamMap() {
-                    return paramMap;
-                }
-            });
+
+                    @Override
+                    public Map<String, Object> getSqlSegmentParamMap() {
+                        return paramMap;
+                    }
+                });
+            }
         });
     }
 
-
+    /**
+     * 做事函数
+     */
     @FunctionalInterface
     public interface DoSomething {
         void doIt();

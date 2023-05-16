@@ -15,10 +15,13 @@
  */
 package cn.fanzy.breeze.sqltoy.plus.conditions.toolkit;
 
+import cn.hutool.core.text.StrPool;
+
 /**
  * 常用字符串
+ * @author fanzaiyang
  */
-public interface StringPool {
+public interface StringPool extends StrPool {
 
     String AMPERSAND = "&";
     String AND = "and";

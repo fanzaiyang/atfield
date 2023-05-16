@@ -7,10 +7,20 @@ import org.springframework.util.Assert;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 抽象部分列表
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public abstract class AbstractSegmentList implements ISqlSegment {
 
+    private static final long serialVersionUID = 8309103623436823734L;
     protected List<ISqlSegment> sqlSegments = new ArrayList<>();
 
+    /**
+     * 合并
+     */
     public abstract void merge();
 
     public void add(ISqlSegment iSqlSegment) {
