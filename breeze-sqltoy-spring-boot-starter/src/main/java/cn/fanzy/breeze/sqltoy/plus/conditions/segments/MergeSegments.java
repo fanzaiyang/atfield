@@ -2,6 +2,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
+import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +26,7 @@ public class MergeSegments implements ISqlSegment {
     private final AbstractSegmentList having = new HavingSegmentList();
     private final AbstractSegmentList orderBy = new OrderBySegmentList();
 
-
+    private String lastSqlSegment="";
     @Override
     public String getSqlSegment() {
         String sql = null;
@@ -36,7 +37,7 @@ public class MergeSegments implements ISqlSegment {
         } else {
             sql = normal.getSqlSegment() + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
         }
-        return sql;
+        return sql+lastSqlSegment;
     }
 
     @Override
@@ -54,6 +55,8 @@ public class MergeSegments implements ISqlSegment {
             groupBy.addAll(list);
         } else if (MatchSegment.HAVING.match(firstSqlSegment)) {
             having.addAll(list);
+        } else if (firstSqlSegment.getSqlSegment().startsWith(SqlKeyword.LAST.name())) {
+            lastSqlSegment = " "+firstSqlSegment;
         } else {
             normal.addAll(list);
         }

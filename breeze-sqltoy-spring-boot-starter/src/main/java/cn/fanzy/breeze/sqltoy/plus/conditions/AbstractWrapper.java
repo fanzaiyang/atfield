@@ -9,6 +9,7 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.segments.FiledValueFilterStrategy;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.MergeSegments;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.SqlSegmentMeta;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
+import cn.hutool.core.util.StrUtil;
 import org.sagacity.sqltoy.utils.StringUtil;
 
 import java.util.*;
@@ -370,7 +371,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children last(boolean condition, String lastSql) {
         return addAssembler((strategy) -> {
-            maybeDo(condition, () -> appendSqlSegments(() -> lastSql));
+            maybeDo(condition, () -> appendSqlSegments(() -> StrUtil.format("{}:{}",SqlKeyword.LAST.name(),lastSql)));
         });
     }
 
