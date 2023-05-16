@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -28,15 +29,15 @@ public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
                 writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullStringJsonSerializer());
                 continue;
             }
-            if(isNumberType(writer)){
+            if (isNumberType(writer)) {
                 writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullNumberJsonSerializer());
                 continue;
             }
-            if(isDateType(writer)){
+            if (isDateType(writer)) {
                 writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullDateJsonSerializer());
                 continue;
             }
-            if(isBooleanType(writer)){
+            if (isBooleanType(writer)) {
                 writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullBooleanJsonSerializer());
                 continue;
             }
@@ -44,6 +45,7 @@ public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
         }
         return beanProperties;
     }
+
     /**
      * 是否是数组
      */
@@ -75,8 +77,10 @@ public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
         Class<?> clazz = writer.getType().getRawClass();
         return clazz.equals(Boolean.class);
     }
+
     private boolean isDateType(BeanPropertyWriter writer) {
         Class<?> clazz = writer.getType().getRawClass();
-        return clazz.equals(Date.class)||clazz.equals(LocalDate.class)||clazz.equals(java.sql.Date.class);
+        return clazz.equals(Date.class) || clazz.equals(LocalDate.class) || clazz.equals(java.sql.Date.class)
+                || clazz.equals(LocalDateTime.class);
     }
 }

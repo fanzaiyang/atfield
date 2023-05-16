@@ -3,6 +3,7 @@ package cn.fanzy.breeze.admin.module.system.account.controller;
 import cn.fanzy.breeze.admin.module.entity.SysAccount;
 import cn.fanzy.breeze.admin.module.system.account.args.*;
 import cn.fanzy.breeze.admin.module.system.account.service.BreezeAdminAccountService;
+import cn.fanzy.breeze.admin.module.system.account.vo.SysAccountVo;
 import cn.fanzy.breeze.web.model.JsonContent;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.github.xiaoymin.knife4j.annotations.ApiSupport;
@@ -71,7 +72,12 @@ public class BreezeAdminAccountController {
     public JsonContent<Page<SysAccount>> query(@Valid @RequestBody BreezeAdminAccountQueryArgs args) {
         return breezeAdminAccountService.query(args);
     }
-
+    @Operation(summary = "查询账户详情")
+    @Parameter(name = "id",description = "账户ID")
+    @GetMapping("/info")
+    public JsonContent<SysAccountVo> getAccountInfo(String id) {
+        return breezeAdminAccountService.getAccountInfo(id);
+    }
     @Operation(summary = "查询账号绑定的角色")
     @ApiOperationSupport(order = 5)
     @Parameter(name = "id",description = "账户ID")

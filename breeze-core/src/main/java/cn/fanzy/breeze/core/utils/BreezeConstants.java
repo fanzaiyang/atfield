@@ -4,8 +4,14 @@ import cn.hutool.core.collection.CollUtil;
 
 import java.util.List;
 
+/**
+ * 微风常量
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public class BreezeConstants {
-    public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html","/swagger-ui/**","/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error","/v3/api-docs/**");
+    public static final List<String> SWAGGER_LIST = CollUtil.toList("/doc.html","/doc.html#/**","/doc.html/**","/swagger-ui/**","/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/favicon.ico", "/error","/v3/api-docs/**");
 
     /**
      * 默认tree的根结点

@@ -58,6 +58,7 @@ public class BreezeAuthExceptionConfiguration {
 
         Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotLoginException异常：{}", ssid, message), e);
+        response.setErrorShowType(ErrorShowType.MODAL_ERROR);
         return response;
     }
 
@@ -67,6 +68,7 @@ public class BreezeAuthExceptionConfiguration {
         String ssid = this.getRequestId(request);
         Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotBasicAuthException异常：{}", ssid, e.getMessage()), e);
+        response.setErrorShowType(ErrorShowType.MESSAGE_ERROR);
         return response;
     }
 
@@ -76,6 +78,7 @@ public class BreezeAuthExceptionConfiguration {
         String ssid = this.getRequestId(request);
         Response response = new Response(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到DisableServiceException异常：{}", ssid, e.getMessage()), e);
+        response.setErrorShowType(ErrorShowType.MESSAGE_ERROR);
         return response;
     }
 
@@ -85,6 +88,7 @@ public class BreezeAuthExceptionConfiguration {
         String ssid = this.getRequestId(request);
         Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(), ssid);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotRoleException异常：{}", ssid, e.getMessage()), e);
+        response.setErrorShowType(ErrorShowType.MESSAGE_ERROR);
         return response;
     }
 
@@ -93,6 +97,7 @@ public class BreezeAuthExceptionConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotPermissionException e) {
         String ssid = this.getRequestId(request);
         Response response = new Response(HttpStatus.FORBIDDEN.value(), e.getMessage(), ssid);
+        response.setErrorShowType(ErrorShowType.MESSAGE_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotPermissionException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -102,6 +107,7 @@ public class BreezeAuthExceptionConfiguration {
     public Object handleRuntimeException(HttpServletRequest request, NotSafeException e) {
         String ssid = this.getRequestId(request);
         Response response = new Response(HttpStatus.PRECONDITION_REQUIRED.value(), e.getMessage(), ssid);
+        response.setErrorShowType(ErrorShowType.SILENT);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到NotSafeException异常：{}", ssid, e.getMessage()), e);
         return response;
     }
@@ -131,12 +137,19 @@ public class BreezeAuthExceptionConfiguration {
         private String now = DateUtil.now();
 
         private boolean success = false;
+        private ErrorShowType errorShowType = ErrorShowType.MESSAGE_ERROR;
 
 
         public Response(int code, String message, String data) {
             this.code = code;
             this.message = message;
             this.data = data;
+        }
+        public Response(int code, String message, String data,ErrorShowType errorShowType) {
+            this.code = code;
+            this.message = message;
+            this.data = data;
+            this.errorShowType=errorShowType;
         }
     }
 
@@ -145,4 +158,35 @@ public class BreezeAuthExceptionConfiguration {
         log.info("「微风组件」开启 <Auth鉴权异常拦截> 相关的配置");
     }
 
+
+    public static enum ErrorShowType{
+        /**
+         * 静默，不显示
+         */
+        SILENT,
+        /**
+         * 显示为警告Message
+         */
+        MESSAGE_WARN,
+        /**
+         * 显示为错误Message
+         */
+        MESSAGE_ERROR,
+        /**
+         * 显示为弹窗警告
+         */
+        MODAL_WARN,
+        /**
+         * 显示为弹窗错误
+         */
+        MODAL_ERROR,
+        /**
+         * 显示为通知警告NOTIFICATION
+         */
+        NOTIFICATION_WARN,
+        /**
+         * 显示为通知错误NOTIFICATION
+         */
+        NOTIFICATION_ERROR;
+    }
 }

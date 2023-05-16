@@ -301,8 +301,8 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(CustomException.class)
     public Object handleCustomException(HttpServletRequest request, CustomException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
+        JsonContent<String> response = new JsonContent<>(e.getCode(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.SILENT);
         if(properties.getReturnErrorStack()){
             response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
         }

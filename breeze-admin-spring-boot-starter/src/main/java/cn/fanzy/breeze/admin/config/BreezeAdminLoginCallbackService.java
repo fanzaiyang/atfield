@@ -4,7 +4,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.admin.module.entity.SysLog;
 import cn.fanzy.breeze.admin.properties.BreezeAdminProperties;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
+import cn.fanzy.breeze.web.logs.model.AppInfoModel;
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
+import cn.fanzy.breeze.web.logs.model.UserInfoModel;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.thread.ThreadUtil;
@@ -47,5 +49,15 @@ public class BreezeAdminLoginCallbackService implements BreezeLogCallbackService
         if (!args.isSuccess() && StrUtil.equalsIgnoreCase(properties.getErrorLevel().name(), BreezeAdminProperties.ErrorEnum.error.name())) {
             ThreadUtil.execute(() -> sqlToyHelperDao.save(sysLog));
         }
+    }
+
+    @Override
+    public UserInfoModel getUserInfo(String userId) {
+        return new UserInfoModel();
+    }
+
+    @Override
+    public AppInfoModel getAppInfo(String appId) {
+        return new AppInfoModel();
     }
 }

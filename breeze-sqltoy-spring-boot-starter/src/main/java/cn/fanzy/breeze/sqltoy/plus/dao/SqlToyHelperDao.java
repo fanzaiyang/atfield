@@ -93,4 +93,13 @@ public interface SqlToyHelperDao extends SqlToyLazyDao {
      * @return long
      */
     <T> long update(Map<String, Object> setMap, Wrapper<T> wrapper);
+
+    /**
+     * 逻辑删除，需要开启相关配置
+     *
+     * @param wrapper 包装器
+     * @return Long
+     */
+    <T> Long remove(Wrapper<T> wrapper);
+
 }

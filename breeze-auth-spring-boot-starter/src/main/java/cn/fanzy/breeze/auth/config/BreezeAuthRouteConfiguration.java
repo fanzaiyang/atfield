@@ -2,10 +2,10 @@ package cn.fanzy.breeze.auth.config;
 
 import cn.dev33.satoken.fun.SaParamFunction;
 import cn.dev33.satoken.interceptor.SaInterceptor;
-import cn.dev33.satoken.router.SaRouteFunction;
-import cn.fanzy.breeze.auth.function.BreezeDefaultRouteFunction;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.breeze.auth.properties.BreezeAuthProperties;
 import cn.fanzy.breeze.core.utils.BreezeConstants;
+import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,14 +32,15 @@ public class BreezeAuthRouteConfiguration implements WebMvcConfigurer {
     private final BreezeAuthProperties properties;
 
     @Bean
-    @ConditionalOnMissingBean(SaRouteFunction.class)
-    public SaParamFunction saRouteFunction() {
-        return new BreezeDefaultRouteFunction();
+    @ConditionalOnMissingBean
+    public SaParamFunction<Object> saParamFunction() {
+        return r -> StpUtil.checkLogin();
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaInterceptor(saRouteFunction()))
+        SaParamFunction<Object> function = SpringUtil.getBean(SaParamFunction.class);
+        registry.addInterceptor(new SaInterceptor(function))
                 .addPathPatterns(properties.getRoute().getPathPatterns())
                 .excludePathPatterns(properties.getRoute().getExcludePathPatterns());
     }

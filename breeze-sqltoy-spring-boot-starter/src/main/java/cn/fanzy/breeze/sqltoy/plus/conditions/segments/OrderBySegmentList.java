@@ -9,8 +9,16 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 订单根据段列表
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
+ */
 public class OrderBySegmentList extends AbstractSegmentList{
 
+
+    private static final long serialVersionUID = -6417864501539531887L;
 
     @Override
     public void merge() {

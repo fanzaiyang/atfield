@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Configuration
 @AutoConfigureAfter(ErrorMvcAutoConfiguration.class)
 @EnableConfigurationProperties({ServerProperties.class, BreezeWebExceptionProperties.class})
-@ConditionalOnProperty(prefix = "breeze.web.exception", name = {"replace-basic-error"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "breeze.web.exception", name = {"replace-basic-error"}, havingValue = "true")
 public class BreezeBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
     private static String SPECIAL_OVERRIDE_BEAN = "basicErrorController";
 

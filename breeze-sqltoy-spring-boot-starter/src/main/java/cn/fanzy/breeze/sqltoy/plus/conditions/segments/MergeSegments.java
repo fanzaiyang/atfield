@@ -2,6 +2,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
+import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,15 +12,21 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * 合并片段
  * 合并sql片段
+ *
+ * @author fanzaiyang
+ * @date 2023-05-06
  */
 public class MergeSegments implements ISqlSegment {
 
+    private static final long serialVersionUID = 845669770756233366L;
     private final AbstractSegmentList normal = new NormalSegmentList();
     private final AbstractSegmentList groupBy = new GroupBySegmentList();
     private final AbstractSegmentList having = new HavingSegmentList();
     private final AbstractSegmentList orderBy = new OrderBySegmentList();
 
+    private String lastSqlSegment = "";
 
     @Override
     public String getSqlSegment() {
@@ -31,7 +38,7 @@ public class MergeSegments implements ISqlSegment {
         } else {
             sql = normal.getSqlSegment() + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
         }
-        return sql;
+        return sql + lastSqlSegment;
     }
 
     @Override
@@ -49,6 +56,8 @@ public class MergeSegments implements ISqlSegment {
             groupBy.addAll(list);
         } else if (MatchSegment.HAVING.match(firstSqlSegment)) {
             having.addAll(list);
+        } else if (firstSqlSegment.getSqlSegment().startsWith(SqlKeyword.LAST.name())) {
+            lastSqlSegment = firstSqlSegment.getSqlSegment().replace(SqlKeyword.LAST.name() + ":", " ");
         } else {
             normal.addAll(list);
         }

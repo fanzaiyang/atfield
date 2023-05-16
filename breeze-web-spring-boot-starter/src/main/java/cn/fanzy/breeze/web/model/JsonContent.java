@@ -31,7 +31,7 @@ public class JsonContent<T> {
 
     private Object exData;
 
-    private ErrorShowType errorShowType = ErrorShowType.SILENT;
+    private ErrorShowType errorShowType = ErrorShowType.MESSAGE_ERROR;
 
     public JsonContent() {
     }

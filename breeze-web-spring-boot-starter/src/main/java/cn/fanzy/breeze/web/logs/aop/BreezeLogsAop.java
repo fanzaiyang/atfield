@@ -2,16 +2,18 @@ package cn.fanzy.breeze.web.logs.aop;
 
 import cn.fanzy.breeze.core.utils.BreezeConstants;
 import cn.fanzy.breeze.web.logs.annotation.Log;
+import cn.fanzy.breeze.web.logs.model.AppInfoModel;
 import cn.fanzy.breeze.web.logs.model.BreezeRequestArgs;
+import cn.fanzy.breeze.web.logs.model.UserInfoModel;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
-import cn.fanzy.breeze.web.utils.HttpUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.AntPathMatcher;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.yomahub.tlog.context.TLogContext;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -58,22 +61,67 @@ public class BreezeLogsAop {
         if (skipSwagger()) {
             return;
         }
+        Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
+
         Map<String, Object> requestData = JoinPointUtils.getParams(joinPoint);
-        String clientIp = SpringUtils.getClientIp();
-        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}",clientIp, SpringUtils.getRequestUri(),JSONUtil.toJsonStr(SpringUtils.getRequestParams()));
+        HttpServletRequest request = SpringUtils.getRequest();
+        String clientIp = SpringUtils.getClientIp(request);
+        String requestUrl = request.getRequestURI();
+        if (StrUtil.isNotBlank(request.getQueryString())) {
+            requestUrl = requestUrl.concat("?").concat(request.getQueryString());
+        }
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, requestUrl, JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
+        if (annotation != null && annotation.ignore()) {
+            breezeRequestArgs = new BreezeRequestArgs();
+            breezeRequestArgs.setIgnore(annotation.ignore());
+            return;
+        }
+        Map<String, Object> requestParams = SpringUtils.getRequestParams(request);
+        String userIdKey = annotation != null ? annotation.userIdKey() : "";
+        Object userId = requestParams.get(userIdKey);
+        UserInfoModel userInfo = breezeLogCallbackService.getUserInfo(userId != null ? userId.toString() : "");
+        if (userInfo == null) {
+            userInfo = new UserInfoModel();
+        }
+        String appIdKey = annotation != null ? annotation.appIdKey() : "";
+        String appId = requestParams.get(appIdKey)!=null?requestParams.get(appIdKey).toString():appIdKey;
+        AppInfoModel appInfo = breezeLogCallbackService.getAppInfo(appId);
+        if (appInfo == null) {
+            appInfo = new AppInfoModel();
+        }
+
         breezeRequestArgs = BreezeRequestArgs.builder()
                 .traceId(TLogContext.getTraceId())
                 .clientIp(clientIp)
                 .requestData(requestData)
                 .startTime(new Date())
                 .classMethod(JoinPointUtils.getMethodInfo(joinPoint))
-                .requestMethod(SpringUtils.getRequestMethod())
-                .requestUrl(SpringUtils.getRequestUri())
+                .requestMethod(request.getMethod())
+                .requestUrl(requestUrl)
+                .userId(userInfo.getUserId())
+                .userName(userInfo.getUserName())
+                .appId(appInfo.getAppId())
+                .appName(appInfo.getAppName())
                 .success(true)
                 .build();
-        Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
-        if (annotation != null) {
-            breezeRequestArgs.setBizName(annotation.value());
+
+        if (annotation == null) {
+            return;
+        }
+        breezeRequestArgs.setBizName(annotation.value());
+        breezeRequestArgs.setModule(annotation.module());
+        breezeRequestArgs.setLogType(annotation.type());
+        if (StrUtil.isNotBlank(annotation.userIdKey())) {
+            Object o = requestData.get(annotation.userIdKey());
+            if (o != null) {
+                breezeRequestArgs.setUserName(StrUtil.blankToDefault(breezeRequestArgs.getUserName(), o.toString()));
+            }
+        }
+        if (StrUtil.isBlank(breezeRequestArgs.getUserName())) {
+            breezeRequestArgs.setUserName(annotation.userName());
+        }
+        if (StrUtil.isBlank(breezeRequestArgs.getAppName())) {
+            breezeRequestArgs.setAppId(annotation.appName());
         }
     }
 
@@ -83,11 +131,15 @@ public class BreezeLogsAop {
             return;
         }
         log.info("===响应结果：{}", JSONUtil.toJsonStr(obj));
+        if (breezeRequestArgs.isIgnore()) {
+            return;
+        }
         breezeRequestArgs.setResponseData(obj);
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(true);
         breezeLogCallbackService.callback(breezeRequestArgs);
+
     }
 
     @AfterThrowing(throwing = "e", value = "cut()")
@@ -95,6 +147,7 @@ public class BreezeLogsAop {
         if (skipSwagger()) {
             return;
         }
+        log.info("===响应异常：{}", e.getMessage());
         if (breezeRequestArgs == null) {
             breezeRequestArgs = BreezeRequestArgs.builder()
                     .traceId(TLogContext.getTraceId())
@@ -102,10 +155,13 @@ public class BreezeLogsAop {
                     .startTime(new Date())
                     .requestMethod(SpringUtils.getRequestMethod())
                     .requestUrl(SpringUtils.getRequestUri())
-                    .success(true)
+                    .success(false)
                     .build();
         }
-        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 512));
+        if (breezeRequestArgs.isIgnore()) {
+            return;
+        }
+        breezeRequestArgs.setResponseData(ExceptionUtil.getErrorStackMessage(e, 1024));
         breezeRequestArgs.setEndTime(new Date());
         breezeRequestArgs.setProceedSecond(DateUtil.between(breezeRequestArgs.getStartTime(), breezeRequestArgs.getEndTime(), DateUnit.SECOND));
         breezeRequestArgs.setSuccess(false);
