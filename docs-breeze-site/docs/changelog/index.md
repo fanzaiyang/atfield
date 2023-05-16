@@ -14,6 +14,9 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.2.2
+### 🐛修复last sql问题
+
 ## v2.2.1
 ### 🐛修复已知问题
 
