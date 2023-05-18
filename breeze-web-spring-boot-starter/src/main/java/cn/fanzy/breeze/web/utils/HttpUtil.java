@@ -21,10 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * http工具
@@ -95,6 +92,15 @@ public class HttpUtil {
         log.info("\r\n");
     }
 
+    public static Map<String, Object> getHeaderMap(HttpServletRequest request){
+        Map<String, Object> map=new HashMap<>(5);
+        for (Enumeration<String> e = request.getHeaderNames(); e.hasMoreElements(); ) {
+            String name = e.nextElement();
+            map.put(name, request.getHeader(name));
+            log.debug("请求头的名字为 {},对应的值为 {}", name, request.getHeader(name));
+        }
+        return map;
+    }
     /**
      * get请求id
      *

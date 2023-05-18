@@ -8,6 +8,7 @@ import cn.fanzy.breeze.web.logs.model.UserInfoModel;
 import cn.fanzy.breeze.web.logs.properties.BreezeLogsProperties;
 import cn.fanzy.breeze.web.logs.service.BreezeLogCallbackService;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
+import cn.fanzy.breeze.web.utils.HttpUtil;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUnit;
@@ -70,7 +71,9 @@ public class BreezeLogsAop {
         if (StrUtil.isNotBlank(request.getQueryString())) {
             requestUrl = requestUrl.concat("?").concat(request.getQueryString());
         }
-        log.info("===客户端IP：{}，请求地址：「{}」，\n请求参数：{}", clientIp, requestUrl, JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
+        log.info("===客户端IP：{}，请求地址：「{}」，\n请求头：{}\n请求参数：{}", clientIp, requestUrl,
+                JSONUtil.toJsonStr(HttpUtil.getHeaderMap(request)),
+                JSONUtil.toJsonStr(SpringUtils.getRequestParams(request)));
         if (annotation != null && annotation.ignore()) {
             breezeRequestArgs = new BreezeRequestArgs();
             breezeRequestArgs.setIgnore(annotation.ignore());
