@@ -3,6 +3,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +57,7 @@ public class MergeSegments implements ISqlSegment {
             groupBy.addAll(list);
         } else if (MatchSegment.HAVING.match(firstSqlSegment)) {
             having.addAll(list);
-        } else if (firstSqlSegment.getSqlSegment().startsWith(SqlKeyword.LAST.name())) {
+        } else if (firstSqlSegment!=null&&StrUtil.startWith(firstSqlSegment.getSqlSegment(),SqlKeyword.LAST.name())) {
             lastSqlSegment = firstSqlSegment.getSqlSegment().replace(SqlKeyword.LAST.name() + ":", " ");
         } else {
             normal.addAll(list);
