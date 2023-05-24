@@ -503,6 +503,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
             String entityFiledName = columnToString(column);
             final String paramName = getParamName(entityFiledName);
             String columnName = mappingStrategy.getColumnName(entityFiledName);
+
             SqlSegmentMeta sqlSegmentMeta = new SqlSegmentMeta();
             sqlSegmentMeta.setCompareEnum(compareEnum);
             sqlSegmentMeta.setEntityFiledName(entityFiledName);
