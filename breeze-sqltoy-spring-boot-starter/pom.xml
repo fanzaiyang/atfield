@@ -13,7 +13,7 @@
     <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
 
     <properties>
-        <sqltoy.version>5.2.48</sqltoy.version>
+        <sqltoy.version>5.2.51</sqltoy.version>
     </properties>
     <dependencies>
         <dependency>
