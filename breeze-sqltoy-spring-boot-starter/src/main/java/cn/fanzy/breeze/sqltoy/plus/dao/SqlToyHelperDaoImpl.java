@@ -73,7 +73,7 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
 
 
     private <T> EntityQuery getEntityQuery(Wrapper<T> wrapper) {
-        EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
+        EntityMeta entityMeta=super.getEntityMeta(wrapper.entityClass());
         //开始组装sql
         wrapper.assemble(entityMeta::getColumnName);
         EntityQuery entityQuery = EntityQuery.create().where(wrapper.getSqlSegment());
