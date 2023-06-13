@@ -1,6 +1,8 @@
 package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 
 
+import cn.hutool.core.util.ObjectUtil;
+
 /**
  * 提起值过滤策略
  *
@@ -40,11 +42,12 @@ public interface FiledValueFilterStrategy {
      */
     class DefaultFiledValueFilterStrategy implements FiledValueFilterStrategy {
 
-        private DefaultFiledValueFilterStrategy() {}
+        private DefaultFiledValueFilterStrategy() {
+        }
 
         @Override
         public boolean validate(Object value) {
-            if (value == null) {
+            if (ObjectUtil.isNull(value) || ObjectUtil.isEmpty(value)) {
                 return false;
             }
             return true;
