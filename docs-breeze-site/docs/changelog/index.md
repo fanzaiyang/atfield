@@ -13,6 +13,10 @@ title: 更新日志
 ## 最新版本
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
+## v2.2.4
+### 升级sqltoy->5.2.54
+### 修复sqltoy-plus的参数null忽略问题
+
 ## v2.2.3
 ### 升级依赖及修复已知bug
 
