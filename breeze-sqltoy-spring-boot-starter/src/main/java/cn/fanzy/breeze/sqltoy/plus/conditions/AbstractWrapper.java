@@ -9,6 +9,8 @@ import cn.fanzy.breeze.sqltoy.plus.conditions.segments.FiledValueFilterStrategy;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.MergeSegments;
 import cn.fanzy.breeze.sqltoy.plus.conditions.segments.SqlSegmentMeta;
 import cn.fanzy.breeze.sqltoy.plus.conditions.toolkit.StringPool;
+import cn.fanzy.breeze.sqltoy.plus.utils.PlusDaoUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import org.sagacity.sqltoy.utils.StringUtil;
 
@@ -20,12 +22,18 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
-public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, R, Children>> implements Operated<Children, R>, Wrapper<T>{
+/**
+ * 摘要包装
+ *
+ * @author fanzaiyang
+ * @date 2023-06-14
+ */
+public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, R, Children>> implements Operated<Children, R>, Wrapper<T> {
 
     /**
      * 占位符
      */
-    protected final Children typedThis = (Children)this;
+    protected final Children typedThis = (Children) this;
 
     /**
      * 必要度量
@@ -60,10 +68,9 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     /**
      * 创建sql组装器
-     * @param sqlAssembler
-     *               -组装器具体实现
-     * @return
-     *               -返回自身
+     *
+     * @param sqlAssembler -组装器具体实现
+     * @return -返回自身
      */
     protected Children addAssembler(ISqlAssembler sqlAssembler) {
         if (sqlAssembler != null) {
@@ -74,88 +81,98 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     /**
      * 获取属性名称
-     * @param column
-     *             -抽象的属性定义
-     * @return
-     *             -返回自身
+     *
+     * @param column -抽象的属性定义
+     * @return -返回自身
      */
     protected abstract String columnToString(R column);
 
     /**
      * 子类返回一个自己的新对象
-     * @return
-     *              -返回自身
+     *
+     * @return -返回自身
      */
     protected abstract Children instance();
 
     @Override
     public Children eq(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.EQ, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.EQ, finalVal));
     }
 
     @Override
     public Children ne(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NE, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NE, finalVal));
     }
 
     @Override
     public Children gt(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GT, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GT, finalVal));
     }
 
     @Override
     public Children ge(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GE, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.GE, finalVal));
     }
 
     @Override
     public Children lt(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LT, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LT, finalVal));
     }
 
     @Override
     public Children le(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LE, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LE, finalVal));
     }
 
     @Override
     public Children between(boolean condition, R column, Object val1, Object val2) {
-        if (!validateFiledValue(val1) || !validateFiledValue(val2)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(val1) || !validateFiledValue(val2)) {
+//            return typedThis;
+//        }
+        Object finalVal1 = PlusDaoUtil.convertVal(val1);
+        Object finalVal2 = PlusDaoUtil.convertVal(val2);
         return addAssembler((strategy) -> {
             maybeDo(condition, () -> {
                 String entityFiledName = columnsToString(column);
                 String val1Name = getParamName(entityFiledName);
                 String val2Name = getParamName(entityFiledName);
                 appendSqlSegments(new ISqlSegment() {
+                    private static final long serialVersionUID = 4720616462039401724L;
+
                     @Override
                     public String getSqlSegment() {
                         return CompareEnum.BETWEEN.getMetaSql(strategy.getColumnName(entityFiledName), val1Name, val2Name);
                     }
+
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {
-                        HashMap<String, Object> map = new HashMap<>();
-                        map.put(val1Name, val1);
-                        map.put(val2Name, val2);
+                        HashMap<String, Object> map = new HashMap<>(2);
+                        map.put(val1Name, finalVal1);
+                        map.put(val2Name, finalVal2);
                         return map;
                     }
                 });
@@ -165,24 +182,29 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     @Override
     public Children notBetween(boolean condition, R column, Object val1, Object val2) {
-        if (!validateFiledValue(val1) || !validateFiledValue(val2)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(val1) || !validateFiledValue(val2)) {
+//            return typedThis;
+//        }
+        Object finalVal1 = PlusDaoUtil.convertVal(val1);
+        Object finalVal2 = PlusDaoUtil.convertVal(val2);
         return addAssembler((strategy) -> {
             maybeDo(condition, () -> {
                 String entityFiledName = columnsToString(column);
                 String val1Name = getParamName(entityFiledName);
                 String val2Name = getParamName(entityFiledName);
                 appendSqlSegments(new ISqlSegment() {
+                    private static final long serialVersionUID = -2636510961945673430L;
+
                     @Override
                     public String getSqlSegment() {
                         return CompareEnum.NOT_BETWEEN.getMetaSql(strategy.getColumnName(entityFiledName), val1Name, val2Name);
                     }
+
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put(val1Name, val1);
-                        map.put(val2Name, val2);
+                        map.put(val1Name, finalVal1);
+                        map.put(val2Name, finalVal2);
                         return map;
                     }
                 });
@@ -192,34 +214,38 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     @Override
     public Children like(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE, finalVal));
     }
 
     @Override
     public Children notLike(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_LIKE, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_LIKE, finalVal));
     }
 
     @Override
     public Children likeLeft(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_LEFT, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_LEFT, finalVal));
     }
 
     @Override
     public Children likeRight(boolean condition, R column, Object val) {
-        if (!validateFiledValue(val)) {
-            return typedThis;
-        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_RIGHT, val));
+//        if (!validateFiledValue(val)) {
+//            return typedThis;
+//        }
+        Object finalVal = PlusDaoUtil.convertVal(val);
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.LIKE_RIGHT, finalVal));
     }
 
     @Override
@@ -238,41 +264,41 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     @Override
     public Children in(boolean condition, R column, Collection<?> coll) {
-        if (!validateFiledValue(coll)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(coll)) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, coll));
     }
 
     @Override
     public Children in(boolean condition, R column, Object... values) {
-        if (!validateFiledValue(values)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(values)) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, values));
     }
 
     @Override
     public Children inb(boolean condition, Collection<R> columns, Collection<Object[]> values) {
-        if (columns == null || columns.size() == 0 || values == null || values.size() == 0) {
-            return typedThis;
-        }
+//        if (columns == null || columns.size() == 0 || values == null || values.size() == 0) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> addBatchInCondition(strategy, condition, columns, values));
     }
 
     @Override
     public Children notIn(boolean condition, R column, Collection<?> coll) {
-        if (!validateFiledValue(coll)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(coll)) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, coll));
     }
 
     @Override
     public Children notIn(boolean condition, R column, Object... values) {
-        if (!validateFiledValue(values)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(values)) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, values));
     }
 
@@ -337,15 +363,16 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     @Override
     public Children having(boolean condition, String sqlHaving, Map<String, Object> paramMap) {
-        if (!validateFiledValue(paramMap)) {
-            return typedThis;
-        }
+//        if (!validateFiledValue(paramMap)) {
+//            return typedThis;
+//        }
         return addAssembler((strategy) -> {
             maybeDo(condition, () -> appendSqlSegments(SqlKeyword.HAVING, new ISqlSegment() {
                 @Override
                 public String getSqlSegment() {
                     return sqlHaving;
                 }
+
                 @Override
                 public Map<String, Object> getSqlSegmentParamMap() {
                     return paramMap;
@@ -371,7 +398,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children last(boolean condition, String lastSql) {
         return addAssembler((strategy) -> {
-            maybeDo(condition, () -> appendSqlSegments(() -> StrUtil.format("{}:{}",SqlKeyword.LAST.name(),lastSql)));
+            maybeDo(condition, () -> appendSqlSegments(() -> StrUtil.format("{}:{}", SqlKeyword.LAST.name(), lastSql)));
         });
     }
 
@@ -393,7 +420,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children or(boolean condition, Function<Children, Children> function) {
         return or(condition).addAssembler((strategy) -> {
-            addNestedCondition(strategy,condition, function);
+            addNestedCondition(strategy, condition, function);
         });
     }
 
@@ -407,7 +434,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     @Override
     public Children not(boolean condition, Function<Children, Children> function) {
         return not(condition).addAssembler((strategy) -> {
-            addNestedCondition(strategy,condition, function);
+            addNestedCondition(strategy, condition, function);
         });
     }
 
@@ -457,10 +484,10 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     /**
      * 普通查询条件
      *
-     * @param condition  是否执行
-     * @param column     属性
+     * @param condition   是否执行
+     * @param column      属性
      * @param compareEnum SQL 关键词
-     * @param val        条件值
+     * @param val         条件值
      */
     protected Children addNeedValCondition(FiledMappingStrategy mappingStrategy, boolean condition, R column, CompareEnum compareEnum, Object val) {
         return maybeDo(condition, () -> addSqlSegment(mappingStrategy, column, compareEnum, val));
@@ -480,10 +507,13 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
             paramMap.put(paramName, values.stream().map(e -> e[finalI]).collect(Collectors.toList()));
         }
         maybeDo(condition, () -> appendSqlSegments(new ISqlSegment() {
+            private static final long serialVersionUID = 7713070527398886440L;
+
             @Override
             public String getSqlSegment() {
                 return CompareEnum.IN_BATCH.getBatchMetaSql(paramNames, columnNames);
             }
+
             @Override
             public Map<String, Object> getSqlSegmentParamMap() {
                 return paramMap;
@@ -493,25 +523,25 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
     /**
      * 设置查询条件封装的单元对象
+     *
      * @param column
      * @param compareEnum
      * @param val
      */
     protected void addSqlSegment(FiledMappingStrategy mappingStrategy, R column, CompareEnum compareEnum, Object val) {
-        boolean isAllow = FiledValueFilterStrategy.FiledValueFilterStrategyHolder.getInstance().validate(val);
-        if (isAllow) {
-            String entityFiledName = columnToString(column);
-            final String paramName = getParamName(entityFiledName);
-            String columnName = mappingStrategy.getColumnName(entityFiledName);
 
-            SqlSegmentMeta sqlSegmentMeta = new SqlSegmentMeta();
-            sqlSegmentMeta.setCompareEnum(compareEnum);
-            sqlSegmentMeta.setEntityFiledName(entityFiledName);
-            sqlSegmentMeta.setParamName(paramName);
-            sqlSegmentMeta.setColumnName(columnName);
-            sqlSegmentMeta.putPair(paramName, val);
-            appendSqlSegments(sqlSegmentMeta);
-        }
+        String entityFiledName = columnToString(column);
+        final String paramName = getParamName(entityFiledName);
+        String columnName = mappingStrategy.getColumnName(entityFiledName);
+
+        SqlSegmentMeta sqlSegmentMeta = new SqlSegmentMeta();
+        sqlSegmentMeta.setCompareEnum(compareEnum);
+        sqlSegmentMeta.setEntityFiledName(entityFiledName);
+        sqlSegmentMeta.setParamName(paramName);
+        sqlSegmentMeta.setColumnName(columnName);
+        // 这里如果传入null类型的参数，转为null
+        sqlSegmentMeta.putPair(paramName, ObjectUtil.isNull(val) ? "null" : val);
+        appendSqlSegments(sqlSegmentMeta);
     }
 
     private boolean validateFiledValue(Object value) {
