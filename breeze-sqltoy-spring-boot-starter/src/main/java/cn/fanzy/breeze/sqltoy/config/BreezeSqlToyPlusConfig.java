@@ -2,6 +2,8 @@ package cn.fanzy.breeze.sqltoy.config;
 
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDaoImpl;
+import cn.fanzy.breeze.sqltoy.plus.dao.SqltoyLightHelperDao;
+import cn.fanzy.breeze.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
 import cn.fanzy.breeze.sqltoy.plus.handler.BreezeSqlToyUnifyFieldsHandler;
 import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
 import cn.hutool.core.util.ArrayUtil;
@@ -37,6 +39,10 @@ public class BreezeSqlToyPlusConfig {
     @Bean
     public SqlToyHelperDao sqlToyHelperDao() {
         return new SqlToyHelperDaoImpl();
+    }
+    @Bean
+    public SqltoyLightHelperDao sqltoyLightHelperDao(){
+        return new SqltoyLightHelperDaoImpl();
     }
     @Bean
     @ConditionalOnMissingBean
