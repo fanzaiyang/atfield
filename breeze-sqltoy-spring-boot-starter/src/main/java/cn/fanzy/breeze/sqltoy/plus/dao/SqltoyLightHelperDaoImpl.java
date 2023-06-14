@@ -1,34 +1,29 @@
 package cn.fanzy.breeze.sqltoy.plus.dao;
 
-import cn.fanzy.breeze.sqltoy.enums.LogicalDeleteEnum;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
 import cn.fanzy.breeze.sqltoy.plus.utils.PlusDaoUtil;
 import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.config.model.EntityMeta;
-import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
-import org.sagacity.sqltoy.exception.DataAccessException;
+import org.sagacity.sqltoy.dao.impl.LightDaoImpl;
 import org.sagacity.sqltoy.model.EntityQuery;
 import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.Page;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * sqltoy
+ * sqltoy光助手刀实现类
  *
  * @author fanzaiyang
+ * @date 2023-06-14
  */
 @Slf4j
-public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao {
-
-
+public class SqltoyLightHelperDaoImpl extends LightDaoImpl implements SqltoyLightHelperDao{
     public <T> T findOne(Wrapper<T> wrapper) {
         List<T> rs = findList(wrapper);
         if (rs == null || rs.isEmpty()) {

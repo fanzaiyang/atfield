@@ -45,7 +45,9 @@ public class MergeSegments implements ISqlSegment {
     @Override
     public Map<String, Object> getSqlSegmentParamMap() {
         return Stream.of(normal.getSqlSegmentParamMap(), groupBy.getSqlSegmentParamMap(), having.getSqlSegmentParamMap(), orderBy.getSqlSegmentParamMap())
-                .filter(Objects::nonNull).flatMap(x -> x.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (p1, p2) -> p1));
+                .filter(Objects::nonNull)
+                .flatMap(x -> x.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (p1, p2) -> p1));
     }
 
     public void add(ISqlSegment... iSqlSegments) {
