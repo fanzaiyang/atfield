@@ -95,6 +95,13 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
     protected abstract Children instance();
 
     @Override
+    public Children skipDeletion(boolean val) {
+        return addAssembler((strategy) -> maybeDo(val, () -> {
+            appendSqlSegments(CompareEnum.SKIP::getMetaSql);
+        }));
+    }
+
+    @Override
     public Children eq(boolean condition, R column, Object val) {
 //        if (!validateFiledValue(val)) {
 //            return typedThis;

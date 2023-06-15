@@ -43,4 +43,5 @@ public class CompareConstant {
     public static final String BETWEEN_SQL = "%s BETWEEN :%s AND :%s";
 
     public static final String NOT_BETWEEN_SQL = "%s NOT BETWEEN :%s AND :%s";
+    public static final String SKIP_SQL = "SKIP";
 }

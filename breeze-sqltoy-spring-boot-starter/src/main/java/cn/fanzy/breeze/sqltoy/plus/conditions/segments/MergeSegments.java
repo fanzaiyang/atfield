@@ -4,6 +4,7 @@ package cn.fanzy.breeze.sqltoy.plus.conditions.segments;
 import cn.fanzy.breeze.sqltoy.plus.conditions.ISqlSegment;
 import cn.fanzy.breeze.sqltoy.plus.conditions.eumn.SqlKeyword;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.spring.SpringUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,16 +29,28 @@ public class MergeSegments implements ISqlSegment {
     private final AbstractSegmentList orderBy = new OrderBySegmentList();
 
     private String lastSqlSegment = "";
+    private boolean skip;
 
     @Override
     public String getSqlSegment() {
+        String logicDeleteField = SpringUtil.getProperty("breeze.sqltoy.logic-delete-field");
+        String logicDeleteValue = SpringUtil.getProperty("breeze.sqltoy.logic-delete-value");
+        String logicNotDeleteValue = SpringUtil.getProperty("breeze.sqltoy.logic-not-delete-value");
         String sql = "";
         if (normal.isEmpty()) {
             if (!groupBy.isEmpty() || !orderBy.isEmpty()) {
-                sql =  "1 = 1 "+groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
+                if (getEnableLogic(logicDeleteField, logicDeleteValue, logicNotDeleteValue)) {
+                    sql = StrUtil.format("{}={} ", logicDeleteField, logicNotDeleteValue);
+                } else {
+                    sql = "1 = 1 ";
+                }
+                sql += groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
             }
         } else {
-            sql = normal.getSqlSegment() + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
+            if (getEnableLogic(logicDeleteField, logicDeleteValue, logicNotDeleteValue)) {
+                sql = StrUtil.format("{}={} AND ", logicDeleteField, logicNotDeleteValue);
+            }
+            sql += "(" + normal.getSqlSegment() + ") " + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
         }
         return sql + lastSqlSegment;
     }
@@ -59,10 +72,19 @@ public class MergeSegments implements ISqlSegment {
             groupBy.addAll(list);
         } else if (MatchSegment.HAVING.match(firstSqlSegment)) {
             having.addAll(list);
-        } else if (firstSqlSegment!=null&&StrUtil.startWith(firstSqlSegment.getSqlSegment(),SqlKeyword.LAST.name())) {
+        } else if (firstSqlSegment != null && StrUtil.startWith(firstSqlSegment.getSqlSegment(), SqlKeyword.LAST.name())) {
             lastSqlSegment = firstSqlSegment.getSqlSegment().replace(SqlKeyword.LAST.name() + ":", " ");
+        } else if (firstSqlSegment != null && StrUtil.equalsIgnoreCase(firstSqlSegment.getSqlSegment(), MatchSegment.SKIP.name())) {
+            skip = true;
         } else {
             normal.addAll(list);
         }
+    }
+
+    public boolean getEnableLogic(String logicDeleteField, String logicDeleteValue, String logicNotDeleteValue) {
+        if (skip) {
+            return false;
+        }
+        return StrUtil.isNotBlank(logicDeleteField) && StrUtil.isNotBlank(logicDeleteValue) && StrUtil.isNotBlank(logicNotDeleteValue);
     }
 }

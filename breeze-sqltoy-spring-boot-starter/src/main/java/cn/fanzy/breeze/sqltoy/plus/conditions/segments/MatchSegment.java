@@ -60,8 +60,8 @@ public enum MatchSegment {
     /**
      * HAVING
      */
-    HAVING(i -> i == SqlKeyword.HAVING);
-
+    HAVING(i -> i == SqlKeyword.HAVING),
+    SKIP(i -> i == SqlKeyword.SKIP);
     private final Predicate<ISqlSegment> predicate;
 
     MatchSegment(Predicate<ISqlSegment> predicate) {
