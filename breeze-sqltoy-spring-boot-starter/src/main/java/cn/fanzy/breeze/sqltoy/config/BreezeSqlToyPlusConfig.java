@@ -6,7 +6,6 @@ import cn.fanzy.breeze.sqltoy.plus.dao.SqltoyLightHelperDao;
 import cn.fanzy.breeze.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
 import cn.fanzy.breeze.sqltoy.plus.handler.BreezeSqlToyUnifyFieldsHandler;
 import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,11 +62,11 @@ public class BreezeSqlToyPlusConfig {
 
     @PostConstruct
     public void checkConfig() {
-        if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
-            String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
-                    "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
-            sqlToyContextProperties.setSqlInterceptors(append);
-        }
+//        if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
+//            String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
+//                    "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
+//            sqlToyContextProperties.setSqlInterceptors(append);
+//        }
         if(StrUtil.isBlank(sqlToyContextProperties.getSqlResourcesDir())){
             sqlToyContextProperties.setSqlResourcesDir("classpath:sql");
         }

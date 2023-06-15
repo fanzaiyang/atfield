@@ -121,7 +121,8 @@ public enum SqlKeyword implements ISqlSegment {
      * desc
      */
     DESC("DESC"),
-    LAST("LAST");
+    LAST("LAST"),
+    SKIP("SKIP"),;
 
     private final String keyword;
 

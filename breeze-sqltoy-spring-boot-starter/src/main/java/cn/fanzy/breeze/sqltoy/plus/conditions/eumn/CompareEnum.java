@@ -173,6 +173,11 @@ public enum CompareEnum {
             return String.format(getSqlContent(), names[0], names[1], names[2]);
         }
     },
+    SKIP(SqlKeyword.SKIP, CompareConstant.SKIP_SQL) {
+        public String getMetaSql(String... names) {
+            return getSqlContent();
+        }
+    },
     ;
 
     /**

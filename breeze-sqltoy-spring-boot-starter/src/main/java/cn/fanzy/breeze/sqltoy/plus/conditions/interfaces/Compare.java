@@ -14,6 +14,21 @@ import java.util.Collection;
 public interface Compare<Children, R> extends Serializable {
 
 
+    /**
+     * 不要删除
+     *
+     * @param val 瓦尔
+     * @return {@link Children}
+     */
+    Children skipDeletion(boolean val);
+
+    /**
+     * 情商
+     *
+     * @param column 列
+     * @param val    瓦尔
+     * @return {@link Children}
+     */
     default Children eq(R column, Object val) {
         return eq(true, column, val);
     }
