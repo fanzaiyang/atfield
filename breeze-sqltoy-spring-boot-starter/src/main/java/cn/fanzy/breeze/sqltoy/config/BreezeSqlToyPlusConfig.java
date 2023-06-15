@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +35,8 @@ import javax.annotation.PostConstruct;
 @EnableConfigurationProperties({BreezeSqlToyProperties.class})
 @PropertySource(value = {"classpath:application-sqltoy.properties"})
 public class BreezeSqlToyPlusConfig {
+    private final SqlToyContextProperties sqlToyContextProperties;
+    private final BreezeSqlToyProperties properties;
     @Bean
     public SqlToyHelperDao sqlToyHelperDao() {
         return new SqlToyHelperDaoImpl();
@@ -49,21 +50,26 @@ public class BreezeSqlToyPlusConfig {
     public IUnifyFieldsHandler unifyFieldsHandler() {
         return new BreezeSqlToyUnifyFieldsHandler();
     }
-    @Primary
-    @Bean
-    @ConditionalOnMissingBean
-    public SqlToyContextProperties sqlToyContextProperties(BreezeSqlToyProperties properties) {
-        SqlToyContextProperties sqlToyContextProperties = new SqlToyContextProperties();
+//    @Primary
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public SqlToyContextProperties sqlToyContextProperties(BreezeSqlToyProperties properties) {
+//        SqlToyContextProperties sqlToyContextProperties = new SqlToyContextProperties();
+//        if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
+//            String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
+//                    "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
+//            sqlToyContextProperties.setSqlInterceptors(append);
+//        }
+//        return sqlToyContextProperties;
+//    }
+
+    @PostConstruct
+    public void checkConfig() {
         if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
             String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
                     "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
             sqlToyContextProperties.setSqlInterceptors(append);
         }
-        return sqlToyContextProperties;
-    }
-
-    @PostConstruct
-    public void checkConfig() {
         log.info("「微风组件」开启 <SqlToy相关配置> 相关的配置。");
     }
 }

@@ -31,7 +31,7 @@ public class LogicalDeleteInterceptor implements SqlInterceptor {
                                  SqlToyResult sqlToyResult, Class entityClass, Integer dbType) {
         BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
         if (properties.isSkip()) {
-            log.warn("用户选择跳过逻辑删除！");
+            log.debug("跳过逻辑删除！");
             return sqlToyResult;
         }
         if(properties.getSkipSqlMode()){
