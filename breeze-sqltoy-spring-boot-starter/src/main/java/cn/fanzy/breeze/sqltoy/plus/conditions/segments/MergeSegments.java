@@ -34,12 +34,11 @@ public class MergeSegments implements ISqlSegment {
     @Override
     public String getSqlSegment() {
         String logicDeleteField = SpringUtil.getProperty("breeze.sqltoy.logic-delete-field");
-        String logicDeleteValue = SpringUtil.getProperty("breeze.sqltoy.logic-delete-value");
         String logicNotDeleteValue = SpringUtil.getProperty("breeze.sqltoy.logic-not-delete-value");
         String sql = "";
         if (normal.isEmpty()) {
             if (!groupBy.isEmpty() || !orderBy.isEmpty()) {
-                if (getEnableLogic(logicDeleteField, logicDeleteValue, logicNotDeleteValue)) {
+                if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
                     sql = StrUtil.format("{}={} ", logicDeleteField, logicNotDeleteValue);
                 } else {
                     sql = "1 = 1 ";
@@ -47,7 +46,7 @@ public class MergeSegments implements ISqlSegment {
                 sql += groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
             }
         } else {
-            if (getEnableLogic(logicDeleteField, logicDeleteValue, logicNotDeleteValue)) {
+            if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
                 sql = StrUtil.format("{}={} AND ", logicDeleteField, logicNotDeleteValue);
             }
             sql += "(" + normal.getSqlSegment() + ") " + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
@@ -81,10 +80,10 @@ public class MergeSegments implements ISqlSegment {
         }
     }
 
-    public boolean getEnableLogic(String logicDeleteField, String logicDeleteValue, String logicNotDeleteValue) {
+    public boolean getEnableLogic(String logicDeleteField, String logicNotDeleteValue) {
         if (skip) {
             return false;
         }
-        return StrUtil.isNotBlank(logicDeleteField) && StrUtil.isNotBlank(logicDeleteValue) && StrUtil.isNotBlank(logicNotDeleteValue);
+        return StrUtil.isNotBlank(logicDeleteField) && StrUtil.isNotBlank(logicNotDeleteValue);
     }
 }
