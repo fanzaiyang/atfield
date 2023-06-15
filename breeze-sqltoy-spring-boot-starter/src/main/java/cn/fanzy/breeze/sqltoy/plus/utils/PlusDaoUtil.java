@@ -3,6 +3,7 @@ package cn.fanzy.breeze.sqltoy.plus.utils;
 import cn.fanzy.breeze.sqltoy.enums.LogicalDeleteEnum;
 import cn.fanzy.breeze.sqltoy.plus.conditions.Wrapper;
 import cn.fanzy.breeze.sqltoy.properties.BreezeSqlToyProperties;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -165,6 +166,8 @@ public class PlusDaoUtil {
     }
     public static String getDeleteValue(BreezeSqlToyProperties properties) {
         if (LogicalDeleteEnum.value.equals(properties.getDeleteValueStrategy())) {
+            Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
+            Assert.notBlank(properties.getLogicDeleteValue(), "请在配置文件中配置逻辑删除字段值logicDeleteValue！");
             return properties.getLogicDeleteValue();
         }
         if (LogicalDeleteEnum.uuid.equals(properties.getDeleteValueStrategy())) {
