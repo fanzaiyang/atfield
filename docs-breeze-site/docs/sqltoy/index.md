@@ -43,18 +43,9 @@ private BreezeSqlToyProperties properties;
 @Test
 void findList() {
     // 跳过逻辑删除
-    properties.setSkip(true);
-    sqlToyHelperDao.findList(Wrappers.lambdaWrapper(AgentCategoryInfo.class));
+    sqlToyHelperDao.findList(Wrappers.lambdaWrapper(AgentCategoryInfo.class).skipDeletion(true));
 }
-@Test
-void findBySql() {
-    // 适用于sql关联查询，用于确定哪个表的删除标识。
-    // 示例sql：select t.* from user t inner join t_org tr on tr.id=t.corp_id
-    properties.setAlias("t");
-    String sql="select t.* from user t inner join t_org tr on tr.id=t.corp_id";
-    sqlToyHelperDao.findBySql(sql,
-            MapKit.map(), Map.class);
-}
+
 ```
 
 
