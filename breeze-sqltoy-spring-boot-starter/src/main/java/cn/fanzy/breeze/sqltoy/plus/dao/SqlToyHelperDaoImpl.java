@@ -89,7 +89,6 @@ public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelp
     @Override
     public <T> Long remove(Wrapper<T> wrapper) {
         BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
-        Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
         Map<String, Object> setMap = new HashMap<>(1);
         setMap.put(properties.getLogicDeleteField(), PlusDaoUtil.getDeleteValue(properties));
         EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
