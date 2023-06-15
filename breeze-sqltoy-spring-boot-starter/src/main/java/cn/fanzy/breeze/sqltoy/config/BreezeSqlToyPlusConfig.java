@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
 
@@ -33,7 +32,6 @@ import javax.annotation.PostConstruct;
 @Configuration
 @AutoConfigureBefore({SqltoyAutoConfiguration.class})
 @EnableConfigurationProperties({BreezeSqlToyProperties.class})
-@PropertySource(value = {"classpath:application-sqltoy.properties"})
 public class BreezeSqlToyPlusConfig {
     private final SqlToyContextProperties sqlToyContextProperties;
     private final BreezeSqlToyProperties properties;
@@ -69,6 +67,12 @@ public class BreezeSqlToyPlusConfig {
             String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
                     "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
             sqlToyContextProperties.setSqlInterceptors(append);
+        }
+        if(StrUtil.isBlank(sqlToyContextProperties.getSqlResourcesDir())){
+            sqlToyContextProperties.setSqlResourcesDir("classpath:sql");
+        }
+        if(StrUtil.isBlank(sqlToyContextProperties.getUnifyFieldsHandler())){
+            sqlToyContextProperties.setUnifyFieldsHandler("unifyFieldsHandler");
         }
         log.info("「微风组件」开启 <SqlToy相关配置> 相关的配置。");
     }
