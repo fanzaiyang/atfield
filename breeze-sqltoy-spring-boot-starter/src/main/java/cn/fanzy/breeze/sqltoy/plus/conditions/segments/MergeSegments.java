@@ -39,7 +39,7 @@ public class MergeSegments implements ISqlSegment {
         if (normal.isEmpty()) {
             if (!groupBy.isEmpty() || !orderBy.isEmpty()) {
                 if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
-                    sql = StrUtil.format("{}={} ", logicDeleteField, logicNotDeleteValue);
+                    sql = StrUtil.format("{}='{}' ", logicDeleteField, logicNotDeleteValue);
                 } else {
                     sql = "1 = 1 ";
                 }
@@ -47,7 +47,7 @@ public class MergeSegments implements ISqlSegment {
             }
         } else {
             if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
-                sql = StrUtil.format("{}={} AND ", logicDeleteField, logicNotDeleteValue);
+                sql = StrUtil.format("{}='{}' AND ", logicDeleteField, logicNotDeleteValue);
             }
             sql += "(" + normal.getSqlSegment() + ") " + groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
         }
