@@ -47,26 +47,9 @@ public class BreezeSqlToyPlusConfig {
     public IUnifyFieldsHandler unifyFieldsHandler() {
         return new BreezeSqlToyUnifyFieldsHandler();
     }
-//    @Primary
-//    @Bean
-//    @ConditionalOnMissingBean
-//    public SqlToyContextProperties sqlToyContextProperties(BreezeSqlToyProperties properties) {
-//        SqlToyContextProperties sqlToyContextProperties = new SqlToyContextProperties();
-//        if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
-//            String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
-//                    "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
-//            sqlToyContextProperties.setSqlInterceptors(append);
-//        }
-//        return sqlToyContextProperties;
-//    }
 
     @PostConstruct
     public void checkConfig() {
-//        if(StrUtil.isNotBlank(properties.getLogicDeleteField())){
-//            String[] append = ArrayUtil.append(sqlToyContextProperties.getSqlInterceptors(),
-//                    "cn.fanzy.breeze.sqltoy.interceptors.LogicalDeleteInterceptor");
-//            sqlToyContextProperties.setSqlInterceptors(append);
-//        }
         if(StrUtil.isBlank(sqlToyContextProperties.getSqlResourcesDir())){
             sqlToyContextProperties.setSqlResourcesDir("classpath:sql");
         }
