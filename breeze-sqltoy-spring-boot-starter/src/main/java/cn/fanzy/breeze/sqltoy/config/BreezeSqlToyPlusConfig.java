@@ -33,7 +33,6 @@ import javax.annotation.PostConstruct;
 @EnableConfigurationProperties({BreezeSqlToyProperties.class})
 public class BreezeSqlToyPlusConfig {
     private final SqlToyContextProperties sqlToyContextProperties;
-    private final BreezeSqlToyProperties properties;
     @Bean
     public SqlToyHelperDao sqlToyHelperDao() {
         return new SqlToyHelperDaoImpl();
