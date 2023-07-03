@@ -3,7 +3,6 @@ package cn.fanzy.breeze.minio.config;
 import cn.fanzy.breeze.minio.properties.BreezeMinIOProperties;
 import cn.fanzy.breeze.minio.service.BreezeMultipartFileService;
 import cn.fanzy.breeze.minio.service.impl.BreezeMultipartFileServiceImpl;
-import cn.fanzy.breeze.web.swagger.properties.BreezeSwaggerProperties;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,6 +13,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * 微风minio多部分配置
+ *
+ * @author fanzaiyang
+ * @date 2023-07-03
+ */
 @Slf4j
 @AllArgsConstructor
 @Configuration
@@ -21,30 +26,12 @@ import javax.annotation.PostConstruct;
 @ConditionalOnClass(JdbcTemplate.class)
 public class BreezeMinioMultipartConfig {
     private final BreezeMinIOProperties properties;
-    private final BreezeSwaggerProperties breezeSwaggerProperties;
     private final JdbcTemplate jdbcTemplate;
 
     @Bean
     public BreezeMultipartFileService breezeMultipartFileService() {
         return new BreezeMultipartFileServiceImpl(jdbcTemplate, properties);
     }
-
-//    @Bean
-//    @ConditionalOnMissingBean(name = "breezeDefaultApi")
-//    @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"packages-to-scan"})
-//    public GroupedOpenApi breezeDefaultApi() {
-//        List<String> packagesToScan = breezeSwaggerProperties.getPackagesToScan();
-//        if (packagesToScan == null) {
-//            packagesToScan = CollUtil.newArrayList("cn.fanzy.breeze.minio.controller");
-//        } else {
-//            packagesToScan.add("cn.fanzy.breeze.minio.controller");
-//        }
-//        return GroupedOpenApi.builder()
-//                .group("-默认分组-")
-//                .pathsToMatch("/**")
-//                .packagesToScan(packagesToScan.toArray(new String[packagesToScan.size()]))
-//                .build();
-//    }
 
     @PostConstruct
     public void init() {
