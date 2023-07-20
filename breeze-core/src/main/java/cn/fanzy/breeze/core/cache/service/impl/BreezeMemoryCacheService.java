@@ -6,6 +6,7 @@ package cn.fanzy.breeze.core.cache.service.impl;
 import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.core.storage.LocalScheduledStorage;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -31,6 +32,15 @@ public class BreezeMemoryCacheService implements BreezeCacheService {
         log.debug("使用Memory缓存！");
         Assert.notBlank(key, "唯一标识不能为空！");
         return LocalScheduledStorage.get(key);
+    }
+
+    @Override
+    public <T> T get(String key, Class<T> clazz) {
+        Object obj = get(key);
+        if(obj ==null){
+            return null;
+        }
+        return JSONUtil.toBean(JSONUtil.toJsonStr(obj),clazz);
     }
 
     @Override

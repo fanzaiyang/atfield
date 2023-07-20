@@ -28,6 +28,15 @@ public interface BreezeCacheService {
     default Object get(String key){return null;};
 
     /**
+     * 得到
+     *
+     * @param key   关键
+     * @param clazz clazz
+     * @return {@link T}
+     */
+    <T> T get(String key,Class<T> clazz);
+
+    /**
      * 根据唯一标识符移除存储的内容
      *
      * @param key 唯一标识符
