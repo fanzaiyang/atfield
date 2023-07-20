@@ -3,6 +3,7 @@ package cn.fanzy.breeze.core.storage;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.thread.ThreadFactoryBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,28 +23,28 @@ import java.util.concurrent.locks.ReentrantLock;
  * 全局存储工具该工具主要是一个基于内存的KV键值对存储工具。 <strong>线程安全的</strong>
  *
  * @author fanzaiyang
- * @since  2022-08-16
+ * @since 2022-08-16
  */
 @Slf4j
 public final class LocalScheduledStorage {
-    private static ScheduledExecutorService swapExpiredPool = new ScheduledThreadPoolExecutor(10);
+    private static final ScheduledExecutorService SWAP_EXPIRED_POOL = new ScheduledThreadPoolExecutor(10, ThreadFactoryBuilder.create().setNamePrefix("breeze-storage-").build());
     /**
      * 缓存
      */
-    private static Map<String, Node> cacheMap = new ConcurrentHashMap<>(1024);
+    private static final Map<String, Node> CACHE_MAP = new ConcurrentHashMap<>(1024);
 
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
     /**
      * 让过期时间最小的数据排在队列前，在清除过期数据时
      * ，只需查看缓存最近的过期数据，而不用扫描全部缓存
      */
-    private PriorityQueue<Node> expireQueue = new PriorityQueue<>(1024);
+    private final PriorityQueue<Node> expireQueue = new PriorityQueue<>(1024);
 
 
     public LocalScheduledStorage() {
         //使用默认的线程池，每x秒清除一次过期数据
         //线程池和调用频率 最好是交给调用者去设置。
-        swapExpiredPool.scheduleWithFixedDelay(new SwapExpiredNodeWork(), 60, 60, TimeUnit.SECONDS);
+        SWAP_EXPIRED_POOL.scheduleWithFixedDelay(new SwapExpiredNodeWork(), 60, 60, TimeUnit.SECONDS);
     }
 
     /**
@@ -54,9 +55,9 @@ public final class LocalScheduledStorage {
      */
     public synchronized static Object get(String key) {
         Assert.notNull(key, "key值不能为空");
-        Node node = cacheMap.get(key);
-        if(node==null){
-            log.warn("未找到键为「{}」的内容！",key);
+        Node node = CACHE_MAP.get(key);
+        if (node == null) {
+            log.warn("未找到键为「{}」的内容！", key);
             return null;
         }
         if (DateUtil.currentSeconds() > node.getExpireTime()) {
@@ -89,7 +90,7 @@ public final class LocalScheduledStorage {
      */
     public synchronized static void put(String key, Object value, int expireSecond) {
         Assert.notNull(key, "key值不能为空");
-        cacheMap.put(key, Node.builder()
+        CACHE_MAP.put(key, Node.builder()
                 .key(key).value(value)
                 .expireTime(DateUtil.currentSeconds() + expireSecond)
                 .build());
@@ -102,14 +103,14 @@ public final class LocalScheduledStorage {
      */
     public synchronized static void remove(String key) {
         Assert.notNull(key, "key值不能为空");
-        cacheMap.remove(key);
+        CACHE_MAP.remove(key);
     }
 
     /**
      * 清空本地线程副本
      */
     public synchronized static void clear() {
-        cacheMap.clear();
+        CACHE_MAP.clear();
     }
 
     /**
@@ -118,8 +119,7 @@ public final class LocalScheduledStorage {
      * @return 本地线程副本里的键值对集合
      */
     public static Map<String, Node> getAll() {
-
-        return cacheMap;
+        return CACHE_MAP;
     }
 
 
@@ -162,7 +162,7 @@ public final class LocalScheduledStorage {
                     if (node == null || node.expireTime > now) {
                         return;
                     }
-                    cacheMap.remove(node.key);
+                    CACHE_MAP.remove(node.key);
                     expireQueue.poll();
                 } finally {
                     lock.unlock();
