@@ -5,6 +5,7 @@ import cn.fanzy.breeze.web.code.processor.BreezeCodeProcessor;
 import cn.fanzy.breeze.web.safe.annotation.BreezeSafe;
 import cn.fanzy.breeze.web.safe.model.BreezeSafeInfo;
 import cn.fanzy.breeze.web.safe.properties.BreezeSafeProperties;
+import cn.fanzy.breeze.web.safe.utils.BreezeSafeUtil;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
@@ -60,8 +61,12 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
         }
         // 1.校验验证码
         if (annotation != null && properties.isNeedCode() && safeInfo.getFailNum() >= properties.getLoginFailedShowCodeMaxNum()) {
-            BreezeCodeProcessor processor = SpringUtils.getBean(BreezeCodeProcessor.class);
-            processor.validate(new ServletWebRequest(SpringUtils.getRequest()), annotation.value());
+            try {
+                BreezeCodeProcessor processor = SpringUtils.getBean(BreezeCodeProcessor.class);
+                processor.validate(new ServletWebRequest(SpringUtils.getRequest()), annotation.value());
+            } catch (Exception e) {
+                log.warn("未开启验证码功能，无法使用！");
+            }
         }
         // 2. 校验次数
         if (safeInfo.getFailNum() >= properties.getLoginFailedMaxNum()) {
@@ -98,11 +103,7 @@ public class BreezeSafeServiceImpl implements BreezeSafeService {
     }
 
     private String getKey(String loginId) {
-        String key = properties.getLoginFailedPrefix() + loginId;
-        if (properties.isSingleIp()) {
-            key += ":" + SpringUtils.getClientIp();
-        }
-        return key;
+        return BreezeSafeUtil.getKey(properties, loginId);
     }
 
     @Override
