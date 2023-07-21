@@ -5,10 +5,12 @@ import cn.fanzy.breeze.web.safe.model.BreezeSafeInfo;
 import cn.fanzy.breeze.web.safe.properties.BreezeSafeProperties;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author fanzaiyang
  */
+@Slf4j
 public class BreezeSafeUtil {
     public static String getErrorMsg(String loginId) {
         if (StrUtil.isBlank(loginId)) {
@@ -34,5 +36,21 @@ public class BreezeSafeUtil {
             key += ":" + SpringUtils.getClientIp();
         }
         return key;
+    }
+
+    /**
+     * 删除账号的安全限制
+     *
+     * @param loginId 登录id
+     */
+    public static void remove(String loginId){
+        try {
+            BreezeSafeProperties properties = SpringUtils.getBean(BreezeSafeProperties.class);
+            BreezeCacheService cacheService = SpringUtils.getBean(BreezeCacheService.class);
+            cacheService.remove(getKey(properties,loginId));
+        }catch (Exception e){
+            log.warn("删除「{}」安全认证失败！原因：{}",loginId,e.getMessage());
+        }
+
     }
 }
