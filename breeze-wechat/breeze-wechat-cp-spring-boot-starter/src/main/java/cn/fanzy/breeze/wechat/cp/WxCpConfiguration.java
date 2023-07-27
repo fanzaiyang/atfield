@@ -93,7 +93,7 @@ public class WxCpConfiguration {
      * @return {@link WxCpService}
      */
     public static WxCpService getCpService(Integer agentId) {
-        if (!cpServices.keySet().contains(agentId)) {
+        if (!cpServices.containsKey(agentId)) {
             return null;
         }
         return cpServices.get(agentId);
@@ -107,7 +107,6 @@ public class WxCpConfiguration {
             return;
         }
         appConfigList = this.properties.getAppConfigs();
-
         cpServices = this.properties.getAppConfigs().stream().map(a -> {
             val configStorage = new WxCpDefaultConfigImpl();
             configStorage.setCorpId(this.properties.getCorpId());

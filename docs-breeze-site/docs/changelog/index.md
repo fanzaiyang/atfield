@@ -13,6 +13,8 @@ title: 更新日志
 ## 最新版本
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
+## v2.2.6
+### 企业微信部门创建
 ## v2.2.5
 ### 重构逻辑删除
 

@@ -19,6 +19,6 @@
     </modules>
 
     <properties>
-        <wechat.version>4.5.0</wechat.version>
+        <wechat.version>4.5.3.B</wechat.version>
     </properties>
 </project>
