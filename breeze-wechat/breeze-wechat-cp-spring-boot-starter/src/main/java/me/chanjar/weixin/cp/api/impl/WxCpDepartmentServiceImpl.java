@@ -1,8 +1,5 @@
 package me.chanjar.weixin.cp.api.impl;
 
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +9,6 @@ import me.chanjar.weixin.common.util.json.GsonParser;
 import me.chanjar.weixin.cp.api.WxCpDepartmentService;
 import me.chanjar.weixin.cp.api.WxCpService;
 import me.chanjar.weixin.cp.bean.WxCpDepart;
-import me.chanjar.weixin.cp.bean.WxCpDepartInfo;
 import me.chanjar.weixin.cp.util.json.WxCpGsonBuilder;
 
 import java.util.List;
