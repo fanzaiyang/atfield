@@ -1,7 +1,7 @@
 package me.chanjar.weixin.cp.api;
 
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.cp.bean.WxCpDepart;
+import me.chanjar.weixin.cp.bean.WxCpDepartInfo;
 
 import java.util.List;
 
@@ -13,8 +13,7 @@ import java.util.List;
  *
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
-public interface WxCpDepartmentService {
-
+public interface WxCpDepartmentInfoService {
     /**
      * <pre>
      * 部门管理接口 - 创建部门.
@@ -26,10 +25,9 @@ public interface WxCpDepartmentService {
      * @return 部门id long
      * @throws WxErrorException 异常
      */
-    Long create(WxCpDepart depart) throws WxErrorException;
+    String create(WxCpDepartInfo depart) throws WxErrorException;
     /**
      * <pre>
-     * 「已过时」请使用WxCpDepartInfo get(String id)
      * 部门管理接口 - 获取单个部门详情.
      * 详情请见: <a href="https://developer.work.weixin.qq.com/document/path/95351">...</a>
      * </pre>
@@ -38,7 +36,8 @@ public interface WxCpDepartmentService {
      * @return 部门信息 wx cp depart
      * @throws WxErrorException 异常
      */
-    WxCpDepart get(Long id) throws WxErrorException;
+    WxCpDepartInfo get(String id) throws WxErrorException;
+
     /**
      * <pre>
      * 部门管理接口 - 获取部门列表.
@@ -49,8 +48,7 @@ public interface WxCpDepartmentService {
      * @return 获取的部门列表 list
      * @throws WxErrorException 异常
      */
-    List<WxCpDepart> list(Long id) throws WxErrorException;
-
+    List<WxCpDepartInfo> list(String id) throws WxErrorException;
 
     /**
      * <pre>
@@ -62,7 +60,7 @@ public interface WxCpDepartmentService {
      * @return 子部门ID列表 list
      * @throws WxErrorException 异常
      */
-    List<WxCpDepart> simpleList(Long id) throws WxErrorException;
+    List<WxCpDepartInfo> simpleList(String id) throws WxErrorException;
 
     /**
      * <pre>
@@ -74,8 +72,7 @@ public interface WxCpDepartmentService {
      * @param group 要更新的group，group的id,name必须设置
      * @throws WxErrorException 异常
      */
-    void update(WxCpDepart group) throws WxErrorException;
-
+    void update(WxCpDepartInfo group) throws WxErrorException;
     /**
      * <pre>
      * 部门管理接口 - 删除部门.
@@ -86,6 +83,5 @@ public interface WxCpDepartmentService {
      * @param departId 部门id
      * @throws WxErrorException 异常
      */
-    void delete(Long departId) throws WxErrorException;
-
+    void delete(String departId) throws WxErrorException;
 }

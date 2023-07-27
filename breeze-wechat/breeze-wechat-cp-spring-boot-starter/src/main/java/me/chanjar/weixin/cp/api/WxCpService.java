@@ -12,7 +12,6 @@ import me.chanjar.weixin.cp.bean.WxCpAgentJsapiSignature;
 import me.chanjar.weixin.cp.bean.WxCpMaJsCode2SessionResult;
 import me.chanjar.weixin.cp.bean.WxCpProviderToken;
 import me.chanjar.weixin.cp.config.WxCpConfigStorage;
-import me.chanjar.weixin.cp.corpgroup.service.WxCpLinkedCorpService;
 
 /**
  * 微信API的Service.
@@ -325,7 +324,12 @@ public interface WxCpService extends WxService {
    * @return the department service
    */
   WxCpDepartmentService getDepartmentService();
-
+  /**
+   * 获取部门相关接口的服务类对象
+   *
+   * @return the department service
+   */
+  WxCpDepartmentInfoService getDepartmentInfoService();
   /**
    * 获取媒体相关接口的服务类对象
    *

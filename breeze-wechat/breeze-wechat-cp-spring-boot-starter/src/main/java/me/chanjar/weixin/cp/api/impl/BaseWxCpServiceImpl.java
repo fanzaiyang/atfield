@@ -24,8 +24,6 @@ import me.chanjar.weixin.cp.bean.WxCpAgentJsapiSignature;
 import me.chanjar.weixin.cp.bean.WxCpMaJsCode2SessionResult;
 import me.chanjar.weixin.cp.bean.WxCpProviderToken;
 import me.chanjar.weixin.cp.config.WxCpConfigStorage;
-import me.chanjar.weixin.cp.corpgroup.service.WxCpLinkedCorpService;
-import me.chanjar.weixin.cp.corpgroup.service.impl.WxCpLinkedCorpServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -47,6 +45,7 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
   private WxCpUserService userService = new WxCpUserServiceImpl(this);
   private final WxCpChatService chatService = new WxCpChatServiceImpl(this);
   private WxCpDepartmentService departmentService = new WxCpDepartmentServiceImpl(this);
+  private WxCpDepartmentInfoService departmentInfoService = new WxCpDepartmentInfoServiceImpl(this);
   private WxCpMediaService mediaService = new WxCpMediaServiceImpl(this);
   private WxCpMenuService menuService = new WxCpMenuServiceImpl(this);
   private WxCpOAuth2Service oauth2Service = new WxCpOAuth2ServiceImpl(this);
@@ -489,6 +488,11 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
   @Override
   public WxCpDepartmentService getDepartmentService() {
     return departmentService;
+  }
+
+  @Override
+  public WxCpDepartmentInfoService getDepartmentInfoService() {
+    return departmentInfoService;
   }
 
   @Override
