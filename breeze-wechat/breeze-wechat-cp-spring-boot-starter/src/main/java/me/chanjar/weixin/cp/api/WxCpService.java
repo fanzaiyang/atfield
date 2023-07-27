@@ -324,12 +324,7 @@ public interface WxCpService extends WxService {
    * @return the department service
    */
   WxCpDepartmentService getDepartmentService();
-  /**
-   * 获取部门相关接口的服务类对象
-   *
-   * @return the department service
-   */
-  WxCpDepartmentInfoService getDepartmentInfoService();
+  
   /**
    * 获取媒体相关接口的服务类对象
    *

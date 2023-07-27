@@ -45,7 +45,6 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
   private WxCpUserService userService = new WxCpUserServiceImpl(this);
   private final WxCpChatService chatService = new WxCpChatServiceImpl(this);
   private WxCpDepartmentService departmentService = new WxCpDepartmentServiceImpl(this);
-  private WxCpDepartmentInfoService departmentInfoService = new WxCpDepartmentInfoServiceImpl(this);
   private WxCpMediaService mediaService = new WxCpMediaServiceImpl(this);
   private WxCpMenuService menuService = new WxCpMenuServiceImpl(this);
   private WxCpOAuth2Service oauth2Service = new WxCpOAuth2ServiceImpl(this);
@@ -488,11 +487,6 @@ public abstract class BaseWxCpServiceImpl<H, P> implements WxCpService, RequestH
   @Override
   public WxCpDepartmentService getDepartmentService() {
     return departmentService;
-  }
-
-  @Override
-  public WxCpDepartmentInfoService getDepartmentInfoService() {
-    return departmentInfoService;
   }
 
   @Override
