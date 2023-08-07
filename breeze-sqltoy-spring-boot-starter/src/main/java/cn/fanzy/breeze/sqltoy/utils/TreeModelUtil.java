@@ -1,7 +1,8 @@
 package cn.fanzy.breeze.sqltoy.utils;
 
 import cn.fanzy.breeze.core.utils.BreezeConstants;
-import cn.fanzy.breeze.sqltoy.plus.dao.SqlToyHelperDao;
+import org.sagacity.sqltoy.dao.LightDao;
+import org.sagacity.sqltoy.dao.SqlToyLazyDao;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
 import java.io.Serializable;
@@ -40,7 +41,42 @@ public class TreeModelUtil {
      * @param dao  刀
      * @param data 数据
      */
-    public static void wrapTreeTableRoute(SqlToyHelperDao dao, Serializable data,String parentIdKey) {
+    public static void wrapTreeTableRoute(LightDao dao, Serializable data) {
+        TreeTableModel treeModel = wrapTreeTable(data,BreezeConstants.TREE_PARENT_ID);
+        dao.wrapTreeTableRoute(treeModel);
+    }
+
+    /**
+     * 包树表路线
+     *
+     * @param dao  刀
+     * @param data 数据
+     */
+    public static void wrapTreeTableRoute(SqlToyLazyDao dao, Serializable data) {
+        TreeTableModel treeModel = wrapTreeTable(data,BreezeConstants.TREE_PARENT_ID);
+        dao.wrapTreeTableRoute(treeModel);
+    }
+
+    /**
+     * 包树表路线
+     *
+     * @param dao         刀
+     * @param data        数据
+     * @param parentIdKey 父id关键
+     */
+    public static void wrapTreeTableRoute(LightDao dao, Serializable data, String parentIdKey) {
+        TreeTableModel treeModel = wrapTreeTable(data,parentIdKey);
+        dao.wrapTreeTableRoute(treeModel);
+    }
+
+    /**
+     * 包树表路线
+     *
+     * @param dao         刀
+     * @param data        数据
+     * @param parentIdKey 父id关键
+     */
+    public static void wrapTreeTableRoute(SqlToyLazyDao dao, Serializable data, String parentIdKey) {
         TreeTableModel treeModel = wrapTreeTable(data,parentIdKey);
         dao.wrapTreeTableRoute(treeModel);
     }
