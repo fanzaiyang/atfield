@@ -92,43 +92,69 @@ public class BreezeMultipartFileServiceImpl implements BreezeMultipartFileServic
                     .build();
         }
         // 断点续传，已上传部分
-        List<PartSummary> partedList = minioService.listParts(file.getObjectName(), file.getUploadId());
-        if (CollUtil.isNotEmpty(partedList)) {
-            Map<String, String> param = new HashMap<>();
-            param.put("uploadId", file.getUploadId());
-            for (int i = 1; i <= args.getTotalChunks(); i++) {
-                int finalI = i;
-                Optional<PartSummary> first = partedList.stream().filter(item -> item.getPartNumber() == finalI).findFirst();
-                // 如果该分片已经上传过了，则返回完成
-                if (first.isPresent()) {
+        try {
+            List<PartSummary> partedList = minioService.listParts(file.getObjectName(), file.getUploadId());
+            if (CollUtil.isNotEmpty(partedList)) {
+                Map<String, String> param = new HashMap<>();
+                param.put("uploadId", file.getUploadId());
+                for (int i = 1; i <= args.getTotalChunks(); i++) {
+                    int finalI = i;
+                    Optional<PartSummary> first = partedList.stream().filter(item -> item.getPartNumber() == finalI).findFirst();
+                    // 如果该分片已经上传过了，则返回完成
+                    if (first.isPresent()) {
+                        partList.add(BreezePutMultiPartFile.builder()
+                                .currentPartNumber(i)
+                                .uploadUrl(null)
+                                .finished(true)
+                                .etag(first.get().getETag())
+                                .size(first.get().getSize())
+                                .build());
+                        continue;
+                    }
+                    param.put("partNumber", i + "");
                     partList.add(BreezePutMultiPartFile.builder()
                             .currentPartNumber(i)
-                            .uploadUrl(null)
-                            .finished(true)
-                            .etag(first.get().getETag())
-                            .size(first.get().getSize())
+                            .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
+                            .finished(false)
                             .build());
-                    continue;
                 }
-                param.put("partNumber", i + "");
-                partList.add(BreezePutMultiPartFile.builder()
-                        .currentPartNumber(i)
-                        .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
-                        .finished(false)
-                        .build());
+            } else {
+                Map<String, String> param = new HashMap<>();
+                param.put("uploadId", file.getUploadId());
+                for (int i = 1; i <= args.getTotalChunks(); i++) {
+                    param.put("partNumber", i + "");
+                    partList.add(BreezePutMultiPartFile.builder()
+                            .currentPartNumber(i)
+                            .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
+                            .finished(false)
+                            .build());
+                }
             }
-        } else {
+        } catch (Exception e) {
+            // 这里是断点续传失败，新增模式
+            String uploadId = minioService.initiateMultipartUpload(args.getObjectName());
             Map<String, String> param = new HashMap<>();
-            param.put("uploadId", file.getUploadId());
+            param.put("uploadId", uploadId);
             for (int i = 1; i <= args.getTotalChunks(); i++) {
                 param.put("partNumber", i + "");
                 partList.add(BreezePutMultiPartFile.builder()
                         .currentPartNumber(i)
-                        .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param))
+                        .uploadUrl(minioService.getPresignedObjectUrl(Method.PUT, args.getObjectName(), null, null, param))
                         .finished(false)
                         .build());
             }
+            String insSql = "update " + getTableName() + " set upload_id=?,update_time=? where id=?";
+            jdbcTemplate.update(insSql, uploadId, new Date(), file.getId());
+            return BreezePutMultipartFileResponse.builder()
+                    .bucketName(minioService.getBucket()).finished(false)
+                    .totalChunks(args.getTotalChunks())
+                    .objectName(args.getObjectName())
+                    .partList(partList)
+                    .identifier(args.getIdentifier())
+                    .chunkSize(args.getChunkSize())
+                    .build();
         }
+
         return BreezePutMultipartFileResponse.builder()
                 .bucketName(args.getBucketName()).finished(false)
                 .objectName(args.getObjectName())
