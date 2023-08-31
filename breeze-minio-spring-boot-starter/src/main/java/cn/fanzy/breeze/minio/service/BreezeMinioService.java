@@ -258,4 +258,10 @@ public interface BreezeMinioService {
      */
     String getPresignedObjectUrl(Method method, String objectName, Integer expireDuration, TimeUnit timeUnit, Map<String, String> extraQueryParams);
 
+    /**
+     * 删除
+     *
+     * @param objectName 对象名称
+     */
+    void delete(String objectName);
 }

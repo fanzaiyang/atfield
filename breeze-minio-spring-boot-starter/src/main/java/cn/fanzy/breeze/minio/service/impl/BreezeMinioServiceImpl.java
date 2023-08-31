@@ -24,6 +24,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import io.minio.*;
+import io.minio.errors.*;
 import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -37,6 +38,8 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -466,9 +469,38 @@ public class BreezeMinioServiceImpl implements BreezeMinioService {
         GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, objectName)
                 .withExpiration(DateUtil.offsetDay(new Date(), 1)).withMethod(HttpMethod.PUT);
         if (extraQueryParams != null) {
-            extraQueryParams.forEach((key, val) -> request.addRequestParameter(key, val));
+            extraQueryParams.forEach(request::addRequestParameter);
         }
         URL url = amazonS3.generatePresignedUrl(request);
         return url.toString();
+    }
+
+    @Override
+    public void delete(String objectName) {
+        Assert.notBlank(objectName, "对象名不能为空！");
+        try {
+            innerClient.deleteObjectTags(DeleteObjectTagsArgs.builder()
+                    .bucket(bucket)
+                    .object(objectName)
+                    .build());
+        } catch (ErrorResponseException e) {
+            throw new RuntimeException(e);
+        } catch (InsufficientDataException e) {
+            throw new RuntimeException(e);
+        } catch (InternalException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidResponseException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (ServerException e) {
+            throw new RuntimeException(e);
+        } catch (XmlParserException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
