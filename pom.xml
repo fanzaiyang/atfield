@@ -21,14 +21,12 @@
         <module>breeze-sqltoy-spring-boot-starter</module>
         <module>breeze-wechat</module>
         <module>breeze-mybatis-plus-spring-boot-starter</module>
-        <module>breeze-admin-spring-boot-starter</module>
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
-        <module>breeze-spring-cloud-dependencies</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
-        <revision>2.2.7</revision>
+        <revision>2.3.0</revision>
         <java.version>8</java.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -62,6 +60,16 @@
                 <version>${spring-boot-admin.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
+                <version>4.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
+                <version>4.3.0</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.breeze</groupId>

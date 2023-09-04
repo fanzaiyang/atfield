@@ -15,7 +15,6 @@
         <tlog.version>1.5.1</tlog.version>
         <guava.version>31.1-jre</guava.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>cn.fanzy.breeze</groupId>
@@ -64,7 +63,7 @@
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.3.0</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

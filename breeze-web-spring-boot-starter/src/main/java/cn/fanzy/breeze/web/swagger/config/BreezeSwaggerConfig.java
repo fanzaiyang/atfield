@@ -25,7 +25,7 @@ import java.util.List;
 @Configuration
 @AllArgsConstructor
 @EnableConfigurationProperties({BreezeSwaggerProperties.class})
-@ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"enable"}, havingValue = "true", matchIfMissing = false)
 public class BreezeSwaggerConfig implements WebMvcConfigurer {
     private final BreezeSwaggerProperties properties;
 
