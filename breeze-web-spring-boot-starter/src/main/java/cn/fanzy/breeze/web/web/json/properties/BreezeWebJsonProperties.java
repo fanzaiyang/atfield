@@ -48,6 +48,9 @@ public class BreezeWebJsonProperties implements Serializable {
     public static class ArrayConfig implements Serializable {
         private static final long serialVersionUID = -8009525539397895880L;
         private Boolean enable;
+        public Boolean getEnable() {
+            return enable == null || enable;
+        }
     }
 
     @Data
@@ -57,6 +60,9 @@ public class BreezeWebJsonProperties implements Serializable {
         private static final long serialVersionUID = 7206753783746316492L;
         private Boolean enable;
         private String defaultValue;
+        public Boolean getEnable() {
+            return enable == null || enable;
+        }
     }
 
     @Data
@@ -66,6 +72,9 @@ public class BreezeWebJsonProperties implements Serializable {
         private static final long serialVersionUID = -8830984202144987747L;
         private Boolean enable;
         private Integer defaultValue;
+        public Boolean getEnable() {
+            return enable == null || enable;
+        }
     }
 
     @Data
@@ -75,6 +84,10 @@ public class BreezeWebJsonProperties implements Serializable {
         private static final long serialVersionUID = 2351363663391795346L;
         private Boolean enable;
         private Boolean defaultValue;
+
+        public Boolean getEnable() {
+            return enable == null || enable;
+        }
     }
 
     @Data
@@ -84,6 +97,9 @@ public class BreezeWebJsonProperties implements Serializable {
         private static final long serialVersionUID = 9222925097381238683L;
         private Boolean enable;
         private String defaultValue;
+        public Boolean getEnable() {
+            return enable == null || enable;
+        }
     }
 
 
