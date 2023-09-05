@@ -28,9 +28,10 @@ public class TreeUtils extends TreeUtil {
 
     /**
      * 构建树 默认为：id，parentId，name，orderNumber 根节点是：-1
+     *
      * @param data List数据
+     * @param <T>  类型
      * @return List树结构
-     * @param <T> 类型
      */
     public static <T> List<Tree<String>> buildTree(List<T> data) {
         List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", BreezeConstants.TREE_ROOT_ID);
@@ -42,14 +43,15 @@ public class TreeUtils extends TreeUtil {
      * 默认为：id，parentId，name，orderNumber
      *
      * @param data   数据
-     * @param <T> 类型
+     * @param <T>    类型
      * @param rootId 根id,默认-1
      * @return List
      */
     public static <T> List<Tree<String>> buildTree(List<T> data, String rootId) {
         TimeInterval timer = DateUtil.timer();
-        List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", BreezeConstants.TREE_ROOT_ID);
-        List<Tree<String>> build = build(nodeList, StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID));
+        rootId = StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID);
+        List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", rootId);
+        List<Tree<String>> build = build(nodeList, rootId);
         long end = System.currentTimeMillis();
         log.info("list转tree耗时(秒):{}", timer.intervalSecond());
         return build;
@@ -65,12 +67,13 @@ public class TreeUtils extends TreeUtil {
      * @param nameKey   名字的关键，默认：name
      * @param weightKey 顺序的关键，默认：orderNumber
      * @param rootId    根id,默认-1
-     * @param <T> 类型
+     * @param <T>       类型
      * @return List
      */
     public static <T> List<Tree<String>> buildTree(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
-        List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, BreezeConstants.TREE_ROOT_ID);
-        return build(nodeList, StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID));
+        rootId = StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID);
+        List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, rootId);
+        return build(nodeList, rootId);
     }
 
     private static <T> List<TreeNode<String>> buildNodeList(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
@@ -96,7 +99,7 @@ public class TreeUtils extends TreeUtil {
         }
         // 这里是修改根结点
         Set<String> nodeIdSet = nodeList.stream().map(TreeNode::getId).collect(Collectors.toSet());
-        rootId = StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID);
+        rootId = StrUtil.blankToDefault(rootId, StrUtil.blankToDefault(rootId, BreezeConstants.TREE_ROOT_ID));
         String finalRootId = rootId;
         nodeList.forEach(item -> {
             if (!nodeIdSet.contains(item.getParentId())) {
