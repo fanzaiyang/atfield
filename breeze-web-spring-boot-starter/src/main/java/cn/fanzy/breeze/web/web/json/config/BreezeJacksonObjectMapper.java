@@ -2,6 +2,7 @@ package cn.fanzy.breeze.web.web.json.config;
 
 import cn.fanzy.breeze.web.web.json.jackson.BreezeBeanSerializerModifier;
 import cn.fanzy.breeze.web.web.json.jackson.BreezeCustomizeNullJsonSerializer;
+import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +35,8 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
  */
 public class BreezeJacksonObjectMapper extends ObjectMapper {
     private static final long serialVersionUID = 4349248944480408489L;
-    public BreezeJacksonObjectMapper(String jacksonDateFormat,String mvcDateFormat, String mvcTimeFormat) {
+    public BreezeJacksonObjectMapper(String jacksonDateFormat, String mvcDateFormat, String mvcTimeFormat,
+                                     BreezeWebJsonProperties properties) {
         super();
         // 收到未知属性时不报异常
         this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -57,7 +59,7 @@ public class BreezeJacksonObjectMapper extends ObjectMapper {
         javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(mvcDateFormat)));
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(mvcTimeFormat)));
         this.setSerializerFactory(this.getSerializerFactory()
-                .withSerializerModifier(new BreezeBeanSerializerModifier()));
+                .withSerializerModifier(new BreezeBeanSerializerModifier(properties)));
         this.getSerializerProvider()
                 .setNullValueSerializer(new BreezeCustomizeNullJsonSerializer.NullObjectJsonSerializer());
         this.registerModules(simpleModule, javaTimeModule);

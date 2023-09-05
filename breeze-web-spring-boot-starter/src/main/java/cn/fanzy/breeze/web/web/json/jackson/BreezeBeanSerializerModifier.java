@@ -1,5 +1,6 @@
 package cn.fanzy.breeze.web.web.json.jackson;
 
+import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
@@ -11,7 +12,16 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author fanzaiyang
+ * @date 2023/09/05
+ */
 public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
+    private final BreezeWebJsonProperties properties;
+    public BreezeBeanSerializerModifier(BreezeWebJsonProperties properties) {
+        this.properties = properties;
+    }
+
     @Override
     public List<BeanPropertyWriter> changeProperties(SerializationConfig config,
                                                      BeanDescription beanDesc,
@@ -22,23 +32,28 @@ public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
             // 判断字段的类型，如果是数组或集合则注册nullSerializer
             if (isArrayType(writer)) {
                 // 给writer注册一个自己的nullSerializer
-                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullArrayJsonSerializer());
+                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer
+                        .NullArrayJsonSerializer(properties.getArray()));
                 continue;
             }
             if (isStringType(writer)) {
-                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullStringJsonSerializer());
+                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer
+                        .NullStringJsonSerializer(properties.getString()));
                 continue;
             }
             if (isNumberType(writer)) {
-                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullNumberJsonSerializer());
+                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer
+                        .NullNumberJsonSerializer(properties.getNumber()));
                 continue;
             }
             if (isDateType(writer)) {
-                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullDateJsonSerializer());
+                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer
+                        .NullDateJsonSerializer(properties.getDate()));
                 continue;
             }
             if (isBooleanType(writer)) {
-                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullBooleanJsonSerializer());
+                writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer
+                        .NullBooleanJsonSerializer(properties.getBool()));
                 continue;
             }
             writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullObjectJsonSerializer());
