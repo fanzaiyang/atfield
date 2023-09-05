@@ -2,6 +2,7 @@ package cn.fanzy.breeze.web.web.json.jackson;
 
 import cn.fanzy.breeze.core.utils.NumberUtil;
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -48,7 +49,8 @@ public class BreezeCustomizeNullJsonSerializer {
         public void serialize(Object value, JsonGenerator jsonGenerator,
                               SerializerProvider serializerProvider) throws IOException {
             if (config.getEnable()) {
-                if (config.getDefaultValue() == null) {
+                if (config.getDefaultValue() == null ||
+                        StrUtil.equalsIgnoreCase(config.getDefaultValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(config.getDefaultValue());
@@ -92,7 +94,8 @@ public class BreezeCustomizeNullJsonSerializer {
         public void serialize(Object value, JsonGenerator jsonGenerator,
                               SerializerProvider serializerProvider) throws IOException {
             if (config.getEnable()) {
-                if (config.getDefaultValue() == null) {
+                if (config.getDefaultValue() == null ||
+                        StrUtil.equalsIgnoreCase(config.getDefaultValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(config.getDefaultValue());
