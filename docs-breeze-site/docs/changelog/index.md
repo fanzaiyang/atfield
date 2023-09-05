@@ -13,6 +13,12 @@ title: 更新日志
 ## 最新版本
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
+
+## v2.3.0
+### knife4j非强依赖
+### fix TreeUtils缺陷
+
+
 ## v2.2.6
 ### 企业微信部门创建
 ### 源码迁移
