@@ -31,6 +31,8 @@ public class BreezeCustomizeNullJsonSerializer {
             if (arrayConfig.getEnable()) {
                 jsonGenerator.writeStartArray();
                 jsonGenerator.writeEndArray();
+            }else {
+                jsonGenerator.writeNull();
             }
         }
     }
@@ -55,6 +57,8 @@ public class BreezeCustomizeNullJsonSerializer {
                 } else {
                     jsonGenerator.writeString(config.getDefaultValue());
                 }
+            }else {
+                jsonGenerator.writeNull();
             }
         }
     }
@@ -78,6 +82,8 @@ public class BreezeCustomizeNullJsonSerializer {
                 } else {
                     jsonGenerator.writeNumber(config.getDefaultValue());
                 }
+            }else {
+                jsonGenerator.writeNull();
             }
 
         }
@@ -100,6 +106,8 @@ public class BreezeCustomizeNullJsonSerializer {
                 } else {
                     jsonGenerator.writeString(config.getDefaultValue());
                 }
+            }else {
+                jsonGenerator.writeNull();
             }
         }
     }
@@ -123,6 +131,8 @@ public class BreezeCustomizeNullJsonSerializer {
                 } else {
                     jsonGenerator.writeBoolean(config.getDefaultValue());
                 }
+            }else {
+                jsonGenerator.writeNull();
             }
         }
     }
