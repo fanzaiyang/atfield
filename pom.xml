@@ -245,6 +245,7 @@
                         <configuration>
                             <failOnError>false</failOnError>
                             <doclint>none</doclint>
+                            <encoding>${project.build.sourceEncoding}</encoding>
                         </configuration>
                     </plugin>
                     <!-- 统一版本号 -->
