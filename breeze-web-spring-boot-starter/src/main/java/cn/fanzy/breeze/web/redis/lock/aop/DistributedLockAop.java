@@ -75,6 +75,10 @@ public class DistributedLockAop {
             return;
         }
         //强制加锁
+        if(lock.isLocked()||lock.isHeldByCurrentThread()){
+            log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));
+            throw new LockErrorException(lockDistributed.errorMessage());
+        }
         lock.lock(lockDistributed.leaseTime(), lockDistributed.unit());
     }
 
