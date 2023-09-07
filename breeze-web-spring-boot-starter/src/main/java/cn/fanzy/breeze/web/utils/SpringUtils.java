@@ -172,7 +172,7 @@ public class SpringUtils extends SpringUtil {
      * @return {@link Map}<{@link String}, {@link Object}>
      */
     public static Map<String, Object> getRequestParams(HttpServletRequest request) {
-        Map<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>(1);
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (String key : parameterMap.keySet()) {
             String[] paramArr = parameterMap.get(key);

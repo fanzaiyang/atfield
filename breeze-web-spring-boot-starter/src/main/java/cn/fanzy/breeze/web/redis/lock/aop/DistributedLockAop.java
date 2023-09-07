@@ -1,7 +1,9 @@
 package cn.fanzy.breeze.web.redis.lock.aop;
 
 import cn.fanzy.breeze.web.redis.lock.annotation.LockDistributed;
+import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +47,12 @@ public class DistributedLockAop {
         }
         String lockName = "";
         String lockKey = lockDistributed.value();
-        if (StrUtil.startWith(lockKey, "@")) {
-            lockKey = lockKey.replace(lockKey, "@");
+
+        if (StrUtil.startWith(lockKey, StrPool.AT)) {
+            lockKey = lockKey.replace(lockKey, StrPool.AT);
             // @开头说明是请求参数
             Map<String, Object> requestParams = SpringUtils.getRequestParams();
-            if (requestParams != null) {
-                lockName = requestParams.get(lockKey) == null ? null : requestParams.get(lockKey).toString();
-            }
+            lockName = requestParams.get(lockKey) == null ? null : requestParams.get(lockKey).toString();
             if (StrUtil.isBlank(lockName)) {
                 // 取Header
                 lockName = SpringUtils.getRequest().getHeader(lockKey);
@@ -64,20 +65,21 @@ public class DistributedLockAop {
         }
         RLock lock = redissonClient.getLock(lockName);
         if (lock.isLocked()) {
+            log.info("已上锁！");
             return;
         }
-        if (lockDistributed.time() == 0) {
-            if (lockDistributed.isTry()) {
-                lock.tryLock();
+        if (lockDistributed.isTryLock()) {
+            // 尝试加锁
+            boolean tryLock = lock.tryLock(lockDistributed.tryWaitTime(), lockDistributed.time(), lockDistributed.unit());
+            if (!tryLock) {
+                if (lockDistributed.tryThrowException()) {
+                    throw new RuntimeException(lockDistributed.tryErrorMessage());
+                }
+                log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));
                 return;
             }
-            lock.lock();
-            return;
         }
-        if (lockDistributed.isTry()) {
-            lock.tryLock(lockDistributed.time(), lockDistributed.unit());
-            return;
-        }
+        //强制加锁
         lock.lock(lockDistributed.time(), lockDistributed.unit());
     }
 
