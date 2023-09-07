@@ -1,7 +1,8 @@
 package cn.fanzy.breeze.web.redis.lock.aop;
 
 import cn.fanzy.breeze.web.redis.lock.annotation.LockDistributed;
-import cn.fanzy.breeze.web.redis.lock.exception.LockErrorException;
+import cn.fanzy.breeze.web.redis.lock.annotation.PreventDuplicateSubmit;
+import cn.fanzy.breeze.web.redis.lock.exception.PreventDuplicateSubmitException;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
 import cn.hutool.core.text.StrPool;
@@ -23,18 +24,20 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
+ * 防止重复提交aop
+ *
  * @author fanzaiyang
+ * @date 2023/09/07
  */
 @Slf4j
 @Aspect
 @Component
 @AllArgsConstructor
 @ConditionalOnClass(RedissonClient.class)
-public class DistributedLockAop {
-
+public class PreventDuplicateSubmitAop {
     private final RedissonClient redissonClient;
 
-    @Pointcut("@annotation(cn.fanzy.breeze.web.redis.lock.annotation.LockDistributed)")
+    @Pointcut("@annotation(cn.fanzy.breeze.web.redis.lock.annotation.PreventDuplicateSubmit)")
     public void cut() {
     }
 
@@ -42,12 +45,12 @@ public class DistributedLockAop {
     public void before(JoinPoint jp) throws InterruptedException {
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
-        LockDistributed lockDistributed = method.getAnnotation(LockDistributed.class);
-        if (lockDistributed == null) {
+        PreventDuplicateSubmit annotation = method.getAnnotation(PreventDuplicateSubmit.class);
+        if (annotation == null) {
             return;
         }
         String lockName = "";
-        String lockKey = lockDistributed.value();
+        String lockKey = annotation.value();
 
         if (StrUtil.startWith(lockKey, StrPool.AT)) {
             lockKey = lockKey.replace(lockKey, StrPool.AT);
@@ -61,7 +64,7 @@ public class DistributedLockAop {
         }
         // 如果未找到对应的请求参数，就使用全局锁。
         if (StrUtil.isBlank(lockName)) {
-            log.warn("未找到「{}」的参数，使用全局锁{}", lockDistributed.value(), lockKey);
+            log.warn("未找到「{}」的参数，使用全局锁{}", annotation.value(), lockKey);
             lockName = lockKey;
         }
         RLock lock = redissonClient.getLock(lockName);
@@ -69,26 +72,18 @@ public class DistributedLockAop {
             log.info("已上锁！");
             return;
         }
-        if (lockDistributed.isTryLock()) {
-            // 尝试加锁
-            boolean tryLock = lock.tryLock(lockDistributed.tryWaitTime(), lockDistributed.leaseTime(), lockDistributed.unit());
-            if (!tryLock) {
-                log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));
-                if (lockDistributed.tryThrowException()) {
-                    throw new LockErrorException(lockDistributed.tryErrorMessage());
-                }
-                return;
-            }
+        boolean tryLock = lock.tryLock(annotation.waitTime(), annotation.leaseTime(), annotation.unit());
+        if (!tryLock) {
+            log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));
+            throw new PreventDuplicateSubmitException(annotation.errorMessage());
         }
-        //强制加锁
-        lock.lock(lockDistributed.leaseTime(), lockDistributed.unit());
     }
 
     @After("cut()")
     public void after(JoinPoint jp) {
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
-        LockDistributed lockDistributed = method.getAnnotation(LockDistributed.class);
+        PreventDuplicateSubmit lockDistributed = method.getAnnotation(PreventDuplicateSubmit.class);
         if (lockDistributed == null) {
             return;
         }

@@ -6,6 +6,8 @@ import cn.fanzy.breeze.web.exception.handler.BreezeExceptionHandler;
 import cn.fanzy.breeze.web.exception.properties.BreezeWebExceptionProperties;
 import cn.fanzy.breeze.web.model.JsonContent;
 import cn.fanzy.breeze.web.model.enums.ErrorShowType;
+import cn.fanzy.breeze.web.redis.lock.exception.LockErrorException;
+import cn.fanzy.breeze.web.redis.lock.exception.PreventDuplicateSubmitException;
 import cn.fanzy.breeze.web.utils.ExceptionUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
@@ -65,7 +67,7 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Object handleHttpMessageNotReadableException(HttpServletRequest request, HttpMessageNotReadableException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "参数解析失败"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},错误的请求,失败的原因为：{}", ssid, e.getMessage())
@@ -85,7 +87,7 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(IllegalArgumentException.class)
     public Object handleIllegalArgumentException(HttpServletRequest request, IllegalArgumentException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "参数不符合要求"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{}，参数解析失败,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -105,7 +107,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleHttpRequestMethodNotSupportedException(HttpServletRequest request,
                                                                HttpRequestMethodNotSupportedException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.METHOD_NOT_ALLOWED.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -126,7 +128,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleHttpMediaTypeNotSupportedException(HttpServletRequest request,
                                                            HttpMediaTypeNotSupportedException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.METHOD_NOT_ALLOWED.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前媒体类型"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},不支持当前媒体类型,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -148,8 +150,8 @@ public class BreezeWebExceptionConfiguration {
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 StrUtil.blankToDefault(e.getMessage(), "逻辑发生空指针异常！"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,失败的原因为空指针异常!", ssid), e);
         handler.after(e);
@@ -171,8 +173,8 @@ public class BreezeWebExceptionConfiguration {
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 RegexUtil.containChinese(msg) ? msg : "请求失败");
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         handler.after(e);
@@ -194,8 +196,8 @@ public class BreezeWebExceptionConfiguration {
         JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 RegexUtil.containChinese(msg) ? msg : "IO操作失败");
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         handler.after(e);
@@ -207,7 +209,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleMissingServletRequestParameterException(HttpServletRequest request,
                                                                 MissingServletRequestParameterException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},请求参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -220,7 +222,7 @@ public class BreezeWebExceptionConfiguration {
     public Object handleMethodArgumentTypeMismatchException(HttpServletRequest request,
                                                             MethodArgumentTypeMismatchException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},方法参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -240,7 +242,7 @@ public class BreezeWebExceptionConfiguration {
     @ResponseStatus(HttpStatus.OK)
     public Object handle(HttpServletRequest request, ValidationException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.BAD_REQUEST.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.BAD_REQUEST.value(),
                 StrUtil.blankToDefault(e.getMessage(), "非法参数"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「微风组件」请求{},参数校验有误,失败的原因为：{}", ssid, e.getMessage()), e);
@@ -279,11 +281,11 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public Object handleIndexOutOfBoundsException(HttpServletRequest request, IndexOutOfBoundsException e) {
         String ssid = this.getRequestId(request);
-        JsonContent<String> response = new JsonContent<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        JsonContent<String> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 StrUtil.blankToDefault(e.getMessage(), "数组越界"));
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,出现数组越界,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
@@ -303,8 +305,8 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<String> response = new JsonContent<>(e.getCode(), e.getMessage());
         response.setErrorShowType(ErrorShowType.SILENT);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,失败的原因为：{}", ssid, e.getMessage()), e);
         handler.after(e);
@@ -335,8 +337,8 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到SQLSyntaxErrorException异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
@@ -349,8 +351,8 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到SQLException异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
@@ -381,7 +383,7 @@ public class BreezeWebExceptionConfiguration {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public JsonContent<Object> processException(HttpServletRequest request, MethodArgumentNotValidException e) {
         String ssid = this.getRequestId(request);
-        if (e.getBindingResult().getFieldErrors().size() > 0) {
+        if (!e.getBindingResult().getFieldErrors().isEmpty()) {
             String field = e.getBindingResult().getFieldErrors().get(0).getField();
             String defaultMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
             log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到参数校验异常：{}", ssid, e.getMessage()), e);
@@ -393,8 +395,9 @@ public class BreezeWebExceptionConfiguration {
 
     /**
      * 处理文件上传异常
+     *
      * @param request request
-     * @param e e
+     * @param e       e
      * @return JsonContent
      */
     @ResponseStatus(HttpStatus.OK)
@@ -403,7 +406,35 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到文件上传超过限制异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
-        return new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(),ErrorShowType.NOTIFICATION_ERROR);
+        return new JsonContent<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), ErrorShowType.NOTIFICATION_ERROR);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(PreventDuplicateSubmitException.class)
+    public Object handlePreventDuplicateSubmitException(HttpServletRequest request, PreventDuplicateSubmitException e) {
+        String ssid = this.getRequestId(request);
+        JsonContent<Object> response = new JsonContent<>(e.getCode(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
+        }
+        log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到重复提交异常：{}", ssid, e.getMessage()), e);
+        handler.after(e);
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(LockErrorException.class)
+    public Object handleLockErrorException(HttpServletRequest request, LockErrorException e) {
+        String ssid = this.getRequestId(request);
+        JsonContent<Object> response = new JsonContent<>(e.getCode(), e.getMessage());
+        response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
+        }
+        log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到加锁异常：{}", ssid, e.getMessage()), e);
+        handler.after(e);
+        return response;
     }
 
     /**
@@ -419,8 +450,8 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
         handler.after(e);
@@ -440,8 +471,8 @@ public class BreezeWebExceptionConfiguration {
         String ssid = this.getRequestId(request);
         JsonContent<Object> response = new JsonContent<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
         response.setErrorShowType(ErrorShowType.NOTIFICATION_ERROR);
-        if(properties.getReturnErrorStack()){
-            response.setExData(ExceptionUtil.getErrorStackMessage(e,properties.getReturnErrorStackLength()));
+        if (properties.getReturnErrorStack()) {
+            response.setExData(ExceptionUtil.getErrorStackMessage(e, properties.getReturnErrorStackLength()));
         }
         log.error(StrUtil.format("「微风组件」请求{},请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         handler.after(e);

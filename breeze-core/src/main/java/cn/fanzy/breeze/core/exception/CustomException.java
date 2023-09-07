@@ -5,12 +5,14 @@ package cn.fanzy.breeze.core.exception;
 
 
 /**
+ * 自定义异常
  * <p>
  * 自定义异常基类
  * </p>
  * 所有程序中自定义异常的基类
  *
  * @author fanzaiyang
+ * @date 2023/09/07
  */
 public class CustomException extends RuntimeException {
 

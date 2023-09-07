@@ -18,14 +18,14 @@ public @interface LockDistributed {
      *
      * @return String
      */
-    String value() default "breeze_lock";
+    String value() default "lock_breeze_distributed";
 
     /**
      * 过期时间
      *
      * @return long
      */
-    long time() default 0;
+    long leaseTime() default 0;
 
     /**
      * 时间单位，默认：秒
