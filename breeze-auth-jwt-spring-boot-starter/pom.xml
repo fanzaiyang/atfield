@@ -21,7 +21,6 @@
     <dependency>
         <groupId>cn.dev33</groupId>
         <artifactId>sa-token-jwt</artifactId>
-        <version>${satoken.version}</version>
     </dependency>
 </dependencies>
 </project>
