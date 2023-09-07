@@ -77,8 +77,8 @@ public class DistributedLockAop {
                 if (lockDistributed.tryThrowException()) {
                     throw new LockErrorException(lockDistributed.tryErrorMessage());
                 }
-                return;
             }
+            return;
         }
         //强制加锁
         lock.lock(lockDistributed.leaseTime(), lockDistributed.unit());
