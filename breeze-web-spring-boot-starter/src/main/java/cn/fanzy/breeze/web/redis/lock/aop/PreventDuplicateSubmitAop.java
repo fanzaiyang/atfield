@@ -1,7 +1,8 @@
 package cn.fanzy.breeze.web.redis.lock.aop;
 
-import cn.fanzy.breeze.web.redis.lock.annotation.LockDistributed;
+import cn.fanzy.breeze.core.utils.ParamUtil;
 import cn.fanzy.breeze.web.redis.lock.annotation.PreventDuplicateSubmit;
+import cn.fanzy.breeze.web.redis.lock.enums.PreventSubmitTypeEnum;
 import cn.fanzy.breeze.web.redis.lock.exception.PreventDuplicateSubmitException;
 import cn.fanzy.breeze.web.utils.JoinPointUtils;
 import cn.fanzy.breeze.web.utils.SpringUtils;
@@ -51,7 +52,6 @@ public class PreventDuplicateSubmitAop {
         }
         String lockName = "";
         String lockKey = annotation.value();
-
         if (StrUtil.startWith(lockKey, StrPool.AT)) {
             lockKey = lockKey.replace(lockKey, StrPool.AT);
             // @开头说明是请求参数
@@ -66,6 +66,24 @@ public class PreventDuplicateSubmitAop {
         if (StrUtil.isBlank(lockName)) {
             log.warn("未找到「{}」的参数，使用全局锁{}", annotation.value(), lockKey);
             lockName = lockKey;
+        }
+        if (PreventSubmitTypeEnum.IP.equals(annotation.type())) {
+            lockName = lockName + StrPool.COLON + SpringUtils.getClientIp();
+        } else if (PreventSubmitTypeEnum.PARAM.equals(annotation.type())) {
+            String paramAscii = ParamUtil.getParamAscii(SpringUtils.getRequestParams());
+            if (StrUtil.isBlank(paramAscii)) {
+                lockName = lockName + StrPool.COLON + "NULL";
+            } else {
+                lockName = lockName + StrPool.COLON + paramAscii;
+            }
+        } else if (PreventSubmitTypeEnum.IP_AND_PARAM.equals(annotation.type())) {
+            lockName = lockName + StrPool.COLON + SpringUtils.getClientIp();
+            String paramAscii = ParamUtil.getParamAscii(SpringUtils.getRequestParams());
+            if (StrUtil.isBlank(paramAscii)) {
+                lockName = lockName + StrPool.COLON + "NULL";
+            } else {
+                lockName = lockName + StrPool.COLON + paramAscii;
+            }
         }
         RLock lock = redissonClient.getLock(lockName);
         if (lock.isLocked()) {
