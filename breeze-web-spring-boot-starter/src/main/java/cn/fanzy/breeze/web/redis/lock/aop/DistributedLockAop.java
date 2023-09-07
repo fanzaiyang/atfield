@@ -93,7 +93,7 @@ public class DistributedLockAop {
             return;
         }
         RLock lock = redissonClient.getLock(lockDistributed.value());
-        if (lock.isLocked()) {
+        if (lock.isLocked() || lock.isHeldByCurrentThread()) {
             try {
                 lock.unlock();
             } catch (Exception e) {
