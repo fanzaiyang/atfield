@@ -3,6 +3,7 @@ package cn.fanzy.breeze.web.redis;
 import cn.fanzy.breeze.core.cache.config.BreezeRedisCacheConfiguration;
 import cn.fanzy.breeze.web.code.config.BreezeCodeConfiguration;
 import cn.fanzy.breeze.web.redis.lock.aop.DistributedLockAop;
+import cn.fanzy.breeze.web.redis.lock.aop.PreventDuplicateSubmitAop;
 import cn.fanzy.breeze.web.redis.rate.aop.RateLimitAop;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -43,7 +44,7 @@ import java.time.Duration;
 @Slf4j
 @Configuration
 @EnableCaching
-@ImportAutoConfiguration({DistributedLockAop.class, RateLimitAop.class})
+@ImportAutoConfiguration({DistributedLockAop.class, PreventDuplicateSubmitAop.class, RateLimitAop.class})
 @ConditionalOnClass(RedisOperations.class)
 @AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class, BreezeCodeConfiguration.class})
 public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
@@ -58,6 +59,7 @@ public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
                 .builder(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory))
                 .cacheDefaults(redisCacheConfiguration).build();
     }
+
     /**
      * 注入一个Redis序列化器
      *
@@ -78,7 +80,7 @@ public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
         objectMapper.configure(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS, false);
         // 使用JSR310提供的序列化类,里面包含了大量的JDK8时间序列化类
         objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance,ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         // 配置null值的序列化器
 //		GenericJackson2JsonRedisSerializer.registerNullValueSerializer(objectMapper, null);
         return new GenericJackson2JsonRedisSerializer(objectMapper);
@@ -87,7 +89,7 @@ public class BreezeRedisCoreConfiguration extends CachingConfigurerSupport {
     /**
      * 注入一个Redis操作工具
      *
-     * @param redisConnectionFactory    连接工厂
+     * @param redisConnectionFactory 连接工厂
      * @return Redis操作工具
      */
     @Bean
