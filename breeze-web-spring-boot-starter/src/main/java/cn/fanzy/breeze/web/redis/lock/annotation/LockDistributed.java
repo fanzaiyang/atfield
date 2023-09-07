@@ -48,16 +48,9 @@ public @interface LockDistributed {
     long tryWaitTime() default 0;
 
     /**
-     * 是否抛出异常,isTry()为true时生效
-     *
-     * @return boolean
-     */
-    boolean tryThrowException() default false;
-
-    /**
      * 尝试错误消息
      *
      * @return {@link String}
      */
-    String tryErrorMessage() default "该方法被另外一个线程占用，请稍后再试！";
+    String errorMessage() default "该方法被另外一个线程占用，请稍后再试！";
 }

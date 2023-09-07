@@ -86,10 +86,6 @@ public class PreventDuplicateSubmitAop {
             }
         }
         RLock lock = redissonClient.getLock(lockName);
-        if (lock.isLocked()) {
-            log.info("已上锁！");
-            return;
-        }
         boolean tryLock = lock.tryLock(annotation.waitTime(), annotation.leaseTime(), annotation.unit());
         if (!tryLock) {
             log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));

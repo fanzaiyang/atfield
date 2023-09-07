@@ -65,18 +65,12 @@ public class DistributedLockAop {
             lockName = lockKey;
         }
         RLock lock = redissonClient.getLock(lockName);
-        if (lock.isLocked()) {
-            log.info("已上锁！");
-            return;
-        }
         if (lockDistributed.isTryLock()) {
             // 尝试加锁
             boolean tryLock = lock.tryLock(lockDistributed.tryWaitTime(), lockDistributed.leaseTime(), lockDistributed.unit());
             if (!tryLock) {
                 log.warn("该方法【{}】被另外一个线程占用，请稍后再试！", JoinPointUtils.getMethodInfo(jp));
-                if (lockDistributed.tryThrowException()) {
-                    throw new LockErrorException(lockDistributed.tryErrorMessage());
-                }
+                throw new LockErrorException(lockDistributed.errorMessage());
             }
             return;
         }
