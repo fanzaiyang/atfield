@@ -171,6 +171,16 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-openapi2-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
+                <artifactId>breeze-openapi3-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.breeze</groupId>
                 <artifactId>breeze-wechat-ma-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
