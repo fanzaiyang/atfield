@@ -1,1 +1,2 @@
-cn.fanzy.breeze.core.cache.config.BreezeCacheConfiguration
+cn.fanzy.breeze.core.cache.config.BreezeMemoryCacheConfiguration
+cn.fanzy.breeze.core.cache.config.BreezeRedisCacheConfiguration

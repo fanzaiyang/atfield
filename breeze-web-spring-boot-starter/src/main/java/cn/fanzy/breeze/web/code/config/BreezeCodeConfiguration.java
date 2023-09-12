@@ -1,7 +1,7 @@
 package cn.fanzy.breeze.web.code.config;
 
 
-import cn.fanzy.breeze.core.cache.config.BreezeCacheConfiguration;
+import cn.fanzy.breeze.core.cache.config.BreezeMemoryCacheConfiguration;
 import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.fanzy.breeze.web.code.aop.BreezeCodeCheckAop;
 import cn.fanzy.breeze.web.code.generator.BreezeCodeGenerator;
@@ -45,7 +45,7 @@ import java.util.Map;
 @Configuration
 @ImportAutoConfiguration({BreezeMailExtendAutoConfiguration.class})
 @EnableConfigurationProperties({BreezeCodeProperties.class})
-@AutoConfigureAfter(value = {BreezeCacheConfiguration.class})
+@AutoConfigureAfter(value = {BreezeMemoryCacheConfiguration.class})
 @ConditionalOnProperty(prefix = "breeze.web.code", name = {"enable"}, havingValue = "true",matchIfMissing = true)
 public class BreezeCodeConfiguration {
 

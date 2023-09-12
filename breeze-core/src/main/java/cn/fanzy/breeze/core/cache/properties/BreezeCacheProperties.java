@@ -23,5 +23,6 @@ public class BreezeCacheProperties implements Serializable {
     /**
      * 缓存方式，默认：自动选择
      */
+    @Deprecated
     private BreezeCacheEnum type = BreezeCacheEnum.auto;
 }
