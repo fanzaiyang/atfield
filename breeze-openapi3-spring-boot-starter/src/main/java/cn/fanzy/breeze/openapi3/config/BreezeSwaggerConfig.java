@@ -35,7 +35,7 @@ public class BreezeSwaggerConfig implements WebMvcConfigurer {
     @ConditionalOnProperty(prefix = "breeze.web.swagger", name = {"packages-to-scan"})
     public GroupedOpenApi breezeDefaultApi() {
         return GroupedOpenApi.builder()
-                .group("-默认分组-")
+                .group("默认分组")
                 .pathsToMatch("/**")
                 .packagesToScan(properties.getPackagesToScan().toArray(new String[properties.getPackagesToScan().size()]))
                 .build();
