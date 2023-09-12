@@ -23,6 +23,8 @@
         <module>breeze-mybatis-plus-spring-boot-starter</module>
         <module>breeze-auth-jwt-spring-boot-starter</module>
         <module>breeze-auth-redis</module>
+        <module>breeze-openapi2-spring-boot-starter</module>
+        <module>breeze-openapi3-spring-boot-starter</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
