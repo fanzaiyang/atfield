@@ -1,6 +1,5 @@
 package cn.fanzy.breeze.web.web.json.jackson;
 
-import cn.fanzy.breeze.core.utils.NumberUtil;
 import cn.fanzy.breeze.web.web.json.properties.BreezeWebJsonProperties;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
