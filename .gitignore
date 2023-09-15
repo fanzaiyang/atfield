@@ -50,3 +50,5 @@ build/
 /logs/
 /upload-demo/node_modules/
 /upload-demo/yarn.lock
+/docs/.idea/
+/docs/.vitepress/cache/
