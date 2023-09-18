@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: 快速开始
-      link: /markdown-examples
+      link: /zh/guide/started
     - theme: alt
       text: Gitee
       link: /api-examples
