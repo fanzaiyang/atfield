@@ -34,11 +34,11 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void save(String key, BreezeCode code) {
-        if(breezeCacheService==null){
+        if (breezeCacheService == null) {
             log.warn("未正确开启缓存，无法保存验证码！");
             return;
         }
-        breezeCacheService.save(properties.getPrefix()+key, code, (int) code.getExpireTimeInSeconds());
+        breezeCacheService.save(properties.getPrefix() + key, code, (int) code.getExpireTimeInSeconds());
     }
 
     /**
@@ -49,13 +49,13 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized BreezeCode get(String key) {
-        if(breezeCacheService==null){
+        if (breezeCacheService == null) {
             log.warn("未正确开启缓存，无法获取验证码！");
             return null;
         }
-        Object obj = breezeCacheService.get(properties.getPrefix()+key);
-        Assert.notNull(obj, "验证码不存在！", key);
-        return (BreezeCode) obj;
+        BreezeCode code = breezeCacheService.get(properties.getPrefix() + key, BreezeCode.class);
+        Assert.notNull(code, "验证码不存在！", key);
+        return code;
     }
 
     /**
@@ -65,10 +65,10 @@ public class BreezeSimpleCodeRepository implements BreezeCodeRepository {
      */
     @Override
     public synchronized void remove(String key) {
-        if(breezeCacheService==null){
+        if (breezeCacheService == null) {
             log.warn("未正确开启缓存，无法删除验证码！");
             return;
         }
-        breezeCacheService.remove(properties.getPrefix()+key);
+        breezeCacheService.remove(properties.getPrefix() + key);
     }
 }

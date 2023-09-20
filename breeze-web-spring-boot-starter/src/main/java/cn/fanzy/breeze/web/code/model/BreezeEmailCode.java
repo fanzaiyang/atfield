@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BreezeEmailCode extends BreezeCode{
+    private static final long serialVersionUID = -8874843082651511403L;
+
     public BreezeEmailCode(String code, int maxRetryCode, long expireTimeInSeconds) {
         super(code, maxRetryCode, expireTimeInSeconds);
     }
