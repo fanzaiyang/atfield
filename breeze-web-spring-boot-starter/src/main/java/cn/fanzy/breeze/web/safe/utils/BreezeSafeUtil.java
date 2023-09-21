@@ -19,10 +19,9 @@ public class BreezeSafeUtil {
         BreezeSafeProperties properties = SpringUtils.getBean(BreezeSafeProperties.class);
         BreezeCacheService cacheService = SpringUtils.getBean(BreezeCacheService.class);
         String key = getKey(properties, loginId);
-        Object obj = cacheService.get(key);
-        BreezeSafeInfo safeInfo = new BreezeSafeInfo();
-        if (obj != null) {
-            safeInfo = (BreezeSafeInfo) obj;
+        BreezeSafeInfo safeInfo = cacheService.get(key, BreezeSafeInfo.class);
+        if (safeInfo == null) {
+            safeInfo = new BreezeSafeInfo();
         }
         if (safeInfo.getFailNum() + 1 >= properties.getLoginFailedMaxNum()) {
             return StrUtil.format("该账号因重试次数太多，而锁定，请{}后重试！", safeInfo.getDeadTime());
@@ -43,13 +42,13 @@ public class BreezeSafeUtil {
      *
      * @param loginId 登录id
      */
-    public static void remove(String loginId){
+    public static void remove(String loginId) {
         try {
             BreezeSafeProperties properties = SpringUtils.getBean(BreezeSafeProperties.class);
             BreezeCacheService cacheService = SpringUtils.getBean(BreezeCacheService.class);
-            cacheService.remove(getKey(properties,loginId));
-        }catch (Exception e){
-            log.warn("删除「{}」安全认证失败！原因：{}",loginId,e.getMessage());
+            cacheService.remove(getKey(properties, loginId));
+        } catch (Exception e) {
+            log.warn("删除「{}」安全认证失败！原因：{}", loginId, e.getMessage());
         }
 
     }
