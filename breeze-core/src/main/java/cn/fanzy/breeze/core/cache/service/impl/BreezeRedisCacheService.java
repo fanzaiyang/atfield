@@ -55,7 +55,10 @@ public class BreezeRedisCacheService implements BreezeCacheService {
         if (StrUtil.isBlank(str)) {
             return null;
         }
-        return JSONUtil.toBean(str, clazz);
+        if (JSONUtil.isTypeJSON(str)) {
+            return JSONUtil.toBean(str, clazz);
+        }
+        return clazz.cast(str);
     }
 
     @Override
