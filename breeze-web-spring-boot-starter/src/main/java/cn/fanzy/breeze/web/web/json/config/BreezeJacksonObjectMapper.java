@@ -35,6 +35,7 @@ import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKN
  */
 public class BreezeJacksonObjectMapper extends ObjectMapper {
     private static final long serialVersionUID = 4349248944480408489L;
+
     public BreezeJacksonObjectMapper(String jacksonDateFormat, String mvcDateFormat, String mvcTimeFormat,
                                      BreezeWebJsonProperties properties) {
         super();
@@ -49,7 +50,7 @@ public class BreezeJacksonObjectMapper extends ObjectMapper {
         this.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         //日期序列化
-        javaTimeModule.addSerializer(Date.class, new DateSerializer(false,new SimpleDateFormat(StrUtil.blankToDefault(jacksonDateFormat,"yyyy-MM-dd HH:mm:ss"))));
+        javaTimeModule.addSerializer(Date.class, new DateSerializer(false, new SimpleDateFormat(StrUtil.blankToDefault(jacksonDateFormat, "yyyy-MM-dd HH:mm:ss"))));
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(jacksonDateFormat)));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(mvcDateFormat)));
         javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(mvcTimeFormat)));
@@ -61,10 +62,10 @@ public class BreezeJacksonObjectMapper extends ObjectMapper {
         this.setSerializerFactory(this.getSerializerFactory()
                 .withSerializerModifier(new BreezeBeanSerializerModifier(properties)));
         this.getSerializerProvider()
-                .setNullValueSerializer(new BreezeCustomizeNullJsonSerializer.NullObjectJsonSerializer());
+                .setNullValueSerializer(new BreezeCustomizeNullJsonSerializer.NullAnyJsonSerializer(properties));
         this.registerModules(simpleModule, javaTimeModule);
-        String format = StrUtil.blankToDefault(jacksonDateFormat,mvcDateFormat);
-        this.setDateFormat(new SimpleDateFormat(StrUtil.blankToDefault(format,"yyyy-MM-dd HH:mm:ss")));
+        String format = StrUtil.blankToDefault(jacksonDateFormat, mvcDateFormat);
+        this.setDateFormat(new SimpleDateFormat(StrUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss")));
     }
 
 }
