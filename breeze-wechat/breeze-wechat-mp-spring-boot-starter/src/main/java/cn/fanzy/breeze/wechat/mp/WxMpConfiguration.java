@@ -3,6 +3,7 @@ package cn.fanzy.breeze.wechat.mp;
 import cn.fanzy.breeze.wechat.mp.handler.*;
 import cn.fanzy.breeze.wechat.mp.properties.WxMpProperties;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxRuntimeException;
@@ -82,6 +83,9 @@ public class WxMpConfiguration {
     }
 
     public static WxMpService getMpService(String appid) {
+        if(StrUtil.isBlank(appid)){
+            return getMpService();
+        }
         WxMpService wxService = mpServices.get(appid);
         if (wxService == null) {
             throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));

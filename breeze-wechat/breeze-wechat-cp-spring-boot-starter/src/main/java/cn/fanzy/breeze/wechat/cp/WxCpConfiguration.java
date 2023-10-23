@@ -54,7 +54,7 @@ public class WxCpConfiguration {
     public WxCpConfiguration(WxCpLogHandler wxCpLogHandler, WxCpNullHandler wxCpNullHandler, WxCpLocationHandler wxCpLocationHandler,
                              WxCpMenuHandler wxCpMenuHandler, WxCpMsgHandler wxCpMsgHandler, WxCpUnsubscribeHandler wxCpUnsubscribeHandler,
                              WxCpSubscribeHandler wxCpSubscribeHandler, WxCpProperties properties, WxCpContactChangeHandler wxCpContactChangeHandler,
-                             WxCpEnterAgentHandler wxCpEnterAgentHandler,WxCpMenuClickHandler wxCpMenuClickHandler,WxCpScanHandler wxCpScanHandler) {
+                             WxCpEnterAgentHandler wxCpEnterAgentHandler, WxCpMenuClickHandler wxCpMenuClickHandler, WxCpScanHandler wxCpScanHandler) {
         this.wxCpLogHandler = wxCpLogHandler;
         this.wxCpNullHandler = wxCpNullHandler;
         this.wxCpLocationHandler = wxCpLocationHandler;
@@ -65,8 +65,8 @@ public class WxCpConfiguration {
         this.properties = properties;
         this.wxCpContactChangeHandler = wxCpContactChangeHandler;
         this.wxCpEnterAgentHandler = wxCpEnterAgentHandler;
-        this.wxCpMenuClickHandler=wxCpMenuClickHandler;
-        this.wxCpScanHandler=wxCpScanHandler;
+        this.wxCpMenuClickHandler = wxCpMenuClickHandler;
+        this.wxCpScanHandler = wxCpScanHandler;
     }
 
 
@@ -93,7 +93,7 @@ public class WxCpConfiguration {
      * @return {@link WxCpService}
      */
     public static WxCpService getCpService(Integer agentId) {
-        if (!cpServices.containsKey(agentId)) {
+        if (agentId != null && !cpServices.containsKey(agentId)) {
             return null;
         }
         return cpServices.get(agentId);
