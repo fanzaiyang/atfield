@@ -209,7 +209,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 
                     @Override
                     public Map<String, Object> getSqlSegmentParamMap() {
-                        HashMap<String, Object> map = new HashMap<>();
+                        HashMap<String, Object> map = new HashMap<>(2);
                         map.put(val1Name, finalVal1);
                         map.put(val2Name, finalVal2);
                         return map;
@@ -282,7 +282,15 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 //        if (!validateFiledValue(values)) {
 //            return typedThis;
 //        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, values));
+        List<Object> list = new ArrayList<>(values.length);
+        for (Object value : values) {
+            if (value instanceof Collection) {
+                list.addAll((Collection<?>) value);
+                continue;
+            }
+            list.add(value);
+        }
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.IN, list));
     }
 
     @Override
@@ -306,7 +314,15 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
 //        if (!validateFiledValue(values)) {
 //            return typedThis;
 //        }
-        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, values));
+        List<Object> list = new ArrayList<>(values.length);
+        for (Object value : values) {
+            if (value instanceof Collection) {
+                list.addAll((Collection<?>) value);
+                continue;
+            }
+            list.add(value);
+        }
+        return addAssembler((strategy) -> addNeedValCondition(strategy, condition, column, CompareEnum.NOT_IN, list));
     }
 
     @Override
@@ -504,7 +520,7 @@ public abstract class AbstractWrapper<T, R, Children extends AbstractWrapper<T, 
         List<String> fieldNames = columns.stream().map(this::columnToString).collect(Collectors.toList());
         List<String> columnNames = new ArrayList<>();
         List<String> paramNames = new ArrayList<>();
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>(fieldNames.size());
         for (int i = 0; i < fieldNames.size(); i++) {
             String fieldName = fieldNames.get(i);
             columnNames.add(mappingStrategy.getColumnName(fieldName));
