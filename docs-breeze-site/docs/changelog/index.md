@@ -14,6 +14,9 @@ title: 更新日志
 
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
+## v2.3.2
+### 修复sqltoy模块的lambda in object类型问题
+
 ## v2.3.0
 ### knife4j非强依赖
 ### fix TreeUtils缺陷
