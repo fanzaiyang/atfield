@@ -36,19 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/.idea/
+
 *.flattened-pom.xml
-/docs/.dumi/tmp/
-/docs/node_modules/
-/docs/yarn.lock
-/docs/.dumi/tmp-production/
-/docs-breeze-site/.dumi/tmp/
-/docs-breeze-site/.dumi/tmp-production/
-/docs-breeze-site/yarn.lock
-/docs-breeze-site/node_modules/
-/docs-breeze-site/dist/
-/logs/
-/upload-demo/node_modules/
-/upload-demo/yarn.lock
-/docs/.idea/
-/docs/.vitepress/cache/

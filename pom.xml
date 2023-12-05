@@ -2,53 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.15</version>
-        <relativePath/>
+        <version>3.2.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>cn.fanzy.breeze</groupId>
-    <artifactId>breeze-spring-cloud</artifactId>
+    <groupId>cn.fanzy.infra</groupId>
+    <artifactId>infra-boot</artifactId>
     <version>${revision}</version>
-    <description>A set of highly available components for SpringBoot 2.x.</description>
-    <modules>
-        <module>breeze-core</module>
-        <module>breeze-web-spring-boot-starter</module>
-        <module>breeze-minio-spring-boot-starter</module>
-        <module>breeze-auth-spring-boot-starter</module>
-        <module>breeze-sqltoy-spring-boot-starter</module>
-        <module>breeze-wechat</module>
-        <module>breeze-mybatis-plus-spring-boot-starter</module>
-        <module>breeze-auth-jwt-spring-boot-starter</module>
-        <module>breeze-auth-redis</module>
-        <module>breeze-openapi2-spring-boot-starter</module>
-        <module>breeze-openapi3-spring-boot-starter</module>
-        <module>breeze-spring-cloud-dependencies</module>
-    </modules>
     <packaging>pom</packaging>
+    <description>Spring boot 3.x for the infrastructure layer.</description>
+    <modules>
+        <module>infra-boot-core</module>
+        <module>infra-web-spring-boot-starter</module>
+        <module>infra-log-spring-boot-starter</module>
+        <module>infra-boot-bom</module>
+        <module>infra-cache-spring-boot-starter</module>
+        <module>infra-redis-spring-boot-starter</module>
+    </modules>
     <properties>
-        <revision>2.3.2</revision>
-        <java.version>8</java.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <hutool.version>5.8.20</hutool.version>
-        <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <spring-boot.version>2.7.15</spring-boot.version>
-        <spring-boot-admin.version>2.7.9</spring-boot-admin.version>
-        <satoken.version>1.34.0</satoken.version>
-        <knife4j.version>4.3.0</knife4j.version>
-        <redisson.version>3.18.0</redisson.version>
+        <revision>1.0.0</revision>
+        <hutool.version>5.8.23</hutool.version>
+        <redisson.version>3.24.3</redisson.version>
+        <spring-boot.version>3.2.0</spring-boot.version>
+        <spring-cloud.version>2022.0.4</spring-cloud.version>
     </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -60,284 +50,113 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>de.codecentric</groupId>
-                <artifactId>spring-boot-admin-dependencies</artifactId>
-                <version>${spring-boot-admin.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-openapi2-spring-boot-starter</artifactId>
-                <version>${knife4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-dao-redis-jackson</artifactId>
-                <version>${satoken.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-spring-boot-starter</artifactId>
-                <version>${satoken.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-jwt</artifactId>
-                <version>${satoken.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.mysql</groupId>
-                <artifactId>mysql-connector-j</artifactId>
-                <version>${mysql.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.google.protobuf</groupId>
-                        <artifactId>protobuf-java</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-auth-redis</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-web-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-minio-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-auth-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-auth-jwt-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-sqltoy-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-admin-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-mybatis-plus-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-wechat</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-wechat-cp-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-openapi2-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-openapi3-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-wechat-ma-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-wechat-mp-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-wechat-pay-spring-boot-starter</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.breeze</groupId>
-                <artifactId>breeze-spring-cloud-dependencies</artifactId>
-                <version>${revision}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>deploy-maven</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-deploy-plugin</artifactId>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <failOnError>false</failOnError>
-                            <doclint>none</doclint>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                        </configuration>
-                    </plugin>
-                    <!-- 统一版本号 -->
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>flatten-maven-plugin</artifactId>
-                        <version>1.5.0</version>
-                        <configuration>
-                            <updatePomFile>true</updatePomFile>
-                            <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>flatten</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>flatten</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>flatten.clean</id>
-                                <phase>clean</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>deploy-gpg</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <doclint>none</doclint>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <!-- 统一版本号 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-    <scm>
-        <connection>scm:git:https://github.com/fanzaiyang/breeze-spring-cloud.git</connection>
-        <developerConnection>scm:git:https://github.com/fanzaiyang/breeze-spring-cloud.git</developerConnection>
-        <url>https://github.com/fanzaiyang/breeze-spring-cloud.git</url>
-    </scm>
     <developers>
         <developer>
             <name>fanzaiyang</name>
             <email>zaiyangnihao@163.com</email>
         </developer>
     </developers>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 </project>
