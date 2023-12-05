@@ -1,5 +1,6 @@
 package cn.fanzy.infra.log.configuration.property;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -8,7 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Bryan.Zhang
  * @since 1.1.0
  */
-@ConfigurationProperties(prefix = "tlog", ignoreUnknownFields = true)
+@Data
+@ConfigurationProperties(prefix = "infra.log", ignoreUnknownFields = true)
 public class TLogProperty {
 
     private String pattern;
@@ -19,39 +21,9 @@ public class TLogProperty {
 
     private Boolean mdcEnable;
 
-    public String getPattern() {
-        return pattern;
-    }
+    /**
+     * 打印格式
+     */
+    private String printPattern;
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-    }
-
-    public boolean enableInvokeTimePrint() {
-        return enableInvokeTimePrint;
-    }
-
-    public boolean getEnableInvokeTimePrint() {
-        return enableInvokeTimePrint;
-    }
-
-    public void setEnableInvokeTimePrint(boolean enableInvokeTimePrint) {
-        this.enableInvokeTimePrint = enableInvokeTimePrint;
-    }
-
-    public String getIdGenerator() {
-        return idGenerator;
-    }
-
-    public void setIdGenerator(String idGenerator) {
-        this.idGenerator = idGenerator;
-    }
-
-    public Boolean getMdcEnable() {
-        return mdcEnable;
-    }
-
-    public void setMdcEnable(Boolean mdcEnable) {
-        this.mdcEnable = mdcEnable;
-    }
 }

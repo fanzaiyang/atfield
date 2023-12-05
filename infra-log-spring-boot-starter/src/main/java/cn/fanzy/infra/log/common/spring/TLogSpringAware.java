@@ -1,5 +1,6 @@
 package cn.fanzy.infra.log.common.spring;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -20,6 +21,7 @@ public class TLogSpringAware implements ApplicationContextAware{
 
 	private static final Logger log = LoggerFactory.getLogger(TLogSpringAware.class);
 
+	@Getter
 	private static ApplicationContext applicationContext = null;
 
 	private static Environment environment = null;
@@ -27,10 +29,6 @@ public class TLogSpringAware implements ApplicationContextAware{
 	@Override
 	public void setApplicationContext(ApplicationContext ac) throws BeansException {
 		applicationContext = ac;
-	}
-
-	public static ApplicationContext getApplicationContext() {
-		return applicationContext;
 	}
 
 	public static <T> T getBean(String name) {

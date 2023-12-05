@@ -31,11 +31,10 @@ import org.springframework.core.Ordered;
 @EnableCaching
 @EnableConfigurationProperties(CacheProperty.class)
 public class CacheAutoConfiguration {
-    private final CacheProperty property;
 
     @Bean(name = "cacheService")
     @ConditionalOnMissingBean(name = "cacheService")
-    public CacheService cacheService() {
+    public CacheService cacheService(CacheProperty property) {
         boolean hasRedis = SpringUtil.getApplicationContext()
                 .containsBean("redisCacheService");
         switch (property.getType()) {
@@ -61,12 +60,12 @@ public class CacheAutoConfiguration {
     }
 
     private CacheService getLocalCacheService() {
-        log.info("开启 <全局缓存-内存> 相关的配置。");
+        log.info("启用 <全局缓存-内存> 相关的配置。");
         return SpringUtil.getBean("localCacheService", CacheService.class);
     }
 
     private CacheService getRedisCacheService() {
-        log.info("开启 <全局缓存-Redis> 相关的配置。");
+        log.info("启用 <全局缓存-Redis> 相关的配置。");
         return SpringUtil.getBean("redisCacheService", CacheService.class);
     }
 }

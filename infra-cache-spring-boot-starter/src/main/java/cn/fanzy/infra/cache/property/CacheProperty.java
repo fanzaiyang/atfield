@@ -12,6 +12,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "infra.cache")
 public class CacheProperty {
+    /**
+     * 类型
+     */
     private CacheType type = CacheType.AUTO;
 
     public enum CacheType {
