@@ -7,6 +7,7 @@ import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import cn.fanzy.breeze.wechat.ma.handler.*;
 import cn.fanzy.breeze.wechat.ma.properties.WxMaProperties;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxRuntimeException;
@@ -63,6 +64,9 @@ public class WxMaConfiguration {
     }
 
     public static WxMaService getMaService(String appid) {
+        if(StrUtil.isBlank(appid)){
+            return getMaService();
+        }
         WxMaService wxService = maServices.get(appid);
         if (wxService == null) {
             throw new IllegalArgumentException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));

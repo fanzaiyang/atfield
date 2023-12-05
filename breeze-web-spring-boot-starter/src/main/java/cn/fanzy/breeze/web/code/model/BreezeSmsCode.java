@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BreezeSmsCode extends BreezeCode{
+    private static final long serialVersionUID = -7126765469595966307L;
+
     public BreezeSmsCode(String code, int maxRetryCode, long expireTimeInSeconds) {
         super(code, maxRetryCode, expireTimeInSeconds);
     }

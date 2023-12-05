@@ -3,6 +3,7 @@ package cn.fanzy.breeze.core.cache.service.impl;
 
 import cn.fanzy.breeze.core.cache.service.BreezeCacheService;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,11 @@ public class BreezeRedisCacheService implements BreezeCacheService {
         log.debug("使用Redis缓存！");
         Assert.notBlank(key, "唯一标识不能为空！");
         String str = stringRedisTemplate.opsForValue().get(key);
-        if(JSONUtil.isTypeJSONObject(str)){
+        log.info("缓存【{}】值：{}", key, str);
+        if (JSONUtil.isTypeJSONObject(str)) {
             return JSONUtil.parseObj(str);
         }
-        if(JSONUtil.isTypeJSONArray(str)){
+        if (JSONUtil.isTypeJSONArray(str)) {
             return JSONUtil.parseArray(str);
         }
         return str;
@@ -49,7 +51,14 @@ public class BreezeRedisCacheService implements BreezeCacheService {
     public <T> T get(String key, Class<T> clazz) {
         Assert.notBlank(key, "唯一标识不能为空！");
         String str = stringRedisTemplate.opsForValue().get(key);
-        return JSONUtil.toBean(str, clazz);
+        log.info("缓存【{}】值：{}", key, str);
+        if (StrUtil.isBlank(str)) {
+            return null;
+        }
+        if (JSONUtil.isTypeJSON(str)) {
+            return JSONUtil.toBean(str, clazz);
+        }
+        return clazz.cast(str);
     }
 
     @Override

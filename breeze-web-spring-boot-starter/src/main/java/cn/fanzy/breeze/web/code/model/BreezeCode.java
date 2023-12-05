@@ -16,6 +16,7 @@ import java.util.Date;
  */
 @Data
 public class BreezeCode implements Serializable {
+    private static final long serialVersionUID = 3184201847334523404L;
     /**
      * 验证码内容
      */

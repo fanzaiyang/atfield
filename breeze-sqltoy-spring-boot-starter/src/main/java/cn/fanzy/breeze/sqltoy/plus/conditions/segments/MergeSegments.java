@@ -37,12 +37,12 @@ public class MergeSegments implements ISqlSegment {
         String logicNotDeleteValue = SpringUtil.getProperty("breeze.sqltoy.logic-not-delete-value");
         String sql = "";
         if (normal.isEmpty()) {
+            if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
+                sql = StrUtil.format("{}='{}' ", logicDeleteField, logicNotDeleteValue);
+            } else {
+                sql = "1 = 1 ";
+            }
             if (!groupBy.isEmpty() || !orderBy.isEmpty()) {
-                if (getEnableLogic(logicDeleteField, logicNotDeleteValue)) {
-                    sql = StrUtil.format("{}='{}' ", logicDeleteField, logicNotDeleteValue);
-                } else {
-                    sql = "1 = 1 ";
-                }
                 sql += groupBy.getSqlSegment() + having.getSqlSegment() + orderBy.getSqlSegment();
             }
         } else {

@@ -56,7 +56,7 @@ public class BreezeBeanSerializerModifier extends BeanSerializerModifier {
                         .NullBooleanJsonSerializer(properties.getBool()));
                 continue;
             }
-            writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullObjectJsonSerializer());
+            writer.assignNullSerializer(new BreezeCustomizeNullJsonSerializer.NullAnyJsonSerializer(properties));
         }
         return beanProperties;
     }

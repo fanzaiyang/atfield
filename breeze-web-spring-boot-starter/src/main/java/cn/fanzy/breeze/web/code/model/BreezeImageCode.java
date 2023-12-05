@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 @Getter
 @Setter
 public class BreezeImageCode extends BreezeCode{
+    private static final long serialVersionUID = 1204287637260727275L;
     @JsonIgnore
     private transient BufferedImage image;
     private transient String imageBase64;
