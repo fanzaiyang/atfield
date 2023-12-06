@@ -3,3 +3,4 @@ cn.fanzy.infra.log.configuration.TLogAspectAutoConfiguration
 cn.fanzy.infra.log.configuration.TLogSpringScheduledAutoConfiguration
 cn.fanzy.infra.log.configuration.TLogCommonAutoConfiguration
 cn.fanzy.infra.log.configuration.TLogWebAutoConfiguration
+cn.fanzy.infra.log.configuration.TLogPrintAutoConfiguration

@@ -29,7 +29,7 @@ public class TLogPropertyConfiguration {
     public TLogPropertyInit tLogPropertyInit(TLogProperty tLogProperty) {
         TLogPropertyInit tLogPropertyInit = new TLogPropertyInit();
         tLogPropertyInit.setPattern(tLogProperty.getPattern());
-        tLogPropertyInit.setEnableInvokeTimePrint(tLogProperty.enableInvokeTimePrint());
+        tLogPropertyInit.setEnableInvokeTimePrint(tLogProperty.isEnableInvokeTimePrint());
         tLogPropertyInit.setIdGenerator(tLogProperty.getIdGenerator());
         tLogPropertyInit.setMdcEnable(tLogProperty.getMdcEnable());
         return tLogPropertyInit;

@@ -1,4 +1,4 @@
-package cn.fanzy.infra.log.print;
+package cn.fanzy.infra.log.print.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -63,7 +63,7 @@ public class PrintLogInfo implements Serializable {
     /**
      * ip地址
      */
-    private String ipAddress;
+    private String clientIp;
 
     /**
      * 请求url

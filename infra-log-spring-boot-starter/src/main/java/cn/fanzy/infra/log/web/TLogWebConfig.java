@@ -1,9 +1,11 @@
 package cn.fanzy.infra.log.web;
 
+import cn.fanzy.infra.log.configuration.property.TLogProperty;
 import cn.fanzy.infra.log.web.interceptor.TLogWebInterceptor;
 import cn.fanzy.infra.log.web.interceptor.TLogWebInvokeTimeInterceptor;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
@@ -25,28 +27,29 @@ import java.util.List;
  * @since 1.0.0
  */
 @Slf4j
+@RequiredArgsConstructor
 public class TLogWebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration interceptorRegistration;
         interceptorRegistration = registry.addInterceptor(new TLogWebInterceptor());
         //这里是为了兼容springboot 1.5.X，1.5.x没有order这个方法
-        try{
+        try {
             Method method = ReflectUtil.getMethod(InterceptorRegistration.class, "order", Integer.class);
-            if (ObjectUtil.isNotNull(method)){
+            if (ObjectUtil.isNotNull(method)) {
                 method.invoke(interceptorRegistration, Ordered.HIGHEST_PRECEDENCE);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         interceptorRegistration = registry.addInterceptor(new TLogWebInvokeTimeInterceptor());
         //这里是为了兼容springboot 1.5.X，1.5.x没有order这个方法
-        try{
+        try {
             Method method = ReflectUtil.getMethod(InterceptorRegistration.class, "order", Integer.class);
-            if (ObjectUtil.isNotNull(method)){
+            if (ObjectUtil.isNotNull(method)) {
                 method.invoke(interceptorRegistration, Ordered.HIGHEST_PRECEDENCE);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }

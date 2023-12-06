@@ -1,0 +1,3 @@
+infra:
+  log:
+    enable-invoke-time-print: true
