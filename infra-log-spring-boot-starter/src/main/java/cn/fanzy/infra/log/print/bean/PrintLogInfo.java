@@ -131,6 +131,10 @@ public class PrintLogInfo implements Serializable {
         /**
          * 错误
          */
-        ERROR
+        ERROR,
+        /**
+         * 未知
+         */
+        UNKNOWN;
     }
 }

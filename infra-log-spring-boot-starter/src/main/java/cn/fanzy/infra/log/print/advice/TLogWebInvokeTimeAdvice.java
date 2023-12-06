@@ -10,6 +10,7 @@ import cn.fanzy.infra.log.print.callback.LogCallbackService;
 import cn.fanzy.infra.log.print.annotation.Log;
 import cn.fanzy.infra.log.print.bean.PrintLogInfo;
 import cn.fanzy.infra.log.print.util.JoinPointUtils;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.StrUtil;
@@ -112,6 +113,7 @@ public class TLogWebInvokeTimeAdvice {
                 .requestTime(requestTime)
                 .requestType(requestType)
                 .requestUrl(requestUrl)
+                .responseStatus(PrintLogInfo.ResponseStatus.UNKNOWN)
                 .traceId(traceId)
                 .build();
         invokeLogInfo.set(logInfo);
@@ -180,7 +182,7 @@ public class TLogWebInvokeTimeAdvice {
     }
 
     private String getLogStr(String pattern, PrintLogInfo logInfo) {
-        String responseData = logInfo.getResponseData();
+        String responseData = StrUtil.blankToDefault(logInfo.getResponseData(), "-");
         if (property.getPrint().getResponseDataLength() == 0) {
             responseData = "";
         } else if (property.getPrint().getResponseDataLength() > 0) {
@@ -188,6 +190,10 @@ public class TLogWebInvokeTimeAdvice {
                 responseData = responseData.substring(0, property.getPrint().getResponseDataLength()) + "...";
             }
         }
+        String requestTime = logInfo.getRequestTime() != null ?
+                LocalDateTimeUtil.format(logInfo.getRequestTime(), "yyyy-MM-dd HH:mm:ss") : null;
+        String responseTime = logInfo.getResponseTime() != null ?
+                LocalDateTimeUtil.format(logInfo.getResponseTime(), "yyyy-MM-dd HH:mm:ss") : null;
         return pattern.replace("$clientIp", StrUtil.blankToDefault(logInfo.getClientIp(), "-"))
                 .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
                 .replace("$requestMethod", StrUtil.blankToDefault(logInfo.getRequestMethod(), "-"))
@@ -202,12 +208,12 @@ public class TLogWebInvokeTimeAdvice {
                 .replace("$userName", StrUtil.blankToDefault(logInfo.getUserName(), "-"))
                 .replace("$deviceName", StrUtil.blankToDefault(logInfo.getDeviceName(), "-"))
                 .replace("$requestType", StrUtil.blankToDefault(logInfo.getRequestType(), "-"))
-                .replace("$requestTime", StrUtil.blankToDefault(logInfo.getRequestTime().toString(), "-"))
+                .replace("$requestTime", StrUtil.blankToDefault(requestTime, "-"))
                 .replace("$responseData", responseData)
                 .replace("$responseMessage", StrUtil.blankToDefault(logInfo.getResponseMessage(), "-"))
                 .replace("$spendMillis", String.valueOf(logInfo.getSpendMillis()))
                 .replace("$responseStatus", StrUtil.blankToDefault(logInfo.getResponseStatus().name(), "-"))
                 .replace("$remarks", StrUtil.blankToDefault(logInfo.getRemarks(), "-"))
-                .replace("$responseTime", StrUtil.blankToDefault(logInfo.getResponseTime().toString(), "-"));
+                .replace("$responseTime", StrUtil.blankToDefault(responseTime, "-"));
     }
 }
