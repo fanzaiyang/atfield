@@ -39,7 +39,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 @EnableConfigurationProperties({JsonProperty.class})
-@ConditionalOnProperty(prefix = "infra.json.convert", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "infra.web.json.convert", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class JsonConvertAutoConfiguration implements WebMvcConfigurer {
     private final JacksonProperties jacksonProperties;
     private final WebMvcProperties webMvcProperties;

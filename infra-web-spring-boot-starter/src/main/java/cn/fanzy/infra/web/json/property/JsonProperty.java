@@ -12,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2023/12/06
  */
 @Data
-@ConfigurationProperties(prefix = "infra.json", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "infra.web.json", ignoreUnknownFields = true)
 public class JsonProperty {
     /**
      * 模型
