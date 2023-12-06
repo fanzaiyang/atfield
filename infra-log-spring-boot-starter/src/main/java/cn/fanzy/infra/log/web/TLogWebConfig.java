@@ -1,6 +1,5 @@
 package cn.fanzy.infra.log.web;
 
-import cn.fanzy.infra.log.configuration.property.TLogProperty;
 import cn.fanzy.infra.log.web.interceptor.TLogWebInterceptor;
 import cn.fanzy.infra.log.web.interceptor.TLogWebInvokeTimeInterceptor;
 import cn.hutool.core.util.ObjectUtil;
@@ -39,7 +38,7 @@ public class TLogWebConfig implements WebMvcConfigurer {
             if (ObjectUtil.isNotNull(method)) {
                 method.invoke(interceptorRegistration, Ordered.HIGHEST_PRECEDENCE);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         interceptorRegistration = registry.addInterceptor(new TLogWebInvokeTimeInterceptor());
@@ -49,7 +48,7 @@ public class TLogWebConfig implements WebMvcConfigurer {
             if (ObjectUtil.isNotNull(method)) {
                 method.invoke(interceptorRegistration, Ordered.HIGHEST_PRECEDENCE);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
     }
