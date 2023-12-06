@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>cn.fanzy.infra</groupId>
-            <artifactId>infra-log-spring-boot-starter</artifactId>
+            <artifactId>infra-tlog-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.fanzy.infra</groupId>

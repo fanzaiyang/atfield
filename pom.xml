@@ -18,7 +18,7 @@
         <module>infra-boot-bom</module>
         <module>infra-boot-core</module>
         <module>infra-web-spring-boot-starter</module>
-        <module>infra-log-spring-boot-starter</module>
+        <module>infra-tlog-spring-boot-starter</module>
         <module>infra-cache-spring-boot-starter</module>
         <module>infra-redis-spring-boot-starter</module>
     </modules>
