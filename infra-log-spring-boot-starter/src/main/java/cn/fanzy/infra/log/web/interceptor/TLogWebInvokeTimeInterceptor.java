@@ -29,7 +29,7 @@ public class TLogWebInvokeTimeInterceptor extends AbsTLogWebHandlerMethodInterce
 
     @Override
     public boolean preHandleByHandlerMethod(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (TLogContext.enableInvokeTimePrint()) {
+        /*if (TLogContext.enableInvokeTimePrint()) {
             String url = request.getRequestURI();
 
             // 打印请求参数
@@ -45,7 +45,7 @@ public class TLogWebInvokeTimeInterceptor extends AbsTLogWebHandlerMethodInterce
             StopWatch stopWatch = new StopWatch();
             invokeTimeTL.set(stopWatch);
             stopWatch.start();
-        }
+        }*/
         return true;
     }
 
@@ -56,12 +56,12 @@ public class TLogWebInvokeTimeInterceptor extends AbsTLogWebHandlerMethodInterce
 
     @Override
     public void afterCompletionByHandlerMethod(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        if (TLogContext.enableInvokeTimePrint()) {
+        /*if (TLogContext.enableInvokeTimePrint()) {
             StopWatch stopWatch = invokeTimeTL.get();
             stopWatch.stop();
             log.info("[TLOG]结束URL[{}]的调用,耗时为:{}毫秒", request.getRequestURI(), stopWatch.getTotalTimeMillis());
             invokeTimeTL.remove();
-        }
+        }*/
     }
 
     /**

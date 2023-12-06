@@ -97,7 +97,7 @@ public class TLogWebInvokeTimeAdvice {
             remarks = annotation.remarks();
             isSkip = annotation.ignore();
         }
-        invokeLogInfo.set(PrintLogInfo.builder()
+        PrintLogInfo logInfo = PrintLogInfo.builder()
                 .appName(appName)
                 .moduleName(moduleName)
                 .methodName(methodName)
@@ -113,30 +113,13 @@ public class TLogWebInvokeTimeAdvice {
                 .requestType(requestType)
                 .requestUrl(requestUrl)
                 .traceId(traceId)
-                .build());
+                .build();
+        invokeLogInfo.set(logInfo);
         callbackService.before(invokeLogInfo.get());
         if (isSkip) {
             return;
         }
-
-        String logStr = property.getPrint().getPrePattern()
-                .replace("$clientIp", StrUtil.blankToDefault(clientIp, "-"))
-                .replace("$userId", StrUtil.blankToDefault(userId, "-"))
-                .replace("$requestMethod", StrUtil.blankToDefault(requestMethod, "-"))
-                .replace("$requestUrl", StrUtil.blankToDefault(requestUrl, "-"))
-                .replace("$requestData", StrUtil.blankToDefault(requestData, "-"))
-                .replace("$traceId", StrUtil.blankToDefault(traceId, "-"))
-                .replace("$appName", StrUtil.blankToDefault(appName, "-"))
-                .replace("$moduleName", StrUtil.blankToDefault(moduleName, "-"))
-                .replace("$methodName", StrUtil.blankToDefault(methodName, "-"))
-                .replace("$operateType", StrUtil.blankToDefault(operateType, "-"))
-                .replace("$userId", StrUtil.blankToDefault(userId, "-"))
-                .replace("$userName", StrUtil.blankToDefault(userName, "-"))
-                .replace("$deviceName", StrUtil.blankToDefault(deviceName, "-"))
-                .replace("$requestType", StrUtil.blankToDefault(requestType, "-"))
-                .replace("$requestTime", StrUtil.blankToDefault(requestTime.toString(), "-"))
-                .replace("$remarks", StrUtil.blankToDefault(remarks, "-"));
-        log.info(logStr);
+        log.info(getLogStr(property.getPrint().getPrePattern(), logInfo));
     }
 
     @AfterReturning(returning = "obj", value = "cut()")
@@ -147,6 +130,7 @@ public class TLogWebInvokeTimeAdvice {
         StopWatch stopWatch = invokeTimeTL.get();
         stopWatch.stop();
         PrintLogInfo logInfo = invokeLogInfo.get();
+        logInfo.setTraceId(TLogContext.getTraceId());
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(JSONUtil.toJsonStr(obj));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.SUCCESS);
@@ -159,28 +143,7 @@ public class TLogWebInvokeTimeAdvice {
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }
-        String logStr = property.getPrint().getAfterPattern()
-                .replace("$clientIp", logInfo.getClientIp())
-                .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
-                .replace("$requestMethod", StrUtil.blankToDefault(logInfo.getRequestMethod(), "-"))
-                .replace("$requestUrl", StrUtil.blankToDefault(logInfo.getRequestUrl(), "-"))
-                .replace("$requestData", StrUtil.blankToDefault(logInfo.getRequestData(), "-"))
-                .replace("$traceId", StrUtil.blankToDefault(logInfo.getTraceId(), "-"))
-                .replace("$appName", StrUtil.blankToDefault(logInfo.getAppName(), "-"))
-                .replace("$moduleName", StrUtil.blankToDefault(logInfo.getModuleName(), "-"))
-                .replace("$methodName", StrUtil.blankToDefault(logInfo.getMethodName(), "-"))
-                .replace("$operateType", StrUtil.blankToDefault(logInfo.getOperateType(), "-"))
-                .replace("$userName", StrUtil.blankToDefault(logInfo.getUserName(), "-"))
-                .replace("$deviceName", StrUtil.blankToDefault(logInfo.getDeviceName(), "-"))
-                .replace("$requestType", StrUtil.blankToDefault(logInfo.getRequestType(), "-"))
-                .replace("$requestTime", StrUtil.blankToDefault(logInfo.getRequestTime().toString(), "-"))
-                .replace("$responseData", StrUtil.blankToDefault(logInfo.getResponseData(), "-"))
-                .replace("$responseMessage", StrUtil.blankToDefault(logInfo.getResponseMessage(), "-"))
-                .replace("$spendMillis", String.valueOf(logInfo.getSpendMillis()))
-                .replace("$responseStatus", StrUtil.blankToDefault(logInfo.getResponseStatus().name(), "-"))
-                .replace("$remarks", StrUtil.blankToDefault(logInfo.getRemarks(), "-"))
-                .replace("$responseTime", StrUtil.blankToDefault(logInfo.getResponseTime().toString(), "-"));
-        log.info(logStr);
+        log.info(getLogStr(property.getPrint().getAfterPattern(), logInfo));
     }
 
     @AfterThrowing(throwing = "e", value = "cut()")
@@ -193,36 +156,14 @@ public class TLogWebInvokeTimeAdvice {
         PrintLogInfo logInfo = invokeLogInfo.get();
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
         logInfo.setResponseTime(LocalDateTime.now());
-        logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, 1024));
+        logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, property.getPrint().getResponseDataLength()));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.FAIL);
         logInfo.setResponseMessage(e.getMessage());
         callbackService.callback(logInfo);
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }
-        String logStr = property.getPrint().getAfterPattern()
-                .replace("$clientIp", StrUtil.blankToDefault(logInfo.getClientIp(), "-"))
-                .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
-                .replace("$requestMethod", StrUtil.blankToDefault(logInfo.getRequestMethod(), "-"))
-                .replace("$requestUrl", StrUtil.blankToDefault(logInfo.getRequestUrl(), "-"))
-                .replace("$requestData", StrUtil.blankToDefault(logInfo.getRequestData(), "-"))
-                .replace("$traceId", StrUtil.blankToDefault(logInfo.getTraceId(), "-"))
-                .replace("$appName", StrUtil.blankToDefault(logInfo.getAppName(), "-"))
-                .replace("$moduleName", StrUtil.blankToDefault(logInfo.getModuleName(), "-"))
-                .replace("$methodName", StrUtil.blankToDefault(logInfo.getMethodName(), "-"))
-                .replace("$operateType", StrUtil.blankToDefault(logInfo.getOperateType(), "-"))
-                .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
-                .replace("$userName", StrUtil.blankToDefault(logInfo.getUserName(), "-"))
-                .replace("$deviceName", StrUtil.blankToDefault(logInfo.getDeviceName(), "-"))
-                .replace("$requestType", StrUtil.blankToDefault(logInfo.getRequestType(), "-"))
-                .replace("$requestTime", StrUtil.blankToDefault(logInfo.getRequestTime().toString(), "-"))
-                .replace("$responseData", StrUtil.blankToDefault(logInfo.getResponseData(), "-"))
-                .replace("$responseMessage", StrUtil.blankToDefault(logInfo.getResponseMessage(), "-"))
-                .replace("$spendMillis", String.valueOf(logInfo.getSpendMillis()))
-                .replace("$responseStatus", StrUtil.blankToDefault(logInfo.getResponseStatus().name(), "-"))
-                .replace("$remarks", StrUtil.blankToDefault(logInfo.getRemarks(), "-"))
-                .replace("$responseTime", StrUtil.blankToDefault(logInfo.getResponseTime().toString(), "-"));
-        log.info(logStr);
+        log.info(getLogStr(property.getPrint().getAfterPattern(), logInfo));
     }
 
     public boolean skipSwagger() {
@@ -236,5 +177,37 @@ public class TLogWebInvokeTimeAdvice {
             }
         }
         return false;
+    }
+
+    private String getLogStr(String pattern, PrintLogInfo logInfo) {
+        String responseData = logInfo.getResponseData();
+        if (property.getPrint().getResponseDataLength() == 0) {
+            responseData = "";
+        } else if (property.getPrint().getResponseDataLength() > 0) {
+            if (StrUtil.isNotBlank(responseData) && responseData.length() > property.getPrint().getResponseDataLength()) {
+                responseData = responseData.substring(0, property.getPrint().getResponseDataLength()) + "...";
+            }
+        }
+        return pattern.replace("$clientIp", StrUtil.blankToDefault(logInfo.getClientIp(), "-"))
+                .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
+                .replace("$requestMethod", StrUtil.blankToDefault(logInfo.getRequestMethod(), "-"))
+                .replace("$requestUrl", StrUtil.blankToDefault(logInfo.getRequestUrl(), "-"))
+                .replace("$requestData", StrUtil.blankToDefault(logInfo.getRequestData(), "-"))
+                .replace("$traceId", StrUtil.blankToDefault(logInfo.getTraceId(), "-"))
+                .replace("$appName", StrUtil.blankToDefault(logInfo.getAppName(), "-"))
+                .replace("$moduleName", StrUtil.blankToDefault(logInfo.getModuleName(), "-"))
+                .replace("$methodName", StrUtil.blankToDefault(logInfo.getMethodName(), "-"))
+                .replace("$operateType", StrUtil.blankToDefault(logInfo.getOperateType(), "-"))
+                .replace("$userId", StrUtil.blankToDefault(logInfo.getUserId(), "-"))
+                .replace("$userName", StrUtil.blankToDefault(logInfo.getUserName(), "-"))
+                .replace("$deviceName", StrUtil.blankToDefault(logInfo.getDeviceName(), "-"))
+                .replace("$requestType", StrUtil.blankToDefault(logInfo.getRequestType(), "-"))
+                .replace("$requestTime", StrUtil.blankToDefault(logInfo.getRequestTime().toString(), "-"))
+                .replace("$responseData", responseData)
+                .replace("$responseMessage", StrUtil.blankToDefault(logInfo.getResponseMessage(), "-"))
+                .replace("$spendMillis", String.valueOf(logInfo.getSpendMillis()))
+                .replace("$responseStatus", StrUtil.blankToDefault(logInfo.getResponseStatus().name(), "-"))
+                .replace("$remarks", StrUtil.blankToDefault(logInfo.getRemarks(), "-"))
+                .replace("$responseTime", StrUtil.blankToDefault(logInfo.getResponseTime().toString(), "-"));
     }
 }

@@ -45,14 +45,14 @@ public class TLogProperty {
         /**
          * 前置格式
          */
-        private String prePattern = "[TLog]=>客户端[$clientIp],用户标识[$userId]，请求地址[$requestUrl],请求参数[$requestData]";
+        private String prePattern = "[TLog]=>客户端[$clientIp],用户标识[$userId]，请求地址[$requestUrl],请求参数：$requestData";
 
         private Boolean afterEnable = true;
 
         /**
          * 后置格式
          */
-        private String afterPattern = "[TLog]=>响应耗时[$spendMillis]ms,结果[$responseData]";
+        private String afterPattern = "[TLog]=>响应耗时[$spendMillis]ms,结果：$responseData";
 
         /**
          * 响应数据长度,超过该长度则打印省略号
