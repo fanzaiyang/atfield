@@ -1,25 +1,25 @@
 package cn.fanzy.infra.web.configuration;
 
-import cn.fanzy.infra.web.json.convert.FrameworkJacksonObjectMapper;
+import cn.fanzy.infra.web.json.convert.DateJackson2ObjectMapperBuilderCustomizer;
+import cn.fanzy.infra.web.json.convert.DecorateJackson2ObjectMapperBuilder;
 import cn.fanzy.infra.web.json.property.JsonProperty;
-import cn.hutool.core.text.CharSequenceUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -41,24 +41,30 @@ import java.util.List;
 @EnableConfigurationProperties({JsonProperty.class})
 @ConditionalOnProperty(prefix = "infra.web.json.convert", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class JsonConvertAutoConfiguration implements WebMvcConfigurer {
+    private final ApplicationContext applicationContext;
     private final JacksonProperties jacksonProperties;
     private final WebMvcProperties webMvcProperties;
-    private final JsonProperty properties;
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(0, new ByteArrayHttpMessageConverter());
-        converters.removeIf(MappingJackson2HttpMessageConverter.class::isInstance);
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        String format = CharSequenceUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
-        converter.setObjectMapper(new FrameworkJacksonObjectMapper(
-                CharSequenceUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss"),
-                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
-                CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss"),
-                properties));
-        converters.add(1, converter);
-        converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
+    @Bean
+    @ConditionalOnMissingBean
+    public JsonProperty jsonProperty(){
+        return new JsonProperty();
+    }
 
+    @Bean
+    public Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder(List<Jackson2ObjectMapperBuilderCustomizer> customizers) {
+        // 用自定义的DecorateJackson2ObjectMapperBuilder替换默认的Jackson2ObjectMapperBuilder
+        Jackson2ObjectMapperBuilder builder = new DecorateJackson2ObjectMapperBuilder();
+        builder.applicationContext(this.applicationContext);
+        for (Jackson2ObjectMapperBuilderCustomizer customizer : customizers) {
+            customizer.customize(builder);
+        }
+        return builder;
+    }
+
+    @Bean("jackson2ObjectMapperBuilderCustomizer")
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return new DateJackson2ObjectMapperBuilderCustomizer(jacksonProperties, webMvcProperties);
     }
 
     @PostConstruct

@@ -70,7 +70,7 @@ public class JsonProperty {
         @AllArgsConstructor
         public static class StringCovert {
             private boolean enable;
-            private String value;
+            private String value="";
         }
 
         @Data
