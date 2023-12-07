@@ -1,5 +1,6 @@
-package cn.fanzy.infra.web.cors;
+package cn.fanzy.infra.web.configuration;
 
+import cn.fanzy.infra.web.cors.CorsProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -8,6 +8,7 @@ import java.io.StringWriter;
 
 /**
  * 异常工具类
+ *
  * @author fanzaiyang
  * @since 2022-10-31
  */
@@ -63,8 +64,11 @@ public class ExceptionUtil {
         StringWriter sw = new StringWriter();
         e.printStackTrace(new PrintWriter(sw, true));
         String string = sw.getBuffer().toString();
-        if (size == null) {
+        if (size == null || size == -1) {
             return string;
+        }
+        if (size == 0) {
+            return "";
         }
         return string.length() > size ? string.substring(0, size) : string;
     }

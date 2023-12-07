@@ -1,3 +1,7 @@
 infra:
   log:
     enable-invoke-time-print: true
+  web:
+    response:
+      wrapper:
+        enable: true

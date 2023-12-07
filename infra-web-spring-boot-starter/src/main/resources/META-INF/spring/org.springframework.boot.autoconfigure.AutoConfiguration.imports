@@ -1,4 +1,4 @@
-cn.fanzy.infra.web.json.configuration.JsonModelAutoConfiguration
-cn.fanzy.infra.web.json.configuration.JsonConvertAutoConfiguration
-cn.fanzy.infra.web.filter.ReplaceStreamFilter
-cn.fanzy.infra.web.advice.GlobalExceptionAdvice
+cn.fanzy.infra.web.configuration.JsonModelAutoConfiguration
+cn.fanzy.infra.web.configuration.JsonConvertAutoConfiguration
+cn.fanzy.infra.web.configuration.InfraWebAutoConfiguration
+cn.fanzy.infra.web.configuration.CorsAutoConfiguration

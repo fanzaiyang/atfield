@@ -17,20 +17,43 @@ public class JsonProperty {
     /**
      * 模型
      */
-    private Model model = new Model("200", "操作成功！", "-1", "操作失败！");
+    private Model model = new Model("200", "操作成功！", "-1", "操作失败！",false,1024);
     /**
      * 转换
      */
     private Convert convert = new Convert();
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Model {
-        private String defaultOkCode;
-        private String defaultOkMessage;
-        private String defaultFailCode;
-        private String defaultFailMessage;
+        /**
+         * 默认ok代码
+         */
+        private String defaultOkCode = "200";
+        /**
+         * 默认ok消息
+         */
+        private String defaultOkMessage = "操作成功！";
+        /**
+         * 默认失败代码
+         */
+        private String defaultFailCode = "-1";
+        /**
+         * 默认失败消息
+         */
+        private String defaultFailMessage = "操作失败！";
+        /**
+         * 启用错误堆栈，默认：false
+         */
+        private boolean enableErrorStack = false;
+        /**
+         * 错误堆栈大小,默认：1024
+         * -1=不限制长度，0-不显示，>0-显示并截断
+         */
+        private int errorStackSize = 1024;
     }
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

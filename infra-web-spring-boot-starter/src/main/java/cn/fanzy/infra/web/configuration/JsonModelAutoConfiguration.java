@@ -1,4 +1,4 @@
-package cn.fanzy.infra.web.json.configuration;
+package cn.fanzy.infra.web.configuration;
 
 import cn.fanzy.infra.core.spring.SpringUtils;
 import cn.fanzy.infra.web.json.property.JsonProperty;
