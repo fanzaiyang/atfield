@@ -1,4 +1,4 @@
-package cn.fanzy.infra.web.response.properties;
+package cn.fanzy.infra.web.response.property;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "infra.web.response.wrapper")
-public class ResponseWrapperProperties implements Serializable {
+public class ResponseWrapperProperty implements Serializable {
     @Serial
     private static final long serialVersionUID = -3642562913132999859L;
 

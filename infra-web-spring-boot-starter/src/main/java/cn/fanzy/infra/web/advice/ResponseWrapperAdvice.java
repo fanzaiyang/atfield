@@ -4,10 +4,7 @@ import cn.fanzy.infra.core.spring.SpringUtils;
 import cn.fanzy.infra.core.utils.InfraConstants;
 import cn.fanzy.infra.web.json.model.R;
 import cn.fanzy.infra.web.response.annotation.ResponseWrapper;
-import cn.fanzy.infra.web.response.properties.ResponseWrapperProperties;
-import cn.hutool.core.util.ClassUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.json.JSONUtil;
+import cn.fanzy.infra.web.response.property.ResponseWrapperProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +18,9 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.lang.reflect.AnnotatedElement;
 import java.util.Objects;
 
 /**
@@ -37,12 +32,12 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 @RestControllerAdvice
-@EnableConfigurationProperties({ResponseWrapperProperties.class})
+@EnableConfigurationProperties({ResponseWrapperProperty.class})
 @ConditionalOnProperty(prefix = "infra.web.response.wrapper", name = {"enable"}, havingValue = "true")
 public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     private final ObjectMapper objectMapper;
-    private final ResponseWrapperProperties properties;
+    private final ResponseWrapperProperty properties;
 
 
     @Override

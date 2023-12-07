@@ -21,6 +21,7 @@
         <module>infra-tlog-spring-boot-starter</module>
         <module>infra-cache-spring-boot-starter</module>
         <module>infra-redis-spring-boot-starter</module>
+        <module>infra-ip-spring-boot-starter</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
