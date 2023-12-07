@@ -1,5 +1,7 @@
 package cn.fanzy.infra.web.response.annotation;
 
+import cn.fanzy.infra.web.json.model.R;
+
 import java.lang.annotation.*;
 
 /**
@@ -9,6 +11,7 @@ import java.lang.annotation.*;
  *     比如：返回数据String，前端要求返回对象{@link cn.fanzy.infra.web.json.model.R}。
  *     则可以使用此注解。帮助你把返回数据String包装到对象里。
  * </pre>
+ *
  * @author fanzaiyang
  * @date 2023/12/07
  */
@@ -16,4 +19,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ResponseWrapper {
+    Class<?> value() default R.class;
 }

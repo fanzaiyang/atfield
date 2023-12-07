@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.Objects;
 
 /**
@@ -41,6 +42,7 @@ import java.util.Objects;
 public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     private final ObjectMapper objectMapper;
+    private final ResponseWrapperProperties properties;
 
 
     @Override
@@ -50,18 +52,27 @@ public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         if (annotation != null) {
             return true;
         }
-        // Swagger的请求忽略
-        PathMatcher matcher = new AntPathMatcher();
-        return InfraConstants.SWAGGER_LIST.stream()
-                .noneMatch(uri -> matcher.match(uri, Objects.requireNonNull(SpringUtils.getRequestUri())));
+        if (properties.getGlobal() != null && properties.getGlobal()) {
+            // Swagger的请求忽略
+            log.info(SpringUtils.getRequestUri());
+            PathMatcher matcher = new AntPathMatcher();
+            return InfraConstants.SWAGGER_LIST.stream()
+                    .noneMatch(uri -> matcher.match(uri, Objects.requireNonNull(SpringUtils.getRequestUri())));
+        }
+        return false;
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         if (body == null) {
+            return null;
+        }
+        ResponseWrapper annotation = returnType.getMethodAnnotation(ResponseWrapper.class);
+        if (annotation == null) {
             return body;
         }
-        if (body instanceof R<?>) {
+
+        if (annotation.value().isInstance(body)) {
             return body;
         }
         // String类型的返回值需要特殊处理,是使用了StringHttpMessageConverter转换器，无法转换为Json格式。
