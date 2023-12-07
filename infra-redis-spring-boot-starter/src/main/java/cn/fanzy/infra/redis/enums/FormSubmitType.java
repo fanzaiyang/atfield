@@ -6,7 +6,7 @@ package cn.fanzy.infra.redis.enums;
  * @author fanzaiyang
  * @date 2023/09/07
  */
-public enum SubmitType {
+public enum FormSubmitType {
     /**
      * 基于IP
      */

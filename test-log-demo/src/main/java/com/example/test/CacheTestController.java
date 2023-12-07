@@ -28,4 +28,9 @@ public class CacheTestController {
         cacheService.put(key, value);
         return "ok";
     }
+    @GetMapping("/remove/{key}")
+    public String remove(@PathVariable String key) {
+        cacheService.remove(key);
+        return "ok";
+    }
 }

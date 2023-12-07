@@ -1,5 +1,8 @@
 package cn.fanzy.infra.redis;
 
+import cn.fanzy.infra.redis.advice.LockForDistributedAdvice;
+import cn.fanzy.infra.redis.advice.LockForFormSubmitAdvice;
+import cn.fanzy.infra.redis.advice.LockForRateLimitAdvice;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -10,6 +13,7 @@ import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
@@ -37,8 +41,9 @@ import java.time.Duration;
 @Configuration
 @EnableCaching
 @ConditionalOnClass(RedisOperations.class)
-//@ImportAutoConfiguration({DistributedLockAop.class, PreventDuplicateSubmitAop.class, RateLimitAop.class})
-//@AutoConfigureBefore(value = {BreezeRedisCacheConfiguration.class, BreezeCodeConfiguration.class})
+@ImportAutoConfiguration({LockForDistributedAdvice.class,
+        LockForFormSubmitAdvice.class,
+        LockForRateLimitAdvice.class})
 public class RedisCoreConfiguration {
     @Bean
     public CacheManager redisCacheManager(RedisConnectionFactory factory) {
@@ -86,8 +91,8 @@ public class RedisCoreConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
+        RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(redisValueSerializer());
@@ -138,7 +143,7 @@ public class RedisCoreConfiguration {
      */
     @PostConstruct
     public void init() {
-        log.info("「微风组件」开启 <Redis扩展支持> 相关的配置。");
+        log.info("开启 <Redis扩展支持> 相关的配置。");
     }
 
 }

@@ -1,12 +1,13 @@
 package cn.fanzy.infra.redis.annotation;
 
-import cn.fanzy.infra.redis.enums.SubmitType;
+import cn.fanzy.infra.redis.enums.FormSubmitType;
 
 import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * 防止重复提交
+ * 默认IP+请求参数
  *
  * @author fanzaiyang
  * @date 2023/09/07
@@ -25,9 +26,9 @@ public @interface LockForm {
     /**
      * 加锁方式
      *
-     * @return {@link SubmitType}
+     * @return {@link FormSubmitType}
      */
-    SubmitType type() default SubmitType.IP_AND_PARAM;
+    FormSubmitType type() default FormSubmitType.IP_AND_PARAM;
 
     /**
      * 尝试加锁等待时间

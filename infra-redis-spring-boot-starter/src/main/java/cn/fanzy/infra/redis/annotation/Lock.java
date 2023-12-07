@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 分布式锁
+ * 分布式锁，默认过期时间0
  *
  * @author fanzaiyang
  * @date 2023/09/07

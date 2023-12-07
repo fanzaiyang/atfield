@@ -6,8 +6,8 @@ import org.redisson.api.RateType;
 import java.lang.annotation.*;
 
 /**
- * 锁定速率限流
- *
+ * 限流
+ * 默认key：LOCK_RATE_LIMIT，全局生效（不基于IP限流）
  * @author fanzaiyang
  * @date 2023/12/06
  */
@@ -19,7 +19,7 @@ public @interface LockRate {
      * 限流的key
      * @return String
      */
-    String value();
+    String value() default "LOCK_RATE_LIMIT";
 
     /**
      * 限流模式,默认单机

@@ -1,6 +1,5 @@
 package cn.fanzy.infra.core.utils;
 
-import cn.fanzy.breeze.core.exception.CustomException;
 import cn.fanzy.infra.core.exception.GlobalException;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -50,39 +49,25 @@ public class CertNoUtil {
      */
     public static synchronized boolean isValid(String idcard) { // 非18位为假
         // 判断出生日期是否正确
-        if (StrUtil.isBlank(idcard)) {
-            return false;
-        }
-        if (!REGEX_18_CARD.matcher(idcard.trim()).matches()) {
+        if (StrUtil.isBlank(idcard) || !REGEX_18_CARD.matcher(idcard.trim()).matches()) {
             return false;
         }
         // 获取前17位
         String idcard17 = idcard.trim().substring(0, 17);
-        // 获取第18位
-        String idcard18Code = idcard.trim().substring(17, 18);
-
         // 是否都为数字
         if (!isDigital(idcard17)) {
             return false;
         }
+        // 获取第18位
+        String idcard18Code = idcard.trim().substring(17, 18);
 
         char[] c = idcard17.toCharArray();
-
         int[] bit = converCharToInt(c);
-
         int sum17 = getPowerSum(bit);
-
         // 将和值与11取模得到余数进行校验码判断
         String checkCode = getCheckCodeBySum(sum17);
-        if (null == checkCode) {
-            return false;
-        }
         // 将身份证的第18位与算出来的校码进行匹配，不相等就为假
-        if (!idcard18Code.equalsIgnoreCase(checkCode)) {
-            return false;
-        }
-
-        return true;
+        return StrUtil.equalsIgnoreCase(idcard18Code, checkCode);
     }
 
     /**
@@ -111,7 +96,7 @@ public class CertNoUtil {
      * @return true表示为纯数字
      */
     private static boolean isDigital(String str) {
-        return str != null && !"".equals(str) && str.matches("^[0-9]*$");
+        return str != null && !str.isEmpty() && str.matches("^[0-9]*$");
     }
 
     /**
