@@ -5,3 +5,6 @@ infra:
     response:
       wrapper:
         enable: true
+    json:
+      model:
+        enable-error-stack: true
