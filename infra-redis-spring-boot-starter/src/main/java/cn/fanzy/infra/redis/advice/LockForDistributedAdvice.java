@@ -1,8 +1,8 @@
 package cn.fanzy.infra.redis.advice;
 
+import cn.fanzy.infra.core.utils.AdviceUtil;
 import cn.fanzy.infra.redis.annotation.Lock;
 import cn.fanzy.infra.redis.exception.LockException;
-import cn.fanzy.infra.redis.util.AdviceUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

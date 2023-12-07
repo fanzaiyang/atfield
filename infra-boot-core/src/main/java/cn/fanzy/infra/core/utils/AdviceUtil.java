@@ -1,7 +1,7 @@
-package cn.fanzy.infra.redis.util;
+package cn.fanzy.infra.core.utils;
 
+import cn.fanzy.infra.core.exception.GlobalException;
 import cn.fanzy.infra.core.spring.SpringUtils;
-import cn.fanzy.infra.redis.exception.LockException;
 import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
@@ -17,7 +17,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * AOP工具类
+ * <pre>
+ *     需要添加aspectj依赖
+ * &lt;dependency&gt;
+ *     &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+ *     &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
+ * &lt;/dependency&gt;
+ * </pre>
  * @author fanzaiyang
+ * @date 2023/12/07
  */
 @Slf4j
 public class AdviceUtil {
@@ -88,7 +97,7 @@ public class AdviceUtil {
             }
         }
         if (StrUtil.isBlank(value)) {
-            throw new LockException("4001", "未找到对应key!");
+            throw new GlobalException("4001", "未找到对应key!");
         }
         return lockName;
     }

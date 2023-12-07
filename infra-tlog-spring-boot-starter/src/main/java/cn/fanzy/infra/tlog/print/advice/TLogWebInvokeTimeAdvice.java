@@ -2,6 +2,7 @@ package cn.fanzy.infra.tlog.print.advice;
 
 
 import cn.fanzy.infra.core.spring.SpringUtils;
+import cn.fanzy.infra.core.utils.AdviceUtil;
 import cn.fanzy.infra.core.utils.ExceptionUtil;
 import cn.fanzy.infra.core.utils.InfraConstants;
 import cn.fanzy.infra.tlog.common.context.TLogContext;
@@ -9,7 +10,6 @@ import cn.fanzy.infra.tlog.configuration.property.TLogProperty;
 import cn.fanzy.infra.tlog.print.callback.LogCallbackService;
 import cn.fanzy.infra.tlog.print.annotation.Log;
 import cn.fanzy.infra.tlog.print.bean.PrintLogInfo;
-import cn.fanzy.infra.tlog.print.util.JoinPointUtils;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
@@ -70,7 +70,7 @@ public class TLogWebInvokeTimeAdvice {
         StopWatch stopWatch = new StopWatch();
         invokeTimeTL.set(stopWatch);
         stopWatch.start();
-        Log annotation = JoinPointUtils.getAnnotation(joinPoint, Log.class);
+        Log annotation = AdviceUtil.getAnnotation(joinPoint, Log.class);
         HttpServletRequest request = SpringUtils.getRequest();
         String requestUrl = request.getRequestURI();
         if (StrUtil.isNotBlank(request.getQueryString())) {
@@ -79,7 +79,7 @@ public class TLogWebInvokeTimeAdvice {
         String traceId = TLogContext.getTraceId();
         String appName = joinPoint.getSignature().getDeclaringTypeName();
         String moduleName = joinPoint.getSignature().getName();
-        String methodName = JoinPointUtils.getMethodInfo(joinPoint);
+        String methodName = AdviceUtil.getMethodInfo(joinPoint);
         String operateType = "";
         String userId = StrUtil.blankToDefault(callbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(callbackService.getUserName(null), "-");
@@ -88,7 +88,7 @@ public class TLogWebInvokeTimeAdvice {
         String deviceName = JSONUtil.toJsonStr(ua);
         String clientIp = SpringUtils.getClientIp(request);
         String requestType = request.getMethod();
-        String requestMethod = JoinPointUtils.getMethodInfo(joinPoint);
+        String requestMethod = AdviceUtil.getMethodInfo(joinPoint);
         String requestData = objectMapper.writeValueAsString(SpringUtils.getRequestParams(request));
         LocalDateTime requestTime = LocalDateTime.now();
         String remarks = "";

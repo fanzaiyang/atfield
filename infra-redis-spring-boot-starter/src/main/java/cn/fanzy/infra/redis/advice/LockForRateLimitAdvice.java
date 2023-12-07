@@ -1,8 +1,8 @@
 package cn.fanzy.infra.redis.advice;
 
 import cn.fanzy.infra.core.spring.SpringUtils;
+import cn.fanzy.infra.core.utils.AdviceUtil;
 import cn.fanzy.infra.redis.annotation.LockRate;
-import cn.fanzy.infra.redis.util.AdviceUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
