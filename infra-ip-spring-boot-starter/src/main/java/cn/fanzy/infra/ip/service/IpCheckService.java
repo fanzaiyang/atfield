@@ -1,6 +1,6 @@
 package cn.fanzy.infra.ip.service;
 
-import jakarta.servlet.http.HttpServletRequest;
+import cn.fanzy.infra.ip.bean.IpStorageBean;
 
 /**
  * ip检查服务
@@ -13,7 +13,8 @@ public interface IpCheckService {
     /**
      * 检查
      *
-     * @param request 要求
+     * @param clientIp 客户端IP
+     * @param storage  存储
      */
-    void check(HttpServletRequest request);
+    void check(String clientIp,IpStorageBean storage);
 }

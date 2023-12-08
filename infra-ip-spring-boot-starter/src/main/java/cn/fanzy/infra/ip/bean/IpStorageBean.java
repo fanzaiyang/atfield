@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @SuperBuilder(toBuilder = true)
@@ -19,9 +19,9 @@ public class IpStorageBean implements Serializable {
     /**
      * 允许的ip列表
      */
-    private List<String> allowedIpList;
+    private Set<String> allowedIpList;
     /**
      * 拒绝的ip列表
      */
-    private List<String> deniedIpList;
+    private Set<String> deniedIpList;
 }

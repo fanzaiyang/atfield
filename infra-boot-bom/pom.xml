@@ -46,6 +46,11 @@
                 <artifactId>infra-redis-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.fanzy.infra</groupId>
+                <artifactId>infra-ip-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

@@ -1,5 +1,6 @@
 package com.example.test;
 
+import cn.fanzy.infra.ip.annotation.IpCheck;
 import cn.fanzy.infra.web.response.annotation.ResponseWrapper;
 import cn.hutool.core.util.RandomUtil;
 import com.example.test.vo.DateVo;
@@ -25,7 +26,8 @@ import java.util.Date;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-    @ResponseWrapper
+
+    @IpCheck(deny = {"*"})
     @GetMapping("/1")
     public String test1() {
         log.info("test1");
