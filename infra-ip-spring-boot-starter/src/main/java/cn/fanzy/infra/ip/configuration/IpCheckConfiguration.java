@@ -7,7 +7,6 @@ import cn.fanzy.infra.ip.service.IpCheckService;
 import cn.fanzy.infra.ip.service.IpStorageService;
 import cn.fanzy.infra.ip.service.impl.IpCheckServiceImpl;
 import cn.fanzy.infra.ip.service.impl.IpStorageServiceImpl;
-import cn.hutool.core.collection.CollUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ public class IpCheckConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnMissingBean
     public IpCheckService ipCheckService() {
-        return new IpCheckServiceImpl(ipStorageService());
+        return new IpCheckServiceImpl();
     }
 
     @Override
@@ -51,7 +50,7 @@ public class IpCheckConfiguration implements WebMvcConfigurer {
         if (patterns.length == 0) {
             patterns = new String[]{"/**"};
         }
-        registry.addInterceptor(new IpCheckInterceptor(ipCheckService()))
+        registry.addInterceptor(new IpCheckInterceptor(ipCheckService(), ipStorageService()))
                 .addPathPatterns(patterns)//拦截所有的路径
                 .excludePathPatterns(property.getGlobal().getExcludePathPatterns());
     }

@@ -7,8 +7,6 @@ import cn.fanzy.infra.ip.bean.IpStorageBean;
 import cn.fanzy.infra.ip.configuration.IpCheckConfiguration;
 import cn.fanzy.infra.ip.property.IpProperty;
 import cn.fanzy.infra.ip.service.IpCheckService;
-import cn.fanzy.infra.ip.service.IpStorageService;
-import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -20,19 +18,15 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
 @Aspect
-@RestControllerAdvice
 @AutoConfigureAfter(IpCheckConfiguration.class)
 @EnableConfigurationProperties({IpProperty.class})
 public class IpCheckAdvice {
     private final IpCheckService checkService;
-    private final IpStorageService storageService;
 
     @Pointcut("@annotation(cn.fanzy.infra.ip.annotation.IpCheck)")
     public void cut() {
