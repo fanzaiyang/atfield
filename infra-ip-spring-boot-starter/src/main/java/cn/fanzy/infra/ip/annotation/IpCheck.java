@@ -26,6 +26,4 @@ public @interface IpCheck {
      * @return {@link String[]}
      */
     String[] deny() default {};
-
-    boolean global() default false;
 }

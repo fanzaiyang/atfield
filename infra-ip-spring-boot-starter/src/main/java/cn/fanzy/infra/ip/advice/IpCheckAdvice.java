@@ -45,27 +45,13 @@ public class IpCheckAdvice {
             return;
         }
         // 注解优先
-        IpStorageBean bean=new IpStorageBean();
-        if(annotation.value()!=null){
+        IpStorageBean bean = new IpStorageBean();
+        if (annotation.value() != null) {
             bean.setAllowedIpList(Arrays.stream(annotation.value()).collect(Collectors.toSet()));
         }
-        if(annotation.deny()!=null){
+        if (annotation.deny() != null) {
             bean.setDeniedIpList(Arrays.stream(annotation.deny()).collect(Collectors.toSet()));
         }
-        // 启用全局，把全局添加到自定义存储里
-        if (annotation.global()) {
-            IpStorageBean ipStorage = storageService.getIpStorage();
-            if(CollUtil.isNotEmpty(ipStorage.getAllowedIpList())){
-                Set<String> allowedIpList = bean.getAllowedIpList();
-                allowedIpList.addAll(ipStorage.getAllowedIpList());
-                bean.setAllowedIpList(allowedIpList);
-            }
-            if(CollUtil.isNotEmpty(ipStorage.getDeniedIpList())){
-                Set<String> deniedIpList = bean.getDeniedIpList();
-                deniedIpList.addAll(ipStorage.getDeniedIpList());
-                bean.setDeniedIpList(deniedIpList);
-            }
-        }
-        checkService.check(SpringUtils.getClientIp(),bean);
+        checkService.check(SpringUtils.getClientIp(), bean);
     }
 }
