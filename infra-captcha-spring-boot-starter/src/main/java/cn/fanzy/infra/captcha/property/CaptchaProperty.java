@@ -99,7 +99,7 @@ public class CaptchaProperty {
         /**
          * 验证码的长度,默认为4
          */
-        private Integer length = 4;
+        private Integer length = 6;
         /**
          * 验证码的失效时间，单位秒，默认:60s
          */
