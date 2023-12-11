@@ -51,6 +51,11 @@
                 <artifactId>infra-ip-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.fanzy.infra</groupId>
+                <artifactId>infra-captcha-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

@@ -53,6 +53,10 @@
             <artifactId>infra-ip-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
+            <groupId>cn.fanzy.infra</groupId>
+            <artifactId>infra-captcha-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>

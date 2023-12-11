@@ -1,8 +1,7 @@
 package cn.fanzy.infra.captcha.creator.impl;
 
-import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.bean.CaptchaImageCodeInfo;
-import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
+import cn.fanzy.infra.captcha.creator.CaptchaImageCreatorService;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
@@ -14,16 +13,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * 图像创建者服务impl
+ * 默认电子邮件captcha创建者服务
  *
  * @author fanzaiyang
- * @date 2023/12/08
+ * @date 2023/12/11
  */
 @Slf4j
 @RequiredArgsConstructor
-public class ImageCaptchaCreatorServiceImpl implements CaptchaCreatorService<CaptchaImageCodeInfo> {
+public class DefaultCaptchaImageCreatorService extends CaptchaImageCreatorService {
     @Override
-    public CaptchaImageCodeInfo generate(CaptchaProperty captchaProperty) {
+    public CaptchaImageCodeInfo generateCode(CaptchaProperty captchaProperty) {
         CaptchaProperty.Image property = captchaProperty.getImage();
         LineCaptcha captcha = CaptchaUtil.createLineCaptcha(property.getWidth(),
                 property.getHeight(), property.getLength(), 2);

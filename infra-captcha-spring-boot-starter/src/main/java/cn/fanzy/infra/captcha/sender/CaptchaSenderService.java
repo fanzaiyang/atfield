@@ -1,8 +1,8 @@
 package cn.fanzy.infra.captcha.sender;
 
+import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
-import cn.fanzy.infra.captcha.property.CaptchaProperty;
-import cn.hutool.core.util.RandomUtil;
+import cn.fanzy.infra.captcha.enums.CaptchaType;
 
 /**
  * 创建验证码的服务
@@ -10,8 +10,8 @@ import cn.hutool.core.util.RandomUtil;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public interface CaptchaSenderService<T extends CaptchaCodeInfo> {
+public interface CaptchaSenderService {
 
-    void send(String target,T codeInfo);
-
+    void send(String target, CaptchaCode codeInfo);
+    boolean isSupported(CaptchaType type);
 }

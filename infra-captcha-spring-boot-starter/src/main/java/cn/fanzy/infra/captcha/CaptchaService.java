@@ -1,5 +1,6 @@
 package cn.fanzy.infra.captcha;
 
+import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
 
@@ -9,16 +10,16 @@ import cn.fanzy.infra.captcha.enums.CaptchaType;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public interface CaptchaService {
+public interface CaptchaService{
 
     /**
      * 创建并发送
      *
      * @param type   类型
      * @param target 目标
-     * @return {@link CaptchaCodeInfo}
+     * @return {@link CaptchaCode}
      */
-    CaptchaCodeInfo createAndSend(CaptchaType type,String target);
+    CaptchaCode createAndSend(CaptchaType type, String target);
 
     /**
      * 验证

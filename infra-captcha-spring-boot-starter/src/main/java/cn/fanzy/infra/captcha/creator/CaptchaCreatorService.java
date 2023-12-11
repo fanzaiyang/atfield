@@ -1,6 +1,8 @@
 package cn.fanzy.infra.captcha.creator;
 
+import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
+import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.hutool.core.util.RandomUtil;
 
@@ -10,11 +12,18 @@ import cn.hutool.core.util.RandomUtil;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public interface CaptchaCreatorService<T extends CaptchaCodeInfo> {
+public interface CaptchaCreatorService{
 
-    T generate(CaptchaProperty captchaProperty);
+    CaptchaCode generate(CaptchaProperty captchaProperty);
 
 
+    /**
+     * 支持
+     *
+     * @param type 类型
+     * @return boolean
+     */
+    boolean isSupported(CaptchaType type);
     default String getRandomCode(int length, boolean containLetter, boolean containNumber) {
         if (containLetter && containNumber) {
             // 包含字符和数字

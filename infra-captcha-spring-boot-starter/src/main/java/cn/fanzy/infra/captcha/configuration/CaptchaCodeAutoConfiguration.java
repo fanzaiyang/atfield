@@ -1,23 +1,32 @@
 package cn.fanzy.infra.captcha.configuration;
 
-import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
-import cn.fanzy.infra.captcha.bean.CaptchaImageCodeInfo;
+import cn.fanzy.infra.captcha.CaptchaService;
+import cn.fanzy.infra.captcha.CaptchaServiceImpl;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
-import cn.fanzy.infra.captcha.creator.impl.EmailCaptchaCreatorServiceImpl;
-import cn.fanzy.infra.captcha.creator.impl.ImageCaptchaCreatorServiceImpl;
-import cn.fanzy.infra.captcha.creator.impl.MobileCaptchaCreatorServiceImpl;
+import cn.fanzy.infra.captcha.creator.CaptchaEmailCreatorService;
+import cn.fanzy.infra.captcha.creator.CaptchaImageCreatorService;
+import cn.fanzy.infra.captcha.creator.CaptchaMobileCreatorService;
+import cn.fanzy.infra.captcha.creator.impl.DefaultCaptchaEmailCreatorService;
+import cn.fanzy.infra.captcha.creator.impl.DefaultCaptchaImageCreatorService;
+import cn.fanzy.infra.captcha.creator.impl.DefaultCaptchaMobileCreatorService;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
+import cn.fanzy.infra.captcha.sender.CaptchaEmailSenderService;
+import cn.fanzy.infra.captcha.sender.CaptchaImageSenderService;
+import cn.fanzy.infra.captcha.sender.CaptchaMobileSenderService;
 import cn.fanzy.infra.captcha.sender.CaptchaSenderService;
-import cn.fanzy.infra.captcha.sender.impl.EmailCaptchaSenderServiceImpl;
-import cn.fanzy.infra.captcha.sender.impl.ImageCaptchaSenderServiceImpl;
-import cn.fanzy.infra.captcha.sender.impl.MobileCaptchaSenderServiceImpl;
+import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaEmailSenderService;
+import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaImageSenderService;
+import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaMobileSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,39 +34,48 @@ import org.springframework.mail.javamail.JavaMailSender;
 @EnableConfigurationProperties(CaptchaProperty.class)
 public class CaptchaCodeAutoConfiguration {
 
-    @Bean("emailCaptchaService")
-    @ConditionalOnMissingBean(name = "emailCaptchaService")
-    public CaptchaCreatorService<CaptchaCodeInfo> emailCaptchaService() {
-        return new EmailCaptchaCreatorServiceImpl();
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaEmailCreatorService captchaEmailCreatorService() {
+        return new DefaultCaptchaEmailCreatorService();
     }
 
-    @Bean("imageCaptchaService")
-    @ConditionalOnMissingBean(name = "imageCaptchaService")
-    public CaptchaCreatorService<CaptchaImageCodeInfo> imageCaptchaService() {
-        return new ImageCaptchaCreatorServiceImpl();
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaImageCreatorService captchaImageCreatorService() {
+        return new DefaultCaptchaImageCreatorService();
     }
 
-    @Bean("mobileCaptchaService")
-    @ConditionalOnMissingBean(name = "mobileCaptchaService")
-    public CaptchaCreatorService<CaptchaCodeInfo> mobileCaptchaService() {
-        return new MobileCaptchaCreatorServiceImpl();
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaMobileCreatorService captchaMobileCreatorService() {
+        return new DefaultCaptchaMobileCreatorService();
     }
 
-    @Bean("emailCaptchaSenderService")
-    @ConditionalOnMissingBean(name = "emailCaptchaSenderService")
-    public CaptchaSenderService<CaptchaCodeInfo> emailCaptchaSenderService(JavaMailSender javaMailSender, CaptchaProperty property) {
-        return new EmailCaptchaSenderServiceImpl(javaMailSender, property);
+    @Bean
+    @ConditionalOnBean(JavaMailSender.class)
+    @ConditionalOnMissingBean
+    public CaptchaEmailSenderService captchaEmailSenderService(JavaMailSender javaMailSender, CaptchaProperty property) {
+        return new DefaultCaptchaEmailSenderService(javaMailSender, property);
     }
 
-    @Bean("mobileCaptchaSenderService")
-    @ConditionalOnMissingBean(name = "mobileCaptchaSenderService")
-    public CaptchaSenderService<CaptchaCodeInfo> mobileCaptchaSenderService() {
-        return new MobileCaptchaSenderServiceImpl();
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaMobileSenderService captchaMobileSenderService() {
+        return new DefaultCaptchaMobileSenderService();
     }
 
-    @Bean("imageCaptchaSenderService")
-    @ConditionalOnMissingBean(name = "imageCaptchaSenderService")
-    public CaptchaSenderService<CaptchaImageCodeInfo> imageCaptchaSenderService() {
-        return new ImageCaptchaSenderServiceImpl();
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaImageSenderService captchaImageSenderService() {
+        return new DefaultCaptchaImageSenderService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public CaptchaService captchaService(List<CaptchaCreatorService> creatorServiceList,
+                                         List<CaptchaSenderService> senderServiceList,
+                                         CaptchaProperty property) {
+        return new CaptchaServiceImpl(creatorServiceList, senderServiceList,property);
     }
 }

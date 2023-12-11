@@ -1,9 +1,9 @@
 package cn.fanzy.infra.captcha.bean;
 
-import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
@@ -16,11 +16,9 @@ import java.time.LocalDateTime;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-@Data
+@Setter
 @SuperBuilder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
-public class CaptchaCodeInfo implements Serializable {
+public class CaptchaCodeInfo implements CaptchaCode {
     @Serial
     private static final long serialVersionUID = 1818762193843128112L;
 
@@ -45,14 +43,24 @@ public class CaptchaCodeInfo implements Serializable {
      */
     private int usedCount;
 
-    public LocalDateTime getExpireAt() {
-        return LocalDateTime.now().plusSeconds(expireSeconds);
+
+    @Override
+    public String getCode() {
+        return code;
     }
 
-    public boolean isExpired() {
-        if (LocalDateTime.now().isAfter(getExpireAt())) {
-            return true;
-        }
-        return usedCount > maxRetryCount;
+    @Override
+    public long getExpireSeconds() {
+        return expireSeconds;
+    }
+
+    @Override
+    public int getMaxRetryCount() {
+        return maxRetryCount;
+    }
+
+    @Override
+    public int getUsedCount() {
+        return usedCount;
     }
 }
