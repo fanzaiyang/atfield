@@ -2,7 +2,6 @@ package cn.fanzy.infra.captcha;
 
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
-import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import cn.fanzy.infra.captcha.exception.CaptchaErrorException;
 import cn.fanzy.infra.captcha.exception.CaptchaExpiredException;
@@ -32,6 +31,11 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public CaptchaCode createAndSend(ICaptchaType type, String target) {
+        return createAndSend(type, target, property);
+    }
+
+    @Override
+    public CaptchaCode createAndSend(ICaptchaType type, String target, CaptchaProperty property) {
         Optional<CaptchaCreatorService> creatorService = creatorServiceList.stream()
                 .filter(creator -> creator.isSupported(type)).findFirst();
         if (creatorService.isEmpty()) {
@@ -50,8 +54,8 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public void verify(ICaptchaType type, String target, String code) {
-        Assert.notBlank(target,"发送的对象不能为空！");
-        Assert.notBlank(code,"验证码不能为空！");
+        Assert.notBlank(target, "发送的对象不能为空！");
+        Assert.notBlank(code, "验证码不能为空！");
         CaptchaCode captchaCode = captchaStorageService.get(target, CaptchaCode.class);
         if (captchaCode == null) {
             throw new NoCaptchaException("-5001", "验证码不存在或已过期！");

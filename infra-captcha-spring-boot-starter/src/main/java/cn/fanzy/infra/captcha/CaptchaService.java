@@ -4,6 +4,7 @@ import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.enums.ICaptchaType;
+import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
@@ -22,6 +23,16 @@ public interface CaptchaService {
      * @return {@link CaptchaCode}
      */
     CaptchaCode createAndSend(ICaptchaType type, String target);
+
+    /**
+     * 创建并发送
+     *
+     * @param type     类型
+     * @param target   目标
+     * @param property 验证码配置
+     * @return {@link CaptchaCode}
+     */
+    CaptchaCode createAndSend(ICaptchaType type, String target, CaptchaProperty property);
 
     /**
      * 验证
