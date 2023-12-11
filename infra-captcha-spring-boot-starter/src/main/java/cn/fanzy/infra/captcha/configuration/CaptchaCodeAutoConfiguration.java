@@ -2,6 +2,7 @@ package cn.fanzy.infra.captcha.configuration;
 
 import cn.fanzy.infra.captcha.CaptchaService;
 import cn.fanzy.infra.captcha.CaptchaServiceImpl;
+import cn.fanzy.infra.captcha.advice.CaptchaCheckAdvice;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
 import cn.fanzy.infra.captcha.creator.CaptchaEmailCreatorService;
 import cn.fanzy.infra.captcha.creator.CaptchaImageCreatorService;
@@ -35,7 +36,8 @@ import java.util.List;
 @Configuration
 @ImportAutoConfiguration({
         CaptchaLocalStorageAutoConfiguration.class,
-        CaptchaRedisStorageAutoConfiguration.class
+        CaptchaRedisStorageAutoConfiguration.class,
+        CaptchaCheckAdvice.class
 })
 @EnableConfigurationProperties(CaptchaProperty.class)
 public class CaptchaCodeAutoConfiguration {

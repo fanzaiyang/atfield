@@ -1,6 +1,7 @@
 package com.example.test;
 
 import cn.fanzy.infra.captcha.CaptchaService;
+import cn.fanzy.infra.captcha.annotation.CaptchaCheck;
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
@@ -26,6 +27,11 @@ public class CaptchaController {
     @GetMapping("2")
     public R<Boolean> code2(String code){
         captchaService.verify(CaptchaType.IMAGE, "client", code);
+        return R.ok();
+    }
+    @CaptchaCheck
+    @GetMapping("3")
+    public R<Boolean> code2(){
         return R.ok();
     }
 }
