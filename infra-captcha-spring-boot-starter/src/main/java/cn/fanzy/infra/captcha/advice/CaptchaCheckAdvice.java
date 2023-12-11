@@ -6,6 +6,7 @@ import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.fanzy.infra.captcha.util.CaptchaTypeUtil;
 import cn.fanzy.infra.core.utils.AdviceUtil;
+import cn.fanzy.infra.core.utils.ParamUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.web.context.request.ServletWebRequest;
 
 /**
  * captcha检查建议
@@ -49,6 +51,9 @@ public class CaptchaCheckAdvice {
         if (StrUtil.isBlank(codeValue)) {
             codeValue = CaptchaTypeUtil.getCodeValue(captchaType, property);
         }
-        captchaService.verify(captchaType, codedKey, codeValue);
+        Object target = ParamUtil.getParamValue(codedKey);
+        Object code = ParamUtil.getParamValue(codeValue);
+        captchaService.verify(captchaType, target == null ? null : target.toString(),
+                code == null ? null : code.toString());
     }
 }

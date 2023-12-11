@@ -84,7 +84,10 @@ public class ParamUtil {
         return null;
 
     }
+    public static Object getParamValue(String key) {
+        return getParamValue(new ServletWebRequest(SpringUtils.getRequest()),key);
 
+    }
     /**
      * 从请求中得到上传的文件Map
      *
