@@ -17,8 +17,10 @@ import cn.fanzy.infra.captcha.sender.CaptchaSenderService;
 import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaEmailSenderService;
 import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaImageSenderService;
 import cn.fanzy.infra.captcha.sender.impl.DefaultCaptchaMobileSenderService;
+import cn.fanzy.infra.captcha.storage.CaptchaStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -31,6 +33,10 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@ImportAutoConfiguration({
+        CaptchaLocalStorageAutoConfiguration.class,
+        CaptchaRedisStorageAutoConfiguration.class
+})
 @EnableConfigurationProperties(CaptchaProperty.class)
 public class CaptchaCodeAutoConfiguration {
 
@@ -75,7 +81,8 @@ public class CaptchaCodeAutoConfiguration {
     @ConditionalOnMissingBean
     public CaptchaService captchaService(List<CaptchaCreatorService> creatorServiceList,
                                          List<CaptchaSenderService> senderServiceList,
+                                         CaptchaStorageService captchaStorageService,
                                          CaptchaProperty property) {
-        return new CaptchaServiceImpl(creatorServiceList, senderServiceList,property);
+        return new CaptchaServiceImpl(creatorServiceList, senderServiceList, captchaStorageService, property);
     }
 }

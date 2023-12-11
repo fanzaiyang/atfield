@@ -21,7 +21,7 @@ public class CaptchaProperty {
      */
     private String prefix = "infra-captcha:";
     /**
-     * 过期秒,默认：60秒
+     * 过期秒,默认：60秒,-1不过期
      */
     private Integer expireSeconds = 60;
     /**

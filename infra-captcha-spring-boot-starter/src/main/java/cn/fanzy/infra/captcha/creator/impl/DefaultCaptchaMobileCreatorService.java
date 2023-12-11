@@ -3,6 +3,7 @@ package cn.fanzy.infra.captcha.creator.impl;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.creator.CaptchaMobileCreatorService;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
+import cn.fanzy.infra.captcha.storage.CaptchaStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultCaptchaMobileCreatorService extends CaptchaMobileCreatorService {
+
     @Override
     public CaptchaCodeInfo generateCode(CaptchaProperty captchaProperty) {
         CaptchaProperty.Mobile property = captchaProperty.getMobile();

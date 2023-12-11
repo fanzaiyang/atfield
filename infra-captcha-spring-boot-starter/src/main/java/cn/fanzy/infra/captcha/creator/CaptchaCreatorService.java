@@ -5,6 +5,8 @@ import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
+import cn.fanzy.infra.captcha.storage.CaptchaStorageService;
+import cn.fanzy.infra.core.spring.SpringUtils;
 import cn.hutool.core.util.RandomUtil;
 
 /**

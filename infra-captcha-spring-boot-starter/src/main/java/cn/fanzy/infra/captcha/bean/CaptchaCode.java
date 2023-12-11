@@ -32,6 +32,11 @@ public interface CaptchaCode extends Serializable {
      */
     int getMaxRetryCount();
 
+    /**
+     * 使用计数
+     *
+     * @return int
+     */
     int getUsedCount();
 
     default LocalDateTime getExpireAt() {
