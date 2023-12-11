@@ -84,6 +84,16 @@ public class ParamUtil {
         return null;
 
     }
+    /**
+     * 获取参数值
+     * <pre>
+     *     1. 请求参数
+     *     2. 请求头
+     *     3. 请求体body
+     * </pre>
+     * @param key     钥匙
+     * @return {@link Object}
+     */
     public static Object getParamValue(String key) {
         return getParamValue(new ServletWebRequest(SpringUtils.getRequest()),key);
 
