@@ -56,9 +56,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         if (captchaCode == null) {
             throw new NoCaptchaException("-5001", "验证码不存在或已过期！");
         }
-        if (captchaCode.isExpired()) {
-            throw new CaptchaExpiredException("-5002", "验证码已过期！");
-        }
+        captchaCode.preVerify();
         // 次数+1
         captchaCode.setUseCountIncrease();
         captchaStorageService.save(target, captchaCode);

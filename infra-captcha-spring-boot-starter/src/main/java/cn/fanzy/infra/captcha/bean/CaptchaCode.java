@@ -1,5 +1,9 @@
 package cn.fanzy.infra.captcha.bean;
 
+import cn.fanzy.infra.captcha.exception.CaptchaErrorException;
+import cn.fanzy.infra.captcha.exception.CaptchaExpiredException;
+import cn.fanzy.infra.captcha.exception.CaptchaInvalidException;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -43,6 +47,7 @@ public interface CaptchaCode extends Serializable {
      * 设置使用计数
      */
     void setUseCountIncrease();
+
     default LocalDateTime getExpireAt() {
         return LocalDateTime.now().plusSeconds(getExpireSeconds());
     }
@@ -53,10 +58,36 @@ public interface CaptchaCode extends Serializable {
      * @return boolean
      */
     default boolean isExpired() {
-        if (LocalDateTime.now().isAfter(getExpireAt())) {
-            return true;
-        }
+        return LocalDateTime.now().isAfter(getExpireAt());
+    }
+
+    /**
+     * 是否超过重拾次数
+     *
+     * @return boolean
+     */
+    default boolean isOverCount() {
         return getUsedCount() > getMaxRetryCount();
     }
 
+    /**
+     * 是否无效
+     *
+     * @return boolean
+     */
+    default boolean isInvalid() {
+        return isExpired() || isOverCount();
+    }
+
+    /**
+     * 预先验证
+     */
+    default void preVerify() {
+        if (isExpired()) {
+            throw new CaptchaExpiredException("5001", "验证码已过期，请重新获取！");
+        }
+        if (isOverCount()) {
+            throw new CaptchaInvalidException("5002", "验证码已过期，请重新获取!");
+        }
+    }
 }
