@@ -4,6 +4,7 @@ import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.enums.ICaptchaType;
+import cn.fanzy.infra.captcha.exception.CaptchaErrorException;
 import cn.fanzy.infra.captcha.exception.CaptchaExpiredException;
 import cn.fanzy.infra.captcha.exception.NoCaptchaException;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
@@ -65,7 +66,7 @@ public class CaptchaServiceImpl implements CaptchaService {
             if (StrUtil.equalsIgnoreCase(code, captchaCode.getCode())) {
                 captchaStorageService.delete(target);
             } else {
-                throw new CaptchaExpiredException("-5003", "验证码输入错误！");
+                throw new CaptchaErrorException("-5003", "验证码输入错误！");
             }
         } else {
             if (code.equals(captchaCode.getCode())) {
