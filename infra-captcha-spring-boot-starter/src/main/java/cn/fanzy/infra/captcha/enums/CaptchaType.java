@@ -6,7 +6,7 @@ package cn.fanzy.infra.captcha.enums;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public enum CaptchaType {
+public enum CaptchaType implements ICaptchaType {
     /**
      * 图片验证码
      */
@@ -19,4 +19,9 @@ public enum CaptchaType {
      * 电子邮件验证码
      */
     EMAIL;
+
+    @Override
+    public String getValue() {
+        return this.name();
+    }
 }

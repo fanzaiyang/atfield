@@ -2,6 +2,7 @@ package cn.fanzy.infra.captcha.creator;
 
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public abstract class CaptchaMobileCreatorService implements CaptchaCreatorServi
     }
 
     @Override
-    public boolean isSupported(CaptchaType type) {
+    public boolean isSupported(ICaptchaType type) {
         return CaptchaType.MOBILE.equals(type);
     }
 }

@@ -3,6 +3,7 @@ package cn.fanzy.infra.captcha.creator;
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.hutool.core.util.RandomUtil;
 
@@ -20,10 +21,10 @@ public interface CaptchaCreatorService{
     /**
      * 支持
      *
-     * @param type 类型
+     * @param type 类型{@link ICaptchaType}
      * @return boolean
      */
-    boolean isSupported(CaptchaType type);
+    boolean isSupported(ICaptchaType type);
     default String getRandomCode(int length, boolean containLetter, boolean containNumber) {
         if (containLetter && containNumber) {
             // 包含字符和数字

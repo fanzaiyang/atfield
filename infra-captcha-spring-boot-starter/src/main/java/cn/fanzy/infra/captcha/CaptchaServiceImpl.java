@@ -4,6 +4,7 @@ import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.fanzy.infra.captcha.sender.CaptchaSenderService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     private final CaptchaProperty property;
 
     @Override
-    public CaptchaCode createAndSend(CaptchaType type, String target) {
+    public CaptchaCode createAndSend(ICaptchaType type, String target) {
         Optional<CaptchaCreatorService> creatorService = creatorServiceList.stream()
                 .filter(creator -> creator.isSupported(type)).findFirst();
         if (creatorService.isEmpty()) {

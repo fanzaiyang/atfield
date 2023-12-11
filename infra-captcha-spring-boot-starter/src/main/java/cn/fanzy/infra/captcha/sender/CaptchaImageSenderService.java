@@ -4,6 +4,7 @@ import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.bean.CaptchaImageCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +19,7 @@ public abstract class CaptchaImageSenderService implements CaptchaSenderService 
     }
 
     @Override
-    public boolean isSupported(CaptchaType type) {
+    public boolean isSupported(ICaptchaType type) {
         return CaptchaType.IMAGE.equals(type);
     }
 }

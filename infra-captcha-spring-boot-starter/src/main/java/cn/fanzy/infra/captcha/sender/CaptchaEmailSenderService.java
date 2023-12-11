@@ -3,6 +3,7 @@ package cn.fanzy.infra.captcha.sender;
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,14 +23,15 @@ public abstract class CaptchaEmailSenderService implements CaptchaSenderService 
         sendCode(target,codeInfo);
     }
 
+    @Override
+    public boolean isSupported(ICaptchaType type) {
+        return CaptchaType.EMAIL.equals(type);
+    }
+
+
     protected String buildContent(CaptchaCode emailCode) {
         String now = DateTimeFormatter.ofPattern("yyyy年MM月dd").format(LocalDateTime.now());
         return MessageFormat.format(HTML_TEMPLATE, emailCode.getCode(), emailCode.getExpireAt(), now);
-    }
-
-    @Override
-    public boolean isSupported(CaptchaType type) {
-        return CaptchaType.EMAIL.equals(type);
     }
 
     /**

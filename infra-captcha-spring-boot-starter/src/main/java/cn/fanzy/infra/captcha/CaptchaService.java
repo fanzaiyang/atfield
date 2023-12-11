@@ -3,6 +3,7 @@ package cn.fanzy.infra.captcha;
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
+import cn.fanzy.infra.captcha.enums.ICaptchaType;
 
 /**
  * 验证码服务
@@ -15,11 +16,11 @@ public interface CaptchaService{
     /**
      * 创建并发送
      *
-     * @param type   类型
+     * @param type   类型{@link ICaptchaType}
      * @param target 目标
      * @return {@link CaptchaCode}
      */
-    CaptchaCode createAndSend(CaptchaType type, String target);
+    CaptchaCode createAndSend(ICaptchaType type, String target);
 
     /**
      * 验证
