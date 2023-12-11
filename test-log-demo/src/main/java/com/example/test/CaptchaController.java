@@ -23,4 +23,9 @@ public class CaptchaController {
         CaptchaCode client = captchaService.createAndSend(CaptchaType.IMAGE, "client");
         log.info(JSONUtil.toJsonStr(client));
     }
+    @GetMapping("2")
+    public R<Boolean> code2(String code){
+        captchaService.verify(CaptchaType.IMAGE, "client", code);
+        return R.ok();
+    }
 }

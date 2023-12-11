@@ -20,10 +20,13 @@ public class CaptchaProperty {
      * 缓存前缀
      */
     private String prefix = "infra-captcha:";
+
     /**
      * 过期秒,默认：60秒,-1不过期
      */
     private Integer expireSeconds = 60;
+
+    private boolean equalsIgnoreCase = true;
     /**
      * 图片验证码配置
      */

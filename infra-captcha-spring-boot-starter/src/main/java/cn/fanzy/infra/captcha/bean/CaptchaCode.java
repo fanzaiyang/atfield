@@ -39,6 +39,10 @@ public interface CaptchaCode extends Serializable {
      */
     int getUsedCount();
 
+    /**
+     * 设置使用计数
+     */
+    void setUseCountIncrease();
     default LocalDateTime getExpireAt() {
         return LocalDateTime.now().plusSeconds(getExpireSeconds());
     }
@@ -54,4 +58,5 @@ public interface CaptchaCode extends Serializable {
         }
         return getUsedCount() > getMaxRetryCount();
     }
+
 }

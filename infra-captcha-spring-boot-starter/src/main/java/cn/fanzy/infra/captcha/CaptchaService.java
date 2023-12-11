@@ -28,7 +28,6 @@ public interface CaptchaService{
      * @param type   类型
      * @param target 目标
      * @param code   验证码
-     * @return boolean
      */
-    boolean verify(CaptchaType type, String target, String code);
+    void verify(CaptchaType type, String target, String code);
 }

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(CaptchaProperty.class)
-@AutoConfigureBefore(CaptchaRedisStorageAutoConfiguration.class)
+@AutoConfigureAfter(CaptchaRedisStorageAutoConfiguration.class)
 public class CaptchaLocalStorageAutoConfiguration {
 
     @Bean

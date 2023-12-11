@@ -1,12 +1,17 @@
 package cn.fanzy.infra.captcha;
 
 import cn.fanzy.infra.captcha.bean.CaptchaCode;
+import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.creator.CaptchaCreatorService;
 import cn.fanzy.infra.captcha.enums.CaptchaType;
 import cn.fanzy.infra.captcha.enums.ICaptchaType;
+import cn.fanzy.infra.captcha.exception.CaptchaExpiredException;
+import cn.fanzy.infra.captcha.exception.NoCaptchaException;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
 import cn.fanzy.infra.captcha.sender.CaptchaSenderService;
 import cn.fanzy.infra.captcha.storage.CaptchaStorageService;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +45,29 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public boolean verify(CaptchaType type, String target, String code) {
-        return false;
+    public void verify(CaptchaType type, String target, String code) {
+        CaptchaCode captchaCode = captchaStorageService.get(target, CaptchaCode.class);
+        if (captchaCode == null) {
+            throw new NoCaptchaException("-5001", "验证码不存在或已过期！");
+        }
+        if (captchaCode.isExpired()) {
+            throw new CaptchaExpiredException("-5002", "验证码已过期！");
+        }
+        // 次数+1
+        captchaCode.setUseCountIncrease();
+        captchaStorageService.save(target, captchaCode);
+        if (property.isEqualsIgnoreCase()) {
+            if (StrUtil.equalsIgnoreCase(code, captchaCode.getCode())) {
+                captchaStorageService.delete(target);
+            }else{
+                throw new CaptchaExpiredException("-5003", "验证码输入错误！");
+            }
+        } else {
+            if (code.equals(captchaCode.getCode())) {
+                captchaStorageService.delete(target);
+            }else{
+                throw new CaptchaExpiredException("-5003", "验证码输入错误！");
+            }
+        }
     }
 }

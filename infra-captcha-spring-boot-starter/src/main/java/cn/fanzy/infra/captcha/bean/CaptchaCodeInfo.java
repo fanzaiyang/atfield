@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
  */
 @Setter
 @SuperBuilder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class CaptchaCodeInfo implements CaptchaCode {
     @Serial
     private static final long serialVersionUID = 1818762193843128112L;
@@ -41,7 +43,7 @@ public class CaptchaCodeInfo implements CaptchaCode {
     /**
      * 已重试次数
      */
-    private int usedCount;
+    private int usedCount = 1;
 
 
     @Override
@@ -62,5 +64,10 @@ public class CaptchaCodeInfo implements CaptchaCode {
     @Override
     public int getUsedCount() {
         return usedCount;
+    }
+
+    @Override
+    public void setUseCountIncrease() {
+        usedCount += 1;
     }
 }
