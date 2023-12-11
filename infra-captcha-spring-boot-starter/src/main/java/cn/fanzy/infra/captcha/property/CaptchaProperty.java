@@ -76,9 +76,9 @@ public class CaptchaProperty {
          */
         private Integer retryCount = 1;
         /**
-         * 过期秒,默认：60秒
+         * 过期秒,默认:5分钟
          */
-        private Integer expireSeconds = 60;
+        private Integer expireSeconds = 300;
         /**
          * 是否生成干扰条纹背景，默认为false
          */
@@ -101,9 +101,9 @@ public class CaptchaProperty {
          */
         private Integer length = 6;
         /**
-         * 验证码的失效时间，单位秒，默认:60s
+         * 验证码的失效时间，单位秒，默认:5分钟
          */
-        private Integer expireSeconds = 60;
+        private Integer expireSeconds = 300;
         /**
          * 验证码是否包含字母,默认不包含
          */
