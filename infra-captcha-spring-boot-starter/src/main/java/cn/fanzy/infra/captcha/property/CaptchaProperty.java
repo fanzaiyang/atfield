@@ -16,11 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "infra.captcha")
 public class CaptchaProperty {
-    /**
-     * 缓存前缀
-     */
     private String prefix = "infra-captcha:";
-
     /**
      * 过期秒,默认：60秒,-1不过期
      */
@@ -46,10 +42,6 @@ public class CaptchaProperty {
     public static class Image {
 
         /**
-         * 前缀
-         */
-        private String prefix = "image:";
-        /**
          * 宽度
          */
         private Integer width = 100;
@@ -60,7 +52,7 @@ public class CaptchaProperty {
         /**
          * 验证码长度
          */
-        private Integer length = 6;
+        private Integer length = 4;
         /**
          * 包含数字
          */
@@ -91,6 +83,7 @@ public class CaptchaProperty {
          * 是否生成干扰条纹背景，默认为false
          */
         private boolean fringe = false;
+
     }
 
     /**
