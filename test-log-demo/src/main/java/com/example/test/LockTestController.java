@@ -3,7 +3,7 @@ package com.example.test;
 import cn.fanzy.infra.redis.annotation.Lock;
 import cn.fanzy.infra.redis.annotation.LockForm;
 import cn.fanzy.infra.redis.annotation.LockRate;
-import cn.fanzy.infra.web.json.model.R;
+import cn.fanzy.infra.web.json.model.Json;
 import cn.hutool.core.thread.ThreadUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,22 +27,22 @@ public class LockTestController {
 
     @Lock("test-lock")
     @GetMapping("/dist")
-    public R<String> lock(String keyword) {
+    public Json<String> lock(String keyword) {
         ThreadUtil.sleep(10, TimeUnit.SECONDS);
-        return R.ok(keyword);
+        return Json.ok(keyword);
     }
 
     @LockForm("test-lock-form")
     @GetMapping("/form")
-    public R<String> form(String param) {
+    public Json<String> form(String param) {
         ThreadUtil.sleep(10, TimeUnit.SECONDS);
-        return R.ok(param);
+        return Json.ok(param);
     }
 
     @LockRate
     @GetMapping("/rate")
-    public R<String> rate(String param) {
+    public Json<String> rate(String param) {
         ThreadUtil.sleep(10, TimeUnit.SECONDS);
-        return R.ok(param);
+        return Json.ok(param);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "outPath": "./src/main/resources/static/docs",
+  "createDebugPage": true,
+  "allInOne": true,
+  "style":"xt256",
+  "md5EncryptedHtmlName": false
+}

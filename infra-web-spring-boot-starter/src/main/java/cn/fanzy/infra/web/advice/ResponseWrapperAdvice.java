@@ -2,7 +2,7 @@ package cn.fanzy.infra.web.advice;
 
 import cn.fanzy.infra.core.spring.SpringUtils;
 import cn.fanzy.infra.core.utils.InfraConstants;
-import cn.fanzy.infra.web.json.model.R;
+import cn.fanzy.infra.web.json.model.Json;
 import cn.fanzy.infra.web.response.annotation.ResponseWrapper;
 import cn.fanzy.infra.web.response.property.ResponseWrapperProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -73,11 +73,11 @@ public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         // String类型的返回值需要特殊处理,是使用了StringHttpMessageConverter转换器，无法转换为Json格式。
         if (body instanceof String) {
             try {
-                return objectMapper.writeValueAsString(R.ok(body));
+                return objectMapper.writeValueAsString(Json.ok(body));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
-        return R.ok(body);
+        return Json.ok(body);
     }
 }

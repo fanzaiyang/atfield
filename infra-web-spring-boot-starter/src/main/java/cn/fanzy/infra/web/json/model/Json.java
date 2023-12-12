@@ -4,7 +4,6 @@ import cn.fanzy.infra.tlog.common.context.TLogContext;
 import cn.fanzy.infra.web.configuration.JsonModelAutoConfiguration;
 import cn.fanzy.infra.web.json.property.JsonProperty;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-public class R<T> {
+public class Json<T> {
 
     private static final JsonProperty PROPERTY = JsonModelAutoConfiguration.getJsonProperty();
 
@@ -57,10 +56,10 @@ public class R<T> {
      */
     private Object errorStacks;
 
-    public R() {
+    public Json() {
     }
 
-    public R(String traceId, String code, String message, T data) {
+    public Json(String traceId, String code, String message, T data) {
         this.traceId = traceId;
         this.code = code;
         this.message = message;
@@ -68,7 +67,7 @@ public class R<T> {
         this.now = LocalDateTime.now();
     }
 
-    public R(String traceId, String code, String message, T data, ShowType showType) {
+    public Json(String traceId, String code, String message, T data, ShowType showType) {
         this.traceId = traceId;
         this.code = code;
         this.message = message;
@@ -77,18 +76,18 @@ public class R<T> {
         this.showType = showType;
     }
 
-    public R(String code, String message) {
+    public Json(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public R(String code, String message, T data) {
+    public Json(String code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public R(String code, String message, T data, ShowType showType) {
+    public Json(String code, String message, T data, ShowType showType) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -98,13 +97,13 @@ public class R<T> {
     /**
      * 成功
      *
-     * @return {@link R}<{@link T}>
+     * @return {@link Json}<{@link T}>
      */
-    public static <T> R<T> ok() {
+    public static <T> Json<T> ok() {
         return ok(null);
     }
 
-    public static <T> R<T> ok(String message) {
+    public static <T> Json<T> ok(String message) {
         return ok(null, message, null);
     }
 
@@ -112,37 +111,37 @@ public class R<T> {
      * 成功
      *
      * @param data 数据
-     * @return {@link R}<{@link T}>
+     * @return {@link Json}<{@link T}>
      */
-    public static <T> R<T> ok(T data) {
+    public static <T> Json<T> ok(T data) {
         return ok(null, null, data);
     }
 
-    public static <T> R<T> ok(String code, String message, T data) {
-        return new R<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultOkCode()),
+    public static <T> Json<T> ok(String code, String message, T data) {
+        return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultOkCode()),
                 StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultOkMessage()),
                 data);
     }
 
 
-    public static <T> R<T> fail() {
+    public static <T> Json<T> fail() {
         return fail(null);
     }
 
-    public static <T> R<T> fail(String message) {
+    public static <T> Json<T> fail(String message) {
         return fail(null, message);
     }
 
-    public static <T> R<T> fail(String code, String message) {
+    public static <T> Json<T> fail(String code, String message) {
         return fail(code, message, null);
     }
 
-    public static <T> R<T> fail(T data) {
+    public static <T> Json<T> fail(T data) {
         return fail(null, null, data);
     }
 
-    public static <T> R<T> fail(String code, String message, T data) {
-        return new R<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultFailCode()),
+    public static <T> Json<T> fail(String code, String message, T data) {
+        return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultFailCode()),
                 StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultFailMessage()),
                 data);
     }

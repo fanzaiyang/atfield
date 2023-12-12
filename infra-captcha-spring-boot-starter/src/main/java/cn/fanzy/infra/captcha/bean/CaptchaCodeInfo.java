@@ -1,9 +1,6 @@
 package cn.fanzy.infra.captcha.bean;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
@@ -43,6 +40,7 @@ public class CaptchaCodeInfo implements CaptchaCode {
     /**
      * 已重试次数
      */
+    @Builder.Default
     private int usedCount = 1;
 
 

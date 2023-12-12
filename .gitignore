@@ -38,3 +38,4 @@ build/
 .DS_Store
 
 *.flattened-pom.xml
+/test-log-demo/src/main/resources/static/

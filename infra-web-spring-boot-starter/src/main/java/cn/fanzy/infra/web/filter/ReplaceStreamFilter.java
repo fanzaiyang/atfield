@@ -2,7 +2,7 @@ package cn.fanzy.infra.web.filter;
 
 import cn.fanzy.infra.core.spring.ServletUtil;
 import cn.fanzy.infra.core.spring.SpringUtils;
-import cn.fanzy.infra.web.json.model.R;
+import cn.fanzy.infra.web.json.model.Json;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,7 +55,7 @@ public class ReplaceStreamFilter implements Filter {
                 }
             }
 
-            ServletUtil.out((HttpServletResponse) response, R.fail(message).setData(e.getCause()));
+            ServletUtil.out((HttpServletResponse) response, Json.fail(message).setData(e.getCause()));
         }
     }
 
