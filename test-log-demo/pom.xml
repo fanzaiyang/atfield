@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>cn.fanzy.infra</groupId>
-            <artifactId>infra-ip-spring-boot-starter</artifactId>
+            <artifactId>infra-ipsec-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.fanzy.infra</groupId>

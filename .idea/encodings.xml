@@ -9,7 +9,7 @@
     <file url="file://$PROJECT_DIR$/infra-boot-dependencies/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infra-cache-spring-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infra-captcha-spring-boot-starter/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/infra-ip-spring-boot-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infra-ipsec-spring-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infra-redis-spring-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infra-tlog-spring-boot-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/infra-tlog-spring-boot-starter/src/main/resources" charset="UTF-8" />

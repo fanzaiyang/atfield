@@ -21,7 +21,7 @@
         <module>infra-tlog-spring-boot-starter</module>
         <module>infra-cache-spring-boot-starter</module>
         <module>infra-redis-spring-boot-starter</module>
-        <module>infra-ip-spring-boot-starter</module>
+        <module>infra-ipsec-spring-boot-starter</module>
         <module>infra-captcha-spring-boot-starter</module>
     </modules>
     <properties>
