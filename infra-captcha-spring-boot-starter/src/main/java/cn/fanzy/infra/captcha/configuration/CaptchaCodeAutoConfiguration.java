@@ -31,6 +31,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.List;
 
+/**
+ * captcha码自动配置
+ *
+ * @author fanzaiyang
+ * @date 2023/12/12
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Configuration

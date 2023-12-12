@@ -16,7 +16,32 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface CaptchaService {
 
     /**
-     * 创建并发送
+     * 创建二维码
+     *
+     * @param type   类型
+     * @param target 目标
+     * @return {@link CaptchaCode}
+     */
+    CaptchaCode create(ICaptchaType type, String target);
+
+    /**
+     * 获取验证码
+     *
+     * @param target 目标
+     * @return {@link CaptchaCode}
+     */
+    CaptchaCode get(String target);
+    /**
+     * 邮寄
+     * 发送验证码
+     *
+     * @param type        类型
+     * @param target      目标
+     * @param captchaCode 验证码
+     */
+    void send(ICaptchaType type, String target,CaptchaCode captchaCode);
+    /**
+     * 创建二维码后并发送
      *
      * @param type   类型{@link ICaptchaType}
      * @param target 目标
@@ -25,7 +50,7 @@ public interface CaptchaService {
     CaptchaCode createAndSend(ICaptchaType type, String target);
 
     /**
-     * 创建并发送
+     * 创建二维码后并发送
      *
      * @param type     类型
      * @param target   目标

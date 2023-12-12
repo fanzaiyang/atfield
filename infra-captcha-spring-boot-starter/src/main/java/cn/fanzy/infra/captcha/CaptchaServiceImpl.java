@@ -30,25 +30,42 @@ public class CaptchaServiceImpl implements CaptchaService {
     private final CaptchaProperty property;
 
     @Override
+    public CaptchaCode create(ICaptchaType type, String target) {
+        Optional<CaptchaCreatorService> creatorService = creatorServiceList.stream()
+                .filter(creator -> creator.isSupported(type)).findFirst();
+        if (creatorService.isEmpty()) {
+            throw new RuntimeException("该类型验证码的生成器不存在！");
+        }
+        CaptchaCode codeInfo = creatorService.get().generate(property);
+        // 将验证码保存到缓存
+        captchaStorageService.save(target, codeInfo);
+        return codeInfo;
+    }
+
+    @Override
+    public void send(ICaptchaType type, String target, CaptchaCode captchaCode) {
+        Optional<CaptchaSenderService> senderService = senderServiceList.stream()
+                .filter(sender -> sender.isSupported(type)).findFirst();
+        if (senderService.isEmpty()) {
+            throw new RuntimeException("该类型验证码的发送器不存在！");
+        }
+        senderService.get().send(target, captchaCode);
+    }
+
+    @Override
+    public CaptchaCode get(String target) {
+        return captchaStorageService.get(target, CaptchaCode.class);
+    }
+
+    @Override
     public CaptchaCode createAndSend(ICaptchaType type, String target) {
         return createAndSend(type, target, property);
     }
 
     @Override
     public CaptchaCode createAndSend(ICaptchaType type, String target, CaptchaProperty property) {
-        Optional<CaptchaCreatorService> creatorService = creatorServiceList.stream()
-                .filter(creator -> creator.isSupported(type)).findFirst();
-        if (creatorService.isEmpty()) {
-            throw new RuntimeException("该类型验证码的生成器不存在！");
-        }
-        Optional<CaptchaSenderService> senderService = senderServiceList.stream()
-                .filter(sender -> sender.isSupported(type)).findFirst();
-        if (senderService.isEmpty()) {
-            throw new RuntimeException("该类型验证码的发送器不存在！");
-        }
-        CaptchaCode codeInfo = creatorService.get().generate(property);
-        captchaStorageService.save(target, codeInfo);
-        senderService.get().send(target, codeInfo);
+        CaptchaCode codeInfo = create(type, target);
+        send(type, target, codeInfo);
         return codeInfo;
     }
 
@@ -56,7 +73,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     public void verify(ICaptchaType type, String target, String code) {
         Assert.notBlank(target, "发送的对象不能为空！");
         Assert.notBlank(code, "验证码不能为空！");
-        CaptchaCode captchaCode = captchaStorageService.get(target, CaptchaCode.class);
+        CaptchaCode captchaCode = get(target);
         if (captchaCode == null) {
             throw new NoCaptchaException("-5001", "验证码不存在或已过期！");
         }
