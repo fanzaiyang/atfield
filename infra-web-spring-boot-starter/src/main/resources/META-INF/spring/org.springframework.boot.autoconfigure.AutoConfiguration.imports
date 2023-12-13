@@ -2,3 +2,4 @@ cn.fanzy.infra.web.configuration.JsonModelAutoConfiguration
 cn.fanzy.infra.web.configuration.JsonConvertAutoConfiguration
 cn.fanzy.infra.web.configuration.InfraWebAutoConfiguration
 cn.fanzy.infra.web.configuration.CorsAutoConfiguration
+cn.fanzy.infra.web.configuration.InfraChainAutoConfiguration
