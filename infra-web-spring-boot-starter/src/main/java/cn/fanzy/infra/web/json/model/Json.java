@@ -147,6 +147,9 @@ public class Json<T> {
     }
 
     public String getTraceId() {
+        if (StrUtil.isNotBlank(traceId)) {
+            return traceId;
+        }
         try {
             Class<?> forName = Class.forName("cn.fanzy.infra.tlog.common.context.TLogContext");
             if (forName != null) {
