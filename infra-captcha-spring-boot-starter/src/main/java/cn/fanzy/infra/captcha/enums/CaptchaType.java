@@ -1,5 +1,7 @@
 package cn.fanzy.infra.captcha.enums;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * 验证码类型
  *
@@ -23,5 +25,15 @@ public enum CaptchaType implements ICaptchaType {
     @Override
     public String getValue() {
         return this.name();
+    }
+
+    @Override
+    public ICaptchaType getType(String value) {
+        for (CaptchaType type : CaptchaType.values()) {
+            if(StrUtil.equalsIgnoreCase(type.getValue(),value)){
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("验证码类型不存在!");
     }
 }

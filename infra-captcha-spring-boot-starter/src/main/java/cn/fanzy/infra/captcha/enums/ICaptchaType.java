@@ -9,4 +9,6 @@ package cn.fanzy.infra.captcha.enums;
 public interface ICaptchaType {
 
     String getValue();
+
+    ICaptchaType getType(String value);
 }
