@@ -147,7 +147,12 @@ public class Json<T> {
     }
 
     public String getTraceId() {
-        return TLogContext.getTraceId();
+        try {
+            return TLogContext.getTraceId();
+        } catch (Exception e){
+            return null;
+        }
+
     }
 
     public LocalDateTime getNow() {

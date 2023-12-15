@@ -27,8 +27,7 @@ public enum CaptchaType implements ICaptchaType {
         return this.name();
     }
 
-    @Override
-    public ICaptchaType getType(String value) {
+    public static ICaptchaType getType(String value) {
         for (CaptchaType type : CaptchaType.values()) {
             if(StrUtil.equalsIgnoreCase(type.getValue(),value)){
                 return type;
