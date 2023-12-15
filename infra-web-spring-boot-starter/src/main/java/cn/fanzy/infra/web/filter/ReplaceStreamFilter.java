@@ -1,5 +1,6 @@
 package cn.fanzy.infra.web.filter;
 
+import cn.fanzy.infra.core.spring.RequestWrapper;
 import cn.fanzy.infra.core.spring.ServletUtil;
 import cn.fanzy.infra.core.spring.SpringUtils;
 import cn.fanzy.infra.web.json.model.Json;
@@ -40,7 +41,7 @@ public class ReplaceStreamFilter implements Filter {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
             if (!isFilterExcludeRequest(httpServletRequest)) {
-                ServletRequest requestWrapper = new ServletRequestWrapper(httpServletRequest);
+                ServletRequest requestWrapper = new RequestWrapper(httpServletRequest);
                 chain.doFilter(requestWrapper, response);
             } else {
                 chain.doFilter(request, response);

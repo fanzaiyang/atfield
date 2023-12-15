@@ -21,6 +21,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
+/**
+ * 日期 Jackson2 对象映射器生成器定制器
+ *
+ * @author fanzaiyang
+ * @date 2023/12/15
+ */
 @RequiredArgsConstructor
 public class DateJackson2ObjectMapperBuilderCustomizer implements Jackson2ObjectMapperBuilderCustomizer, Ordered {
     private final JacksonProperties jacksonProperties;
