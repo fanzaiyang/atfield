@@ -148,11 +148,13 @@ public class Json<T> {
 
     public String getTraceId() {
         try {
-            return TLogContext.getTraceId();
-        } catch (Exception e){
-            return null;
+            Class<?> forName = Class.forName("cn.fanzy.infra.tlog.common.context.TLogContext");
+            if (forName != null) {
+                return TLogContext.getTraceId();
+            }
+        } catch (Exception ignored) {
         }
-
+        return null;
     }
 
     public LocalDateTime getNow() {
