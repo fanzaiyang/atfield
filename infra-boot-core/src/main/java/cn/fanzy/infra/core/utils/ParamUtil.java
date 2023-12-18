@@ -106,10 +106,10 @@ public class ParamUtil {
      */
     public static Map<String, MultipartFile> getMultipartFileMap(HttpServletRequest request) {
         Assert.isTrue(request instanceof MultipartHttpServletRequest, "请求方式不是MultipartHttpServletRequest！");
+        assert request instanceof MultipartHttpServletRequest;
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        assert multipartRequest != null;
         Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
-        if (fileMap.size() < 1) {
+        if (fileMap.isEmpty()) {
             throw new RuntimeException("请至少上传1个文件！");
         }
         return fileMap;
