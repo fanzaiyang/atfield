@@ -7,9 +7,9 @@ import cn.fanzy.infra.core.utils.ExceptionUtil;
 import cn.fanzy.infra.core.utils.InfraConstants;
 import cn.fanzy.infra.tlog.common.context.TLogContext;
 import cn.fanzy.infra.tlog.configuration.property.TLogProperty;
-import cn.fanzy.infra.tlog.print.callback.LogCallbackService;
 import cn.fanzy.infra.tlog.print.annotation.Log;
 import cn.fanzy.infra.tlog.print.bean.PrintLogInfo;
+import cn.fanzy.infra.tlog.print.callback.LogCallbackService;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
@@ -20,7 +20,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,6 @@ public class TLogWebInvokeTimeAdvice {
 
     private final LogCallbackService callbackService;
 
-    private final ObjectMapper objectMapper;
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
             "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
             "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
@@ -89,7 +87,7 @@ public class TLogWebInvokeTimeAdvice {
         String clientIp = SpringUtils.getClientIp(request);
         String requestType = request.getMethod();
         String requestMethod = AdviceUtil.getMethodInfo(joinPoint);
-        String requestData = objectMapper.writeValueAsString(SpringUtils.getRequestParams(request));
+        String requestData = JSONUtil.toJsonStr(SpringUtils.getRequestParams(request));
         LocalDateTime requestTime = LocalDateTime.now();
         String remarks = "";
         boolean isSkip = property.getPrint().getPreEnable() != null && !property.getPrint().getPreEnable();
@@ -137,7 +135,7 @@ public class TLogWebInvokeTimeAdvice {
         PrintLogInfo logInfo = invokeLogInfo.get();
         logInfo.setTraceId(TLogContext.getTraceId());
         logInfo.setResponseTime(LocalDateTime.now());
-        logInfo.setResponseData(objectMapper.writeValueAsString(obj));
+        logInfo.setResponseData(JSONUtil.toJsonStr(obj));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.SUCCESS);
         if (obj != null && JSONUtil.isTypeJSONObject(obj.toString())) {
             JSONObject entries = JSONUtil.parseObj(obj.toString());
