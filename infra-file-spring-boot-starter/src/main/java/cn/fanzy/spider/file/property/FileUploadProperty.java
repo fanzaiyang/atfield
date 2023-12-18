@@ -89,7 +89,7 @@ public class FileUploadProperty implements Serializable {
 
 
         public String getTableName() {
-            return StrUtil.blankToDefault(tableName,"sys_multipart_file_info");
+            return StrUtil.blankToDefault(tableName,"sys_file_info");
         }
     }
 }
