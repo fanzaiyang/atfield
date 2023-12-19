@@ -105,7 +105,7 @@ public class RedisCoreConfiguration {
     /**
      * 注入一个Redis操作工具
      *
-     * @param redisConnectionFactory 连接工厂
+     * @param factory 连接工厂
      * @return Redis操作工具
      */
     @Bean
