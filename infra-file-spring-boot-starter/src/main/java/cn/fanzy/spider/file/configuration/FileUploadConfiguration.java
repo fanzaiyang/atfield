@@ -1,5 +1,6 @@
 package cn.fanzy.spider.file.configuration;
 
+import cn.fanzy.infra.core.exception.NonePropertyException;
 import cn.fanzy.spider.file.controller.InfraFileUploadController;
 import cn.fanzy.spider.file.property.FileUploadProperty;
 import cn.fanzy.spider.file.service.FileUploadService;
@@ -41,6 +42,9 @@ public class FileUploadConfiguration {
      * @return {@link FileUploadService}
      */
     public static FileUploadService instance() {
+        if(CollUtil.isEmpty(keySet)){
+            throw new NonePropertyException("501","请在配置文件中添加上传配置。【infra.upload】");
+        }
         return instance(CollUtil.get(keySet, 0));
     }
 
