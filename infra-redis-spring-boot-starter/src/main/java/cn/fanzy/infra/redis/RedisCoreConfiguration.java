@@ -14,6 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
@@ -21,7 +22,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
@@ -45,16 +45,35 @@ import java.time.Duration;
         LockForFormSubmitAdvice.class,
         LockForRateLimitAdvice.class})
 public class RedisCoreConfiguration {
+    @ConditionalOnClass(CacheManager.class)
     @Bean
-    public CacheManager redisCacheManager(RedisConnectionFactory factory) {
-        RedisSerializationContext.SerializationPair<Object> serializationPair =
-                RedisSerializationContext.SerializationPair.fromSerializer(redisValueSerializer());
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofSeconds(30))
-                .serializeValuesWith(serializationPair);
-        return RedisCacheManager
+    @ConditionalOnMissingBean
+    public CacheManager redisCacheManager(RedisConnectionFactory factory, CacheProperties properties) {
+        return TtlRedisCacheManager
                 .builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
-                .cacheDefaults(redisCacheConfiguration).build();
+                .cacheDefaults(redisCacheConfiguration(properties)).build();
+    }
+
+    private RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties) {
+
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
+
+        config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()));
+        config = config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.json()));
+
+        CacheProperties.Redis redisProperties = cacheProperties.getRedis();
+
+        if (redisProperties.getTimeToLive() != null) {
+            config = config.entryTtl(redisProperties.getTimeToLive());
+        }
+        if (!redisProperties.isCacheNullValues()) {
+            config = config.disableCachingNullValues();
+        }
+        if (!redisProperties.isUseKeyPrefix()) {
+            config = config.disableKeyPrefix();
+        }
+        config = config.computePrefixWith(name -> name + ":");// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        return config;
     }
 
     /**
