@@ -33,7 +33,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @RestControllerAdvice
 @EnableConfigurationProperties({ResponseWrapperProperty.class})
-@ConditionalOnProperty(prefix = "infra.web.response.wrapper", name = {"enable"}, havingValue = "true")
+@ConditionalOnProperty(prefix = "infra.web.response.wrapper", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
 
     private final ObjectMapper objectMapper;

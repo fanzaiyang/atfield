@@ -23,7 +23,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @AutoConfigureBefore(JsonConvertAutoConfiguration.class)
 @EnableConfigurationProperties({JsonProperty.class})
-@ImportAutoConfiguration({ReplaceStreamFilter.class, GlobalExceptionAdvice.class, ResponseWrapperAdvice.class})
+@ImportAutoConfiguration({ReplaceStreamFilter.class,
+        GlobalExceptionAdvice.class,
+        ResponseWrapperAdvice.class})
 @PropertySource(
         name = "TLog Default framework Properties",
         value = "classpath:/META-INF/infra-web-default.properties")
