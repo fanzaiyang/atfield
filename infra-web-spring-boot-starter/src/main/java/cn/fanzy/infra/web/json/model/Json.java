@@ -4,9 +4,11 @@ import cn.fanzy.infra.tlog.common.context.TLogContext;
 import cn.fanzy.infra.web.configuration.JsonModelAutoConfiguration;
 import cn.fanzy.infra.web.json.property.JsonProperty;
 import cn.hutool.core.util.StrUtil;
-import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,11 +17,15 @@ import java.time.LocalDateTime;
  * @author fanzaiyang
  * @date 2023/11/30
  */
-@Data
-@Accessors(chain = true)
-public class Json<T> {
+@Getter
+@Setter
+public class Json<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1222584965768862227L;
+
 
     private static final JsonProperty PROPERTY = JsonModelAutoConfiguration.getJsonProperty();
+
 
     /**
      * 链路id
@@ -166,36 +172,5 @@ public class Json<T> {
 
     public boolean isSuccess() {
         return StrUtil.equals(getCode(), PROPERTY.getModel().getDefaultOkCode());
-    }
-
-    public enum ShowType {
-        /**
-         * 静默，不显示
-         */
-        SILENT,
-        /**
-         * 显示为警告Message
-         */
-        MESSAGE_WARN,
-        /**
-         * 显示为错误Message
-         */
-        MESSAGE_ERROR,
-        /**
-         * 显示为弹窗警告
-         */
-        MODAL_WARN,
-        /**
-         * 显示为弹窗错误
-         */
-        MODAL_ERROR,
-        /**
-         * 显示为通知警告NOTIFICATION
-         */
-        NOTIFICATION_WARN,
-        /**
-         * 显示为通知错误NOTIFICATION
-         */
-        NOTIFICATION_ERROR;
     }
 }

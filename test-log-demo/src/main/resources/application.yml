@@ -8,6 +8,8 @@ infra:
     json:
       model:
         enable-error-stack: true
+      convert:
+        enable: false
   captcha:
     image:
       retry-count: 3

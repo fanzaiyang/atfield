@@ -55,8 +55,9 @@ public class ReplaceStreamFilter implements Filter {
                     message = e.getCause().getCause().getMessage() == null ? message : e.getCause().getCause().getMessage();
                 }
             }
-
-            ServletUtil.out((HttpServletResponse) response, Json.fail(message).setData(e.getCause()));
+            Json<Object> json = Json.fail(message);
+            json.setData(e.getCause());
+            ServletUtil.out((HttpServletResponse) response,json);
         }
     }
 

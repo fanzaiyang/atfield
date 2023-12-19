@@ -3,6 +3,7 @@ package cn.fanzy.infra.web.advice;
 import cn.fanzy.infra.core.exception.GlobalException;
 import cn.fanzy.infra.core.utils.ExceptionUtil;
 import cn.fanzy.infra.web.json.model.Json;
+import cn.fanzy.infra.web.json.model.ShowType;
 import cn.fanzy.infra.web.json.property.JsonProperty;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
@@ -63,7 +64,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "参数解析失败"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},错误的请求,失败的原因为：{}", ssid, e.getMessage())
                 , e);
         setErrorStacks(response,e);
@@ -83,7 +84,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "参数不符合要求"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{}，参数解析失败,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -103,7 +104,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前请求方法"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},不支持当前请求方法,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -124,7 +125,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()),
                 StrUtil.blankToDefault(e.getMessage(), "不支持当前媒体类型"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},不支持当前媒体类型,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -143,7 +144,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 StrUtil.blankToDefault(e.getMessage(), "逻辑发生空指针异常！"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,失败的原因为空指针异常!", ssid), e);
         setErrorStacks(response,e);
         return response;
@@ -162,7 +163,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         String msg = e.getMessage();
         Json<String> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), msg);
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         setErrorStacks(response,e);
         return response;
@@ -181,7 +182,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         String msg = e.getMessage();
         Json<String> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), msg);
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
 
         log.error(StrUtil.format("「全局异常」请求{},请求失败,失败的原因为：{}", ssid, msg), e);
         setErrorStacks(response,e);
@@ -195,7 +196,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -208,7 +209,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "请求参数有误"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},方法参数有误,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -228,7 +229,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "非法参数"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},参数校验有误,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -248,7 +249,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 StrUtil.blankToDefault(e.getMessage(), "非法参数"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},参数约束有误,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -267,7 +268,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 StrUtil.blankToDefault(e.getMessage(), "数组越界"));
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
 
         log.error(StrUtil.format("「全局异常」请求{},请求失败,出现数组越界,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
@@ -286,7 +287,7 @@ public class GlobalExceptionAdvice {
     public Object handleCustomException(HttpServletRequest request, GlobalException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>(e.getCode(), e.getMessage());
-        response.setShowType(Json.ShowType.SILENT);
+        response.setShowType(ShowType.SILENT);
 
         log.error(StrUtil.format("「全局异常」请求{},请求失败,失败的原因为：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
@@ -305,7 +306,7 @@ public class GlobalExceptionAdvice {
     public Object handleIllegalStateException(HttpServletRequest request, IllegalStateException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{}，请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -316,7 +317,7 @@ public class GlobalExceptionAdvice {
     public Object handleException(HttpServletRequest request, SQLSyntaxErrorException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到SQLSyntaxErrorException异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -327,7 +328,7 @@ public class GlobalExceptionAdvice {
     public Object handleException(HttpServletRequest request, SQLException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
 
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到SQLException异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
@@ -347,7 +348,7 @@ public class GlobalExceptionAdvice {
     public Object handleException(HttpServletRequest request, NoHandlerFoundException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.NOT_FOUND.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到未找到处理程序异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -358,7 +359,7 @@ public class GlobalExceptionAdvice {
     public Object handleException(HttpServletRequest request, NoResourceFoundException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.NOT_FOUND.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到NoResourceFoundException程序异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -410,7 +411,7 @@ public class GlobalExceptionAdvice {
     public Object handleRuntimeException(HttpServletRequest request, RuntimeException e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到运行时异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;
@@ -428,7 +429,7 @@ public class GlobalExceptionAdvice {
     public Object handleException(HttpServletRequest request, Exception e) {
         String ssid = this.getRequestId(request);
         Json<Object> response = new Json<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), e.getMessage());
-        response.setShowType(Json.ShowType.NOTIFICATION_ERROR);
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},请求失败,拦截到未知异常：{}", ssid, e.getMessage()), e);
         setErrorStacks(response,e);
         return response;

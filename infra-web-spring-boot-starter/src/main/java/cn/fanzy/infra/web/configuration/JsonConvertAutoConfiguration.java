@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
@@ -44,12 +43,7 @@ public class JsonConvertAutoConfiguration implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private final JacksonProperties jacksonProperties;
     private final WebMvcProperties webMvcProperties;
-
-    @Bean
-    @ConditionalOnMissingBean
-    public JsonProperty jsonProperty(){
-        return new JsonProperty();
-    }
+    public final JsonProperty jsonProperty;
 
     @Bean
     public Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder(List<Jackson2ObjectMapperBuilderCustomizer> customizers) {
