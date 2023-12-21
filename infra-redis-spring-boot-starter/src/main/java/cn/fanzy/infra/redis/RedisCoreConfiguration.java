@@ -80,27 +80,6 @@ public class RedisCoreConfiguration {
                 .cacheDefaults(redisCacheConfiguration(properties)).build();
     }
 
-    private RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties) {
-
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
-
-        config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()));
-        config = config.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.json()));
-
-        CacheProperties.Redis redisProperties = cacheProperties.getRedis();
-
-        if (redisProperties.getTimeToLive() != null) {
-            config = config.entryTtl(redisProperties.getTimeToLive());
-        }
-        if (!redisProperties.isCacheNullValues()) {
-            config = config.disableCachingNullValues();
-        }
-        if (!redisProperties.isUseKeyPrefix()) {
-            config = config.disableKeyPrefix();
-        }
-        config = config.computePrefixWith(name -> name + ":");// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
-        return config;
-    }
 
     /**
      * 注入一个Redis序列化器
@@ -127,28 +106,7 @@ public class RedisCoreConfiguration {
         simpleModule.addSerializer(Long.TYPE, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
         //反序列化的时候如果多了其他属性,不抛出异常
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        String format = StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
-        String dateTimeFormat = StrUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss");
-        String dateFormat = StrUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd");
-        String timeFormat = StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss");
-        //日期序列化
-        javaTimeModule.addSerializer(Date.class, new DateSerializer(false,
-                new SimpleDateFormat(StrUtil.blankToDefault(dateTimeFormat, "yyyy-MM-dd HH:mm:ss"))));
-        javaTimeModule.addSerializer(LocalDateTime.class,
-                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(timeFormat)));
-        //日期反序列化
-        javaTimeModule.addDeserializer(Date.class, new DateDeserializers.DateDeserializer());
-        javaTimeModule.addDeserializer(LocalDateTime.class,
-                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
-        javaTimeModule.addDeserializer(LocalDate.class,
-                new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
-        javaTimeModule.addDeserializer(LocalTime.class,
-                new LocalTimeDeserializer(DateTimeFormatter.ofPattern(timeFormat)));
-
-        objectMapper.registerModules(simpleModule, javaTimeModule);
+        objectMapper.registerModules(simpleModule, javaTimeModule());
         objectMapper.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
         // 配置null值的序列化器
 //		GenericJackson2JsonRedisSerializer.registerNullValueSerializer(objectMapper, null);
@@ -201,13 +159,66 @@ public class RedisCoreConfiguration {
         // 配置序列化（解决乱码的问题）
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
         return configuration
+                .serializeKeysWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair
                         // spring Security 默认不支持 jackson的序列化
                         .fromSerializer(redisValueSerializer))
-                .serializeKeysWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .entryTtl(Duration.ofMinutes(30L));
     }
+
+    private RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties) {
+
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
+        config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer()));
+        CacheProperties.Redis redisProperties = cacheProperties.getRedis();
+        if (redisProperties.getTimeToLive() != null) {
+            config = config.entryTtl(redisProperties.getTimeToLive());
+        }
+        if (!redisProperties.isCacheNullValues()) {
+            config = config.disableCachingNullValues();
+        }
+        if (!redisProperties.isUseKeyPrefix()) {
+            config = config.disableKeyPrefix();
+        }
+        return config.computePrefixWith(name -> name + ":");// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+    }
+
+    private GenericJackson2JsonRedisSerializer serializer() {
+        // 基于 Jackson 的 RedisSerializer 实现：GenericJackson2JsonRedisSerializer
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+        // 把 javaTimeModule 配置到 Serializer 中
+        return serializer.configure(config -> {
+            config.registerModules(javaTimeModule());
+        });
+    }
+
+
+    private JavaTimeModule javaTimeModule() {
+        JavaTimeModule javaTimeModule = new JavaTimeModule();
+        String format = StrUtil.blankToDefault(jacksonProperties.getDateFormat(), webMvcProperties.getFormat().getDateTime());
+        String dateTimeFormat = StrUtil.blankToDefault(format, "yyyy-MM-dd HH:mm:ss");
+        String dateFormat = StrUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd");
+        String timeFormat = StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss");
+        //日期序列化
+        javaTimeModule.addSerializer(Date.class, new DateSerializer(false,
+                new SimpleDateFormat(StrUtil.blankToDefault(dateTimeFormat, "yyyy-MM-dd HH:mm:ss"))));
+        javaTimeModule.addSerializer(LocalDateTime.class,
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)));
+        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(timeFormat)));
+        //日期反序列化
+        javaTimeModule.addDeserializer(Date.class, new DateDeserializers.DateDeserializer());
+        javaTimeModule.addDeserializer(LocalDateTime.class,
+                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateTimeFormat)));
+        javaTimeModule.addDeserializer(LocalDate.class,
+                new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormat)));
+        javaTimeModule.addDeserializer(LocalTime.class,
+                new LocalTimeDeserializer(DateTimeFormatter.ofPattern(timeFormat)));
+        return javaTimeModule;
+    }
+
 
     /**
      * 配置检查
