@@ -24,6 +24,11 @@ public class ByteRation {
         this.unit = ByteRationUnit.of(unit);
     }
 
+    public ByteRation(long value, ByteRationUnit unit) {
+        this.value = value;
+        this.unit = unit;
+    }
+
     public static ByteRation of(long value, String unit) {
         return new ByteRation(value, unit);
     }
