@@ -21,7 +21,11 @@ public class DefaultCaptchaEmailCreatorService extends CaptchaEmailCreatorServic
         String code = getRandomCode(property.getLength(), property.isContainLetter(), property.isContainNumber());
         return CaptchaCodeInfo.builder()
                 .code(code)
-                .expireSeconds(property.getExpireSeconds())
+                .expireSeconds(
+                        property.getExpireSeconds()==null?
+                                captchaProperty.getExpireSeconds() :
+                                property.getExpireSeconds()
+                )
                 .maxRetryCount(property.getRetryCount())
                 .usedCount(0)
                 .build();

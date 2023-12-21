@@ -31,7 +31,11 @@ public class DefaultCaptchaImageCreatorService extends CaptchaImageCreatorServic
         Image image = captcha.createImage(code);
         return CaptchaImageCodeInfo.builder()
                 .code(code)
-                .expireSeconds(property.getExpireSeconds())
+                .expireSeconds(
+                        property.getExpireSeconds()==null?
+                                captchaProperty.getExpireSeconds() :
+                                property.getExpireSeconds()
+                )
                 .maxRetryCount(property.getRetryCount())
                 .usedCount(0)
                 .image(ImgUtil.copyImage(image, BufferedImage.TYPE_INT_RGB))

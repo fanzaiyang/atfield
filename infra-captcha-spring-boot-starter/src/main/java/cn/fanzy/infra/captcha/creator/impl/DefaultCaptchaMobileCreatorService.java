@@ -3,7 +3,6 @@ package cn.fanzy.infra.captcha.creator.impl;
 import cn.fanzy.infra.captcha.bean.CaptchaCodeInfo;
 import cn.fanzy.infra.captcha.creator.CaptchaMobileCreatorService;
 import cn.fanzy.infra.captcha.property.CaptchaProperty;
-import cn.fanzy.infra.captcha.storage.CaptchaStorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +22,11 @@ public class DefaultCaptchaMobileCreatorService extends CaptchaMobileCreatorServ
         String code = getRandomCode(property.getLength(), property.isContainLetter(), property.isContainNumber());
         return CaptchaCodeInfo.builder()
                 .code(code)
-                .expireSeconds(property.getExpireSeconds())
+                .expireSeconds(
+                        property.getExpireSeconds() == null ?
+                                captchaProperty.getExpireSeconds() :
+                                property.getExpireSeconds()
+                )
                 .maxRetryCount(property.getRetryCount())
                 .usedCount(0)
                 .build();
