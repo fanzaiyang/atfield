@@ -4,6 +4,9 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * 字节比例单位
  *
@@ -12,15 +15,14 @@ import lombok.Getter;
  */
 @Getter
 public enum ByteRationUnit {
-
+    /**
+     * 比特,最基本存储单元
+     */
+    Bit(0, 8),
     /**
      * 字节
      */
-    Bytes(0, 8),
-    /**
-     * b
-     */
-    Bit(1, 1024),
+    Bytes(1, 1024),
     /**
      * 知识库
      */
@@ -87,11 +89,11 @@ public enum ByteRationUnit {
      * @param start 开始
      * @param end   结束
      */
-    public static int getRadix(int start, int end) {
+    public static BigDecimal getRadix(int start, int end) {
         Assert.isTrue(start >= 0 && start <= 9, "参数1必须介于0到9之间。");
         Assert.isTrue(end >= 0 && end <= 9, "参数2必须介于0到9之间。");
         if (start == end) {
-            return 1;
+            return BigDecimal.ONE;
         }
         if (end > start) {
             // 从小到大
@@ -99,13 +101,16 @@ public enum ByteRationUnit {
             for (int i = start; i < end; i++) {
                 radix = radix * RADIX[start];
             }
-            return 1 / radix;
+            return BigDecimal.ONE
+                    .divide(BigDecimal.valueOf(radix),
+                            10,
+                            RoundingMode.HALF_UP);
         }
         // 从大到小
         int radix = 1;
         for (int i = end; i < start; i++) {
             radix = radix * RADIX[start];
         }
-        return radix;
+        return BigDecimal.valueOf(radix);
     }
 }

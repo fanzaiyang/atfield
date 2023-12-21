@@ -42,8 +42,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getBytes() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.Bytes.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.Bytes.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -52,8 +53,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getBit() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.Bit.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.Bit.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -62,8 +64,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getKb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.KB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.KB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -72,8 +75,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getMb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.MB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.MB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -82,8 +86,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getGb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.GB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.GB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -92,8 +97,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getTb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.TB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.TB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -102,8 +108,9 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getPb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.PB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.PB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -112,13 +119,15 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getEb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.EB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.EB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     public BigDecimal getZb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.ZB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.ZB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 
     /**
@@ -127,7 +136,8 @@ public class ByteRation {
      * @return {@link BigDecimal}
      */
     public BigDecimal getYb() {
-        int radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.YB.getIndex());
-        return BigDecimal.valueOf(this.value * radix);
+        BigDecimal radix = ByteRationUnit.getRadix(unit.getIndex(), ByteRationUnit.YB.getIndex());
+        return BigDecimal.valueOf(this.value)
+                .multiply(radix);
     }
 }
