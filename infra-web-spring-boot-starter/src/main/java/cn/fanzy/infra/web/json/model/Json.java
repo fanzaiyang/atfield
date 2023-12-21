@@ -123,6 +123,10 @@ public class Json<T> implements Serializable {
         return ok(null, null, data);
     }
 
+    public static <T> Json<T> ok(String message, T data) {
+        return ok(null, message, data);
+    }
+
     public static <T> Json<T> ok(String code, String message, T data) {
         return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultOkCode()),
                 StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultOkMessage()),
@@ -136,6 +140,10 @@ public class Json<T> implements Serializable {
 
     public static <T> Json<T> fail(String message) {
         return fail(null, message);
+    }
+
+    public static <T> Json<T> fail(String message, T data) {
+        return fail(null, message, data);
     }
 
     public static <T> Json<T> fail(String code, String message) {
