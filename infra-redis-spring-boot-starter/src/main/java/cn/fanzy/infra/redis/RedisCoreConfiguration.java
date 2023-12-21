@@ -181,8 +181,8 @@ public class RedisCoreConfiguration {
         if (StrUtil.isNotBlank(redisProperties.getKeyPrefix())) {
             globalPrefix = redisProperties.getKeyPrefix();
         }
-        final String prefix = globalPrefix;
-        config = config.computePrefixWith(cacheName -> prefix + StrPool.COLON + cacheName + StrPool.COLON);// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        final String prefix = StrUtil.isBlank(globalPrefix) ? "" : globalPrefix + StrPool.COLON;
+        config = config.computePrefixWith(cacheName -> prefix + cacheName + StrPool.COLON);// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
         return config;
     }
 
