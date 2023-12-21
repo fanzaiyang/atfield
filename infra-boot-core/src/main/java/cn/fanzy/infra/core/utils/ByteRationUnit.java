@@ -77,7 +77,7 @@ public enum ByteRationUnit {
         return null;
     }
 
-    private static final Integer[] RADIXS = new Integer[]{
+    private static final Integer[] RADIX = new Integer[]{
             8, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024
     };
 
@@ -97,14 +97,14 @@ public enum ByteRationUnit {
             // 从小到大
             int radix = 1;
             for (int i = start; i < end; i++) {
-                radix = radix * RADIXS[start];
+                radix = radix * RADIX[start];
             }
             return 1 / radix;
         }
         // 从大到小
         int radix = 1;
         for (int i = end; i < start; i++) {
-            radix = radix * RADIXS[start];
+            radix = radix * RADIX[start];
         }
         return radix;
     }
