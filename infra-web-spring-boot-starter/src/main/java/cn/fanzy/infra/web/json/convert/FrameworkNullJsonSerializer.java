@@ -107,8 +107,7 @@ public class FrameworkNullJsonSerializer {
         public void serialize(Object value, JsonGenerator jsonGenerator,
                               SerializerProvider serializerProvider) throws IOException {
             if (covert.isEnable()) {
-                if (StrUtil.isBlank(covert.getValue()) ||
-                        StrUtil.equalsIgnoreCase(covert.getValue(), "null")) {
+                if (covert.getValue() == null || StrUtil.equalsIgnoreCase(covert.getValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(covert.getValue());
