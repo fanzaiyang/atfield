@@ -170,7 +170,8 @@ public class RedisCoreConfiguration {
     private RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties) {
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
-        config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
+        config = config
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(RedisSerializer.string()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer()));
         CacheProperties.Redis redisProperties = cacheProperties.getRedis();
         if (redisProperties.getTimeToLive() != null) {
