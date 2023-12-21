@@ -99,7 +99,7 @@ public enum ByteRationUnit {
             // 从小到大
             int radix = 1;
             for (int i = start; i < end; i++) {
-                radix = radix * RADIX[start];
+                radix = radix * RADIX[i];
             }
             return BigDecimal.ONE
                     .divide(BigDecimal.valueOf(radix),
@@ -109,7 +109,7 @@ public enum ByteRationUnit {
         // 从大到小
         int radix = 1;
         for (int i = end; i < start; i++) {
-            radix = radix * RADIX[start];
+            radix = radix * RADIX[i];
         }
         return BigDecimal.valueOf(radix);
     }
