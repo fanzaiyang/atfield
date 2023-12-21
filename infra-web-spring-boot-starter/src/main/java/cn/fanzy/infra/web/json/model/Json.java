@@ -123,6 +123,10 @@ public class Json<T> implements Serializable {
         return ok(null, null, data);
     }
 
+    public static <T> Json<T> okData(T data) {
+        return ok(null, null, data);
+    }
+
     public static <T> Json<T> ok(String message, T data) {
         return ok(null, message, data);
     }
