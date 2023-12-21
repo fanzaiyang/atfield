@@ -124,12 +124,12 @@ public class Json<T> implements Serializable {
     }
 
     /**
-     * 确定数据
+     * 返回成功数据
      *
      * @param data 数据
      * @return {@link Json}<{@link T}>
      */
-    public static <T> Json<T> okData(T data) {
+    public static <T> Json<T> data(T data) {
         return ok(null, null, data);
     }
 

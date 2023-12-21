@@ -73,11 +73,11 @@ public class ResponseWrapperAdvice implements ResponseBodyAdvice<Object> {
         // String类型的返回值需要特殊处理,是使用了StringHttpMessageConverter转换器，无法转换为Json格式。
         if (body instanceof String) {
             try {
-                return objectMapper.writeValueAsString(Json.ok(body));
+                return objectMapper.writeValueAsString(Json.data(body));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
         }
-        return Json.ok(body);
+        return Json.data(body);
     }
 }
