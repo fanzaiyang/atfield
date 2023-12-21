@@ -3,6 +3,7 @@ package cn.fanzy.infra.redis;
 import cn.fanzy.infra.redis.advice.LockForDistributedAdvice;
 import cn.fanzy.infra.redis.advice.LockForFormSubmitAdvice;
 import cn.fanzy.infra.redis.advice.LockForRateLimitAdvice;
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -43,7 +44,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
 
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -147,25 +147,19 @@ public class RedisCoreConfiguration {
 
     }
 
-    /**
-     * 自定义Redis缓存配置
-     *
-     * @param redisValueSerializer Redis序列化器
-     * @return Redis缓存配置
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RedisCacheConfiguration redisCacheConfiguration(RedisSerializer<Object> redisValueSerializer) {
-        // 配置序列化（解决乱码的问题）
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
-        return configuration
-                .serializeKeysWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair
-                        // spring Security 默认不支持 jackson的序列化
-                        .fromSerializer(redisValueSerializer))
-                .entryTtl(Duration.ofMinutes(30L));
-    }
+//    @Bean
+//    @ConditionalOnMissingBean
+//    public RedisCacheConfiguration redisCacheConfiguration(RedisSerializer<Object> redisValueSerializer) {
+//        // 配置序列化（解决乱码的问题）
+//        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
+//        return configuration
+//                .serializeKeysWith(
+//                        RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+//                .serializeValuesWith(RedisSerializationContext.SerializationPair
+//                        // spring Security 默认不支持 jackson的序列化
+//                        .fromSerializer(redisValueSerializer))
+//                .entryTtl(Duration.ofMinutes(30L));
+//    }
 
     private RedisCacheConfiguration redisCacheConfiguration(CacheProperties cacheProperties) {
 
@@ -183,7 +177,13 @@ public class RedisCoreConfiguration {
         if (!redisProperties.isUseKeyPrefix()) {
             config = config.disableKeyPrefix();
         }
-        return config.computePrefixWith(name -> name + ":");// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        String globalPrefix = "";
+        if (StrUtil.isNotBlank(redisProperties.getKeyPrefix())) {
+            globalPrefix = redisProperties.getKeyPrefix();
+        }
+        final String prefix = globalPrefix;
+        config = config.computePrefixWith(cacheName -> prefix + StrPool.COLON + cacheName + StrPool.COLON);// 覆盖默认key双冒号  CacheKeyPrefix#prefixed
+        return config;
     }
 
     private GenericJackson2JsonRedisSerializer serializer() {
