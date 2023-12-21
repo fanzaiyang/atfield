@@ -11,10 +11,11 @@ import cn.fanzy.infra.captcha.bean.CaptchaCode;
 public interface CaptchaStorageService {
 
     /**
+     * 救
      * 保存验证码
      *
-     * @param target   目标
-     * @param codeInfo 代码信息
+     * @param target        目标
+     * @param codeInfo      代码信息
      */
     void save(String target, CaptchaCode codeInfo);
 

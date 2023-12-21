@@ -29,13 +29,10 @@ public class RedisCaptchaStorageService implements CaptchaStorageService {
 
     @Override
     public void save(String target, CaptchaCode codeInfo) {
-        if (property.getExpireSeconds() == null) {
-            property.setExpireSeconds(-1);
-        }
-        if (property.getExpireSeconds() == -1 || property.getExpireSeconds() == 0) {
+        if (codeInfo.getExpireSeconds() == -1 || codeInfo.getExpireSeconds() == 0) {
             redisTemplate.opsForValue().set(property.getPrefix() + target, codeInfo);
         } else {
-            redisTemplate.opsForValue().set(property.getPrefix() + target, codeInfo, property.getExpireSeconds(),
+            redisTemplate.opsForValue().set(property.getPrefix() + target, codeInfo, codeInfo.getExpireSeconds(),
                     TimeUnit.SECONDS);
         }
 

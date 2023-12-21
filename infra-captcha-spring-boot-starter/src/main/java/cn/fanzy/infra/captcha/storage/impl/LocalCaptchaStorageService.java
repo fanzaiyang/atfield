@@ -24,13 +24,10 @@ public class LocalCaptchaStorageService implements CaptchaStorageService {
 
     @Override
     public void save(String target, CaptchaCode codeInfo) {
-        if (property.getExpireSeconds() == null) {
-            property.setExpireSeconds(-1);
-        }
-        if (property.getExpireSeconds() == -1 || property.getExpireSeconds() == 0) {
+        if (codeInfo.getExpireSeconds() == -1 || codeInfo.getExpireSeconds() == 0) {
             CACHE.put(property.getPrefix() + target, codeInfo);
         } else {
-            CACHE.put(property.getPrefix() + target, codeInfo, (long) property.getExpireSeconds() * 1000);
+            CACHE.put(property.getPrefix() + target, codeInfo, codeInfo.getExpireSeconds() * 1000);
         }
 
     }
