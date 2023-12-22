@@ -2,8 +2,10 @@ package cn.fanzy.infra.repository;
 
 import cn.fanzy.infra.repository.dao.BaseRepository;
 import cn.fanzy.infra.repository.dao.BaseRepositoryImpl;
+import cn.fanzy.infra.repository.sqltoy.configuration.SqltoyAutoConfiguration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@ImportAutoConfiguration({SqltoyAutoConfiguration.class})
 public class InfraRepositoryConfiguration {
 
     @Bean
