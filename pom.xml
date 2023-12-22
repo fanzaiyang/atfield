@@ -24,6 +24,7 @@
         <module>infra-ipsec-spring-boot-starter</module>
         <module>infra-captcha-spring-boot-starter</module>
         <module>infra-file-spring-boot-starter</module>
+        <module>infra-repository-spring-boot-starter</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
