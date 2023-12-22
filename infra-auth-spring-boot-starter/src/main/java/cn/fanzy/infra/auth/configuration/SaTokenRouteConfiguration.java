@@ -1,42 +1,46 @@
-package cn.fanzy.infra.web.configuration;
+package cn.fanzy.infra.auth.configuration;
 
-import cn.fanzy.infra.web.advice.GlobalExceptionAdvice;
-import cn.fanzy.infra.web.advice.ResponseWrapperAdvice;
-import cn.fanzy.infra.web.filter.ReplaceStreamFilter;
-import cn.fanzy.infra.web.json.property.JsonProperty;
+import cn.dev33.satoken.fun.SaParamFunction;
+import cn.dev33.satoken.interceptor.SaInterceptor;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.fanzy.infra.auth.property.AuthProperty;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * infra-web自动配置
+ * SA 令牌配置
  *
  * @author fanzaiyang
- * @date 2023/12/06
+ * @date 2023/12/18
  */
 @RequiredArgsConstructor
 @Configuration
-@AutoConfigureBefore(JsonConvertAutoConfiguration.class)
-@EnableConfigurationProperties({JsonProperty.class})
-@ImportAutoConfiguration({ReplaceStreamFilter.class,
-        GlobalExceptionAdvice.class,
-        ResponseWrapperAdvice.class})
-@PropertySource(
-        name = "TLog Default framework Properties",
-        value = "classpath:/META-INF/infra-web-default.properties")
-public class InfraWebAutoConfiguration implements WebMvcConfigurer {
-    /**
-     * 添加资源处理程序
-     * 跨域配置会覆盖默认的配置，
-     * 因此需要实现addResourceHandlers方法，增加默认配置静态路径
-     *
-     * @param registry 注册表
-     */
+@EnableConfigurationProperties(AuthProperty.class)
+@ConditionalOnProperty(prefix = "infra.auth.route", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+public class SaTokenRouteConfiguration implements WebMvcConfigurer {
+
+    private final AuthProperty property;
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SaParamFunction<Object> saParamFunction() {
+        return r -> StpUtil.checkLogin();
+    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
+        registry.addInterceptor(new SaInterceptor(saParamFunction()))
+                .addPathPatterns(property.getRoute().getAddPathPatterns())
+                .excludePathPatterns(property.getRoute().getExcludePathPatterns());
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
