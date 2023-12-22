@@ -61,6 +61,11 @@
                 <artifactId>infra-file-spring-boot-starter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.fanzy.infra</groupId>
+                <artifactId>infra-repository-spring-boot-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
