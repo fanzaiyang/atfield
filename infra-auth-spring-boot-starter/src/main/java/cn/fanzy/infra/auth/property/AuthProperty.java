@@ -50,7 +50,7 @@ public class AuthProperty implements Serializable {
         /**
          * 排除路径模式
          */
-        private String[] excludePathPatterns;
+        private String[] excludePathPatterns = new String[]{};
 
         public String[] getAddPathPatterns() {
             if (addPathPatterns == null || addPathPatterns.length == 0) {
@@ -79,7 +79,7 @@ public class AuthProperty implements Serializable {
         /**
          * 忽略路径
          */
-        private String[] excludePathPatterns;
+        private String[] excludePathPatterns = new String[]{};
 
         public String[] getAddPathPatterns() {
             if (addPathPatterns == null || addPathPatterns.length == 0) {

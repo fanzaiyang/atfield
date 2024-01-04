@@ -3,7 +3,9 @@ package cn.fanzy.infra.tlog.configuration;
 import cn.fanzy.infra.tlog.configuration.property.TLogProperty;
 import cn.fanzy.infra.tlog.print.advice.TLogWebInvokeTimeAdvice;
 import cn.fanzy.infra.tlog.print.callback.DefaultLogCallbackServiceImpl;
+import cn.fanzy.infra.tlog.print.callback.DefaultLogUserCallbackServiceImpl;
 import cn.fanzy.infra.tlog.print.callback.LogCallbackService;
+import cn.fanzy.infra.tlog.print.callback.LogUserCallbackService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +23,14 @@ import org.springframework.context.annotation.Configuration;
 public class TLogPrintAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    public LogCallbackService logCallbackService(TLogProperty property) {
-        return new DefaultLogCallbackServiceImpl(property);
+    public LogCallbackService logCallbackService() {
+        return new DefaultLogCallbackServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public LogUserCallbackService logUserCallbackService() {
+        return new DefaultLogUserCallbackServiceImpl();
     }
 
     @Bean

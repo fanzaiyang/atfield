@@ -9,35 +9,16 @@ import cn.fanzy.infra.tlog.print.bean.PrintLogInfo;
  * @date 2023/12/05
  */
 public interface LogCallbackService {
-
-    /**
-     * 执行结束后的回调
-     *
-     * @param param 对象
-     */
-    void callback(PrintLogInfo param);
-
     /**
      * 执行之前的回调
      *
      * @param param 参数
      */
     void before(PrintLogInfo param);
-
     /**
-     * 获取用户id
+     * 执行结束后的回调
      *
-     * @param param 参数
-     * @return {@link String}
+     * @param param 对象
      */
-    String getUserId(PrintLogInfo param);
-
-    /**
-     * 获取用户名
-     *
-     * @param param 参数
-     * @return {@link String}
-     */
-    String getUserName(PrintLogInfo param);
-
+    void after(PrintLogInfo param);
 }

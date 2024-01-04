@@ -10,6 +10,7 @@ import cn.fanzy.infra.tlog.configuration.property.TLogProperty;
 import cn.fanzy.infra.tlog.print.annotation.Log;
 import cn.fanzy.infra.tlog.print.bean.PrintLogInfo;
 import cn.fanzy.infra.tlog.print.callback.LogCallbackService;
+import cn.fanzy.infra.tlog.print.callback.LogUserCallbackService;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
@@ -51,6 +52,8 @@ public class TLogWebInvokeTimeAdvice {
 
     private final LogCallbackService callbackService;
 
+    private final LogUserCallbackService userCallbackService;
+
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
             "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
             "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
@@ -79,8 +82,8 @@ public class TLogWebInvokeTimeAdvice {
         String moduleName = joinPoint.getSignature().getName();
         String methodName = AdviceUtil.getMethodInfo(joinPoint);
         String operateType = "";
-        String userId = StrUtil.blankToDefault(callbackService.getUserId(null), "-");
-        String userName = StrUtil.blankToDefault(callbackService.getUserName(null), "-");
+        String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
+        String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
 
         UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
         String deviceName = JSONUtil.toJsonStr(ua);
@@ -142,7 +145,7 @@ public class TLogWebInvokeTimeAdvice {
             logInfo.setResponseMessage(entries.getStr("message", ""));
         }
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
-        callbackService.callback(logInfo);
+        callbackService.after(logInfo);
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }
@@ -162,7 +165,7 @@ public class TLogWebInvokeTimeAdvice {
         logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, property.getPrint().getResponseDataLength()));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.FAIL);
         logInfo.setResponseMessage(e.getMessage());
-        callbackService.callback(logInfo);
+        callbackService.after(logInfo);
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }

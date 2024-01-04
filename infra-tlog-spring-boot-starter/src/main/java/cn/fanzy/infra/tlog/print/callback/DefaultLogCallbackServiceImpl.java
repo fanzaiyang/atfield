@@ -1,6 +1,5 @@
 package cn.fanzy.infra.tlog.print.callback;
 
-import cn.fanzy.infra.tlog.configuration.property.TLogProperty;
 import cn.fanzy.infra.tlog.print.bean.PrintLogInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,25 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class DefaultLogCallbackServiceImpl implements LogCallbackService {
 
-    private final TLogProperty property;
-
-    @Override
-    public void callback(PrintLogInfo param) {
-
-    }
-
     @Override
     public void before(PrintLogInfo param) {
 
     }
-
     @Override
-    public String getUserId(PrintLogInfo param) {
-        return null;
-    }
+    public void after(PrintLogInfo param) {
 
-    @Override
-    public String getUserName(PrintLogInfo param) {
-        return null;
     }
 }
