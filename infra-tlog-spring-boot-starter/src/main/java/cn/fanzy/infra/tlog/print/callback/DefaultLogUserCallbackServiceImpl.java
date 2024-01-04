@@ -9,11 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 public class DefaultLogUserCallbackServiceImpl implements LogUserCallbackService{
     @Override
     public String getUserId(PrintLogInfo param) {
-        return null;
+        return "anonymousUser";
     }
 
     @Override
     public String getUserName(PrintLogInfo param) {
-        return null;
+        return "anonymousUser";
     }
 }
