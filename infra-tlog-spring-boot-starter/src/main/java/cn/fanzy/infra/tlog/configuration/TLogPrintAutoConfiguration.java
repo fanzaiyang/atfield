@@ -34,7 +34,9 @@ public class TLogPrintAutoConfiguration {
     }
 
     @Bean
-    public TLogWebInvokeTimeAdvice tLogWebInvokeTimeAdvice(TLogProperty property, LogCallbackService callbackService) {
-        return new TLogWebInvokeTimeAdvice(property, callbackService);
+    @ConditionalOnMissingBean
+    public TLogWebInvokeTimeAdvice tLogWebInvokeTimeAdvice(TLogProperty property, LogCallbackService callbackService,
+                                                           LogUserCallbackService logUserCallbackService) {
+        return new TLogWebInvokeTimeAdvice(property, callbackService, logUserCallbackService);
     }
 }
