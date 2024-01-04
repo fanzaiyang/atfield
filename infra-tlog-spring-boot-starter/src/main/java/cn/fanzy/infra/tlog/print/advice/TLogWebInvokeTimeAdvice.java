@@ -140,9 +140,12 @@ public class TLogWebInvokeTimeAdvice {
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(JSONUtil.toJsonStr(obj));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.SUCCESS);
-        if (obj != null && JSONUtil.isTypeJSONObject(obj.toString())) {
-            JSONObject entries = JSONUtil.parseObj(obj.toString());
-            logInfo.setResponseMessage(entries.getStr("message", ""));
+        if (obj != null) {
+            try {
+                JSONObject entries = JSONUtil.parseObj(obj.toString());
+                logInfo.setResponseMessage(entries.getStr("message", ""));
+            } catch (Exception ignored) {
+            }
         }
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
         callbackService.after(logInfo);
