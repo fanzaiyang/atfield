@@ -32,12 +32,12 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>atfield-redis</artifactId>
+                <artifactId>atfield-captcha</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>atfield-ipsec</artifactId>
+                <artifactId>atfield-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -47,7 +47,22 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>atfield-captcha</artifactId>
+                <artifactId>atfield-ipsec</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-satoken</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-sqltoy</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -60,6 +75,7 @@
                 <artifactId>atfield-web</artifactId>
                 <version>${revision}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>
