@@ -13,7 +13,7 @@
               value="${FILE_LOG_PATTERN:-%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <!--这里替换成AspectLogbackEncoder-->
-        <encoder class="cn.fanzy.infra.tlog.core.enhance.logback.AspectLogbackEncoder">
+        <encoder class="cn.fanzy.atfield.tlog.core.enhance.logback.AspectLogbackEncoder">
             <pattern>${CONSOLE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
@@ -28,7 +28,7 @@
             <maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-7}</maxHistory>
         </rollingPolicy>
         <!--这里替换成AspectLogbackEncoder-->
-        <encoder class="cn.fanzy.infra.tlog.core.enhance.logback.AspectLogbackEncoder">
+        <encoder class="cn.fanzy.atfield.tlog.core.enhance.logback.AspectLogbackEncoder">
             <pattern>${FILE_LOG_PATTERN}</pattern>
         </encoder>
     </appender>
