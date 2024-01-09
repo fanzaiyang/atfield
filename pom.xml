@@ -21,6 +21,7 @@
         <module>atfield-tlog</module>
         <module>atfield-web</module>
         <module>atfield-sqltoy</module>
+        <module>atfield-satoken</module>
     </modules>
 
     <properties>
