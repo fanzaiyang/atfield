@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.fanzy.field</groupId>
+        <groupId>cn.fanzy.atfield</groupId>
         <artifactId>at-field</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -21,42 +21,42 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-cache</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-ipsec</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-file</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-captcha</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-tlog</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>cn.fanzy.field</groupId>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>at-field-web</artifactId>
                 <version>${revision}</version>
             </dependency>
