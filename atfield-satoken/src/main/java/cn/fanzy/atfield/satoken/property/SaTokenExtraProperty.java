@@ -17,6 +17,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ConfigurationProperties(prefix = "atfield.sa-token")
 public class SaTokenExtraProperty implements Serializable {
     @Serial
     private static final long serialVersionUID = -164668125373548470L;

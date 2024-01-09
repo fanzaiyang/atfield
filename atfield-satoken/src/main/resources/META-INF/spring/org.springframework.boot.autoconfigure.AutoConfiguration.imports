@@ -1,1 +1,2 @@
-cn.fanzy.atfield.satoken.configuration.SaTokenAutoConfiguration
+cn.fanzy.atfield.satoken.configuration.SaTokenAnnotationConfiguration
+cn.fanzy.atfield.satoken.configuration.SaTokenRouteConfiguration
