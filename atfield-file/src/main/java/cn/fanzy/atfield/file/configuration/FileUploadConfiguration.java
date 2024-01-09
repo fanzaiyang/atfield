@@ -68,7 +68,7 @@ public class FileUploadConfiguration {
     @PostConstruct
     public void init() {
         if (properties.getServers() == null || CollUtil.isEmpty(properties.getServers())) {
-            log.error("请在配置文件中添加infra.upload开头的参数！");
+            log.error("请在配置文件中添加atfield.file开头的参数！");
         }
         keySet = properties.getServers().keySet();
         for (String key : keySet) {
