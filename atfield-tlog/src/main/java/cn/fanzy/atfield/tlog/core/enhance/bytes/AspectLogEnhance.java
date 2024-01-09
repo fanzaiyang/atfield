@@ -21,7 +21,7 @@ public class AspectLogEnhance {
             ClassPool pool = ClassPool.getDefault();
             pool.insertClassPath(new ClassClassPath(AspectLogEnhance.class));
             try {
-                pool.importPackage("cn.fanzy.spider.infra.tlog.core.enhance.bytes.logback.LogbackBytesEnhance");
+                pool.importPackage("cn.fanzy.atfield.tlog.core.enhance.bytes.logback.LogbackBytesEnhance");
                 cc = pool.get("ch.qos.logback.classic.Logger");
                 if (cc != null) {
                     CtMethod ctMethod = cc.getDeclaredMethod("buildLoggingEventAndAppend");
@@ -39,7 +39,7 @@ public class AspectLogEnhance {
 
             //log4j日志增强(包括同步和异步日志)
             try {
-                pool.importPackage("cn.fanzy.spider.infra.tlog.core.enhance.bytes.log4j.Log4jBytesEnhance");
+                pool.importPackage("cn.fanzy.atfield.tlog.core.enhance.bytes.log4j.Log4jBytesEnhance");
 
                 cc = pool.get("org.apache.log4j.AppenderSkeleton");
 

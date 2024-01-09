@@ -17,7 +17,7 @@ import java.util.List;
  */
 @RequiredArgsConstructor
 @Configuration
-public class InfraChainAutoConfiguration {
+public class ChainAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean

@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * infra-web自动配置
+ * web自动配置
  *
  * @author fanzaiyang
  * @date 2023/12/06
@@ -29,7 +29,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @PropertySource(
         name = "TLog Default framework Properties",
         value = "classpath:/META-INF/infra-web-default.properties")
-public class InfraWebAutoConfiguration implements WebMvcConfigurer {
+public class CustomWebAutoConfiguration implements WebMvcConfigurer {
     /**
      * 添加资源处理程序
      * 跨域配置会覆盖默认的配置，

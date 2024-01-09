@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/11/29
  */
 public interface CacheService {
-    String PREFIX = "global_infra_cache:";
+    String PREFIX = "global_atfield_cache:";
 
     /**
      * 获取密钥名称

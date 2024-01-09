@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
     <!-- 增加如下的TLog MDC Listener -->
-<!--    <contextListener class="cn.fanzy.spider.infra.tlog.core.enhance.logback.TLogLogbackTTLMdcListener"/>-->
+<!--    <contextListener class="cn.fanzy.spider.atfield.tlog.core.enhance.logback.TLogLogbackTTLMdcListener"/>-->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
     <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />

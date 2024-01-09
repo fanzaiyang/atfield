@@ -7,4 +7,4 @@
 
 
   Spring-Boot: ${spring-boot.formatted-version}
-  Infra Spring Boot Starter: 1.0.0
+  A.T Field: 1.0.0

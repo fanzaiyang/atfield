@@ -5,7 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import java.util.List;
 
 /**
- * infra常数
+ * 常数
  *
  * @author fanzaiyang
  * @date 2023/12/06
