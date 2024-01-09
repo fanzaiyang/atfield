@@ -43,7 +43,7 @@ public class FileUploadConfiguration {
      */
     public static FileUploadService instance() {
         if(CollUtil.isEmpty(keySet)){
-            throw new NonePropertyException("501","请在配置文件中添加上传配置。【infra.upload】");
+            throw new NonePropertyException("501","请在配置文件中添加上传配置。【atfield.file】");
         }
         return instance(CollUtil.get(keySet, 0));
     }
