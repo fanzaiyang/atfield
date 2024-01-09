@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.fanzy.breeze.wechat.ma.WxMaConfiguration
