@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties(SaTokenExtraProperty.class)
-@ConditionalOnProperty(prefix = "atfield.satoken.annotation", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "atfield.sa-token.annotation", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class SaTokenAnnotationConfiguration implements WebMvcConfigurer {
     private final SaTokenExtraProperty properties;
 

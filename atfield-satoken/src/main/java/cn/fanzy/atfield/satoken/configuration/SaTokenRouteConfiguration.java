@@ -23,7 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(SaTokenExtraProperty.class)
-@ConditionalOnProperty(prefix = "atfield.satoken.route", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "atfield.sa-token.route", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     private final SaTokenExtraProperty property;
 
