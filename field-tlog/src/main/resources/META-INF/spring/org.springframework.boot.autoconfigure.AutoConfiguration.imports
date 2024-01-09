@@ -1,0 +1,6 @@
+cn.fanzy.field.tlog.configuration.lifecircle.TLogPropertyConfiguration
+cn.fanzy.field.tlog.configuration.TLogAspectAutoConfiguration
+cn.fanzy.field.tlog.configuration.TLogSpringScheduledAutoConfiguration
+cn.fanzy.field.tlog.configuration.TLogCommonAutoConfiguration
+cn.fanzy.field.tlog.configuration.TLogWebAutoConfiguration
+cn.fanzy.field.tlog.configuration.TLogPrintAutoConfiguration

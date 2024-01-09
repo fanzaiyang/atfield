@@ -1,6 +1,0 @@
-cn.fanzy.infra.tlog.configuration.lifecircle.TLogPropertyConfiguration
-cn.fanzy.infra.tlog.configuration.TLogAspectAutoConfiguration
-cn.fanzy.infra.tlog.configuration.TLogSpringScheduledAutoConfiguration
-cn.fanzy.infra.tlog.configuration.TLogCommonAutoConfiguration
-cn.fanzy.infra.tlog.configuration.TLogWebAutoConfiguration
-cn.fanzy.infra.tlog.configuration.TLogPrintAutoConfiguration

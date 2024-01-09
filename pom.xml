@@ -3,41 +3,40 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
-    <groupId>cn.fanzy.infra</groupId>
-    <artifactId>infra-boot</artifactId>
+
+    <groupId>cn.fanzy.field</groupId>
+    <artifactId>at-field</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
-    <description>Spring boot 3.x for the infrastructure layer.</description>
+    <name>ATField</name>
+    <description>绝对领域</description>
     <modules>
-        <module>infra-boot-bom</module>
-        <module>infra-boot-core</module>
-        <module>infra-web-spring-boot-starter</module>
-        <module>infra-tlog-spring-boot-starter</module>
-        <module>infra-cache-spring-boot-starter</module>
-        <module>infra-redis-spring-boot-starter</module>
-        <module>infra-ipsec-spring-boot-starter</module>
-        <module>infra-captcha-spring-boot-starter</module>
-        <module>infra-file-spring-boot-starter</module>
-        <module>infra-repository-spring-boot-starter</module>
-        <module>infra-auth-spring-boot-starter</module>
+        <module>field-bom</module>
+        <module>field-core</module>
+        <module>field-cache</module>
+        <module>field-captcha</module>
+        <module>field-file</module>
+        <module>field-ipsec</module>
+        <module>field-redis</module>
+        <module>field-tlog</module>
+        <module>field-web</module>
     </modules>
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0</revision>
-        <hutool.version>5.8.23</hutool.version>
+        <hutool.version>5.8.24</hutool.version>
         <redisson.version>3.24.3</redisson.version>
         <spring-boot.version>3.2.0</spring-boot.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
+        <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-javadoc-plugin.vesion>3.6.2</maven-javadoc-plugin.vesion>
+        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
+        <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -70,15 +69,6 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -89,10 +79,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -105,6 +97,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.vesion}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -123,7 +116,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.5.0</version>
+                <version>${flatten-maven-plugin.version}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <flattenMode>resolveCiFriendliesOnly</flattenMode>
