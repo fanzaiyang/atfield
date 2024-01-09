@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.fanzy.atfield</groupId>
-        <artifactId>at-field</artifactId>
+        <artifactId>atfield</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>at-field-core</artifactId>
+    <artifactId>atfield-core</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

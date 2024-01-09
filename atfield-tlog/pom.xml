@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.fanzy.atfield</groupId>
-        <artifactId>at-field</artifactId>
+        <artifactId>atfield</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>at-field-tlog</artifactId>
+    <artifactId>atfield-tlog</artifactId>
     <description>TLog框架不支持SpringBoot3.x，所以此处修改了其部分源码。https://gitee.com/dromara/TLog</description>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,7 +20,7 @@
         <dependencies>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-bom</artifactId>
+                <artifactId>atfield-bom</artifactId>
                 <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -31,7 +31,7 @@
     <dependencies>
         <dependency>
             <groupId>cn.fanzy.atfield</groupId>
-            <artifactId>at-field-core</artifactId>
+            <artifactId>atfield-core</artifactId>
         </dependency>
         <!-- 负责解析切入点表达式 -->
         <dependency>

@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>cn.fanzy.atfield</groupId>
-        <artifactId>at-field</artifactId>
+        <artifactId>atfield</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>at-field-bom</artifactId>
+    <artifactId>atfield-bom</artifactId>
     <packaging>pom</packaging>
 
     <properties>
@@ -22,42 +22,42 @@
         <dependencies>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-core</artifactId>
+                <artifactId>atfield-core</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-cache</artifactId>
+                <artifactId>atfield-cache</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-redis</artifactId>
+                <artifactId>atfield-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-ipsec</artifactId>
+                <artifactId>atfield-ipsec</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-file</artifactId>
+                <artifactId>atfield-file</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-captcha</artifactId>
+                <artifactId>atfield-captcha</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-tlog</artifactId>
+                <artifactId>atfield-tlog</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>at-field-web</artifactId>
+                <artifactId>atfield-web</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

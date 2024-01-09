@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.fanzy.atfield</groupId>
-    <artifactId>at-field</artifactId>
+    <artifactId>atfield</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>
     <name>ATField</name>
@@ -20,6 +20,7 @@
         <module>atfield-redis</module>
         <module>atfield-tlog</module>
         <module>atfield-web</module>
+        <module>atfield-sqltoy</module>
     </modules>
 
     <properties>
