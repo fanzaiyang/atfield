@@ -22,7 +22,7 @@ import java.util.Map;
  */
 @Slf4j
 @Data
-@ConfigurationProperties(prefix = "atfield.upload")
+@ConfigurationProperties(prefix = "atfield.file")
 public class FileUploadProperty implements Serializable {
     @Serial
     private static final long serialVersionUID = -5609231397331602609L;
