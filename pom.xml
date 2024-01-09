@@ -11,15 +11,15 @@
     <name>ATField</name>
     <description>绝对领域</description>
     <modules>
-        <module>field-bom</module>
-        <module>field-core</module>
-        <module>field-cache</module>
-        <module>field-captcha</module>
-        <module>field-file</module>
-        <module>field-ipsec</module>
-        <module>field-redis</module>
-        <module>field-tlog</module>
-        <module>field-web</module>
+        <module>atfield-bom</module>
+        <module>atfield-core</module>
+        <module>atfield-cache</module>
+        <module>atfield-captcha</module>
+        <module>atfield-file</module>
+        <module>atfield-ipsec</module>
+        <module>atfield-redis</module>
+        <module>atfield-tlog</module>
+        <module>atfield-web</module>
     </modules>
 
     <properties>
