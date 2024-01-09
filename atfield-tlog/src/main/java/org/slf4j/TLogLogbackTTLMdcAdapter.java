@@ -23,7 +23,7 @@ public class TLogLogbackTTLMdcAdapter implements MDCAdapter {
     private static final int WRITE_OPERATION = 1;
     private static final int READ_OPERATION = 2;
 
-    private static TLogLogbackTTLMdcAdapter mdcMDCAdapter;
+    private static final TLogLogbackTTLMdcAdapter mdcMDCAdapter;
 
     // keeps track of the last operation performed
     final ThreadLocal<Integer> lastOperation = new ThreadLocal<>();
@@ -48,7 +48,7 @@ public class TLogLogbackTTLMdcAdapter implements MDCAdapter {
     }
 
     private Map<String, String> duplicateAndInsertNewMap(Map<String, String> oldMap) {
-        Map<String, String> newMap = Collections.synchronizedMap(new HashMap<String, String>());
+        Map<String, String> newMap = Collections.synchronizedMap(new HashMap<>());
         if (oldMap != null) {
             // we don't want the parent thread modifying oldMap while we are
             // iterating over it
@@ -123,7 +123,7 @@ public class TLogLogbackTTLMdcAdapter implements MDCAdapter {
 
 
     @Override
-    public Map getCopyOfContextMap() {
+    public Map<String, String> getCopyOfContextMap() {
         lastOperation.set(READ_OPERATION);
         Map<String, String> hashMap = copyOnInheritThreadLocal.get();
         if (hashMap == null) {
