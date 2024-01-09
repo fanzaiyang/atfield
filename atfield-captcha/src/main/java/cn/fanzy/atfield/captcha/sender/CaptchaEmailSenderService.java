@@ -92,7 +92,6 @@ public abstract class CaptchaEmailSenderService implements CaptchaSenderService 
             + "            </tr>"
             + "        </tbody>"
             + "    </table>"
-            + "" + "" + "" + ""
             + "    <style type='text/css'>"
             + "        body '{' font-size: 14px;"
             + "            font-family: arial, verdana, sans-serif;"
