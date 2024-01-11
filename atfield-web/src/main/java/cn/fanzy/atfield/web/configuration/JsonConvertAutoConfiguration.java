@@ -20,6 +20,8 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * <pre>
@@ -52,6 +54,16 @@ public class JsonConvertAutoConfiguration implements WebMvcConfigurer {
         builder.applicationContext(this.applicationContext);
         for (Jackson2ObjectMapperBuilderCustomizer customizer : customizers) {
             customizer.customize(builder);
+        }
+        if (jacksonProperties.getLocale() == null) {
+            builder.locale(Locale.CHINA);
+        } else {
+            builder.locale(jacksonProperties.getLocale());
+        }
+        if (jacksonProperties.getTimeZone() != null) {
+            builder.timeZone(jacksonProperties.getTimeZone());
+        } else {
+            builder.timeZone("GTM+8");
         }
         return builder;
     }

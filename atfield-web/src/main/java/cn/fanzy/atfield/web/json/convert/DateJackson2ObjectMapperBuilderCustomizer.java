@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * 日期 Jackson2 对象映射器生成器定制器
@@ -42,7 +43,16 @@ public class DateJackson2ObjectMapperBuilderCustomizer implements Jackson2Object
         String timeFormat = StrUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss");
         // 设置java.util.Date时间类的序列化以及反序列化的格式
         builder.simpleDateFormat(dateTimeFormat);
-
+        if (jacksonProperties.getLocale() == null) {
+            builder.locale(Locale.CHINA);
+        } else {
+            builder.locale(jacksonProperties.getLocale());
+        }
+        if (jacksonProperties.getTimeZone() != null) {
+            builder.timeZone(jacksonProperties.getTimeZone());
+        } else {
+            builder.timeZone("GTM+8");
+        }
         // JSR 310日期时间处理
         JavaTimeModule javaTimeModule = new JavaTimeModule();
 
