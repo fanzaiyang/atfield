@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * TLog web这块的逻辑封装类
  *
  * @author Bryan.Zhang
- * @since 1.1.5
+ * @since 17
  */
 public class TLogWebCommon extends TLogRPCHandler {
 

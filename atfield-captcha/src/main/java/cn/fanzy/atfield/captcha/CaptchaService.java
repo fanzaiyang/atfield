@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *
  * @author fanzaiyang
  * @date 2023/12/08
+ * @since 17
  */
 public interface CaptchaService {
 
