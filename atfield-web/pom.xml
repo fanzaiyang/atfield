@@ -65,5 +65,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.fanzy.atfield</groupId>
+            <artifactId>atfield-satoken</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
