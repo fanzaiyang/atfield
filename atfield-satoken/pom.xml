@@ -55,10 +55,5 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>cn.fanzy.atfield</groupId>
-            <artifactId>atfield-web</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>
