@@ -250,7 +250,7 @@ public class GlobalExceptionAdvice {
         String ssid = this.getRequestId(request);
         String message = e.getMessage();
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            message = violation.getMessage();
+            message = violation.getMessageTemplate();
             break;
         }
         Json<String> response = new Json<>(String.valueOf(HttpStatus.BAD_REQUEST.value()),
