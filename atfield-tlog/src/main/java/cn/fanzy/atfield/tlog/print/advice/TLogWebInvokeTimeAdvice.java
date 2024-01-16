@@ -4,12 +4,12 @@ import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AdviceUtil;
 import cn.fanzy.atfield.core.utils.Constants;
 import cn.fanzy.atfield.core.utils.ExceptionUtil;
-import cn.fanzy.atfield.tlog.print.annotation.Log;
-import cn.fanzy.atfield.tlog.print.callback.LogCallbackService;
-import cn.fanzy.atfield.tlog.print.callback.LogUserCallbackService;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
+import cn.fanzy.atfield.tlog.print.annotation.Log;
 import cn.fanzy.atfield.tlog.print.bean.PrintLogInfo;
+import cn.fanzy.atfield.tlog.print.callback.LogCallbackService;
+import cn.fanzy.atfield.tlog.print.callback.LogUserCallbackService;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
@@ -68,10 +68,13 @@ public class TLogWebInvokeTimeAdvice {
         if (skipSwagger()) {
             return;
         }
+        Log annotation = AdviceUtil.getAnnotation(joinPoint, Log.class);
+        if(annotation.ignore()){
+            return;
+        }
         StopWatch stopWatch = new StopWatch();
         invokeTimeTL.set(stopWatch);
         stopWatch.start();
-        Log annotation = AdviceUtil.getAnnotation(joinPoint, Log.class);
         HttpServletRequest request = SpringUtils.getRequest();
         String requestUrl = request.getRequestURI();
         if (StrUtil.isNotBlank(request.getQueryString())) {
@@ -133,9 +136,12 @@ public class TLogWebInvokeTimeAdvice {
         if (skipSwagger()) {
             return;
         }
+        PrintLogInfo logInfo = invokeLogInfo.get();
+        if(logInfo==null){
+            return;
+        }
         StopWatch stopWatch = invokeTimeTL.get();
         stopWatch.stop();
-        PrintLogInfo logInfo = invokeLogInfo.get();
         logInfo.setTraceId(TLogContext.getTraceId());
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(JSONUtil.toJsonStr(obj));
@@ -160,9 +166,12 @@ public class TLogWebInvokeTimeAdvice {
         if (skipSwagger()) {
             return;
         }
+        PrintLogInfo logInfo = invokeLogInfo.get();
+        if(logInfo==null){
+            return;
+        }
         StopWatch stopWatch = invokeTimeTL.get();
         stopWatch.stop();
-        PrintLogInfo logInfo = invokeLogInfo.get();
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, property.getPrint().getResponseDataLength()));
