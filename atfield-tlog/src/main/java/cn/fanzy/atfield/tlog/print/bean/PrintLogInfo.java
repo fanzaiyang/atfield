@@ -56,7 +56,7 @@ public class PrintLogInfo implements Serializable {
     private String operateType;
 
     /**
-     * 设备名称
+     * 设备名称user-agent
      */
     private String deviceName;
 
