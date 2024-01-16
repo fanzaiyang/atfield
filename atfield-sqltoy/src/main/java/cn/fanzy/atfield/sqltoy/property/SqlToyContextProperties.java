@@ -117,7 +117,7 @@ public class SqlToyContextProperties implements Serializable {
 	/**
 	 * 统一字段处理器
 	 */
-	private String unifyFieldsHandler;
+	private String unifyFieldsHandler="unifyFieldsHandler";
 
 	/**
 	 * 数据库方言参数配置

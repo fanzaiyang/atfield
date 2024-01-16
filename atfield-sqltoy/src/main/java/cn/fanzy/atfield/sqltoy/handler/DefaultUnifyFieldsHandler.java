@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
-import cn.fanzy.atfield.sqltoy.entity.IUserOnlineInfo;
+import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.model.IgnoreCaseSet;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
@@ -17,14 +17,14 @@ import java.util.Map;
  */
 @RequiredArgsConstructor
 public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
-    private final IUserOnlineInfo userOnlineInfo;
+    private final ICurrentUserInfo currentUserInfo;
     @Override
     public Map<String, Object> createUnifyFields() {
         Map<String, Object> map = new HashMap<>();
         map.put("delFlag", 0);
-        map.put("createBy", userOnlineInfo.getUserId());
+        map.put("createBy", currentUserInfo.getUserId());
         map.put("createTime", new Date());
-        map.put("updateBy", userOnlineInfo.getUserId());
+        map.put("updateBy", currentUserInfo.getUserId());
         map.put("updateTime", new Date());
         return map;
     }
@@ -32,7 +32,7 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
     @Override
     public Map<String, Object> updateUnifyFields() {
         Map<String, Object> map = new HashMap<>();
-        map.put("updateBy", userOnlineInfo.getUserId());
+        map.put("updateBy", currentUserInfo.getUserId());
         map.put("updateTime", new Date());
         return map;
     }

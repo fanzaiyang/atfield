@@ -8,7 +8,7 @@ import java.util.Map;
  * @author fanzaiyang
  * @date 2024/01/09
  */
-public class AnonymousUserOnlineInfo implements IUserOnlineInfo {
+public class AnonymousCurrentUserInfo implements ICurrentUserInfo {
     @Override
     public String getUserId() {
         return "anonymous";
