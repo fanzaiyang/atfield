@@ -16,7 +16,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "atfield.captcha")
 public class CaptchaProperty {
-    private String prefix = "at-field-captcha:";
+    private String prefix = "atfield-captcha:";
     /**
      * 过期秒,默认：60秒,-1不过期
      */
