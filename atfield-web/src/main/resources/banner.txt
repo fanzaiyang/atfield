@@ -7,4 +7,4 @@
 
 
   Spring-Boot: ${spring-boot.formatted-version}
-  A.T Field: 1.0.0
+  A.T Field: ${application.version}
