@@ -1,7 +1,9 @@
 package cn.fanzy.atfield.sqltoy.configuration;
 
+import cn.fanzy.atfield.sqltoy.interceptor.LogicDelFilterInterceptor;
 import cn.fanzy.atfield.sqltoy.property.SqlToyContextProperties;
 import cn.fanzy.atfield.sqltoy.property.SqlToyContextTaskPoolProperties;
+import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import com.alibaba.ttl.threadpool.TtlExecutors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +51,11 @@ import static java.lang.System.err;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(SqlToyContextProperties.class)
+@EnableConfigurationProperties({SqlToyContextProperties.class, SqltoyExtraProperties.class})
 public class SqltoyAutoConfiguration {
 	private final ApplicationContext applicationContext;
 	private final SqlToyContextProperties properties;
-
+	private final SqltoyExtraProperties extraProperties;
 	// 增加一个辅助校验,避免不少新用户将spring.sqltoy开头写成sqltoy.开头
 	@Value("${sqltoy.sqlResourcesDir:}")
 	private String sqlResourcesDir;
@@ -403,8 +405,8 @@ public class SqltoyAutoConfiguration {
 		// ---- sqltoy默认的规则，即:先判断是否包含beanName，然后判断是否是包路径再new 构造
 		// 自定义sql拦截处理器
 		String[] sqlInterceptors = properties.getSqlInterceptors();
+		List<SqlInterceptor> sqlInterceptorList = new ArrayList<>();
 		if (null != sqlInterceptors && sqlInterceptors.length > 0) {
-			List<SqlInterceptor> sqlInterceptorList = new ArrayList<SqlInterceptor>();
 			for (String interceptor : sqlInterceptors) {
 				// 优先检查beanName
 				if (applicationContext.containsBean(interceptor)) {
@@ -415,8 +417,9 @@ public class SqltoyAutoConfiguration {
 							.add(((SqlInterceptor) Class.forName(interceptor).getDeclaredConstructor().newInstance()));
 				}
 			}
-			sqlToyContext.setSqlInterceptors(sqlInterceptorList);
 		}
+		sqlInterceptorList.add(logicDelFilterInterceptor());
+		sqlToyContext.setSqlInterceptors(sqlInterceptorList);
 
 		// 自定义sql格式化器
 		String sqlFormater = properties.getSqlFormater();
@@ -473,5 +476,11 @@ public class SqltoyAutoConfiguration {
 		SqlToyCRUDServiceImpl sqlToyCRUDService = new SqlToyCRUDServiceImpl();
 		sqlToyCRUDService.setSqlToyLazyDao(sqlToyLazyDao);
 		return sqlToyCRUDService;
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public LogicDelFilterInterceptor logicDelFilterInterceptor() {
+		return new LogicDelFilterInterceptor(extraProperties);
 	}
 }
