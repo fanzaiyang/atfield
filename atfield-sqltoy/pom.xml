@@ -25,6 +25,13 @@
                 <artifactId>sagacity-sqltoy</artifactId>
                 <version>${sagacity.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-bom</artifactId>
+                <version>${revision}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -44,6 +51,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.fanzy.atfield</groupId>
+            <artifactId>atfield-core</artifactId>
         </dependency>
     </dependencies>
 </project>
