@@ -13,6 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.Ordered;
 
 /**
@@ -30,6 +31,7 @@ import org.springframework.core.Ordered;
 @EnableConfigurationProperties(CacheProperty.class)
 public class CacheAutoConfiguration {
 
+    @Primary
     @Bean(name = "cacheService")
     @ConditionalOnMissingBean(name = "cacheService")
     public CacheService cacheService(CacheProperty property) {
