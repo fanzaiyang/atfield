@@ -4,6 +4,7 @@ import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.sqltoy.flex.utils.LambdaGetter;
 import cn.fanzy.atfield.sqltoy.flex.utils.LambdaUtil;
 import cn.fanzy.atfield.sqltoy.flex.utils.SqlConstants;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.model.EntityQuery;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -410,12 +412,11 @@ public class LambdaEntityQuery {
     }
 
     public EntityQuery build() {
-        String select = StrUtil.join(",", paramNames);
         StringBuilder whereStr = new StringBuilder();
         for (int i = 0; i < where.size(); i++) {
             int nextIndex = i + 1;
             String thisValue = where.get(i);
-            String nextValue = "";
+            String nextValue = " ";
             if (nextIndex < where.size()) {
                 nextValue = where.get(nextIndex);
             }
@@ -423,15 +424,17 @@ public class LambdaEntityQuery {
                 continue;
             }
             whereStr.append(thisValue);
-            if (!SqlConstants.KEYWORDS.contains(nextValue.toUpperCase())) {
-                whereStr.append("AND");
+            if (StrUtil.isNotBlank(nextValue) &&
+                !SqlConstants.KEYWORDS.contains(nextValue.toUpperCase())) {
+                whereStr.append(" AND ");
             }
             whereStr.append(nextValue);
         }
-        return entityQuery.select(select)
+
+        return entityQuery
                 .where(whereStr.toString())
-                .names(ArrayUtil.toArray(paramNames, String.class))
-                .values(ArrayUtil.toArray(paramValues, Object.class))
+                .names(paramNames.toArray(new String[0]))
+                .values(paramValues.toArray())
                 .groupBy();
     }
 
@@ -465,6 +468,6 @@ public class LambdaEntityQuery {
     }
 
     private String getParamName(String fieldName) {
-        return StrUtil.format(":param.{}", fieldName);
+        return StrUtil.format(":param_{}", fieldName);
     }
 }
