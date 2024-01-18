@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -430,10 +431,10 @@ public class LambdaEntityQuery {
             }
             whereStr.append(nextValue);
         }
-
         return entityQuery
                 .where(whereStr.toString())
-                .names(paramNames.toArray(new String[0]))
+                .names(paramNames.stream().map(name -> name.replace(":", ""))
+                        .toArray(String[]::new))
                 .values(paramValues.toArray())
                 .groupBy();
     }
