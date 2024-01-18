@@ -1,6 +1,8 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
+import cn.fanzy.atfield.sqltoy.entity.BaseEntity;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
+import cn.fanzy.atfield.sqltoy.flex.query.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.model.IgnoreCaseSet;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
@@ -26,6 +28,10 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         map.put("createTime", new Date());
         map.put("updateBy", currentUserInfo.getUserId());
         map.put("updateTime", new Date());
+        Wrappers.lambdaQuery(BaseEntity.class)
+                .select(BaseEntity::getCreateBy)
+                .eq(BaseEntity::getCreateBy,"1")
+                .getEntityQuery();
         return map;
     }
 
