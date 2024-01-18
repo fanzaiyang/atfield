@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.redis.advice;
 
 import cn.fanzy.atfield.core.spring.SpringUtils;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.ParamUtil;
 import cn.fanzy.atfield.redis.annotation.LockForm;
 import cn.fanzy.atfield.redis.enums.FormSubmitType;
@@ -40,7 +40,7 @@ public class LockForFormSubmitAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) throws InterruptedException {
-        LockForm annotation = AdviceUtil.getAnnotation(jp, LockForm.class);
+        LockForm annotation = AopUtil.getAnnotation(jp, LockForm.class);
         if (annotation == null) {
             return;
         }
@@ -48,14 +48,14 @@ public class LockForFormSubmitAdvice {
         RLock rlock = redissonClient.getLock(lockName);
         boolean tryLock = rlock.tryLock(annotation.waitTime(), annotation.leaseTime(), annotation.unit());
         if (!tryLock) {
-            log.warn("请不要重复提交！执行方法：{}，{}", AdviceUtil.getMethodInfo(jp), rlock.getName());
+            log.warn("请不要重复提交！执行方法：{}，{}", AopUtil.getMethodInfo(jp), rlock.getName());
             throw new LockFormException("400", "请不要重复提交!");
         }
     }
 
     @After("cut()")
     public void after(JoinPoint jp) {
-        LockForm annotation = AdviceUtil.getAnnotation(jp,LockForm.class);
+        LockForm annotation = AopUtil.getAnnotation(jp,LockForm.class);
         if (annotation == null) {
             return;
         }
@@ -72,7 +72,7 @@ public class LockForFormSubmitAdvice {
     }
 
     private String getLockName(LockForm annotation){
-        String lockName = AdviceUtil.getLockKey(annotation.value());
+        String lockName = AopUtil.getLockKey(annotation.value());
 
         // 基于IP地址的重复提交，即1个IP地址1个锁，。防止同一个IP重复提交
         if (FormSubmitType.IP.equals(annotation.type())) {

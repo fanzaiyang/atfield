@@ -5,7 +5,7 @@ import cn.fanzy.atfield.captcha.annotation.CaptchaCheck;
 import cn.fanzy.atfield.captcha.enums.CaptchaType;
 import cn.fanzy.atfield.captcha.property.CaptchaProperty;
 import cn.fanzy.atfield.captcha.util.CaptchaTypeUtil;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.ParamUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class CaptchaCheckAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) {
-        CaptchaCheck annotation = AdviceUtil.getAnnotation(jp, CaptchaCheck.class);
+        CaptchaCheck annotation = AopUtil.getAnnotation(jp, CaptchaCheck.class);
         if (annotation == null) {
             return;
         }

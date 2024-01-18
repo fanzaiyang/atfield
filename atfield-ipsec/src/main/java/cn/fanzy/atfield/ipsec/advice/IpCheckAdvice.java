@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.ipsec.advice;
 
 import cn.fanzy.atfield.core.spring.SpringUtils;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.ipsec.configuration.IpCheckConfiguration;
 import cn.fanzy.atfield.ipsec.service.IpCheckService;
 import cn.fanzy.atfield.ipsec.annotation.IpCheck;
@@ -33,7 +33,7 @@ public class IpCheckAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) {
-        IpCheck annotation = AdviceUtil.getAnnotation(jp, IpCheck.class);
+        IpCheck annotation = AopUtil.getAnnotation(jp, IpCheck.class);
         if (annotation == null) {
             return;
         }

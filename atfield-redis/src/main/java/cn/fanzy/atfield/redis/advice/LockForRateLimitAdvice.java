@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.redis.advice;
 
 import cn.fanzy.atfield.core.spring.SpringUtils;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.redis.annotation.LockRate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class LockForRateLimitAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) {
-        LockRate annotation = AdviceUtil.getAnnotation(jp, LockRate.class);
+        LockRate annotation = AopUtil.getAnnotation(jp, LockRate.class);
         if (annotation == null) {
             return;
         }
@@ -55,14 +55,14 @@ public class LockForRateLimitAdvice {
 
 
     private String getRateKey(JoinPoint jp) {
-        LockRate annotation = AdviceUtil.getAnnotation(jp, LockRate.class);
+        LockRate annotation = AopUtil.getAnnotation(jp, LockRate.class);
         String key = annotation.value();
         if (annotation.useIp()) {
             // 基于IP地址限流
             key += ":" + SpringUtils.getClientIp();
         }
         // 拼接执行的方法
-        String methodInfo = AdviceUtil.getMethodInfo(jp);
+        String methodInfo = AopUtil.getMethodInfo(jp);
         key += ":" + methodInfo;
         return key;
     }

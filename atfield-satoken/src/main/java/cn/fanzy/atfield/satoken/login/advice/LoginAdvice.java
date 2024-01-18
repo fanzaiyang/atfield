@@ -3,7 +3,7 @@ package cn.fanzy.atfield.satoken.login.advice;
 
 import cn.fanzy.atfield.cache.CacheService;
 import cn.fanzy.atfield.core.spring.SpringUtils;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.satoken.login.annotation.Login;
 import cn.fanzy.atfield.satoken.login.exception.LoginDenyException;
 import cn.fanzy.atfield.satoken.login.model.LoginAopInfoDto;
@@ -47,7 +47,7 @@ public class LoginAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) {
-        Login annotation = AdviceUtil.getAnnotation(jp, Login.class);
+        Login annotation = AopUtil.getAnnotation(jp, Login.class);
         if (annotation == null) {
             return;
         }

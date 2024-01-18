@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.tlog.print.advice;
 
 import cn.fanzy.atfield.core.spring.SpringUtils;
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.Constants;
 import cn.fanzy.atfield.core.utils.ExceptionUtil;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
@@ -68,7 +68,7 @@ public class TLogWebInvokeTimeAdvice {
         if (skipSwagger()) {
             return;
         }
-        Log annotation = AdviceUtil.getAnnotation(joinPoint, Log.class);
+        Log annotation = AopUtil.getAnnotation(joinPoint, Log.class);
         if(annotation.ignore()){
             return;
         }
@@ -83,7 +83,7 @@ public class TLogWebInvokeTimeAdvice {
         String traceId = TLogContext.getTraceId();
         String appName = joinPoint.getSignature().getDeclaringTypeName();
         String moduleName = joinPoint.getSignature().getName();
-        String methodName = AdviceUtil.getMethodInfo(joinPoint);
+        String methodName = AopUtil.getMethodInfo(joinPoint);
         String operateType = "";
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
@@ -92,7 +92,7 @@ public class TLogWebInvokeTimeAdvice {
         String deviceName = JSONUtil.toJsonStr(ua);
         String clientIp = SpringUtils.getClientIp(request);
         String requestType = request.getMethod();
-        String requestMethod = AdviceUtil.getMethodInfo(joinPoint);
+        String requestMethod = AopUtil.getMethodInfo(joinPoint);
         String requestData = JSONUtil.toJsonStr(SpringUtils.getRequestParams(request));
         LocalDateTime requestTime = LocalDateTime.now();
         String remarks = "";

@@ -25,12 +25,13 @@ import java.util.Map;
  *     &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
  * &lt;/dependency&gt;
  * </pre>
+ *
  * @author fanzaiyang
  * @date 2023/12/07
  * @since 17
  */
 @Slf4j
-public class AdviceUtil {
+public class AopUtil {
     /**
      * 得到参数
      *
@@ -91,6 +92,15 @@ public class AdviceUtil {
         if (StrUtil.startWith(value, StrPool.AT)) {
             value = value.replace(value, StrPool.AT);
             // @开头说明是请求参数
+            Map<String, Object> requestParams = SpringUtils.getRequestParams();
+            lockName = requestParams.get(value) == null ? null : requestParams.get(value).toString();
+            if (StrUtil.isBlank(lockName)) {
+                // 取Header
+                lockName = SpringUtils.getRequest().getHeader(value);
+            }
+        } else if (StrUtil.startWith(value, "#")) {
+            value = value.replace(value, "#");
+            // #开头说明是请求参数
             Map<String, Object> requestParams = SpringUtils.getRequestParams();
             lockName = requestParams.get(value) == null ? null : requestParams.get(value).toString();
             if (StrUtil.isBlank(lockName)) {

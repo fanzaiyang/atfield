@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.redis.advice;
 
-import cn.fanzy.atfield.core.utils.AdviceUtil;
+import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.redis.annotation.Lock;
 import cn.fanzy.atfield.redis.exception.LockException;
 import cn.hutool.core.util.StrUtil;
@@ -40,14 +40,14 @@ public class LockForDistributedAdvice {
 
     @Before("cut()")
     public void before(JoinPoint jp) throws InterruptedException {
-        Lock lock = AdviceUtil.getAnnotation(jp, Lock.class);
+        Lock lock = AopUtil.getAnnotation(jp, Lock.class);
         if (lock == null) {
             return;
         }
-        RLock rlock = redissonClient.getLock(AdviceUtil.getLockKey(lock.value()));
+        RLock rlock = redissonClient.getLock(AopUtil.getLockKey(lock.value()));
         boolean tryLock = rlock.tryLock(lock.tryWaitTime(), lock.leaseTime(), lock.unit());
         if (!tryLock) {
-            String message = StrUtil.format("该方法【{}】被另外一个线程占用，请稍后再试！{}", AdviceUtil.getMethodInfo(jp),
+            String message = StrUtil.format("该方法【{}】被另外一个线程占用，请稍后再试！{}", AopUtil.getMethodInfo(jp),
                     rlock.getName());
             log.warn(message);
             throw new LockException("500", message);
@@ -62,7 +62,7 @@ public class LockForDistributedAdvice {
         if (lock == null) {
             return;
         }
-        RLock rlock = redissonClient.getLock(AdviceUtil.getLockKey(lock.value()));
+        RLock rlock = redissonClient.getLock(AopUtil.getLockKey(lock.value()));
         if (rlock.isLocked() || rlock.isHeldByCurrentThread()) {
             try {
                 rlock.unlock();
