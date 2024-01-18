@@ -37,11 +37,6 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>atfield-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>atfield-file</artifactId>
                 <version>${revision}</version>
             </dependency>
