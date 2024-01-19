@@ -36,7 +36,7 @@ public class TLogSpringAware implements ApplicationContextAware{
 	}
 
 	public static <T> T getBean(Class<T> clazz) {
-		return (T) applicationContext.getBean(clazz);
+		return applicationContext.getBean(clazz);
 	}
 
 	public static <T> T registerBean(Class<T> c){

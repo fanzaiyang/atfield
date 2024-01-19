@@ -34,5 +34,5 @@ public enum ShowType {
     /**
      * 显示为通知错误NOTIFICATION
      */
-    NOTIFICATION_ERROR;
+    NOTIFICATION_ERROR
 }

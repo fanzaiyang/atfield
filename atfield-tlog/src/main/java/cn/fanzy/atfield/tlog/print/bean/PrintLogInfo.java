@@ -135,6 +135,6 @@ public class PrintLogInfo implements Serializable {
         /**
          * 未知
          */
-        UNKNOWN;
+        UNKNOWN
     }
 }

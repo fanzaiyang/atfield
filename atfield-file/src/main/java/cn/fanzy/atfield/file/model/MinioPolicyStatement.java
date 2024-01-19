@@ -14,7 +14,7 @@ public class MinioPolicyStatement {
      * @author fanzaiyang
      * @date 2023/11/13
      */
-    public static enum Effect {
+    public enum Effect {
         /**
          * 允许
          */
@@ -22,9 +22,9 @@ public class MinioPolicyStatement {
         /**
          * 否认
          */
-        Deny;
+        Deny
     }
-    public static enum Action {
+    public enum Action {
         /**
          * 允许
          */
@@ -32,6 +32,6 @@ public class MinioPolicyStatement {
         /**
          * 否认
          */
-        Deny;
+        Deny
     }
 }

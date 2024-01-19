@@ -49,7 +49,7 @@ public class UniqueIdGenerator {
 
     private static final long WORKER_ID_MAX_VALUE = 1L << WORKER_ID_BITS;
 
-    private static AbstractClock clock = AbstractClock.systemClock();
+    private static final AbstractClock clock = AbstractClock.systemClock();
 
     /**
      * ID前缀，当 workerId 相同时(容器、多数据中心 等场景，IP相同)，百万倍降低重复概率

@@ -125,12 +125,11 @@ public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
             }
         }
         final Message msg = event.getMessage();
-        if (msg instanceof StringBuilderFormattable) {
+        if (msg instanceof StringBuilderFormattable stringBuilderFormattable) {
 
             final boolean doRender = textRenderer != null;
             final StringBuilder workingBuilder = doRender ? new StringBuilder(80) : toAppendTo;
 
-            final StringBuilderFormattable stringBuilderFormattable = (StringBuilderFormattable) msg;
             final int offset = workingBuilder.length();
             stringBuilderFormattable.formatTo(workingBuilder);
 

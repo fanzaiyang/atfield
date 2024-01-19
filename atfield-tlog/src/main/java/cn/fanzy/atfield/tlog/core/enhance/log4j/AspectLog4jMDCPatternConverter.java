@@ -16,7 +16,7 @@ import java.util.Map;
  * @since 1.1.5
  */
 public class AspectLog4jMDCPatternConverter extends PatternConverter {
-    private String key;
+    private final String key;
 
     AspectLog4jMDCPatternConverter(FormattingInfo formattingInfo, String key) {
         super(formattingInfo);

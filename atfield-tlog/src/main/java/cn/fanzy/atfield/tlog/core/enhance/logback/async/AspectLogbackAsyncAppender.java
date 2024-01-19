@@ -22,8 +22,7 @@ public class AspectLogbackAsyncAppender extends AsyncAppender {
 
     @Override
     protected void append(ILoggingEvent eventObject) {
-        if(eventObject instanceof LoggingEvent){
-            LoggingEvent loggingEvent = (LoggingEvent)eventObject;
+        if(eventObject instanceof LoggingEvent loggingEvent){
 
             String resultLog;
             final String logValue = AspectLogContext.getLogValue();

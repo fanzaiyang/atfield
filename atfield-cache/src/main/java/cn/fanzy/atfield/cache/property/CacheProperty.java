@@ -29,6 +29,6 @@ public class CacheProperty {
         /**
          * redis
          */
-        REDIS;
+        REDIS
     }
 }

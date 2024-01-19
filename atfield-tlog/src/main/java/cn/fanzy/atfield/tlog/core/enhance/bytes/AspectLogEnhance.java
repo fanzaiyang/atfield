@@ -48,7 +48,6 @@ public class AspectLogEnhance {
                     ctMethod.setBody("{Log4jBytesEnhance.enhance($1,closed,name,this);}");
                     cc.toClass();
                     System.out.println("log4j日志增强成功");
-                    return;
                 }
             } catch (Exception e) {
                 if (e.getCause() instanceof LinkageError) {

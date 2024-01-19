@@ -3,6 +3,10 @@ package cn.fanzy.atfield.sqltoy.configuration;
 import cn.fanzy.atfield.sqltoy.entity.AnonymousCurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
+import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDao;
+import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDaoImpl;
+import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDao;
+import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.repository.BaseRepository;
 import cn.fanzy.atfield.sqltoy.repository.BaseRepositoryImpl;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +35,16 @@ public class SqltoyExtraAutoConfiguration {
     public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
         return new DefaultUnifyFieldsHandler(currentUserInfo);
     }
-
+    @Bean
+    @ConditionalOnMissingBean
+    public SqlToyHelperDao sqlToyHelperDao() {
+        return new SqlToyHelperDaoImpl();
+    }
+    @Bean
+    @ConditionalOnMissingBean
+    public SqltoyLightHelperDao sqltoyLightHelperDao() {
+        return new SqltoyLightHelperDaoImpl();
+    }
     @Bean
     public BaseRepository baseRepository() {
         return new BaseRepositoryImpl();

@@ -11,7 +11,7 @@ import cn.fanzy.atfield.tlog.core.rpc.TLogRPCHandler;
  */
 public class TLogMqConsumerProcessor {
 
-    private static TLogRPCHandler tLogRPCHandler = new TLogRPCHandler();
+    private static final TLogRPCHandler tLogRPCHandler = new TLogRPCHandler();
 
     public static void process(TLogMqWrapBean tLogMqWrapBean, TLogMqRunner tLogMqRunner){
         tLogRPCHandler.processProviderSide(tLogMqWrapBean);

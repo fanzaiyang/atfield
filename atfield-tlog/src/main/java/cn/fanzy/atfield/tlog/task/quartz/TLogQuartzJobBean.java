@@ -9,7 +9,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 public abstract class TLogQuartzJobBean extends QuartzJobBean {
 
-    private TLogRPCHandler tLogRPCHandler = new TLogRPCHandler();
+    private final TLogRPCHandler tLogRPCHandler = new TLogRPCHandler();
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

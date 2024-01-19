@@ -406,7 +406,7 @@ public class SqltoyAutoConfiguration {
 		// 自定义sql拦截处理器
 		String[] sqlInterceptors = properties.getSqlInterceptors();
 		List<SqlInterceptor> sqlInterceptorList = new ArrayList<>();
-		if (null != sqlInterceptors && sqlInterceptors.length > 0) {
+		if (null != sqlInterceptors) {
 			for (String interceptor : sqlInterceptors) {
 				// 优先检查beanName
 				if (applicationContext.containsBean(interceptor)) {
