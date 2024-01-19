@@ -1,11 +1,14 @@
 package cn.fanzy.atfield.satoken.model;
 
+import cn.hutool.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * 用户详细信息
  * Provides core user information.
+ *
  * @author fanzaiyang
  * @date 2024/01/19
  */
@@ -17,6 +20,7 @@ public interface UserDetails extends Serializable {
      * @return {@link String}
      */
     String getUserId();
+
     /**
      * 获取用户名
      *
@@ -61,6 +65,13 @@ public interface UserDetails extends Serializable {
      * @return boolean
      */
     boolean isEnabled();
+
+    /**
+     * 获得额外
+     *
+     * @return {@link JSONObject}
+     */
+    JSONObject getExtra();
 
     /**
      * 获取权限
