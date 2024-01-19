@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.satoken.property;
 
+import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,8 @@ public class SaTokenExtraProperty implements Serializable {
          * 是否启用，默认：true
          */
         private Boolean enable;
+
+        private Boolean swagger = true;
         /**
          * 添加路径模式，默认：/**
          */
@@ -57,6 +60,19 @@ public class SaTokenExtraProperty implements Serializable {
                 return new String[]{"/**"};
             }
             return addPathPatterns;
+        }
+
+        public String[] getExcludePathPatterns() {
+            if (swagger != null && swagger) {
+                String[] swaggers = new String[]{"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"
+                        , "/doc.html/**", "/error", "/favicon.ico"};
+                if (excludePathPatterns == null) {
+                    return swaggers;
+                }
+                // 添加
+                return ArrayUtil.addAll(excludePathPatterns, swaggers);
+            }
+            return excludePathPatterns;
         }
     }
 
