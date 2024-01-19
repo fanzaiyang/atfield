@@ -33,6 +33,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.ArrayList;
@@ -449,6 +450,7 @@ public class SqltoyAutoConfiguration {
 	 * 
 	 * @return 返回预定义的通用Dao实例
 	 */
+	@Primary
 	@Bean(name = "sqlToyLazyDao")
 	@ConditionalOnMissingBean
 	SqlToyLazyDao sqlToyLazyDao(SqlToyContext sqlToyContext) {
@@ -456,7 +458,7 @@ public class SqltoyAutoConfiguration {
 		lazyDao.setSqlToyContext(sqlToyContext);
 		return lazyDao;
 	}
-
+	@Primary
 	@Bean(name = "lightDao")
 	@ConditionalOnMissingBean
 	LightDao lightDao(SqlToyContext sqlToyContext) {

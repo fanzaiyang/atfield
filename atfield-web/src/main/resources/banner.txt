@@ -6,4 +6,4 @@
         \/  \/                \/            \/           \/
 
   Spring-Boot: ${spring-boot.formatted-version}
-  A.T Field: ${application.formatted-version}
+  A.T Field: (v1.0.0)

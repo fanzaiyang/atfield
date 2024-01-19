@@ -11,6 +11,7 @@ import cn.fanzy.atfield.sqltoy.repository.BaseRepository;
 import cn.fanzy.atfield.sqltoy.repository.BaseRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,16 +36,21 @@ public class SqltoyExtraAutoConfiguration {
     public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
         return new DefaultUnifyFieldsHandler(currentUserInfo);
     }
+
+    @Qualifier("sqlToyHelperDao")
     @Bean("sqlToyHelperDao")
     @ConditionalOnMissingBean(name = "sqlToyHelperDao")
     public SqlToyHelperDao sqlToyHelperDao() {
         return new SqlToyHelperDaoImpl();
     }
+
+    @Qualifier("sqltoyLightHelperDao")
     @Bean("sqltoyLightHelperDao")
     @ConditionalOnMissingBean(name = "sqltoyLightHelperDao")
     public SqltoyLightHelperDao sqltoyLightHelperDao() {
         return new SqltoyLightHelperDaoImpl();
     }
+
     @Bean
     public BaseRepository baseRepository() {
         return new BaseRepositoryImpl();
