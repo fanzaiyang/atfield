@@ -35,13 +35,13 @@ public class SqltoyExtraAutoConfiguration {
     public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
         return new DefaultUnifyFieldsHandler(currentUserInfo);
     }
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean("sqlToyHelperDao")
+    @ConditionalOnMissingBean(name = "sqlToyHelperDao")
     public SqlToyHelperDao sqlToyHelperDao() {
         return new SqlToyHelperDaoImpl();
     }
-    @Bean
-    @ConditionalOnMissingBean
+    @Bean("sqltoyLightHelperDao")
+    @ConditionalOnMissingBean(name = "sqltoyLightHelperDao")
     public SqltoyLightHelperDao sqltoyLightHelperDao() {
         return new SqltoyLightHelperDaoImpl();
     }
