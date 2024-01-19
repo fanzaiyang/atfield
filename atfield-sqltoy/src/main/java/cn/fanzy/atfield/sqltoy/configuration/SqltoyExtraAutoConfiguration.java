@@ -7,8 +7,8 @@ import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDao;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
-import cn.fanzy.atfield.sqltoy.repository.BaseRepository;
-import cn.fanzy.atfield.sqltoy.repository.BaseRepositoryImpl;
+import cn.fanzy.atfield.sqltoy.repository.Repository;
+import cn.fanzy.atfield.sqltoy.repository.RepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,7 +52,7 @@ public class SqltoyExtraAutoConfiguration {
     }
 
     @Bean
-    public BaseRepository baseRepository() {
-        return new BaseRepositoryImpl();
+    public Repository baseRepository() {
+        return new RepositoryImpl();
     }
 }

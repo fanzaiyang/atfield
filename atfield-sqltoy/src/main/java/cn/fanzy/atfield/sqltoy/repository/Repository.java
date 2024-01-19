@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author fanzaiyang
  * @date 2024/01/09
  */
-public interface BaseRepository extends LightDao {
+public interface Repository extends LightDao {
     /**
      * 换行树表路由
      *

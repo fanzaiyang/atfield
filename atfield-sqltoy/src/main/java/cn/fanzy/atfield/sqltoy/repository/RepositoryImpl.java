@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @date 2024/01/09
  */
 @RequiredArgsConstructor
-public class BaseRepositoryImpl extends LightDaoImpl implements BaseRepository{
+public class RepositoryImpl extends LightDaoImpl implements Repository {
     @Override
     public boolean wrapTreeTableRoute(Serializable entity) {
         return super.wrapTreeTableRoute(new TreeTableModel(entity)
