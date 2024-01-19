@@ -97,10 +97,11 @@ public interface SqltoyLightHelperDao extends LightDao {
     <T> long update(Map<String, Object> setMap, Wrapper<T> wrapper);
 
     /**
-     * 逻辑删除，需要开启相关配置
+     * 已删除
      *
      * @param wrapper 包装器
      * @return Long
      */
+    @Deprecated
     <T> Long remove(Wrapper<T> wrapper);
 }

@@ -2,7 +2,6 @@ package cn.fanzy.atfield.sqltoy.plus.dao;
 
 import cn.fanzy.atfield.sqltoy.plus.conditions.Wrapper;
 import cn.fanzy.atfield.sqltoy.plus.utils.PlusDaoUtil;
-import cn.fanzy.atfield.sqltoy.properties.BreezeSqlToyProperties;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -83,12 +82,13 @@ public class SqltoyLightHelperDaoImpl extends LightDaoImpl implements SqltoyLigh
 
     @Override
     public <T> Long remove(Wrapper<T> wrapper) {
-        BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
-        Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
-        Map<String, Object> setMap = new HashMap<>(1);
-        setMap.put(properties.getLogicDeleteField(), PlusDaoUtil.getDeleteValue(properties));
-        EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
-        EntityUpdate entityUpdate = PlusDaoUtil.getEntityUpdate(setMap,wrapper, entityMeta);
-        return super.updateByQuery(wrapper.entityClass(), entityUpdate);
+//        BreezeSqlToyProperties properties = SpringUtil.getBean(BreezeSqlToyProperties.class);
+//        Assert.notBlank(properties.getLogicDeleteField(), "请在配置文件中配置逻辑删除字段！");
+//        Map<String, Object> setMap = new HashMap<>(1);
+//        setMap.put(properties.getLogicDeleteField(), PlusDaoUtil.getDeleteValue(properties));
+//        EntityMeta entityMeta = super.getEntityMeta(wrapper.entityClass());
+//        EntityUpdate entityUpdate = PlusDaoUtil.getEntityUpdate(setMap,wrapper, entityMeta);
+//        return super.updateByQuery(wrapper.entityClass(), entityUpdate);
+        return null;
     }
 }

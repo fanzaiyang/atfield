@@ -100,6 +100,7 @@ public interface SqlToyHelperDao extends SqlToyLazyDao {
      * @param wrapper 包装器
      * @return Long
      */
+    @Deprecated
     <T> Long remove(Wrapper<T> wrapper);
 
 }
