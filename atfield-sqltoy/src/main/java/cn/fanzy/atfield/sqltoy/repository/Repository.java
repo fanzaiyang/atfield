@@ -28,4 +28,13 @@ public interface Repository extends LightDao {
      */
     boolean wrapTreeTableRoute(final Serializable entity, String pidField);
 
+    /**
+     * 逻辑删除
+     *
+     * @param clazz 克拉兹
+     * @param ids   主键
+     * @return {@link Long}
+     */
+    <T> Long remove(Class<T> clazz, Object... ids);
+
 }
