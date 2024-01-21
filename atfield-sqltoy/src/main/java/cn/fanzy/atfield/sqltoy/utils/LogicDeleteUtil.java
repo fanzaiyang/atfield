@@ -9,7 +9,7 @@ import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
  * @author fanzaiyang
  * @date 2024-01-21
  */
-public class DelFlagUtil {
+public class LogicDeleteUtil {
 
     /**
      * 得到配置
