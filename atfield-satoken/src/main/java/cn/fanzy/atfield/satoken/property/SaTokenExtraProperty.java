@@ -64,7 +64,9 @@ public class SaTokenExtraProperty implements Serializable {
 
         public String[] getExcludePathPatterns() {
             if (swagger != null && swagger) {
-                String[] swaggers = new String[]{"/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**"
+                String[] swaggers = new String[]{
+                        "/swagger-resources/**", "/webjars/**", "/v2/api-docs/**",
+                        "/v3/api-docs/**", "/swagger-ui.html/**"
                         , "/doc.html/**", "/error", "/favicon.ico"};
                 if (excludePathPatterns == null) {
                     return swaggers;
