@@ -143,6 +143,48 @@ public class Json<T> implements Serializable {
                 data);
     }
 
+    public static <T> Json<T> success() {
+        return success(null);
+    }
+
+    public static <T> Json<T> success(String message) {
+        return success(null, message, null);
+    }
+
+    /**
+     * 成功
+     *
+     * @param data 数据
+     * @return {@link Json}<{@link T}>
+     */
+    public static <T> Json<T> success(T data) {
+        return success(null, null, data);
+    }
+
+    /**
+     * 成功
+     *
+     * @param message 消息
+     * @param data    数据
+     * @return {@link Json}<{@link T}>
+     */
+    public static <T> Json<T> success(String message, T data) {
+        return success(null, message, data);
+    }
+
+    /**
+     * 成功
+     *
+     * @param code    编码
+     * @param message 消息
+     * @param data    数据
+     * @return {@link Json}<{@link T}>
+     */
+    public static <T> Json<T> success(String code, String message, T data) {
+        return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultOkCode()),
+                StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultOkMessage()),
+                data);
+    }
 
     public static <T> Json<T> fail() {
         return fail(null);
@@ -165,6 +207,32 @@ public class Json<T> implements Serializable {
     }
 
     public static <T> Json<T> fail(String code, String message, T data) {
+        return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultFailCode()),
+                StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultFailMessage()),
+                data);
+    }
+
+    public static <T> Json<T> error() {
+        return fail(null);
+    }
+
+    public static <T> Json<T> error(String message) {
+        return error(null, message);
+    }
+
+    public static <T> Json<T> error(String message, T data) {
+        return error(null, message, data);
+    }
+
+    public static <T> Json<T> error(String code, String message) {
+        return error(code, message, null);
+    }
+
+    public static <T> Json<T> error(T data) {
+        return error(null, null, data);
+    }
+
+    public static <T> Json<T> error(String code, String message, T data) {
         return new Json<>(StrUtil.blankToDefault(code, PROPERTY.getModel().getDefaultFailCode()),
                 StrUtil.blankToDefault(message, PROPERTY.getModel().getDefaultFailMessage()),
                 data);
