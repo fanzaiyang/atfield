@@ -7,12 +7,14 @@ import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDao;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
+import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.Repository;
 import cn.fanzy.atfield.sqltoy.repository.RepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @RequiredArgsConstructor
 @Configuration
+@EnableConfigurationProperties(SqltoyExtraProperties.class)
 public class SqltoyExtraAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
@@ -52,7 +55,7 @@ public class SqltoyExtraAutoConfiguration {
     }
 
     @Bean
-    public Repository baseRepository() {
-        return new RepositoryImpl();
+    public Repository repository(SqltoyExtraProperties properties) {
+        return new RepositoryImpl(properties);
     }
 }

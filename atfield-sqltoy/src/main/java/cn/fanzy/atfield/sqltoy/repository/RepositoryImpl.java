@@ -1,7 +1,10 @@
 package cn.fanzy.atfield.sqltoy.repository;
 
+import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import lombok.RequiredArgsConstructor;
+import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.LightDaoImpl;
+import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
 import java.io.Serializable;
@@ -14,6 +17,8 @@ import java.io.Serializable;
  */
 @RequiredArgsConstructor
 public class RepositoryImpl extends LightDaoImpl implements Repository {
+    private final SqltoyExtraProperties properties;
+
     @Override
     public boolean wrapTreeTableRoute(Serializable entity) {
         return super.wrapTreeTableRoute(new TreeTableModel(entity)
@@ -24,5 +29,15 @@ public class RepositoryImpl extends LightDaoImpl implements Repository {
     public boolean wrapTreeTableRoute(Serializable entity, String pidField) {
         return super.wrapTreeTableRoute(new TreeTableModel(entity)
                 .pidField(pidField));
+    }
+
+
+    @Override
+    public <T> Long remove(Class<T> clazz, Object... ids) {
+        EntityMeta meta = getEntityMeta(clazz);
+        return updateByQuery(clazz, EntityUpdate.create()
+                .set(properties.getLogicDeleteField(), properties.getLogicDeleteValue())
+                .where(meta.getIdArgWhereSql())
+                .values(ids));
     }
 }
