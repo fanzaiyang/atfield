@@ -45,6 +45,7 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
                 .addResourceLocations("classpath:/META-INF/resources/");
+
         // 配置knife4j 显示文档
         registry.addResourceHandler("doc.html")
                 .addResourceLocations("classpath:/static/")
@@ -56,7 +57,9 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
         // 公共部分内容
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
         registry.addResourceHandler("/favicon.ico")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/static/")
+                .addResourceLocations("classpath:/META-INF/resources/");
     }
 }
