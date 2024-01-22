@@ -55,11 +55,11 @@ public class TLogWebInvokeTimeAdvice {
     private final LogUserCallbackService userCallbackService;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
-            "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
+              "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
+              "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
     public void cut() {
     }
 
@@ -69,7 +69,7 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         Log annotation = AopUtil.getAnnotation(joinPoint, Log.class);
-        if(annotation.ignore()){
+        if (annotation != null && annotation.ignore()) {
             return;
         }
         StopWatch stopWatch = new StopWatch();
@@ -137,7 +137,7 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         PrintLogInfo logInfo = invokeLogInfo.get();
-        if(logInfo==null){
+        if (logInfo == null) {
             return;
         }
         StopWatch stopWatch = invokeTimeTL.get();
@@ -167,7 +167,7 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         PrintLogInfo logInfo = invokeLogInfo.get();
-        if(logInfo==null){
+        if (logInfo == null) {
             return;
         }
         StopWatch stopWatch = invokeTimeTL.get();
