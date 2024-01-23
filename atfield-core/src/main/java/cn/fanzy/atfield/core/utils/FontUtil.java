@@ -25,7 +25,7 @@ public class FontUtil extends cn.hutool.core.img.FontUtil {
         for (int i = 0; i < text.length(); i++) {
             String charAt = String.valueOf(text.charAt(i));
             Rectangle rectangle = font.getStringBounds(charAt, context).getBounds();
-            offset += rectangle.width / 2;
+            offset += rectangle.width;
         }
         return offset;
     }
