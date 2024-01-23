@@ -25,10 +25,10 @@
     </modules>
 
     <properties>
+        <revision>1.0.3</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <revision>1.0.1</revision>
         <hutool.version>5.8.24</hutool.version>
         <redisson.version>3.24.3</redisson.version>
         <spring-boot.version>3.2.0</spring-boot.version>

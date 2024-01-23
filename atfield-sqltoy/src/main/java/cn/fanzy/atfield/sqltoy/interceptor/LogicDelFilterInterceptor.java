@@ -24,12 +24,15 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
     private final SqltoyExtraProperties properties;
 
     public SqlToyResult decorate(SqlToyContext sqlToyContext, SqlToyConfig sqlToyConfig, OperateType operateType, SqlToyResult sqlToyResult, Class entityClass, Integer dbType) {
-        EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
         // 逻辑删除字段
         if (StringUtil.isBlank(properties.getLogicDeleteField()) ||
                 StringUtil.isBlank(properties.getLogicDeleteField()) ||
                 StringUtil.isBlank(properties.getLogicNotDeleteValue())) {
             log.debug("请配置spring.sqltoy.db-config.logicDeleteField、logicNotDeleteValue、logicTenantColumn");
+            return sqlToyResult;
+        }
+        EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
+        if(entityMeta==null){
             return sqlToyResult;
         }
         String logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());

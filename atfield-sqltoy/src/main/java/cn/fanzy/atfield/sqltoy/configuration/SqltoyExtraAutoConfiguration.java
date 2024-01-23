@@ -11,6 +11,7 @@ import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.Repository;
 import cn.fanzy.atfield.sqltoy.repository.RepositoryImpl;
+import cn.hutool.log.Log;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,6 +56,12 @@ public class SqltoyExtraAutoConfiguration {
         return new SqltoyLightHelperDaoImpl();
     }
 
+    @Qualifier("logicDelFilterInterceptor")
+    @Bean("logicDelFilterInterceptor")
+    @ConditionalOnMissingBean
+    public LogicDelFilterInterceptor logicDelFilterInterceptor(SqltoyExtraProperties properties){
+        return new LogicDelFilterInterceptor(properties);
+    }
     @Bean
     public Repository repository(SqltoyExtraProperties properties) {
         return new RepositoryImpl(properties);
