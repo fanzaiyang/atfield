@@ -3,6 +3,7 @@ package cn.fanzy.atfield.sqltoy.configuration;
 import cn.fanzy.atfield.sqltoy.entity.AnonymousCurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
+import cn.fanzy.atfield.sqltoy.interceptor.LogicDelFilterInterceptor;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDao;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDao;

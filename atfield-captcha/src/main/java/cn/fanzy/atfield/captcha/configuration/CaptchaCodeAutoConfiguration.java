@@ -48,6 +48,8 @@ import java.util.List;
 @EnableConfigurationProperties(CaptchaProperty.class)
 public class CaptchaCodeAutoConfiguration {
 
+    private final CaptchaProperty property;
+
     @Bean
     @ConditionalOnMissingBean
     public CaptchaEmailCreatorService captchaEmailCreatorService() {
@@ -69,7 +71,7 @@ public class CaptchaCodeAutoConfiguration {
     @Bean
     @ConditionalOnBean(JavaMailSender.class)
     @ConditionalOnMissingBean
-    public CaptchaEmailSenderService captchaEmailSenderService(JavaMailSender javaMailSender, CaptchaProperty property) {
+    public CaptchaEmailSenderService captchaEmailSenderService(JavaMailSender javaMailSender) {
         return new DefaultCaptchaEmailSenderService(javaMailSender, property);
     }
 
@@ -89,8 +91,7 @@ public class CaptchaCodeAutoConfiguration {
     @ConditionalOnMissingBean
     public CaptchaService captchaService(List<CaptchaCreatorService> creatorServiceList,
                                          List<CaptchaSenderService> senderServiceList,
-                                         CaptchaStorageService captchaStorageService,
-                                         CaptchaProperty property) {
+                                         CaptchaStorageService captchaStorageService) {
         return new CaptchaServiceImpl(creatorServiceList, senderServiceList, captchaStorageService, property);
     }
 }

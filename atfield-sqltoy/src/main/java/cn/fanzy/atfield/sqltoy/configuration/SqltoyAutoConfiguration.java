@@ -419,7 +419,7 @@ public class SqltoyAutoConfiguration {
 				}
 			}
 		}
-		sqlInterceptorList.add(logicDelFilterInterceptor());
+		sqlInterceptorList.add(new LogicDelFilterInterceptor(extraProperties));
 		sqlToyContext.setSqlInterceptors(sqlInterceptorList);
 
 		// 自定义sql格式化器
@@ -478,11 +478,5 @@ public class SqltoyAutoConfiguration {
 		SqlToyCRUDServiceImpl sqlToyCRUDService = new SqlToyCRUDServiceImpl();
 		sqlToyCRUDService.setSqlToyLazyDao(sqlToyLazyDao);
 		return sqlToyCRUDService;
-	}
-
-	@Bean
-	@ConditionalOnMissingBean
-	public LogicDelFilterInterceptor logicDelFilterInterceptor() {
-		return new LogicDelFilterInterceptor(extraProperties);
 	}
 }
