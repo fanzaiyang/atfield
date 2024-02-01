@@ -123,10 +123,10 @@ public class CaptchaProperty {
         private String codeValue = "code";
 
         /**
-         * 重试次数,默认值：1，前端输入错误次数超过该值时，将不再重试，直接返回错误。
+         * 重试次数,默认值：5，前端输入错误次数超过该值时，将不再重试，直接返回错误。
          * -1或0：在过期时间内，不限次数
          */
-        private Integer retryCount;
+        private Integer retryCount=5;
     }
 
     @Data
@@ -158,10 +158,10 @@ public class CaptchaProperty {
          */
         private String contentTemplate = "您的验证码的内容为{0} ,验证码的有效时间为{1}。";
         /**
-         * 重试次数,默认值：1，前端输入错误次数超过该值时，将不再重试，直接返回错误。
+         * 重试次数,默认值：5，前端输入错误次数超过该值时，将不再重试，直接返回错误。
          * -1或0：在过期时间内，不限次数
          */
-        private Integer retryCount;
+        private Integer retryCount=5;
         /**
          * 从请求中获取短信验证码的发送目标(手机号)的参数，默认值为 email
          */
