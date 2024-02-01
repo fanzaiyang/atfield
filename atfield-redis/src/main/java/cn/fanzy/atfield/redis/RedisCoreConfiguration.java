@@ -60,13 +60,13 @@ import java.util.Date;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableCaching
 @EnableConfigurationProperties({CacheProperties.class, JacksonProperties.class,
         WebMvcProperties.class})
-@ConditionalOnClass(RedisOperations.class)
 @ImportAutoConfiguration({LockForDistributedAdvice.class,
         LockForFormSubmitAdvice.class,
         LockForRateLimitAdvice.class})
+@ConditionalOnClass(RedisOperations.class)
+@EnableCaching
 public class RedisCoreConfiguration {
     private final JacksonProperties jacksonProperties;
     private final WebMvcProperties webMvcProperties;
