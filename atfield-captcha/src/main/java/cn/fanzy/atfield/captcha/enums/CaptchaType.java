@@ -35,4 +35,14 @@ public enum CaptchaType implements ICaptchaType {
         }
         throw new IllegalArgumentException("验证码类型不存在!");
     }
+
+    @Override
+    public String getCaptchaName(){
+        return switch (this.name().toLowerCase()){
+            case "image"->"图片验证码";
+            case "mobile"->"手机验证码";
+            case "email"->"邮件验证码";
+            default -> throw new IllegalStateException("Unexpected value: " + this.name().toLowerCase());
+        };
+    }
 }

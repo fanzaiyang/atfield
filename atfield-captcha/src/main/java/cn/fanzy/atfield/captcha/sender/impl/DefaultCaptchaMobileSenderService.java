@@ -5,6 +5,12 @@ import cn.fanzy.atfield.captcha.sender.CaptchaMobileSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 默认验证码移动发送器服务
+ *
+ * @author fanzaiyang
+ * @date 2024/02/01
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultCaptchaMobileSenderService extends CaptchaMobileSenderService {

@@ -10,6 +10,12 @@ import lombok.extern.slf4j.Slf4j;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
+/**
+ * 默认验证码图像发送器服务
+ *
+ * @author fanzaiyang
+ * @date 2024/02/01
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultCaptchaImageSenderService extends CaptchaImageSenderService {

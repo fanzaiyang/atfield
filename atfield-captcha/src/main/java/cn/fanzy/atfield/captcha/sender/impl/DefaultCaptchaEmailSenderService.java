@@ -11,6 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
+/**
+ * 默认验证码电子邮件发送服务
+ *
+ * @author fanzaiyang
+ * @date 2024/02/01
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultCaptchaEmailSenderService extends CaptchaEmailSenderService {

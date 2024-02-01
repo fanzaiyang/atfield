@@ -8,5 +8,20 @@ package cn.fanzy.atfield.captcha.enums;
  */
 public interface ICaptchaType {
 
+    /**
+     * 获取价值
+     *
+     * @return {@link String}
+     */
     String getValue();
+
+
+    /**
+     * 验证码名称
+     *
+     * @return {@link String}
+     */
+    default String getCaptchaName() {
+        return "";
+    }
 }

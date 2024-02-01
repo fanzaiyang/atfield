@@ -21,6 +21,12 @@ import org.springframework.web.context.request.ServletWebRequest;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 验证码服务实现
+ *
+ * @author fanzaiyang
+ * @date 2024/02/01
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class CaptchaServiceImpl implements CaptchaService {
@@ -34,7 +40,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         Optional<CaptchaCreatorService> creatorService = creatorServiceList.stream()
                 .filter(creator -> creator.isSupported(type)).findFirst();
         if (creatorService.isEmpty()) {
-            throw new RuntimeException("该类型验证码的生成器不存在！");
+            throw new RuntimeException("【"+type.getCaptchaName()+"】生成器不存在！");
         }
         CaptchaCode codeInfo = creatorService.get().generate(property);
         // 将验证码保存到缓存
@@ -47,7 +53,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         Optional<CaptchaSenderService> senderService = senderServiceList.stream()
                 .filter(sender -> sender.isSupported(type)).findFirst();
         if (senderService.isEmpty()) {
-            throw new RuntimeException("该类型验证码的发送器不存在！");
+            throw new RuntimeException("【"+type.getCaptchaName()+"】发送器不存在！");
         }
         senderService.get().send(target, captchaCode);
     }
@@ -71,11 +77,11 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public void verify(ICaptchaType type, String target, String code) {
-        Assert.notBlank(target, "发送的对象不能为空！");
-        Assert.notBlank(code, "验证码不能为空！");
+        Assert.notBlank(target, "【{}】发送的对象不能为空！",type.getCaptchaName());
+        Assert.notBlank(code, "【{}】验证码不能为空！",type.getCaptchaName());
         CaptchaCode captchaCode = get(target);
         if (captchaCode == null) {
-            throw new NoCaptchaException("-5001", "验证码不存在或已过期！");
+            throw new NoCaptchaException("-5001", "【"+type.getCaptchaName()+"】不存在或已过期！");
         }
         captchaCode.preVerify();
         // 次数+1
@@ -85,13 +91,13 @@ public class CaptchaServiceImpl implements CaptchaService {
             if (StrUtil.equalsIgnoreCase(code, captchaCode.getCode())) {
                 captchaStorageService.delete(target);
             } else {
-                throw new CaptchaErrorException("-5003", "验证码输入错误！");
+                throw new CaptchaErrorException("-5003", "【"+type.getCaptchaName()+"】输入错误！");
             }
         } else {
             if (code.equals(captchaCode.getCode())) {
                 captchaStorageService.delete(target);
             } else {
-                throw new CaptchaExpiredException("-5003", "验证码输入错误！");
+                throw new CaptchaExpiredException("-5003", "【"+type.getCaptchaName()+"】输入错误！");
             }
         }
     }
