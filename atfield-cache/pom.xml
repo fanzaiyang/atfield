@@ -37,6 +37,7 @@
         <dependency>
             <groupId>cn.fanzy.atfield</groupId>
             <artifactId>atfield-redis</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
