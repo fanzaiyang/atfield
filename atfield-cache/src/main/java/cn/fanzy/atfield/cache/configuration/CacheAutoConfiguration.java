@@ -27,7 +27,6 @@ import org.springframework.core.Ordered;
 @Configuration
 @ImportAutoConfiguration({LocalCacheAutoConfiguration.class, RedisCacheAutoConfiguration.class})
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
-@EnableCaching
 @EnableConfigurationProperties(CacheProperty.class)
 public class CacheAutoConfiguration {
 

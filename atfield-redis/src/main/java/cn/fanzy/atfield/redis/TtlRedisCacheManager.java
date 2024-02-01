@@ -6,11 +6,16 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 
+/**
+ * TTL Redis 缓存管理器
+ *
+ * @author fanzaiyang
+ * @date 2024/02/01
+ */
 public class TtlRedisCacheManager extends RedisCacheManager {
     public TtlRedisCacheManager(RedisCacheWriter cacheWriter,
                                 RedisCacheConfiguration defaultCacheConfiguration) {

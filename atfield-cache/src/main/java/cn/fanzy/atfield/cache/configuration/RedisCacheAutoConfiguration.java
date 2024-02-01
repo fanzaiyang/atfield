@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisOperations;
@@ -20,6 +21,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
+@EnableCaching
 @ConditionalOnClass(RedisOperations.class)
 public class RedisCacheAutoConfiguration {
 
