@@ -23,31 +23,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties({CorsProperties.class})
-@ConditionalOnProperty(prefix = "atfield.web.cors", name = {"enable"}, havingValue = "true", matchIfMissing = true)
-public class CorsAutoConfiguration {
+@ConditionalOnProperty(prefix = "atfield.web.cors", name = {"enable"}, havingValue = "true")
+public class CorsAutoConfiguration implements WebMvcConfigurer{
     private final CorsProperties corsProperties;
 
-    /**
-     * 配置跨域支持
-     *
-     * @return WebMvcConfigurer
-     */
-    @Bean("corsAllowedConfigurer")
-    @ConditionalOnMissingBean(name = "corsAllowedConfigurer")
-    public WebMvcConfigurer corsAllowedConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                //@formatter:off
-                registry
-                        .addMapping(corsProperties.getUrl())
-                        .allowedOriginPatterns(corsProperties.getAllowedOrigins())
-                        .allowedMethods(corsProperties.getAllowedMethods())
-                        .allowedHeaders(corsProperties.getAllowedHeaders())
-                        .allowCredentials(corsProperties.getAllowCredentials());//允许带认证信息的配置
-                //@formatter:on
-            }
-        };
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry
+                .addMapping(corsProperties.getUrl())
+                .allowedOriginPatterns(corsProperties.getAllowedOrigins())
+                .allowedMethods(corsProperties.getAllowedMethods())
+                .allowedHeaders(corsProperties.getAllowedHeaders())
+                .allowCredentials(corsProperties.getAllowCredentials());
     }
 
     /**

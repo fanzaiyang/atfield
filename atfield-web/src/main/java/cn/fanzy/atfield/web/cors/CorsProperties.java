@@ -26,9 +26,9 @@ public class CorsProperties implements Serializable {
     @Serial
     private static final long serialVersionUID = -2465252437257164820L;
     /**
-     * 是否开启跨域支持,默认开启
+     * 是否开启跨域支持,默认：关闭
      */
-    private Boolean enable = true;
+    private Boolean enable = false;
     /**
      * 跨域设置允许的路径，默认为所有路径
      */
