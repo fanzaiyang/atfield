@@ -3,6 +3,7 @@ package cn.fanzy.atfield.sqltoy.repository;
 import org.sagacity.sqltoy.dao.LightDao;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 基础存储库
@@ -27,6 +28,17 @@ public interface Repository extends LightDao {
      * @return boolean
      */
     boolean wrapTreeTableRoute(final Serializable entity, String pidField);
+
+    boolean wrapTreeTableRoute(final List<Serializable> entities);
+
+    /**
+     * 换行树表路由
+     *
+     * @param entity   实体
+     * @param pidField PID 字段
+     * @return boolean
+     */
+    boolean wrapTreeTableRoute(final List<Serializable> entities, String pidField);
 
     /**
      * 逻辑删除

@@ -8,6 +8,7 @@ import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 基本存储库 impl
@@ -31,6 +32,21 @@ public class RepositoryImpl extends LightDaoImpl implements Repository {
                 .pidField(pidField));
     }
 
+    @Override
+    public boolean wrapTreeTableRoute(List<Serializable> entities) {
+        for (Serializable entity : entities) {
+            wrapTreeTableRoute(entity);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean wrapTreeTableRoute(List<Serializable> entities, String pidField) {
+        for (Serializable entity : entities) {
+            wrapTreeTableRoute(entity, pidField);
+        }
+        return true;
+    }
 
     @Override
     public <T> Long remove(Class<T> clazz, Object... ids) {

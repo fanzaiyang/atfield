@@ -11,6 +11,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * SA 令牌注释配置
+ *
+ * @author fanzaiyang
+ * @date 2024/03/01
+ */
 @Slf4j
 @AllArgsConstructor
 @Configuration
