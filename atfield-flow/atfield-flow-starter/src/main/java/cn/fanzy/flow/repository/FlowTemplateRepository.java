@@ -1,7 +1,7 @@
 package cn.fanzy.flow.repository;
 
 import cn.fanzy.atfield.core.utils.IdUtil;
-import cn.fanzy.flow.model.IPage;
+import cn.fanzy.flow.model.Pages;
 import cn.fanzy.flow.model.db.FlowTemplateInfo;
 import cn.fanzy.flow.utils.SqlConstants;
 import cn.fanzy.flow.utils.SqlUtil;
@@ -106,7 +106,7 @@ public class FlowTemplateRepository {
      * @param pageSize 页面大小
      * @return {@link PageResult}<{@link FlowTemplateInfo}>
      */
-    public IPage<FlowTemplateInfo> queryFlowTemplatePage(int pageNo, int pageSize) {
+    public Pages<FlowTemplateInfo> queryFlowTemplatePage(int pageNo, int pageSize) {
         try {
             PageResult<Entity> page = SqlUtil.getDb()
                     .page(Entity.create(SqlConstants.TB_FLOW_TEMPLATE_INFO),
@@ -115,7 +115,7 @@ public class FlowTemplateRepository {
                 return null;
             }
             List<FlowTemplateInfo> list = page.stream().map(item -> item.toBean(FlowTemplateInfo.class)).toList();
-            return IPage.of(pageNo, pageSize, page.getTotal(), list);
+            return Pages.of(pageNo, pageSize, page.getTotal(), list);
         } catch (SQLException e) {
             log.error("查询流程模板页面异常！", e);
             throw new RuntimeException("查询流程模板页面异常！", e);

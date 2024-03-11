@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class IPage<T> implements Serializable {
+public class Pages<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 3179974334516819442L;
 
@@ -28,7 +28,7 @@ public class IPage<T> implements Serializable {
     private int totalPage;
     private List<T> data;
 
-    public IPage(int pageNo, int pageSize, int total, List<T> data) {
+    public Pages(int pageNo, int pageSize, int total, List<T> data) {
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.total = total;
@@ -36,8 +36,8 @@ public class IPage<T> implements Serializable {
         this.totalPage=PageUtil.totalPage(total, pageSize);
     }
 
-    public static <T> IPage<T> of(int pageNo, int pageSize, int total, List<T> data) {
-        return new IPage<>(pageNo, pageSize, total, data);
+    public static <T> Pages<T> of(int pageNo, int pageSize, int total, List<T> data) {
+        return new Pages<>(pageNo, pageSize, total, data);
     }
 
     public int getTotalPage() {
