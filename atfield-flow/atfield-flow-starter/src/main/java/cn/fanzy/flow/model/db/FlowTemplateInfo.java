@@ -33,6 +33,8 @@ public class FlowTemplateInfo implements Serializable {
      */
     private String code;
 
+    private String avatar;
+
     /**
      * 模板名称
      */

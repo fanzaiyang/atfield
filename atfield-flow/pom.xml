@@ -10,7 +10,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>cn.fanzy.flow</groupId>
     <artifactId>atfield-flow</artifactId>
     <packaging>pom</packaging>
 

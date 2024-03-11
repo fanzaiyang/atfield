@@ -70,7 +70,11 @@
                 <artifactId>atfield-web</artifactId>
                 <version>${revision}</version>
             </dependency>
-
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-flow-starter</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

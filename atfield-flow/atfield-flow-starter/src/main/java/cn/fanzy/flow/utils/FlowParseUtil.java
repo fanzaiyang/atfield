@@ -21,7 +21,7 @@ import java.util.Optional;
  * @author fanzaiyang
  * @date 2024/03/08
  */
-public class FlowDataParseUtil {
+public class FlowParseUtil {
 
     /**
      * 根据流程数据创建流节点
@@ -97,6 +97,17 @@ public class FlowDataParseUtil {
     }
 
     /**
+     * 按 ID 获取流节点
+     *
+     * @param flowData 流量数据
+     * @param nodeId   节点 ID
+     * @return {@link FlowNode}
+     */
+    public static FlowNode getFlowNodeById(String flowData, String nodeId) {
+        return getFlowNodeById(parseFlowNodes(flowData),nodeId);
+    }
+
+    /**
      * 按 ID 获取流下一个节点
      *
      * @param nodeList 节点列表
@@ -111,5 +122,16 @@ public class FlowDataParseUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 按 ID 获取流下一个节点
+     *
+     * @param flowData 流量数据
+     * @param nodeId   节点 ID
+     * @return {@link FlowNode}
+     */
+    public static FlowNode getFlowNextNodeById(String flowData, String nodeId) {
+        return getFlowNextNodeById(parseFlowNodes(flowData),nodeId);
     }
 }
