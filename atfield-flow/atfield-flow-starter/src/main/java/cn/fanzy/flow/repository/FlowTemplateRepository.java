@@ -102,7 +102,7 @@ public class FlowTemplateRepository {
     /**
      * 获取流模板页面
      *
-     * @param pageNo   页码
+     * @param pageNo   页码，1
      * @param pageSize 页面大小
      * @return {@link PageResult}<{@link FlowTemplateInfo}>
      */
@@ -110,7 +110,7 @@ public class FlowTemplateRepository {
         try {
             PageResult<Entity> page = SqlUtil.getDb()
                     .page(Entity.create(SqlConstants.TB_FLOW_TEMPLATE_INFO),
-                            new Page(pageNo, pageSize));
+                            new Page(pageNo-1, pageSize));
             if(page==null){
                 return null;
             }
