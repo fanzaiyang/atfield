@@ -1,4 +1,4 @@
-package cn.fanzy.flow.model.db;
+package cn.fanzy.flow.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlowTemplateHistoryInfo implements Serializable {
+public class FlowTemplateInfoEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -4559143895248911537L;
 
@@ -32,6 +32,8 @@ public class FlowTemplateHistoryInfo implements Serializable {
      * 模板编码
      */
     private String code;
+
+    private String avatar;
 
     /**
      * 模板名称
@@ -62,10 +64,12 @@ public class FlowTemplateHistoryInfo implements Serializable {
      * 流程版本号
      */
     private Integer flowVersion;
+
     /**
      * 流量数据JSON ARRAY
      */
     private String flowData;
+
     /**
      * 乐观锁
      */

@@ -1,18 +1,18 @@
 package cn.fanzy.flow.model.enums;
 
 /**
- * 操作类型
+ * 操作流程顺序
  *
  * @author fanzaiyang
  * @date 2024/03/08
  */
-public enum OperationType {
+public enum ApproveOrder {
     /**
-     * 通过
+     * 顺序审批
      */
-    PASS,
+    ORDER,
     /**
-     * 驳回
+     * 跳转到此节点
      */
-    REJECT;
+    ME;
 }

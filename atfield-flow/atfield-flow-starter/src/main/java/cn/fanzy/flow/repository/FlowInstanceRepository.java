@@ -2,11 +2,14 @@ package cn.fanzy.flow.repository;
 
 import cn.fanzy.atfield.core.utils.IdUtil;
 import cn.fanzy.flow.model.Pages;
+import cn.fanzy.flow.model.entity.FlowInstanceInfoEntity;
 import cn.fanzy.flow.model.entity.FlowTemplateInfoEntity;
 import cn.fanzy.flow.utils.SqlConstants;
 import cn.fanzy.flow.utils.SqlUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.*;
+import cn.hutool.db.Entity;
+import cn.hutool.db.Page;
+import cn.hutool.db.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * 流模板存储库
+ * 流实例存储库
  *
  * @author fanzaiyang
  * @date 2024/03/11
@@ -24,17 +27,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class FlowTemplateRepository {
+public class FlowInstanceRepository {
 
 
-    public void createFlowTemplateTable() {
-        boolean exists = SqlUtil.isTableExists(SqlConstants.TB_FLOW_TEMPLATE_INFO);
+    public void createFlowInstanceTable() {
+        boolean exists = SqlUtil.isTableExists(SqlConstants.TB_FLOW_INSTANCE_INFO);
         if (exists) {
-            log.warn("数据库表：{}已存在！", SqlConstants.TB_FLOW_TEMPLATE_INFO);
+            log.warn("数据库表：{}已存在！", SqlConstants.TB_FLOW_INSTANCE_INFO);
             return;
         }
         try {
-            SqlUtil.getDb().execute(SqlConstants.SQL_CREATE_TABLE_TEMPLATE);
+            SqlUtil.getDb().execute(SqlConstants.SQL_CREATE_TABLE_INSTANCE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -46,7 +49,7 @@ public class FlowTemplateRepository {
      * @param entity 流模板信息
      * @return {@link String}
      */
-    public String createFlowTemplate(FlowTemplateInfoEntity entity) {
+    public String createFlowInstance(FlowInstanceInfoEntity entity) {
         entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtil.getSnowflakeNextIdStr()));
         entity.setDelFlag(entity.getDelFlag() == null ? 0 : entity.getDelFlag());
         entity.setCreateTime(LocalDateTime.now());
@@ -54,13 +57,23 @@ public class FlowTemplateRepository {
         int inserted = 0;
         try {
             inserted = SqlUtil.getDb()
-                    .insertOrUpdate(Entity.create(SqlConstants.SQL_INSERT_TABLE_TEMPLATE)
+                    .insertOrUpdate(Entity.create(SqlConstants.TB_FLOW_INSTANCE_INFO)
                                     .set("id", entity.getId())
                                     .set("code", entity.getCode())
-                                    .set("avatar", entity.getAvatar())
-                                    .set("name", entity.getName())
-                                    .set("remarks", entity.getRemarks())
-                                    .set("order_number", entity.getOrderNumber())
+                                    .set("title", entity.getTitle())
+                                    .set("form_id", entity.getFormId())
+                                    .set("flow_template_id", entity.getFlowTemplateId())
+                                    .set("flow_status", entity.getFlowStatus())
+                                    .set("apply_user_id", entity.getApplyUserId())
+                                    .set("apply_time", entity.getApplyTime())
+                                    .set("flow_current_node_id", entity.getCurrentNodeId())
+                                    .set("flow_current_node_name", entity.getCurrentNodeName())
+                                    .set("flow_current_handler_ids", entity.getCurrentHandlerIds())
+                                    .set("flow_receive_time", entity.getReceiveTime())
+                                    .set("flow_next_handler_ids", entity.getNextHandlerIds())
+                                    .set("flow_next_node_id", entity.getNextNodeId())
+                                    .set("flow_next_node_name", entity.getNextNodeName())
+                                    .set("flow_template_info", entity.getFlowTemplateId())
                                     .set("status", entity.getStatus())
                                     .set("tenant_id", entity.getTenantId())
                                     .set("revision", entity.getRevision())
@@ -86,14 +99,14 @@ public class FlowTemplateRepository {
      * @param id 编号
      * @return {@link FlowTemplateInfoEntity}
      */
-    public FlowTemplateInfoEntity getFlowTemplate(String id) {
+    public FlowInstanceInfoEntity getFlowInstance(String id) {
         try {
-            Entity entity = SqlUtil.getDb().get(Entity.create(SqlConstants.TB_FLOW_TEMPLATE_INFO)
+            Entity entity = SqlUtil.getDb().get(Entity.create(SqlConstants.TB_FLOW_INSTANCE_INFO)
                     .set("id", id));
             if (entity == null) {
                 return null;
             }
-            return entity.toBean(FlowTemplateInfoEntity.class);
+            return entity.toBean(FlowInstanceInfoEntity.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -104,21 +117,21 @@ public class FlowTemplateRepository {
      *
      * @param pageNo   页码，1
      * @param pageSize 页面大小
-     * @return {@link PageResult}<{@link FlowTemplateInfoEntity}>
+     * @return {@link PageResult}<{@link FlowInstanceInfoEntity}>
      */
-    public Pages<FlowTemplateInfoEntity> queryFlowTemplatePage(int pageNo, int pageSize) {
+    public Pages<FlowInstanceInfoEntity> queryFlowInstancePage(int pageNo, int pageSize) {
         try {
             PageResult<Entity> page = SqlUtil.getDb()
-                    .page(Entity.create(SqlConstants.TB_FLOW_TEMPLATE_INFO),
-                            new Page(pageNo-1, pageSize));
-            if(page==null){
+                    .page(Entity.create(SqlConstants.TB_FLOW_INSTANCE_INFO),
+                            new Page(pageNo - 1, pageSize));
+            if (page == null) {
                 return null;
             }
-            List<FlowTemplateInfoEntity> list = page.stream().map(item -> item.toBean(FlowTemplateInfoEntity.class)).toList();
+            List<FlowInstanceInfoEntity> list = page.stream().map(item -> item.toBean(FlowInstanceInfoEntity.class)).toList();
             return Pages.of(pageNo, pageSize, page.getTotal(), list);
         } catch (SQLException e) {
-            log.error("查询流程模板页面异常！", e);
-            throw new RuntimeException("查询流程模板页面异常！", e);
+            log.error("查询流程实例异常！", e);
+            throw new RuntimeException("查询流程实例异常！", e);
         }
     }
 }

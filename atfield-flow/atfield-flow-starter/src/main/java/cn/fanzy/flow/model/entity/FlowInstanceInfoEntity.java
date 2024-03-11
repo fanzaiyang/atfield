@@ -1,4 +1,4 @@
-package cn.fanzy.flow.model.db;
+package cn.fanzy.flow.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlowInstanceInfo implements Serializable {
+public class FlowInstanceInfoEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -4559143895248911537L;
 

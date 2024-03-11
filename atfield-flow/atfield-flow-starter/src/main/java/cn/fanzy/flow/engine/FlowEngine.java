@@ -1,6 +1,6 @@
 package cn.fanzy.flow.engine;
 
-import cn.fanzy.flow.model.db.FlowTemplateInfo;
+import cn.fanzy.flow.model.entity.FlowTemplateInfoEntity;
 
 /**
  * 流程引擎
@@ -16,6 +16,6 @@ public interface FlowEngine {
      * @param flowTemplate 流程模板
      * @return {@link String}
      */
-    String handleCreateFlowTemplate(FlowTemplateInfo flowTemplate);
+    String handleCreateFlowTemplate(FlowTemplateInfoEntity flowTemplate);
 
 }

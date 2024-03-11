@@ -1,7 +1,7 @@
-package cn.fanzy.flow.model.db;
+package cn.fanzy.flow.model.entity;
 
-import cn.fanzy.flow.model.enums.OperationOrder;
-import cn.fanzy.flow.model.enums.OperationType;
+import cn.fanzy.flow.model.enums.ApproveOrder;
+import cn.fanzy.flow.model.enums.ApproveResult;
 import cn.fanzy.flow.model.enums.NodeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlowTaskInfo implements Serializable {
+public class FlowTaskInfoEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -4559143895248911537L;
 
@@ -49,7 +49,10 @@ public class FlowTaskInfo implements Serializable {
      * 节点ID
      */
     private String nodeId;
-
+    /**
+     * 节点ID
+     */
+    private String nodeName;
     /**
      * 处理人ID
      */
@@ -67,21 +70,22 @@ public class FlowTaskInfo implements Serializable {
     /**
      * 操作时间
      */
-    private LocalDateTime operationTime;
+    private LocalDateTime approveTime;
     /**
      * 操作备注
      */
-    private String operationRemarks;
+    private String approveRemarks;
 
     /**
      * 操作类型
      */
-    private OperationType operationType;
+    private ApproveResult approveResult;
 
     /**
      * 操作流程顺序，
      */
-    private OperationOrder operationOrder;
+    private ApproveOrder approveOrder;
+
 
     /**
      * 下一个节点ID

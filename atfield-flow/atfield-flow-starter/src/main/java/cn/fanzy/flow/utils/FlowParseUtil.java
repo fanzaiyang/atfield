@@ -1,7 +1,7 @@
 package cn.fanzy.flow.utils;
 
 import cn.fanzy.flow.exception.BadFlowDataException;
-import cn.fanzy.flow.model.db.FlowTaskInfo;
+import cn.fanzy.flow.model.entity.FlowTaskInfoEntity;
 import cn.fanzy.flow.model.enums.NodeType;
 import cn.fanzy.flow.model.flow.FlowNode;
 import cn.fanzy.flow.model.flow.FlowNodeHandler;
@@ -56,16 +56,16 @@ public class FlowParseUtil {
      *
      * @param flowData 流量数据
      * @param nodeId   节点 ID
-     * @return {@link List}<{@link FlowTaskInfo}>
+     * @return {@link List}<{@link FlowTaskInfoEntity}>
      */
-    public static List<FlowTaskInfo> parseFlowTask(String flowData, String nodeId) {
+    public static List<FlowTaskInfoEntity> parseFlowTask(String flowData, String nodeId) {
         List<FlowNode> flowNodeList = parseFlowNodes(flowData);
         FlowNode node = getFlowNodeById(flowNodeList, nodeId);
         FlowNode nextNode = getFlowNextNodeById(flowNodeList, nodeId);
-        List<FlowTaskInfo> taskList = new ArrayList<>();
+        List<FlowTaskInfoEntity> taskList = new ArrayList<>();
         // 根据节点信息生成任务
         if (CollUtil.isEmpty(node.getHandlers())) {
-            taskList.add(FlowTaskInfo.builder()
+            taskList.add(FlowTaskInfoEntity.builder()
                     .nextNodeId(nextNode == null ? null : nextNode.getId())
                     .nodeId(node.getId())
                     .nodeType(node.getNodeType())
@@ -75,7 +75,7 @@ public class FlowParseUtil {
             return taskList;
         }
         for (FlowNodeHandler handler : node.getHandlers()) {
-            taskList.add(FlowTaskInfo.builder()
+            taskList.add(FlowTaskInfoEntity.builder()
                     .nextNodeId(nextNode == null ? null : nextNode.getId())
                     .nodeId(node.getId())
                     .nodeType(node.getNodeType())
