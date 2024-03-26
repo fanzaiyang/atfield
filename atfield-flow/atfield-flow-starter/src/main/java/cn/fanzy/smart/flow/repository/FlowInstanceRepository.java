@@ -1,13 +1,11 @@
-package cn.fanzy.flow.repository;
+package cn.fanzy.smart.flow.repository;
 
 import cn.fanzy.atfield.core.utils.IdUtil;
-import cn.fanzy.flow.model.Pages;
-import cn.fanzy.flow.model.entity.FlowInstanceInfoEntity;
-import cn.fanzy.flow.model.entity.FlowTaskInfoEntity;
-import cn.fanzy.flow.model.entity.FlowTemplateInfoEntity;
-import cn.fanzy.flow.model.params.ParamUpdateTaskFinishDto;
-import cn.fanzy.flow.utils.SqlConstants;
-import cn.fanzy.flow.utils.SqlUtil;
+import cn.fanzy.smart.flow.model.Pages;
+import cn.fanzy.smart.flow.model.entity.FlowInstanceInfoEntity;
+import cn.fanzy.smart.flow.model.entity.FlowTemplateInfoEntity;
+import cn.fanzy.smart.flow.utils.SqlConstants;
+import cn.fanzy.smart.flow.utils.SqlUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.Entity;
 import cn.hutool.db.Page;
@@ -29,17 +27,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class FlowTaskRepository {
+public class FlowInstanceRepository {
 
 
-    public void createFlowTaskTable() {
-        boolean exists = SqlUtil.isTableExists(SqlConstants.TB_FLOW_TASK_INFO);
+    public void createFlowInstanceTable() {
+        boolean exists = SqlUtil.isTableExists(SqlConstants.TB_FLOW_INSTANCE_INFO);
         if (exists) {
-            log.warn("数据库表：{}已存在！", SqlConstants.TB_FLOW_TASK_INFO);
+            log.warn("数据库表：{}已存在！", SqlConstants.TB_FLOW_INSTANCE_INFO);
             return;
         }
         try {
-            SqlUtil.getDb().execute(SqlConstants.TB_FLOW_TASK_INFO);
+            SqlUtil.getDb().execute(SqlConstants.SQL_CREATE_TABLE_INSTANCE);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +49,7 @@ public class FlowTaskRepository {
      * @param entity 流模板信息
      * @return {@link String}
      */
-    public String createFlowTask(FlowTaskInfoEntity entity) {
+    public String createFlowInstance(FlowInstanceInfoEntity entity) {
         entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtil.getSnowflakeNextIdStr()));
         entity.setDelFlag(entity.getDelFlag() == null ? 0 : entity.getDelFlag());
         entity.setCreateTime(LocalDateTime.now());
@@ -61,19 +59,21 @@ public class FlowTaskRepository {
             inserted = SqlUtil.getDb()
                     .insertOrUpdate(Entity.create(SqlConstants.TB_FLOW_INSTANCE_INFO)
                                     .set("id", entity.getId())
-                                    .set("flow_template_id", entity.getFlowTemplateId())
-                                    .set("flow_instance_id", entity.getFlowInstanceId())
+                                    .set("code", entity.getCode())
+                                    .set("title", entity.getTitle())
                                     .set("form_id", entity.getFormId())
-                                    .set("node_id", entity.getNodeId())
-                                    .set("node_name", entity.getNodeName())
-                                    .set("handler_id", entity.getHandlerId())
-                                    .set("approve_time", entity.getApproveTime())
-                                    .set("approve_result", entity.getApproveResult().name())
-                                    .set("approve_remarks", entity.getApproveRemarks())
-                                    .set("approve_order", entity.getApproveOrder().name())
-                                    .set("node_type", entity.getNodeType().name())
-                                    .set("order_number", entity.getOrderNumber())
-                                    .set("remarks", entity.getRemarks())
+                                    .set("flow_template_id", entity.getFlowTemplateId())
+                                    .set("flow_status", entity.getFlowStatus())
+                                    .set("apply_user_id", entity.getApplyUserId())
+                                    .set("apply_time", entity.getApplyTime())
+                                    .set("flow_current_node_id", entity.getCurrentNodeId())
+                                    .set("flow_current_node_name", entity.getCurrentNodeName())
+                                    .set("flow_current_handler_ids", entity.getCurrentHandlerIds())
+                                    .set("flow_receive_time", entity.getReceiveTime())
+                                    .set("flow_next_handler_ids", entity.getNextHandlerIds())
+                                    .set("flow_next_node_id", entity.getNextNodeId())
+                                    .set("flow_next_node_name", entity.getNextNodeName())
+                                    .set("flow_template_info", entity.getFlowTemplateId())
                                     .set("status", entity.getStatus())
                                     .set("tenant_id", entity.getTenantId())
                                     .set("revision", entity.getRevision())
@@ -88,7 +88,7 @@ public class FlowTaskRepository {
         }
 
         if (inserted == 0) {
-            throw new RuntimeException("创建流程任务失败!");
+            throw new RuntimeException("创建流程模板失败!");
         }
         return entity.getId();
     }
@@ -99,14 +99,14 @@ public class FlowTaskRepository {
      * @param id 编号
      * @return {@link FlowTemplateInfoEntity}
      */
-    public FlowTaskInfoEntity getFlowTask(String id) {
+    public FlowInstanceInfoEntity getFlowInstance(String id) {
         try {
-            Entity entity = SqlUtil.getDb().get(Entity.create(SqlConstants.TB_FLOW_TASK_INFO)
+            Entity entity = SqlUtil.getDb().get(Entity.create(SqlConstants.TB_FLOW_INSTANCE_INFO)
                     .set("id", id));
             if (entity == null) {
                 return null;
             }
-            return entity.toBean(FlowTaskInfoEntity.class);
+            return entity.toBean(FlowInstanceInfoEntity.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -133,29 +133,5 @@ public class FlowTaskRepository {
             log.error("查询流程实例异常！", e);
             throw new RuntimeException("查询流程实例异常！", e);
         }
-    }
-
-    public String updateTaskFinish(ParamUpdateTaskFinishDto param) {
-        int inserted = 0;
-        try {
-            FlowTaskInfoEntity flowTask = getFlowTask(param.getTaskId());
-            inserted = SqlUtil.getDb()
-                    .insertOrUpdate(Entity.create(SqlConstants.TB_FLOW_TASK_INFO)
-                                    .set("id", flowTask.getId())
-                                    .set("approve_time", flowTask.getApproveTime())
-                                    .set("approve_result", flowTask.getApproveResult().name())
-                                    .set("approve_remarks", flowTask.getApproveRemarks())
-                                    .set("approve_order", flowTask.getApproveOrder().name())
-                                    .set("update_by", flowTask.getHandlerId())
-                                    .set("update_time", LocalDateTime.now()),
-                            "id");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (inserted == 0) {
-            throw new RuntimeException("创建流程任务失败!");
-        }
-        return param.getTaskId();
     }
 }

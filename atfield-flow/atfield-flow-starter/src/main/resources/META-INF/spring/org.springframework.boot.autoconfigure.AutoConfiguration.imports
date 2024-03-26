@@ -1,2 +1,2 @@
-cn.fanzy.flow.repository.FlowTemplateRepository
-cn.fanzy.flow.utils.SqlUtil
+cn.fanzy.smart.flow.repository.FlowTemplateRepository
+cn.fanzy.smart.flow.utils.SqlUtil

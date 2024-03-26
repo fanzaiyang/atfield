@@ -1,6 +1,6 @@
-package cn.fanzy.flow.engine;
+package cn.fanzy.smart.flow.engine;
 
-import cn.fanzy.flow.model.entity.FlowTemplateInfoEntity;
+import cn.fanzy.smart.flow.model.entity.FlowTemplateInfoEntity;
 
 /**
  * 流程引擎

@@ -1,4 +1,4 @@
-package cn.fanzy.flow.exception;
+package cn.fanzy.smart.flow.exception;
 
 import cn.fanzy.atfield.core.exception.GlobalException;
 

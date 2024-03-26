@@ -1,4 +1,4 @@
-package cn.fanzy.flow.model.enums;
+package cn.fanzy.smart.flow.model.enums;
 
 /**
  * 操作类型

@@ -1,7 +1,7 @@
-package cn.fanzy.flow.model.params;
+package cn.fanzy.smart.flow.model.params;
 
-import cn.fanzy.flow.model.enums.ApproveOrder;
-import cn.fanzy.flow.model.enums.ApproveResult;
+import cn.fanzy.smart.flow.model.enums.ApproveOrder;
+import cn.fanzy.smart.flow.model.enums.ApproveResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package cn.fanzy.flow.model.flow;
+package cn.fanzy.smart.flow.model.flow;
 
-import cn.fanzy.flow.model.enums.NodeType;
+import cn.fanzy.smart.flow.model.enums.NodeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

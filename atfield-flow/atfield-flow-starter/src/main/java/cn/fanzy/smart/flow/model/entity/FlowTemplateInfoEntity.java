@@ -1,4 +1,4 @@
-package cn.fanzy.flow.model.entity;
+package cn.fanzy.smart.flow.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

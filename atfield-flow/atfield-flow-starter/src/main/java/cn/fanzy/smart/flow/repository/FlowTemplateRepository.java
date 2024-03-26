@@ -1,10 +1,10 @@
-package cn.fanzy.flow.repository;
+package cn.fanzy.smart.flow.repository;
 
 import cn.fanzy.atfield.core.utils.IdUtil;
-import cn.fanzy.flow.model.Pages;
-import cn.fanzy.flow.model.entity.FlowTemplateInfoEntity;
-import cn.fanzy.flow.utils.SqlConstants;
-import cn.fanzy.flow.utils.SqlUtil;
+import cn.fanzy.smart.flow.model.Pages;
+import cn.fanzy.smart.flow.model.entity.FlowTemplateInfoEntity;
+import cn.fanzy.smart.flow.utils.SqlConstants;
+import cn.fanzy.smart.flow.utils.SqlUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.db.*;
 import lombok.RequiredArgsConstructor;

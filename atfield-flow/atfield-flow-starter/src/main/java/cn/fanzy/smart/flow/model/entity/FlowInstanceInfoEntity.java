@@ -1,8 +1,5 @@
-package cn.fanzy.flow.model.entity;
+package cn.fanzy.smart.flow.model.entity;
 
-import cn.fanzy.flow.model.enums.ApproveOrder;
-import cn.fanzy.flow.model.enums.ApproveResult;
-import cn.fanzy.flow.model.enums.NodeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 任务信息表
+ * 流程实例
  *
  * @author fanzaiyang
  * @date 2024/03/08
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FlowTaskInfoEntity implements Serializable {
+public class FlowInstanceInfoEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -4559143895248911537L;
 
@@ -32,70 +29,79 @@ public class FlowTaskInfoEntity implements Serializable {
     private String id;
 
     /**
+     * 编码
+     */
+    private String code;
+
+    /**
+     * 流程主题
+     */
+    private String title;
+
+    /**
+     * 表单ID
+     */
+    private String formId;
+
+    /**
      * 流模板 ID
      */
     private String flowTemplateId;
 
     /**
-     * 流程实例ID
+     * 流程状态；0-草稿，1-进行中，2-已完成，3-废弃，4-异常
      */
-    private String flowInstanceId;
+    private Integer flowStatus;
 
     /**
-     * 表单 ID
+     * 申请人ID
      */
-    private String formId;
+    private String applyUserId;
+
     /**
-     * 节点ID
+     * 申请时间
      */
-    private String nodeId;
+    private LocalDateTime applyTime;
+
     /**
-     * 节点ID
+     * 当前节点 ID
      */
-    private String nodeName;
+    private String currentNodeId;
+
     /**
-     * 处理人ID
+     * 当前节点名称
      */
-    private String handlerId;
+    private String currentNodeName;
+
+    /**
+     * 当前处理人
+     */
+    private String currentHandlerIds;
 
     /**
      * 接收时间
      */
-    private LocalDateTime receivedTime;
+    private LocalDateTime receiveTime;
 
     /**
-     * 阅读时间
-     */
-    private LocalDateTime readTime;
-    /**
-     * 操作时间
-     */
-    private LocalDateTime approveTime;
-    /**
-     * 操作备注
-     */
-    private String approveRemarks;
-
-    /**
-     * 操作类型
-     */
-    private ApproveResult approveResult;
-
-    /**
-     * 操作流程顺序，
-     */
-    private ApproveOrder approveOrder;
-
-
-    /**
-     * 下一个节点ID
+     * 下一个节点 ID
      */
     private String nextNodeId;
 
     /**
-     * 任务类型
+     * 下一个节点名称
      */
-    private NodeType nodeType;
+    private String nextNodeName;
+
+    /**
+     * 下一个处理人
+     */
+    private String nextHandlerIds;
+
+    /**
+     * 流量数据
+     */
+    private String flowData;
     /**
      * 备注说明
      */
@@ -107,7 +113,7 @@ public class FlowTaskInfoEntity implements Serializable {
     private Integer orderNumber;
 
     /**
-     * 状态；1-待处理，2-已处理
+     * 状态
      */
     private Integer status;
 

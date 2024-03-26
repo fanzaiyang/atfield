@@ -1,4 +1,4 @@
-package cn.fanzy.flow.utils;
+package cn.fanzy.smart.flow.utils;
 
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.hutool.core.collection.CollUtil;

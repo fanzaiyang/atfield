@@ -1,4 +1,4 @@
-package cn.fanzy.flow.utils;
+package cn.fanzy.smart.flow.utils;
 
 /**
  * SQL 常量

@@ -1,10 +1,10 @@
-package cn.fanzy.flow.utils;
+package cn.fanzy.smart.flow.utils;
 
-import cn.fanzy.flow.exception.BadFlowDataException;
-import cn.fanzy.flow.model.entity.FlowTaskInfoEntity;
-import cn.fanzy.flow.model.enums.NodeType;
-import cn.fanzy.flow.model.flow.FlowNode;
-import cn.fanzy.flow.model.flow.FlowNodeHandler;
+import cn.fanzy.smart.flow.exception.BadFlowDataException;
+import cn.fanzy.smart.flow.model.entity.FlowTaskInfoEntity;
+import cn.fanzy.smart.flow.model.enums.NodeType;
+import cn.fanzy.smart.flow.model.flow.FlowNode;
+import cn.fanzy.smart.flow.model.flow.FlowNodeHandler;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;

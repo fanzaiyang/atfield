@@ -1,4 +1,4 @@
-package cn.fanzy.flow.model;
+package cn.fanzy.smart.flow.model;
 
 import cn.hutool.core.util.PageUtil;
 import lombok.AllArgsConstructor;
