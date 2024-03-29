@@ -15,7 +15,7 @@
         <module>atfield-core</module>
         <module>atfield-cache</module>
         <module>atfield-captcha</module>
-        <module>atfield-file</module>
+        <module>atfield-upload</module>
         <module>atfield-ipsec</module>
         <module>atfield-redis</module>
         <module>atfield-tlog</module>
@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <revision>1.0.5</revision>
+        <revision>1.1.0</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

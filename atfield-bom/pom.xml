@@ -37,7 +37,7 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
-                <artifactId>atfield-file</artifactId>
+                <artifactId>atfield-upload</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
