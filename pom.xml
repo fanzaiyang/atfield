@@ -24,6 +24,7 @@
         <module>atfield-satoken</module>
         <module>atfield-flow</module>
         <module>atfield-flow/atfield-flow-starter</module>
+        <module>atfield-biz-system</module>
     </modules>
 
     <properties>
