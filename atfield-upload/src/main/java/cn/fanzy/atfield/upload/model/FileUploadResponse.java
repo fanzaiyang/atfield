@@ -52,6 +52,12 @@ public class FileUploadResponse implements Serializable {
     private double fileMbSize;
 
     /**
+     * 文件字节大小，单位：b
+     * {@linkplain inputStream.available()}
+     */
+    private double fileByteSize;
+
+    /**
      * 临时预览地址
      */
     private String previewUrl;

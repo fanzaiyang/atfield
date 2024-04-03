@@ -234,7 +234,7 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
         try {
             int available = inputStream.available();
             BigDecimal decimal = new BigDecimal(available)
-                    .divide(new BigDecimal(1048576), 2, RoundingMode.HALF_UP);
+                    .divide(new BigDecimal(1048576), 4, RoundingMode.HALF_UP);
             ObjectWriteResponse response = innerClient.putObject(PutObjectArgs.builder()
                     .bucket(this.bucket)
                     .contentType(contentType)
@@ -247,7 +247,8 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
                     .endpoint(config.getEndpoint())
                     .objectName(objectName)
                     .fileName(fileName)
-                    .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
+                    .fileMbSize(decimal.setScale(4, RoundingMode.HALF_UP).doubleValue())
+                    .fileByteSize(available)
                     .previewUrl(getPreviewUrl(objectName))
                     .build();
         } catch (Exception e) {
