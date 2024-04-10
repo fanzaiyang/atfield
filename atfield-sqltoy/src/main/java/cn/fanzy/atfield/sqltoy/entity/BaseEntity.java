@@ -9,6 +9,7 @@ import org.sagacity.sqltoy.config.annotation.DataVersion;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
@@ -42,8 +43,8 @@ public class BaseEntity implements Serializable {
      * 数据版本
      */
     @DataVersion(startDate = true)
-    @Column(name = "revision", comment = "乐观锁", length = 10L, type = java.sql.Types.INTEGER, nativeType = "INT", nullable = true)
-    private Integer revision;
+    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
+    private Long revision;
 
     /**
      * 创建者
