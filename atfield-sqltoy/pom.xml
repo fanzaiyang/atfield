@@ -17,12 +17,19 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sagacity.version>5.6.5</sagacity.version>
+        <mongo.version>3.12.14</mongo.version>
+        <caffeine.version>3.1.8</caffeine.version>
     </properties>
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.sagframe</groupId>
                 <artifactId>sagacity-sqltoy</artifactId>
+                <version>${sagacity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sagframe</groupId>
+                <artifactId>sagacity-sqltoy-spring-starter</artifactId>
                 <version>${sagacity.version}</version>
             </dependency>
             <dependency>
@@ -38,6 +45,10 @@
         <dependency>
             <groupId>com.sagframe</groupId>
             <artifactId>sagacity-sqltoy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sagframe</groupId>
+            <artifactId>sagacity-sqltoy-spring-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

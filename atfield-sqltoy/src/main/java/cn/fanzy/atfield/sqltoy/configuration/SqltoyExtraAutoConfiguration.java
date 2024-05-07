@@ -4,14 +4,9 @@ import cn.fanzy.atfield.sqltoy.entity.AnonymousCurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
 import cn.fanzy.atfield.sqltoy.interceptor.LogicDelFilterInterceptor;
-import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDao;
-import cn.fanzy.atfield.sqltoy.plus.dao.SqlToyHelperDaoImpl;
-import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDao;
-import cn.fanzy.atfield.sqltoy.plus.dao.SqltoyLightHelperDaoImpl;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.Repository;
 import cn.fanzy.atfield.sqltoy.repository.RepositoryImpl;
-import cn.hutool.log.Log;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,20 +35,6 @@ public class SqltoyExtraAutoConfiguration {
     @ConditionalOnMissingBean
     public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
         return new DefaultUnifyFieldsHandler(currentUserInfo);
-    }
-
-    @Qualifier("sqlToyHelperDao")
-    @Bean("sqlToyHelperDao")
-    @ConditionalOnMissingBean(name = "sqlToyHelperDao")
-    public SqlToyHelperDao sqlToyHelperDao() {
-        return new SqlToyHelperDaoImpl();
-    }
-
-    @Qualifier("sqltoyLightHelperDao")
-    @Bean("sqltoyLightHelperDao")
-    @ConditionalOnMissingBean(name = "sqltoyLightHelperDao")
-    public SqltoyLightHelperDao sqltoyLightHelperDao() {
-        return new SqltoyLightHelperDaoImpl();
     }
 
     @Qualifier("logicDelFilterInterceptor")
