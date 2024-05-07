@@ -2,6 +2,7 @@ package cn.fanzy.atfield.satoken.configuration;
 
 import cn.fanzy.atfield.cache.CacheService;
 import cn.fanzy.atfield.captcha.CaptchaService;
+import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 import cn.fanzy.atfield.satoken.login.advice.LoginAdvice;
 import cn.fanzy.atfield.satoken.login.property.LoginProperty;
 import cn.fanzy.atfield.satoken.login.service.LoginAdviceService;
@@ -10,6 +11,7 @@ import cn.fanzy.atfield.satoken.login.service.impl.LoginAdviceServiceImpl;
 import cn.fanzy.atfield.satoken.login.service.impl.LoginCaptchaServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @RequiredArgsConstructor
 @Configuration
+@ConditionalOnClass(ICaptchaType.class)
 @ImportAutoConfiguration({LoginAdvice.class})
 @EnableConfigurationProperties(LoginProperty.class)
 public class LoginExtraConfiguration {

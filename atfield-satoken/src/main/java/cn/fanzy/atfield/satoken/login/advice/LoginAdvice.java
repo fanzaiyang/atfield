@@ -2,6 +2,7 @@ package cn.fanzy.atfield.satoken.login.advice;
 
 
 import cn.fanzy.atfield.cache.CacheService;
+import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.satoken.login.annotation.Login;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.Date;
@@ -34,6 +36,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 @Aspect
+@ConditionalOnClass(ICaptchaType.class)
 @EnableConfigurationProperties({LoginProperty.class})
 public class LoginAdvice {
 
