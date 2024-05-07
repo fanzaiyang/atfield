@@ -4,7 +4,7 @@ import cn.fanzy.atfield.sqltoy.plus.conditions.Wrapper;
 import cn.fanzy.atfield.sqltoy.plus.utils.PlusDaoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.config.model.EntityMeta;
-import org.sagacity.sqltoy.dao.impl.SqlToyLazyDaoImpl;
+import org.sagacity.sqltoy.dao.impl.DefaultLazyDaoImpl;
 import org.sagacity.sqltoy.model.EntityQuery;
 import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.Page;
@@ -18,7 +18,7 @@ import java.util.Map;
  * @author fanzaiyang
  */
 @Slf4j
-public class SqlToyHelperDaoImpl extends SqlToyLazyDaoImpl implements SqlToyHelperDao {
+public class SqlToyHelperDaoImpl extends DefaultLazyDaoImpl implements SqlToyHelperDao {
 
 
     public <T> T findOne(Wrapper<T> wrapper) {
