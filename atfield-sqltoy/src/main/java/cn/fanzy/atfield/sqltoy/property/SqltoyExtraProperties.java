@@ -33,4 +33,6 @@ public class SqltoyExtraProperties implements Serializable {
      * 逻辑不删除值
      */
     private String logicNotDeleteValue;
+
+    private Boolean unifyField;
 }

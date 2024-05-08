@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +36,7 @@ public class SqltoyExtraAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "spring.sqltoy.extra", name = {"unifyField"}, havingValue = "true", matchIfMissing = true)
     public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
         return new DefaultUnifyFieldsHandler(currentUserInfo);
     }
