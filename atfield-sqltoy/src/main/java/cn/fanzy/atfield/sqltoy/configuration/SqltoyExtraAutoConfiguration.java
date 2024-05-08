@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * SQLTOY 额外自动配置
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @RequiredArgsConstructor
 @Configuration
+@PropertySource("classpath:atfield-sqltoy.properties")
 @EnableConfigurationProperties(SqltoyExtraProperties.class)
 public class SqltoyExtraAutoConfiguration {
     @Bean

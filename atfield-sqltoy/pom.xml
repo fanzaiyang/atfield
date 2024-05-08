@@ -22,11 +22,11 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-            <!--<dependency>
+            <dependency>
                 <groupId>com.sagframe</groupId>
                 <artifactId>sagacity-sqltoy</artifactId>
                 <version>${sagacity.version}</version>
-            </dependency>-->
+            </dependency>
             <dependency>
                 <groupId>com.sagframe</groupId>
                 <artifactId>sagacity-sqltoy-spring-starter</artifactId>
@@ -42,10 +42,10 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.sagframe</groupId>
             <artifactId>sagacity-sqltoy</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.sagframe</groupId>
             <artifactId>sagacity-sqltoy-spring-starter</artifactId>
