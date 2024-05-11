@@ -3,7 +3,7 @@ package cn.fanzy.atfield.sqltoy.repository;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.config.model.EntityMeta;
-import org.sagacity.sqltoy.dao.impl.DefaultLightDaoImpl;
+import org.sagacity.sqltoy.dao.impl.LightDaoImpl;
 import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2024/01/09
  */
 @RequiredArgsConstructor
-public class RepositoryImpl extends DefaultLightDaoImpl implements Repository {
+public class RepositoryImpl extends LightDaoImpl implements Repository {
     private final SqltoyExtraProperties properties;
 
     @Override
