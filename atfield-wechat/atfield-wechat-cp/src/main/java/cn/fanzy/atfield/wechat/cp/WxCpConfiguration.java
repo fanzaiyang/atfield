@@ -103,7 +103,7 @@ public class WxCpConfiguration {
     public void initServices() {
         log.debug("【微信组件】: 开启 <企业微信> 相关的配置");
         if (CollUtil.isEmpty(this.properties.getAppConfigs())) {
-            log.warn("【微信组件】: 请在配置文件中添加企业微信相关配置！参数以yf.wechat.cp开头。");
+            log.warn("【微信组件】: 请在配置文件中添加微信相关配置！参数以atfield.wechat.cp开头。");
             return;
         }
         appConfigList = this.properties.getAppConfigs();

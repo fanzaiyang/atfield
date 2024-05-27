@@ -84,7 +84,7 @@ public class WxMaConfiguration {
         log.debug("【微信组件】: 开启 <微信小程序> 相关的配置");
         List<WxMaProperties.AppConfig> configs = this.properties.getAppConfigs();
         if (configs == null) {
-            throw new WxRuntimeException("大哥，拜托先看下项目首页的说明（readme文件），添加下相关配置，注意别配错了！");
+            throw new WxRuntimeException("【微信组件】: 请在配置文件中添加微信相关配置！参数以atfield.wechat开头！");
         }
         appConfigList = this.properties.getAppConfigs();
         maServices = configs.stream()
