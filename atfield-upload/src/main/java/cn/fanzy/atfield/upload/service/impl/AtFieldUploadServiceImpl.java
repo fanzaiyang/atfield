@@ -88,11 +88,11 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
         configs.setUseExpectContinue(true);
         AWSCredentials credentials = new BasicAWSCredentials(config.getAccessKey(), config.getSecretKey());
         //设置Endpoint
-        AwsClientBuilder.EndpointConfiguration end_point = new AwsClientBuilder.EndpointConfiguration(config.getEndpoint(), Regions.DEFAULT_REGION.name());
+        AwsClientBuilder.EndpointConfiguration endPoint = new AwsClientBuilder.EndpointConfiguration(config.getEndpoint(), Regions.DEFAULT_REGION.name());
         amazonS3 = AmazonS3ClientBuilder.standard()
                 .withClientConfiguration(configs)
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withEndpointConfiguration(end_point)
+                .withEndpointConfiguration(endPoint)
                 .withPathStyleAccessEnabled(true).build();
 
     }

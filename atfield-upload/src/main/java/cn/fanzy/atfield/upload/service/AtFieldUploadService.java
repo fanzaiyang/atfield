@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 在现场上传服务中
+ *
+ * @author fanzaiyang
+ * @date 2024/05/27
+ */
 public interface AtFieldUploadService {
 
     void setConfig(UploadProperty.MinioServerConfig config);
@@ -215,7 +221,7 @@ public interface AtFieldUploadService {
     /**
      * 得到公共预览url
      * <pre>
-     *     ⚠️ 注意：这里会把该文件设置为公共可读，请谨慎使用。
+     *     ⚠️ 注意：请把该文件设置为公开readony，否则会导致预览失败。
      * </pre>
      *
      * @param objectName 对象名称
