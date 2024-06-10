@@ -5,6 +5,8 @@ import cn.fanzy.atfield.wechat.cp.properties.WxCpProperties;
 import cn.hutool.core.collection.CollUtil;
 import com.google.common.collect.Maps;
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -13,7 +15,6 @@ import me.chanjar.weixin.cp.api.impl.WxCpServiceImpl;
 import me.chanjar.weixin.cp.config.impl.WxCpDefaultConfigImpl;
 import me.chanjar.weixin.cp.constant.WxCpConsts;
 import me.chanjar.weixin.cp.message.WxCpMessageRouter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -30,12 +31,13 @@ import java.util.stream.Collectors;
  * @since 2021/09/09
  */
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 @Import({WxCpBeanAutoConfig.class})
 @EnableConfigurationProperties(WxCpProperties.class)
 public class WxCpConfiguration {
     private final WxCpLogHandler wxCpLogHandler;
-    private final WxCpNullHandler wxCpNullHandler;
+    private final WxCpApproveHandler wxCpApproveHandler;
     private final WxCpLocationHandler wxCpLocationHandler;
     private final WxCpMenuHandler wxCpMenuHandler;
     private final WxCpMsgHandler wxCpMsgHandler;
@@ -47,32 +49,9 @@ public class WxCpConfiguration {
     private final WxCpScanHandler wxCpScanHandler;
     private final WxCpProperties properties;
     public static List<WxCpProperties.AppConfig> appConfigList;
+    @Getter
     private static Map<Integer, WxCpMessageRouter> routers = Maps.newLinkedHashMap();
     private static Map<Integer, WxCpService> cpServices = Maps.newLinkedHashMap();
-
-    @Autowired
-    public WxCpConfiguration(WxCpLogHandler wxCpLogHandler, WxCpNullHandler wxCpNullHandler, WxCpLocationHandler wxCpLocationHandler,
-                             WxCpMenuHandler wxCpMenuHandler, WxCpMsgHandler wxCpMsgHandler, WxCpUnsubscribeHandler wxCpUnsubscribeHandler,
-                             WxCpSubscribeHandler wxCpSubscribeHandler, WxCpProperties properties, WxCpContactChangeHandler wxCpContactChangeHandler,
-                             WxCpEnterAgentHandler wxCpEnterAgentHandler, WxCpMenuClickHandler wxCpMenuClickHandler, WxCpScanHandler wxCpScanHandler) {
-        this.wxCpLogHandler = wxCpLogHandler;
-        this.wxCpNullHandler = wxCpNullHandler;
-        this.wxCpLocationHandler = wxCpLocationHandler;
-        this.wxCpMenuHandler = wxCpMenuHandler;
-        this.wxCpMsgHandler = wxCpMsgHandler;
-        this.wxCpUnsubscribeHandler = wxCpUnsubscribeHandler;
-        this.wxCpSubscribeHandler = wxCpSubscribeHandler;
-        this.properties = properties;
-        this.wxCpContactChangeHandler = wxCpContactChangeHandler;
-        this.wxCpEnterAgentHandler = wxCpEnterAgentHandler;
-        this.wxCpMenuClickHandler = wxCpMenuClickHandler;
-        this.wxCpScanHandler = wxCpScanHandler;
-    }
-
-
-    public static Map<Integer, WxCpMessageRouter> getRouters() {
-        return routers;
-    }
 
     /**
      * 默认获取第一个配置Agent应用的服务
@@ -122,7 +101,7 @@ public class WxCpConfiguration {
     }
 
     private WxCpMessageRouter newRouter(WxCpService wxCpService) {
-        final val newRouter = new WxCpMessageRouter(wxCpService);
+        val newRouter = new WxCpMessageRouter(wxCpService);
 
         // 记录所有事件的日志 （异步执行）
         newRouter.rule().handler(this.wxCpLogHandler).next();
@@ -163,6 +142,9 @@ public class WxCpConfiguration {
 
         newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
                 .event(WxCpConsts.EventType.ENTER_AGENT).handler(this.wxCpEnterAgentHandler).end();
+
+        newRouter.rule().async(false).msgType(WxConsts.XmlMsgType.EVENT)
+                .event(WxCpConsts.EventType.SYS_APPROVAL_CHANGE).handler(this.wxCpApproveHandler).end();
 
         // 默认
         newRouter.rule().async(false).handler(this.wxCpMsgHandler).end();

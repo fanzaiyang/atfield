@@ -37,6 +37,12 @@ public class WxCpBeanAutoConfig {
 
     @Bean
     @ConditionalOnMissingBean
+    public WxCpApproveHandler wxCpApproveHandler() {
+        return (wxMessage, context, cpService, sessionManager) -> null;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public WxCpLocationHandler wxCpLocationHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
             log.info("WxCpLocationHandler上报地理位置，纬度 : {}\n经度 : {}\n精度 : {}",
@@ -53,14 +59,16 @@ public class WxCpBeanAutoConfig {
             return null;
         };
     }
+
     @Bean
     @ConditionalOnMissingBean
-    public WxCpMenuClickHandler wxCpMenuClickHandler(){
+    public WxCpMenuClickHandler wxCpMenuClickHandler() {
         return (wxMessage, context, cpService, sessionManager) -> {
             log.info("WxCpMenuClickHandler菜单点击，{}", wxMessage.toString());
             return null;
         };
     }
+
     @Bean
     @ConditionalOnMissingBean
     public WxCpMsgHandler wxCpMsgHandler() {
@@ -105,6 +113,7 @@ public class WxCpBeanAutoConfig {
             return null;
         };
     }
+
     @Bean
     @ConditionalOnMissingBean
     public WxCpScanHandler wxCpScanHandler() {
