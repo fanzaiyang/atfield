@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <description>企业微信模块</description>
     <artifactId>atfield-wechat-ma</artifactId>
     <dependencyManagement>
         <dependencies>

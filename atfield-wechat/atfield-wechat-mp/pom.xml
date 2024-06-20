@@ -9,6 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <description>公众号（包括订阅号和服务号）</description>
 
     <artifactId>atfield-wechat-mp</artifactId>
     <dependencyManagement>
