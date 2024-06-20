@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.web.sensitive;
 
-import cn.fanzy.atfield.core.utils.CertNoUtil;
+import cn.hutool.core.util.IdcardUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.util.StringUtils;
 
@@ -51,7 +51,7 @@ public class SensitiveUtil {
      * @return 脱敏后的数据
      */
     public static String idCard(String idCard) {
-        if (!CertNoUtil.isValid(idCard)) {
+        if (!IdcardUtil.isValidCard(idCard)) {
             return idCard;
         }
         return idCard.replaceAll("(?<=\\w{3})\\w(?=\\w{4})", "*");
