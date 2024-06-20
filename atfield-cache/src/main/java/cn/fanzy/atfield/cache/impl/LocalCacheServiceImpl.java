@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.cache.impl;
 
 import cn.fanzy.atfield.cache.CacheService;
-import cn.fanzy.atfield.core.utils.ObjectUtil;
+import cn.fanzy.atfield.core.utils.ObjectUtils;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class LocalCacheServiceImpl implements CacheService {
     @Override
     public <T> T get(String key, Class<T> clazz, boolean isUpdate) {
         Object object = get(key, isUpdate);
-        return ObjectUtil.cast(object, clazz);
+        return ObjectUtils.cast(object, clazz);
     }
 
     @Override

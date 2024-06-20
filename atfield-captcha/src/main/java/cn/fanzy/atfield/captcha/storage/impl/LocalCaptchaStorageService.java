@@ -3,7 +3,7 @@ package cn.fanzy.atfield.captcha.storage.impl;
 import cn.fanzy.atfield.captcha.bean.CaptchaCode;
 import cn.fanzy.atfield.captcha.property.CaptchaProperty;
 import cn.fanzy.atfield.captcha.storage.CaptchaStorageService;
-import cn.fanzy.atfield.core.utils.ObjectUtil;
+import cn.fanzy.atfield.core.utils.ObjectUtils;
 import cn.hutool.cache.CacheUtil;
 import cn.hutool.cache.impl.TimedCache;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class LocalCaptchaStorageService implements CaptchaStorageService {
 
     @Override
     public <T> T get(String target, Class<T> clazz) {
-        return ObjectUtil.cast(get(target), clazz);
+        return ObjectUtils.cast(get(target), clazz);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class LocalCaptchaStorageService implements CaptchaStorageService {
     public <T> T pop(String target, Class<T> clazz) {
         Object object = get(target);
         delete(target);
-        return ObjectUtil.cast(object, clazz);
+        return ObjectUtils.cast(object, clazz);
     }
 
     @Override

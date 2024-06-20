@@ -10,7 +10,7 @@ import java.awt.geom.AffineTransform;
  * @author fanzaiyang
  * @date 2024/01/23
  */
-public class FontUtil extends cn.hutool.core.img.FontUtil {
+public class FontUtils extends cn.hutool.core.img.FontUtil {
 
     /**
      * 获取字体长度

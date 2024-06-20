@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.cache.impl;
 
 import cn.fanzy.atfield.cache.CacheService;
-import cn.fanzy.atfield.core.utils.ObjectUtil;
+import cn.fanzy.atfield.core.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -41,7 +41,7 @@ public class RedisCacheServiceImpl implements CacheService {
     @Override
     public <T> T get(String key, Class<T> clazz) {
         Object object = get(key);
-        return ObjectUtil.cast(object, clazz);
+        return ObjectUtils.cast(object, clazz);
     }
 
     /**

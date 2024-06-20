@@ -7,6 +7,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  * @date 2024/01/23
  */
 @Slf4j
-public class TreeUtil extends cn.hutool.core.lang.tree.TreeUtil {
+public class TreeUtils extends TreeUtil {
     /**
      * 构建树 默认为：id，parentId，name，orderNumber 根节点是：-1
      *

@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.core.utils;
 
 import cn.hutool.core.text.StrPool;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 
 /**
@@ -9,7 +10,7 @@ import cn.hutool.crypto.SecureUtil;
  * @author fanzaiyang
  * @date 2023/12/21
  */
-public class IdUtil extends cn.hutool.core.util.IdUtil {
+public class IdUtils extends IdUtil {
 
     /**
      * 获取安全的主键ID

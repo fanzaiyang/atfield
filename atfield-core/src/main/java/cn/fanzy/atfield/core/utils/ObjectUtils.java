@@ -9,8 +9,8 @@ import cn.hutool.json.JSONUtil;
  * @author fanzaiyang
  * @date 2023/11/30
  */
-public class ObjectUtil extends cn.hutool.core.util.ObjectUtil {
-    private ObjectUtil() {
+public class ObjectUtils extends cn.hutool.core.util.ObjectUtil {
+    private ObjectUtils() {
     }
 
     /**
