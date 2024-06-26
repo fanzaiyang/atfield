@@ -16,10 +16,10 @@ public class DefaultLogCallbackServiceImpl implements LogCallbackService {
 
     @Override
     public void before(PrintLogInfo param) {
-
+        // todo 自定义打印
     }
     @Override
     public void after(PrintLogInfo param) {
-
+        // todo 写入到数据库
     }
 }
