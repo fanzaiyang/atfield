@@ -120,7 +120,6 @@ public class RedisCoreConfiguration {
      * @return Redis操作工具
      */
     @Bean
-    @ConditionalOnMissingBean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);

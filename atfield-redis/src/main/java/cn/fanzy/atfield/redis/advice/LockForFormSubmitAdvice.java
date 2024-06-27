@@ -55,7 +55,7 @@ public class LockForFormSubmitAdvice {
 
     @After("cut()")
     public void after(JoinPoint jp) {
-        LockForm annotation = AopUtil.getAnnotation(jp,LockForm.class);
+        LockForm annotation = AopUtil.getAnnotation(jp, LockForm.class);
         if (annotation == null) {
             return;
         }
@@ -71,7 +71,7 @@ public class LockForFormSubmitAdvice {
         }
     }
 
-    private String getLockName(LockForm annotation){
+    private String getLockName(LockForm annotation) {
         String lockName = AopUtil.getLockKey(annotation.value());
 
         // 基于IP地址的重复提交，即1个IP地址1个锁，。防止同一个IP重复提交

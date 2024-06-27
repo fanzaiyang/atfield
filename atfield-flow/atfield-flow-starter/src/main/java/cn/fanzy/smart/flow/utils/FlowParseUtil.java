@@ -104,7 +104,7 @@ public class FlowParseUtil {
      * @return {@link FlowNode}
      */
     public static FlowNode getFlowNodeById(String flowData, String nodeId) {
-        return getFlowNodeById(parseFlowNodes(flowData),nodeId);
+        return getFlowNodeById(parseFlowNodes(flowData), nodeId);
     }
 
     /**
@@ -132,6 +132,6 @@ public class FlowParseUtil {
      * @return {@link FlowNode}
      */
     public static FlowNode getFlowNextNodeById(String flowData, String nodeId) {
-        return getFlowNextNodeById(parseFlowNodes(flowData),nodeId);
+        return getFlowNextNodeById(parseFlowNodes(flowData), nodeId);
     }
 }

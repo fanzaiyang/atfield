@@ -74,7 +74,7 @@ public class ChainHandler {
     public Serializable process(Serializable request, Class<? extends Handler> clazz) {
         // 依次调用每个Handler:
         Map<String, ? extends Handler> map = SpringUtils.getBeansOfType(clazz);
-        List<Handler> processList =map.values().stream().sorted(Comparator.comparingInt(Handler::getOrder))
+        List<Handler> processList = map.values().stream().sorted(Comparator.comparingInt(Handler::getOrder))
                 .collect(Collectors.toList());
         Serializable processResult = null;
         for (Handler handler : processList) {

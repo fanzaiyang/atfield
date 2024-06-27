@@ -23,7 +23,7 @@ public class AspectLog4jAsyncAppender extends AsyncAppender {
     public void doAppend(LoggingEvent event) {
         String resultLog;
         if (!TLogContext.hasTLogMDC()
-                && StrUtil.isNotBlank(AspectLogContext.getLogValue())) {
+            && StrUtil.isNotBlank(AspectLogContext.getLogValue())) {
             resultLog = StrUtil.format("{} {}", event.getMessage(), AspectLogContext.getLogValue());
         } else {
             resultLog = (String) event.getMessage();

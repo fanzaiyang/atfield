@@ -8,20 +8,22 @@ order: 1
 
 ## 介绍
 
-微信开发 Java SDK，支持微信支付、开放平台、公众号、企业号/企业微信、小程序等的后端开发。本插件基于[WxJava](https://gitee.com/binary/weixin-java-tools)开发。
+微信开发 Java
+SDK，支持微信支付、开放平台、公众号、企业号/企业微信、小程序等的后端开发。本插件基于[WxJava](https://gitee.com/binary/weixin-java-tools)
+开发。
 
 > ⚠️注意：
-> 
+>
 > 为了更好的快速使用本插件，微信官方文档需要了解。
 
 * 企业微信
-  * https://developer.work.weixin.qq.com/document/path/90664
+    * https://developer.work.weixin.qq.com/document/path/90664
 * 微信公众号
-  * https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html
+    * https://developers.weixin.qq.com/doc/offiaccount/Getting_Started/Overview.html
 * 微信小程序
-  * https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/
+    * https://developers.weixin.qq.com/miniprogram/dev/OpenApiDoc/
 * 微信支付
-  * https://pay.weixin.qq.com/wiki/doc/apiv3_partner/wechatpay/wechatpay-1.shtml
+    * https://pay.weixin.qq.com/wiki/doc/apiv3_partner/wechatpay/wechatpay-1.shtml
 
 ## 特性
 
@@ -71,9 +73,9 @@ order: 1
 ```
 
 2. 添加配置
-   
+
    > **注意：**
-   > 
+   >
    > 微信组件需要添加配置文件才能使用。
 
 ```yaml

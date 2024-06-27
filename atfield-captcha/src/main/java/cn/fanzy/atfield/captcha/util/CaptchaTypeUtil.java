@@ -24,6 +24,7 @@ public class CaptchaTypeUtil {
         }
         return null;
     }
+
     public static String getCodeValue(ICaptchaType captchaType, CaptchaProperty property) {
         if (CaptchaType.IMAGE.equals(captchaType)) {
             return property.getImage().getCodeValue();

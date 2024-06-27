@@ -29,10 +29,10 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-    <dependency>
-        <groupId>cn.fanzy.atfield</groupId>
-        <artifactId>atfield-web</artifactId>
-    </dependency>
+        <dependency>
+            <groupId>cn.fanzy.atfield</groupId>
+            <artifactId>atfield-web</artifactId>
+        </dependency>
         <dependency>
             <groupId>cn.fanzy.atfield</groupId>
             <artifactId>atfield-sqltoy</artifactId>

@@ -24,6 +24,7 @@ public class CaptchaLocalStorageAutoConfiguration {
     public CaptchaStorageService captchaStorageService(CaptchaProperty property) {
         return new LocalCaptchaStorageService(property);
     }
+
     @PostConstruct
     public void checkConfig() {
         log.info("开启 <验证码-Local存储> 相关的配置");

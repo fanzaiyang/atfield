@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Forest的拦截器
+ *
  * @author Bryan.Zhang
  * @since 1.3.5
  */
@@ -23,7 +24,7 @@ public class TLogForestInterceptor implements Interceptor<Object> {
     @Override
     public boolean beforeExecute(ForestRequest request) {
         String traceId = TLogContext.getTraceId();
-        if(StrUtil.isNotBlank(traceId)) {
+        if (StrUtil.isNotBlank(traceId)) {
             String appName = TLogSpringAware.getProperty("spring.application.name");
 
             request.addHeader(TLogConstants.TLOG_TRACE_KEY, traceId);

@@ -24,6 +24,7 @@ public class MinioPolicyStatement {
          */
         Deny
     }
+
     public enum Action {
         /**
          * 允许

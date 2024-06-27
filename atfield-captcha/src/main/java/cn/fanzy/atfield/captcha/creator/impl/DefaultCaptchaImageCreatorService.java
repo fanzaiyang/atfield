@@ -32,7 +32,7 @@ public class DefaultCaptchaImageCreatorService extends CaptchaImageCreatorServic
         return CaptchaImageCodeInfo.builder()
                 .code(code)
                 .expireSeconds(
-                        property.getExpireSeconds()==null?
+                        property.getExpireSeconds() == null ?
                                 captchaProperty.getExpireSeconds() :
                                 property.getExpireSeconds()
                 )

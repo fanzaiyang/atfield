@@ -30,6 +30,7 @@ public interface CaptchaService {
      * @return {@link CaptchaCode}
      */
     CaptchaCode get(String target);
+
     /**
      * 邮寄
      * 发送验证码
@@ -38,7 +39,8 @@ public interface CaptchaService {
      * @param target      目标
      * @param captchaCode 验证码
      */
-    void send(ICaptchaType type, String target,CaptchaCode captchaCode);
+    void send(ICaptchaType type, String target, CaptchaCode captchaCode);
+
     /**
      * 创建二维码后并发送
      *
@@ -61,17 +63,17 @@ public interface CaptchaService {
     /**
      * 验证
      *
-     * @param captchaType   类型
-     * @param target 目标
-     * @param code   验证码
+     * @param captchaType 类型
+     * @param target      目标
+     * @param code        验证码
      */
     void verify(ICaptchaType captchaType, String target, String code);
 
     /**
      * 验证
      *
-     * @param captchaType    类型
-     * @param request 要求
+     * @param captchaType 类型
+     * @param request     要求
      */
     void verify(ICaptchaType captchaType, HttpServletRequest request);
 }

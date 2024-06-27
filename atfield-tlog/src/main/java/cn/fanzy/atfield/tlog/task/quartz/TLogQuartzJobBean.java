@@ -16,7 +16,7 @@ public abstract class TLogQuartzJobBean extends QuartzJobBean {
         try {
             tLogRPCHandler.processProviderSide(new TLogLabelBean());
             executeTask(jobExecutionContext);
-        }finally {
+        } finally {
             tLogRPCHandler.cleanThreadLocal();
         }
     }

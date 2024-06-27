@@ -4,6 +4,7 @@ order: 5
 group:
   title: 企业微信
 ---
+
 # 素材管理
 
 ## 使用场景
@@ -34,7 +35,8 @@ void uploadTemp() throws WxErrorException, IOException {
 ## 上传图片
 
 > 上传图片得到图片URL，该URL永久有效
-> 返回的图片URL，仅能用于[图文消息](https://developer.work.weixin.qq.com/document/path/90256#10167/图文消息)正文中的图片展示，或者给客户发送欢迎语等；若用于非企业微信环境下的页面，图片将被屏蔽。
+> 返回的图片URL，仅能用于[图文消息](https://developer.work.weixin.qq.com/document/path/90256#10167/图文消息)
+> 正文中的图片展示，或者给客户发送欢迎语等；若用于非企业微信环境下的页面，图片将被屏蔽。
 > 每个企业每月最多可上传3000张图片，每天最多可上传1000张图片
 
 ```java

@@ -23,9 +23,10 @@ import java.util.concurrent.TimeUnit;
  * @author fanzaiyang
  * @date 2024/05/27
  */
-public interface AtFieldUploadService {
+public interface UploadService {
 
     void setConfig(UploadProperty.MinioServerConfig config);
+
     /**
      * 公网客户端
      * <pre>主要用于查询类</pre>
@@ -48,7 +49,7 @@ public interface AtFieldUploadService {
      * @param bucket 桶
      * @return BreezeMinioServiceImpl
      */
-    AtFieldUploadService bucket(String bucket);
+    UploadService bucket(String bucket);
 
 
     /**
@@ -64,13 +65,13 @@ public interface AtFieldUploadService {
      * @return {@link String}
      */
     String getBucketHost();
+
     /**
      * 桶存在和创造
      *
      * @param bucket 桶
      */
     void bucketExistsAndCreate(String bucket);
-
 
 
     /**
@@ -119,6 +120,7 @@ public interface AtFieldUploadService {
      * @return {@link FileUploadResponse}
      */
     FileUploadResponse upload(File file, String objectName);
+
     /**
      * 上传
      *
@@ -141,6 +143,7 @@ public interface AtFieldUploadService {
     FileUploadResponse upload(InputStream inputStream, String objectName, String fileName, String contentType);
 
     FileUploadResponse merge(ComposeObjectArgs args);
+
     /**
      * 得到对象
      *
@@ -199,7 +202,7 @@ public interface AtFieldUploadService {
     /**
      * 制定桶政策
      *
-     * @param args   arg游戏
+     * @param args arg游戏
      */
     void setBucketPolicy(MinioBucketPolicy args);
 
@@ -232,6 +235,7 @@ public interface AtFieldUploadService {
 
     /**
      * 分片上传，获取上传ID
+     *
      * @param objectName 对象名唯一
      * @return String
      */
@@ -240,24 +244,27 @@ public interface AtFieldUploadService {
 
     /**
      * 删除上传的分片任务
+     *
      * @param objectName object
-     * @param uploadId uploadId
+     * @param uploadId   uploadId
      */
     void abortMultipartUpload(String objectName, String uploadId);
 
     /**
      * 合并分片
+     *
      * @param objectName objectName
-     * @param uploadId uploadId
-     * @param parts List {@link PartSummary}
+     * @param uploadId   uploadId
+     * @param parts      List {@link PartSummary}
      * @return CompleteMultipartUploadResult
      */
     CompleteMultipartUploadResult completeMultipartUpload(String objectName, String uploadId, List<PartSummary> parts);
 
     /**
      * 查询分片
+     *
      * @param objectName objectName
-     * @param uploadId uploadId
+     * @param uploadId   uploadId
      * @return List {@link PartSummary}
      */
     List<PartSummary> listParts(String objectName, String uploadId);
@@ -265,10 +272,11 @@ public interface AtFieldUploadService {
 
     /**
      * 获取上传路径
-     * @param method {@link Method}
-     * @param objectName objectName
-     * @param expireDuration expireDuration
-     * @param timeUnit {@link TimeUnit}
+     *
+     * @param method           {@link Method}
+     * @param objectName       objectName
+     * @param expireDuration   expireDuration
+     * @param timeUnit         {@link TimeUnit}
      * @param extraQueryParams Map
      * @return String
      */

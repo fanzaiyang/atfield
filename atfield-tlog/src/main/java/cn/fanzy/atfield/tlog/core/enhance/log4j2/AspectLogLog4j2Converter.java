@@ -16,9 +16,9 @@
  */
 package cn.fanzy.atfield.tlog.core.enhance.log4j2;
 
-import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.fanzy.atfield.tlog.common.constant.TLogConstants;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
+import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.hutool.core.util.StrUtil;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -115,7 +115,7 @@ public final class AspectLogLog4j2Converter extends LogEventPatternConverter {
     public void format(final LogEvent event, final StringBuilder toAppendTo) {
         String logLable = event.getContextData().getValue(TLogConstants.MDC_KEY);
 
-        if (StrUtil.isBlank(logLable)){
+        if (StrUtil.isBlank(logLable)) {
             logLable = AspectLogContext.getLogValue();
         }
 

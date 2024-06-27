@@ -26,13 +26,13 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
     public SqlToyResult decorate(SqlToyContext sqlToyContext, SqlToyConfig sqlToyConfig, OperateType operateType, SqlToyResult sqlToyResult, Class entityClass, Integer dbType) {
         // 逻辑删除字段
         if (StringUtil.isBlank(properties.getLogicDeleteField()) ||
-                StringUtil.isBlank(properties.getLogicDeleteField()) ||
-                StringUtil.isBlank(properties.getLogicNotDeleteValue())) {
+            StringUtil.isBlank(properties.getLogicDeleteField()) ||
+            StringUtil.isBlank(properties.getLogicNotDeleteValue())) {
             log.debug("请配置spring.sqltoy.db-config.logicDeleteField、logicNotDeleteValue、logicTenantColumn");
             return sqlToyResult;
         }
         EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
-        if(entityMeta==null){
+        if (entityMeta == null) {
             return sqlToyResult;
         }
         String logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());
@@ -52,14 +52,14 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
         String sqlPart = where.concat(logicDelColumn).concat("='").concat(properties.getLogicNotDeleteValue())
                 .concat("' and ");
         if (operateType.equals(OperateType.load) ||
-                operateType.equals(OperateType.loadAll) ||
-                operateType.equals(OperateType.update) ||
-                operateType.equals(OperateType.updateAll) ||
-                operateType.equals(OperateType.delete) ||
-                operateType.equals(OperateType.deleteAll) ||
-                operateType.equals(OperateType.unique) ||
-                operateType.equals(OperateType.saveOrUpdate) ||
-                operateType.equals(OperateType.singleTable)) {
+            operateType.equals(OperateType.loadAll) ||
+            operateType.equals(OperateType.update) ||
+            operateType.equals(OperateType.updateAll) ||
+            operateType.equals(OperateType.delete) ||
+            operateType.equals(OperateType.deleteAll) ||
+            operateType.equals(OperateType.unique) ||
+            operateType.equals(OperateType.saveOrUpdate) ||
+            operateType.equals(OperateType.singleTable)) {
 
             if (operateType.equals(OperateType.saveOrUpdate) && sql.indexOf(" when matched then update set ") > 0) {
                 int onTenantIndex = sql.indexOf(") tv on (");

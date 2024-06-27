@@ -18,6 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
     private final ICurrentUserInfo currentUserInfo;
+
     @Override
     public Map<String, Object> createUnifyFields() {
         Map<String, Object> map = new HashMap<>();

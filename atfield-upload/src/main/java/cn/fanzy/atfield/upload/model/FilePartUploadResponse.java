@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * 分片上传前端请求参数
+ *
  * @author fanzaiyang
  */
 @Data

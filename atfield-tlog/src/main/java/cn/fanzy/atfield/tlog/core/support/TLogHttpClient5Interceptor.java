@@ -19,17 +19,18 @@ import java.io.IOException;
 
 /**
  * HttpClient5的拦截器
+ *
  * @author Bryan.Zhang
  * @since 1.3.3
  */
 public class TLogHttpClient5Interceptor implements HttpRequestInterceptor {
-    
+
     private static final Logger log = LoggerFactory.getLogger(TLogHttpClient5Interceptor.class);
-    
+
     @Override
     public void process(HttpRequest request, EntityDetails entityDetails, HttpContext context) throws HttpException, IOException {
         String traceId = TLogContext.getTraceId();
-        if(StrUtil.isNotBlank(traceId)) {
+        if (StrUtil.isNotBlank(traceId)) {
             String appName = TLogSpringAware.getProperty("spring.application.name");
 
             request.addHeader(TLogConstants.TLOG_TRACE_KEY, traceId);

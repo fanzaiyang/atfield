@@ -1,6 +1,5 @@
 package cn.fanzy.atfield.satoken.login.model;
 
-import cn.fanzy.atfield.satoken.login.property.LoginProperty;
 import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

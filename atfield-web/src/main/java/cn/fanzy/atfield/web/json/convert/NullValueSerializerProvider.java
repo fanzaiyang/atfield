@@ -90,26 +90,26 @@ public class NullValueSerializerProvider extends DefaultSerializerProvider {
     private boolean isDateType(BeanProperty property) {
         Class<?> clazz = property.getType().getRawClass();
         return Date.class.isAssignableFrom(clazz)
-                || java.sql.Date.class.isAssignableFrom(clazz)
-                || java.sql.Timestamp.class.isAssignableFrom(clazz)
-                || java.sql.Time.class.isAssignableFrom(clazz)
-                || java.time.LocalDate.class.isAssignableFrom(clazz)
-                || java.time.LocalDateTime.class.isAssignableFrom(clazz)
-                || java.time.LocalTime.class.isAssignableFrom(clazz)
-                || java.time.ZonedDateTime.class.isAssignableFrom(clazz)
-                || java.time.OffsetDateTime.class.isAssignableFrom(clazz)
-                || java.time.OffsetTime.class.isAssignableFrom(clazz)
-                || java.time.Year.class.isAssignableFrom(clazz)
-                || java.time.YearMonth.class.isAssignableFrom(clazz)
-                || java.time.MonthDay.class.isAssignableFrom(clazz);
+               || java.sql.Date.class.isAssignableFrom(clazz)
+               || java.sql.Timestamp.class.isAssignableFrom(clazz)
+               || java.sql.Time.class.isAssignableFrom(clazz)
+               || java.time.LocalDate.class.isAssignableFrom(clazz)
+               || java.time.LocalDateTime.class.isAssignableFrom(clazz)
+               || java.time.LocalTime.class.isAssignableFrom(clazz)
+               || java.time.ZonedDateTime.class.isAssignableFrom(clazz)
+               || java.time.OffsetDateTime.class.isAssignableFrom(clazz)
+               || java.time.OffsetTime.class.isAssignableFrom(clazz)
+               || java.time.Year.class.isAssignableFrom(clazz)
+               || java.time.YearMonth.class.isAssignableFrom(clazz)
+               || java.time.MonthDay.class.isAssignableFrom(clazz);
     }
 
     private boolean isMapType(BeanProperty property) {
         Class<?> clazz = property.getType().getRawClass();
         return Map.class.isAssignableFrom(clazz)
-                || Set.class.isAssignableFrom(clazz)
-                || JSONObject.class.isAssignableFrom(clazz)
-                || Map.Entry.class.isAssignableFrom(clazz);
+               || Set.class.isAssignableFrom(clazz)
+               || JSONObject.class.isAssignableFrom(clazz)
+               || Map.Entry.class.isAssignableFrom(clazz);
     }
 
     private boolean isObjectType(BeanProperty property) {

@@ -13,7 +13,7 @@ import java.util.Set;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public class IpUtil extends Ipv4Util{
+public class IpUtil extends Ipv4Util {
 
     /**
      * 包含
@@ -49,7 +49,7 @@ public class IpUtil extends Ipv4Util{
                 return Ipv4Util.matches(itemIp, ip);
             }
             // 处理IP范围，类似192.168.0.0-192.168.2.1或192.168.1.1/24
-            if (itemIp.contains("-")||itemIp.contains("/")) {
+            if (itemIp.contains("-") || itemIp.contains("/")) {
                 List<String> rangeIpList = Ipv4Util.list(itemIp, true);
                 return rangeIpList.contains(ip);
             }

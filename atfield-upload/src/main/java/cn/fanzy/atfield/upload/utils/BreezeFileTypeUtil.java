@@ -44,12 +44,13 @@ public class BreezeFileTypeUtil {
         if (StrUtil.isBlank(type)) {
             // 如果未获取到文件类型，则根据文件名截取
             String fileName = file.getName();
-            return fileName.substring(fileName.lastIndexOf(".")+1);
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
         }
         return type;
     }
+
     public static String getFileType(String fileName) {
-        Assert.notBlank(fileName,"文件名称不能为空！");
-        return fileName.substring(fileName.lastIndexOf(".")+1);
+        Assert.notBlank(fileName, "文件名称不能为空！");
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 }

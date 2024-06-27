@@ -65,16 +65,16 @@ public class AspectLogAop {
         StringBuilder sb = new StringBuilder();
 
         //处理字符串类型标签
-        if (StrUtil.isNotBlank(str)){
+        if (StrUtil.isNotBlank(str)) {
             sb.append(str);
             sb.append(joint);
         }
 
         //处理自定义converter
         boolean isAspectLogConvert;
-        if (convertClazz.equals(AspectLogConvert.class)){
+        if (convertClazz.equals(AspectLogConvert.class)) {
             isAspectLogConvert = false;
-        }else{
+        } else {
             isAspectLogConvert = AspectLogConvert.class.isAssignableFrom(convertClazz);
         }
 
@@ -113,27 +113,27 @@ public class AspectLogAop {
         return jp.proceed();
     }
 
-    private String getExpressionValue(String expression, Map<String, Object> map){
+    private String getExpressionValue(String expression, Map<String, Object> map) {
         List<String> errorList = new ArrayList<>();
-        try{
+        try {
             InstructionSet instructionSet = expressRunner.getInstructionSetFromLocalCache("map." + expression);
             DefaultContext<String, Object> context = new DefaultContext<>();
             context.put("map", map);
             Object value = expressRunner.execute(instructionSet, context, errorList, false, false);
 
-            if (ObjectUtil.isNull(value)){
+            if (ObjectUtil.isNull(value)) {
                 return null;
             }
-            if (ObjectUtil.isBasicType(value)){
+            if (ObjectUtil.isBasicType(value)) {
                 return value.toString();
-            }else{
+            } else {
                 return JSONUtil.toJsonStr(value);
             }
-        }catch (Throwable t){
-            for (String scriptErrorMsg : errorList){
+        } catch (Throwable t) {
+            for (String scriptErrorMsg : errorList) {
                 log.error("\n{}", scriptErrorMsg);
             }
-            log.error(t.getMessage(),t);
+            log.error(t.getMessage(), t);
             throw new TLogCustomLabelExpressionException(t.getMessage());
         }
     }

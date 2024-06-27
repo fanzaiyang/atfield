@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 /**
  * 统一响应结果
  * <strong>注意：该类已废弃，使用 {@link Json} 代替</strong>
+ *
  * @author wanghuifeng
  */
 @Deprecated

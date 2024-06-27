@@ -59,7 +59,7 @@ public class CustomizeNullJsonSerializer {
                               SerializerProvider serializerProvider) throws IOException {
             if (config.isEnable()) {
                 if (config.getValue() == null ||
-                        StrUtil.equalsIgnoreCase(config.getValue(), "null")) {
+                    StrUtil.equalsIgnoreCase(config.getValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(config.getValue());
@@ -108,7 +108,7 @@ public class CustomizeNullJsonSerializer {
                               SerializerProvider serializerProvider) throws IOException {
             if (config.isEnable()) {
                 if (config.getValue() == null ||
-                        StrUtil.equalsIgnoreCase(config.getValue(), "null")) {
+                    StrUtil.equalsIgnoreCase(config.getValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(config.getValue());
@@ -194,7 +194,7 @@ public class CustomizeNullJsonSerializer {
             }
             // Date => null
             if (Objects.equals(field.getType(), Date.class) || Objects.equals(field.getType(), java.sql.Date.class) ||
-                    Objects.equals(field.getType(), LocalDate.class)) {
+                Objects.equals(field.getType(), LocalDate.class)) {
                 new NullDateJsonSerializer(config.getConvert().getDate())
                         .serialize(value, jsonGenerator, serializerProvider);
                 return;

@@ -1,8 +1,6 @@
 package cn.fanzy.atfield.satoken.login.service;
 
-import cn.fanzy.atfield.satoken.login.annotation.Login;
 import cn.fanzy.atfield.satoken.login.model.LoginAopInfoDto;
-import cn.fanzy.atfield.satoken.login.property.LoginProperty;
 
 /**
  * 登录AOP服务

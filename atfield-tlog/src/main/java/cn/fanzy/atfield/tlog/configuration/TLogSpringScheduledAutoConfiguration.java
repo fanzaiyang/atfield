@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Spring Scheduled AOP自动装配类
+ *
  * @author Bryan.Zhang
  * @since 1.3.4
  */
@@ -15,7 +16,7 @@ public class TLogSpringScheduledAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SpringScheduledTaskAop.class)
-    public SpringScheduledTaskAop springScheduledTaskAop(){
+    public SpringScheduledTaskAop springScheduledTaskAop() {
         return new SpringScheduledTaskAop();
     }
 }

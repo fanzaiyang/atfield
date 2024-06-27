@@ -32,6 +32,7 @@ public class ByteRation {
     public static ByteRation of(long value, String unit) {
         return new ByteRation(value, unit);
     }
+
     public static ByteRation of(long value, ByteCalcUnit unit) {
         return new ByteRation(value, unit);
     }

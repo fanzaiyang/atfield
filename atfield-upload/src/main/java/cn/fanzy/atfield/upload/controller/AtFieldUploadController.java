@@ -1,8 +1,8 @@
 package cn.fanzy.atfield.upload.controller;
 
 import cn.fanzy.atfield.upload.model.ParamFilePartPutDto;
+import cn.fanzy.atfield.upload.service.UploadPartService;
 import cn.fanzy.atfield.upload.utils.Resp;
-import cn.fanzy.atfield.upload.service.AtFieldPartUploadService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @ConditionalOnClass(JdbcTemplate.class)
 public class AtFieldUploadController {
 
-    private final AtFieldPartUploadService uploadService;
+    private final UploadPartService uploadService;
 
     @PostMapping("${breeze.minio.api.init:/breeze/minio/multipart/init}")
     public Object init(@RequestBody ParamFilePartPutDto args) {

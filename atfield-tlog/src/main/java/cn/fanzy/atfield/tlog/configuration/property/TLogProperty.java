@@ -38,7 +38,8 @@ public class TLogProperty {
      */
     private PrintInfo print = new PrintInfo();
 
-    private Boolean ignoreSpringdoc=true;
+    private Boolean ignoreSpringdoc = true;
+
     @Data
     public static class PrintInfo {
         private Boolean preEnable = true;

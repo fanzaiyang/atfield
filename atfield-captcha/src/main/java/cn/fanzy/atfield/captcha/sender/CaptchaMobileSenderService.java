@@ -1,8 +1,8 @@
 package cn.fanzy.atfield.captcha.sender;
 
-import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 import cn.fanzy.atfield.captcha.bean.CaptchaCode;
 import cn.fanzy.atfield.captcha.enums.CaptchaType;
+import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

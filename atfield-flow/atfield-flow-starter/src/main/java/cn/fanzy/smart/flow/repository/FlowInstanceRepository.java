@@ -1,6 +1,6 @@
 package cn.fanzy.smart.flow.repository;
 
-import cn.fanzy.atfield.core.utils.IdUtil;
+import cn.fanzy.atfield.core.utils.IdUtils;
 import cn.fanzy.smart.flow.model.Pages;
 import cn.fanzy.smart.flow.model.entity.FlowInstanceInfoEntity;
 import cn.fanzy.smart.flow.model.entity.FlowTemplateInfoEntity;
@@ -50,7 +50,7 @@ public class FlowInstanceRepository {
      * @return {@link String}
      */
     public String createFlowInstance(FlowInstanceInfoEntity entity) {
-        entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtil.getSnowflakeNextIdStr()));
+        entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtils.getSnowflakeNextIdStr()));
         entity.setDelFlag(entity.getDelFlag() == null ? 0 : entity.getDelFlag());
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());

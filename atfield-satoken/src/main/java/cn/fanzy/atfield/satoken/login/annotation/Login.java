@@ -23,6 +23,7 @@ public @interface Login {
      *      #persons[3]
      *      #person.friends[5].name
      * </pre>
+     *
      * @return {@link String}
      */
     String value();

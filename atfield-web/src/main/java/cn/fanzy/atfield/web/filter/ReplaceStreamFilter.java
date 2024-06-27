@@ -57,7 +57,7 @@ public class ReplaceStreamFilter implements Filter {
             }
             Json<Object> json = Json.fail(message);
             json.setData(e.getCause());
-            ServletUtil.out((HttpServletResponse) response,json);
+            ServletUtil.out((HttpServletResponse) response, json);
         }
     }
 

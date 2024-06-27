@@ -1,10 +1,10 @@
 package cn.fanzy.atfield.upload.service.impl;
 
-import cn.fanzy.atfield.upload.configuration.UploadSingleConfiguration;
+import cn.fanzy.atfield.upload.configuration.UploadConfiguration;
 import cn.fanzy.atfield.upload.model.*;
 import cn.fanzy.atfield.upload.property.UploadProperty;
-import cn.fanzy.atfield.upload.service.AtFieldPartUploadService;
-import cn.fanzy.atfield.upload.service.AtFieldUploadService;
+import cn.fanzy.atfield.upload.service.UploadPartService;
+import cn.fanzy.atfield.upload.service.UploadService;
 import cn.fanzy.atfield.upload.utils.BreezeFileTypeUtil;
 import cn.fanzy.atfield.upload.utils.BreezeObjectGenerate;
 import cn.hutool.core.collection.CollUtil;
@@ -27,13 +27,13 @@ import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
-public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
+public class UploadPartServiceImpl implements UploadPartService {
     private final JdbcTemplate jdbcTemplate;
     private final UploadProperty properties;
 
     @Override
     public FilePartUploadResponse beforeUpload(ParamFilePartPutDto param) {
-        AtFieldUploadService atFieldUploadService = UploadSingleConfiguration.instance();
+        UploadService uploadService = UploadConfiguration.instance();
         Assert.notBlank(param.getIdentifier(), "参与文件MD5值（identifier）不能为空！");
         String sql = "select * from " + getTableName() + " t where t.del_flag=0 and t.identifier=? limit 1";
         List<FilePartUploadDO> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(FilePartUploadDO.class),
@@ -44,14 +44,14 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
         }
         if (CollUtil.isEmpty(query)) {
             // 不存在，需要新的上传
-            String uploadId = atFieldUploadService.initiateMultipartUpload(param.getObjectName());
+            String uploadId = uploadService.initiateMultipartUpload(param.getObjectName());
             Map<String, String> mapParam = new HashMap<>();
             mapParam.put("uploadId", uploadId);
             for (int i = 1; i <= param.getTotalChunks(); i++) {
                 mapParam.put("partNumber", i + "");
                 partList.add(FilePartUploadVo.builder()
                         .currentPartNumber(i)
-                        .uploadUrl(atFieldUploadService.getPresignedObjectUrl(Method.PUT, param.getObjectName(), null, null, mapParam))
+                        .uploadUrl(uploadService.getPresignedObjectUrl(Method.PUT, param.getObjectName(), null, null, mapParam))
                         .finished(false)
                         .build());
             }
@@ -60,15 +60,15 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
                     param.getIdentifier(),
                     uploadId,
                     param.getFileName(),
-                    atFieldUploadService.getBucketHost(),
-                    atFieldUploadService.getBucket(),
+                    uploadService.getBucketHost(),
+                    uploadService.getBucket(),
                     param.getObjectName(),
                     param.getTotalChunks(),
                     param.getFileSize(),
                     param.getChunkSize(),
                     new Date(), null, null, 0, "MINIO_SERVER", new Date());
             return FilePartUploadResponse.builder()
-                    .bucketName(atFieldUploadService.getBucket()).finished(false)
+                    .bucketName(uploadService.getBucket()).finished(false)
                     .totalChunks(param.getTotalChunks())
                     .objectName(param.getObjectName())
                     .partList(partList)
@@ -95,7 +95,7 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
                             .endpoint(file.getBucketHost())
                             .bucket(file.getBucketName())
                             .objectName(file.getObjectName())
-                            .previewUrl(atFieldUploadService.getPreviewUrl(file.getObjectName()))
+                            .previewUrl(uploadService.getPreviewUrl(file.getObjectName()))
                             .fileName(file.getFileName())
                             .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
                             .build())
@@ -103,7 +103,7 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
         }
         // 断点续传，已上传部分
         try {
-            List<PartSummary> partedList = atFieldUploadService.listParts(file.getObjectName(), file.getUploadId());
+            List<PartSummary> partedList = uploadService.listParts(file.getObjectName(), file.getUploadId());
             if (CollUtil.isNotEmpty(partedList)) {
                 Map<String, String> paramMap = new HashMap<>();
                 paramMap.put("uploadId", file.getUploadId());
@@ -124,7 +124,7 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
                     paramMap.put("partNumber", i + "");
                     partList.add(FilePartUploadVo.builder()
                             .currentPartNumber(i)
-                            .uploadUrl(atFieldUploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, paramMap))
+                            .uploadUrl(uploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, paramMap))
                             .finished(false)
                             .build());
                 }
@@ -135,28 +135,28 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
                     paramMap.put("partNumber", i + "");
                     partList.add(FilePartUploadVo.builder()
                             .currentPartNumber(i)
-                            .uploadUrl(atFieldUploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, paramMap))
+                            .uploadUrl(uploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, paramMap))
                             .finished(false)
                             .build());
                 }
             }
         } catch (Exception e) {
             // 这里是断点续传失败，新增模式
-            String uploadId = atFieldUploadService.initiateMultipartUpload(param.getObjectName());
+            String uploadId = uploadService.initiateMultipartUpload(param.getObjectName());
             Map<String, String> paramMap = new HashMap<>();
             paramMap.put("uploadId", uploadId);
             for (int i = 1; i <= param.getTotalChunks(); i++) {
                 paramMap.put("partNumber", i + "");
                 partList.add(FilePartUploadVo.builder()
                         .currentPartNumber(i)
-                        .uploadUrl(atFieldUploadService.getPresignedObjectUrl(Method.PUT, param.getObjectName(), null, null, paramMap))
+                        .uploadUrl(uploadService.getPresignedObjectUrl(Method.PUT, param.getObjectName(), null, null, paramMap))
                         .finished(false)
                         .build());
             }
             String insSql = "update " + getTableName() + " set upload_id=?,update_time=? where id=?";
             jdbcTemplate.update(insSql, uploadId, new Date(), file.getId());
             return FilePartUploadResponse.builder()
-                    .bucketName(atFieldUploadService.getBucket()).finished(false)
+                    .bucketName(uploadService.getBucket()).finished(false)
                     .totalChunks(param.getTotalChunks())
                     .objectName(param.getObjectName())
                     .partList(partList)
@@ -180,7 +180,7 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
         if (partNumber < 1) {
             throw new RuntimeException("partNumber不能小于1");
         }
-        AtFieldUploadService atFieldUploadService = UploadSingleConfiguration.instance();
+        UploadService uploadService = UploadConfiguration.instance();
         String sql = "select * from " + getTableName() + " t where t.del_flag=0 and t.identifier=? limit 1";
         List<FilePartUploadDO> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(FilePartUploadDO.class), identifier);
         Assert.notEmpty(query, "该上传任务不存在，请先初始化！");
@@ -201,7 +201,7 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
         Map<String, String> param = new HashMap<>();
         param.put("uploadId", file.getUploadId());
         param.put("partNumber", partNumber + "");
-        String url = atFieldUploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param);
+        String url = uploadService.getPresignedObjectUrl(Method.PUT, file.getObjectName(), null, null, param);
         return FilePartUploadVo.builder()
                 .finished(false)
                 .currentPartNumber(partNumber)
@@ -211,21 +211,21 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
 
     @Override
     public List<PartSummary> queryListPart(String uploadId, String objectName, String minioConfigName) {
-        AtFieldUploadService atFieldUploadService = UploadSingleConfiguration.instance();
-        return atFieldUploadService.listParts(objectName, uploadId);
+        UploadService uploadService = UploadConfiguration.instance();
+        return uploadService.listParts(objectName, uploadId);
     }
 
     @Override
     public FileUploadResponse mergeChunk(String identifier, String minioConfigName) {
-        AtFieldUploadService atFieldUploadService = UploadSingleConfiguration.instance();
+        UploadService uploadService = UploadConfiguration.instance();
         String sql = "select * from " + getTableName() + " t where t.del_flag=0 and (t.identifier=? or t.upload_id=?) limit 1";
         List<FilePartUploadDO> query = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(FilePartUploadDO.class), identifier, identifier);
         Assert.notEmpty(query, "未找到合并文件！");
         FilePartUploadDO file = query.get(0);
-        List<PartSummary> partList = atFieldUploadService.listParts(file.getObjectName(), file.getUploadId());
+        List<PartSummary> partList = uploadService.listParts(file.getObjectName(), file.getUploadId());
         Assert.notEmpty(partList, "分片尚未完成，无法执行合并！");
         Assert.isTrue(partList.size() == file.getTotalChunkNum(), "文件分片未上传完成「{}/{}」，请稍后在试！", partList.size(), file.getTotalChunkNum());
-        CompleteMultipartUploadResult response = atFieldUploadService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
+        CompleteMultipartUploadResult response = uploadService.completeMultipartUpload(file.getObjectName(), file.getUploadId(), partList);
         Date now = new Date();
         long between = DateUtil.between(file.getBeginTime(), now, DateUnit.SECOND);
         jdbcTemplate.update("update " + getTableName() + " set status = 1,end_time=?,spend_second=?,update_by='MINIO_SERVER',update_time=? where id=?", now, between, now, file.getId());
@@ -234,10 +234,10 @@ public class AtFieldPartUploadServiceImpl implements AtFieldPartUploadService {
         return FileUploadResponse.builder()
                 .id(file.getId())
                 .etag(response.getETag())
-                .endpoint(atFieldUploadService.getBucketHost())
-                .bucket(atFieldUploadService.getBucket())
+                .endpoint(uploadService.getBucketHost())
+                .bucket(uploadService.getBucket())
                 .objectName(response.getKey())
-                .previewUrl(atFieldUploadService.getPreviewUrl(response.getKey()))
+                .previewUrl(uploadService.getPreviewUrl(response.getKey()))
                 .fileName(file.getFileName())
                 .fileMbSize(decimal.setScale(2, RoundingMode.HALF_UP).doubleValue())
                 .build();

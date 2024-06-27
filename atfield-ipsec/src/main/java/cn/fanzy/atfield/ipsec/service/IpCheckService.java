@@ -16,5 +16,5 @@ public interface IpCheckService {
      * @param clientIp 客户端IP
      * @param storage  存储
      */
-    void check(String clientIp,IpStorageBean storage);
+    void check(String clientIp, IpStorageBean storage);
 }

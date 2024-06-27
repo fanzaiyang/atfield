@@ -15,47 +15,60 @@ title: 更新日志
 ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud?style=for-the-badge.png)
 
 ## v2.3.2
+
 ### 修复sqltoy模块的lambda in object类型问题
 
 ## v2.3.0
+
 ### knife4j非强依赖
+
 ### fix TreeUtils缺陷
 
-
 ## v2.2.6
+
 ### 企业微信部门创建
+
 ### 源码迁移
+
 ## v2.2.5
+
 ### 重构逻辑删除
 
 ## v2.2.4
+
 ### 升级sqltoy->5.2.54
+
 ### 修复sqltoy-plus的参数null忽略问题
 
 ## v2.2.3
+
 ### 升级依赖及修复已知bug
 
 ## v2.2.2
+
 ### 🐛修复last sql问题
 
 ## v2.2.1
+
 ### 🐛修复已知问题
 
 * 升级sqltoy依赖。
 * fix between问题
 
 ## v2.2.0
+
 ### 🐛修复大量已知问题
 
 * 修改JSON序列化Date问题。
 
-
 ## v2.1.8
+
 ### 🐛问题修复
 
 * 修改JSON序列化LocalDate问题。
 
 ## v2.1.7
+
 ### 🐛问题修复
 
 * 修改JSON序列化带来的诸多问题。
@@ -72,8 +85,6 @@ title: 更新日志
 
 * web组件，修复开启json处理后时间未格式化问题。
 
-
-
 ## v2.1.4
 
 ### 🐛问题修复
@@ -85,8 +96,8 @@ title: 更新日志
 ## v2.1.3
 
 * 分片上传初始化接口添加秒传响应对象
-  
-  * 方便前端拿到已上传的文件信息，方便回传后台。
+
+    * 方便前端拿到已上传的文件信息，方便回传后台。
 
 ## v2.1.2
 
@@ -99,14 +110,14 @@ title: 更新日志
 ## v2.1.0
 
 * 🎉 新增基于MinIO的分片上传、断点续传、秒传功能组件。涉及以下组件。🐶
-  
-  * breeze-minio-spring-boot-starter
-  
-  * breeze-admin-spring-boot-starter
+
+    * breeze-minio-spring-boot-starter
+
+    * breeze-admin-spring-boot-starter
 
 * 🎉 新增JSON消息空处理，null转换为对应类型返回到前端。
-  
-  * breeze-web-spring-boot-starter
+
+    * breeze-web-spring-boot-starter
 
 ## v2.0.3
 

@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.tlog.core.enhance.log4j;
 
-import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
+import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.hutool.core.util.StrUtil;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
@@ -15,8 +15,8 @@ import org.apache.log4j.spi.LoggingEvent;
 public class AspectLog4jPatternConverter extends PatternConverter {
     @Override
     protected String convert(LoggingEvent loggingEvent) {
-       //只有在MDC没有设置的情况下才加到message里
-       String renderedMessage = loggingEvent.getRenderedMessage();
+        //只有在MDC没有设置的情况下才加到message里
+        String renderedMessage = loggingEvent.getRenderedMessage();
         String logValue = AspectLogContext.getLogValue();
         if (StrUtil.isNotBlank(logValue) && !TLogContext.hasTLogMDC()) {
             return logValue + " " + renderedMessage;

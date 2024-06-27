@@ -31,7 +31,8 @@ public class UploadProperty implements Serializable {
      */
     private Map<String, MinioServerConfig> servers = new LinkedHashMap<>();
 
-    private MinioApi api=new MinioApi();
+    private MinioApi api = new MinioApi();
+
     @Data
     public static class MinioServerConfig {
         /**
@@ -67,7 +68,7 @@ public class UploadProperty implements Serializable {
     }
 
     @Data
-    public static class MinioApi{
+    public static class MinioApi {
         /**
          * 是否启用controller接口，默认：true开启
          */
@@ -89,7 +90,7 @@ public class UploadProperty implements Serializable {
 
 
         public String getTableName() {
-            return StrUtil.blankToDefault(tableName,"sys_file_info");
+            return StrUtil.blankToDefault(tableName, "sys_file_info");
         }
     }
 }

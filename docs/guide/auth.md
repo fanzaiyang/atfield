@@ -27,8 +27,9 @@ order: 3
 2. 修改配置
 
 > ⚠️**注意：**
-> 
-> 该组件可以在未任何配置的情况下使用，默认开启了[注解](https://sa-token.cc/doc.html#/use/at-check)和[路由](https://sa-token.cc/doc.html#/use/route-check)鉴权。
+>
+> 该组件可以在未任何配置的情况下使用，默认开启了[注解](https://sa-token.cc/doc.html#/use/at-check)
+> 和[路由](https://sa-token.cc/doc.html#/use/route-check)鉴权。
 
 ```yaml
 breeze:
@@ -47,11 +48,11 @@ breeze:
 ```
 
 3. 文档地址
-   
+
    https://sa-token.cc/doc.html
-   
+
    常用方法
-   
+
    ```java
    // 会话登录：参数填写要登录的账号id，建议的数据类型：long | int | String， 不可以传入复杂类型，如：User、Admin 等等
    StpUtil.login(Object id);     
@@ -95,8 +96,9 @@ breeze:
    ```
 
 4. 其他说明
+
 * 鉴权写入redis，在pom中添加
-  
+
   ```xml
   <!--pom.xml-->
   <dependency>
@@ -106,26 +108,26 @@ breeze:
   ```
 
 * 使用JWT，在pom中添加
-  
+
   ```xml
   <dependency>
      <groupId>cn.fanzy.breeze</groupId>
      <artifactId>breeze-auth-jwt-spring-boot-starter</artifactId>
   </dependency>
   ```
-  
+
   JWT风格配置。
-  
-  * simple模式：Token 风格替换,默认
-  
-  * Mixin 模式：混入部分逻辑
-  
-  * Stateless 模式：服务器完全无状态
-  
-  * statelessNotCheck：不校验过期
-  
+
+    * simple模式：Token 风格替换,默认
+
+    * Mixin 模式：混入部分逻辑
+
+    * Stateless 模式：服务器完全无状态
+
+    * statelessNotCheck：不校验过期
+
   在配置文件中配置即可。
-  
+
   ```properties
   breeze.auth.jwt.enable=true # 是否启用jwt，默认：false
   breeze.auth.jwt.mode=stateless # 可选simple、mixin、stateless、statelessNotCheck。

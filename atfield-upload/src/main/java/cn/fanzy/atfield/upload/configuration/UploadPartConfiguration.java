@@ -1,8 +1,8 @@
 package cn.fanzy.atfield.upload.configuration;
 
 import cn.fanzy.atfield.upload.property.UploadProperty;
-import cn.fanzy.atfield.upload.service.AtFieldPartUploadService;
-import cn.fanzy.atfield.upload.service.impl.AtFieldPartUploadServiceImpl;
+import cn.fanzy.atfield.upload.service.UploadPartService;
+import cn.fanzy.atfield.upload.service.impl.UploadPartServiceImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +29,9 @@ public class UploadPartConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AtFieldPartUploadService filePartUploadService(JdbcTemplate jdbcTemplate,
-                                                          UploadProperty properties) {
-        return new AtFieldPartUploadServiceImpl(jdbcTemplate, properties);
+    public UploadPartService filePartUploadService(JdbcTemplate jdbcTemplate,
+                                                   UploadProperty properties) {
+        return new UploadPartServiceImpl(jdbcTemplate, properties);
     }
 
     @PostConstruct

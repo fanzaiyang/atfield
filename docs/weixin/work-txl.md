@@ -4,6 +4,7 @@ order: 6
 group:
   title: 企业微信
 ---
+
 # 通讯录
 
 ## 成员管理
@@ -140,7 +141,9 @@ void listOrgUser() throws WxErrorException {
 > 该接口使用场景为企业支付，在使用企业红包和向员工付款时，需要自行将企业微信的userid转成openid。
 >
 > 注：需要成员使用微信登录企业微信或者关注微信插件（原企业号）才能转成openid;
-> 如果是外部联系人，请使用[外部联系人openid转换](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90202#18820)转换openid
+>
+如果是外部联系人，请使用[外部联系人openid转换](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90202#18820)
+转换openid
 
 ```java
 @Test
@@ -410,7 +413,9 @@ void delDepartment() throws WxErrorException {
 
 > [获取部门列表 - 接口文档 - 企业微信开发者中心 (qq.com)](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90208)
 >
-> 注：该接口性能较低，建议换用[获取子部门ID列表](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90208#36259)与[获取单个部门详情](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90208#36260)
+>
+注：该接口性能较低，建议换用[获取子部门ID列表](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90208#36259)
+与[获取单个部门详情](https://gitee.com/link?target=https://developer.work.weixin.qq.com/document/path/90208#36260)
 
 ```java
 @Test

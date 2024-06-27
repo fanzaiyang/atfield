@@ -34,7 +34,8 @@ public interface MyInterface {
 
 ### 改进try with resource
 
-在Java7中新增了try with resource语法用来自动关闭资源文件，在IO流和jdbc部分使用的比较多。使用方式是将需要自动关闭的资源对象的创建放到try后面的小括号中，在jdk9中我们可以将这些资源对象的创建代码放到小括号外面，然后将需要关闭的对象名放到try后面的小括号中即可。
+在Java7中新增了try with
+resource语法用来自动关闭资源文件，在IO流和jdbc部分使用的比较多。使用方式是将需要自动关闭的资源对象的创建放到try后面的小括号中，在jdk9中我们可以将这些资源对象的创建代码放到小括号外面，然后将需要关闭的对象名放到try后面的小括号中即可。
 
 ```java
 public class TryWithResource {
@@ -71,7 +72,9 @@ String _ = "test";
 
 **底层由char数组改成了byte数据，当字符串为纯英文是占用空间减少一半。**
 
-写程序的时候会经常用到String字符串，在以前的版本中String内部使用了`char`数组存储，对于使用英语的人来说，一个字符用一个字节就能存储，使用char存储字符会浪费一半的内存空间，因此在jdk9中将String内部的`char数组`改成了`byte数组`，这样就节省了一半的内存占用。
+写程序的时候会经常用到String字符串，在以前的版本中String内部使用了`char`
+数组存储，对于使用英语的人来说，一个字符用一个字节就能存储，使用char存储字符会浪费一半的内存空间，因此在jdk9中将String内部的`char数组`
+改成了`byte数组`，这样就节省了一半的内存占用。
 
 ```java
 char c = 'a';//2个字节
@@ -110,7 +113,7 @@ java9中将rt.jar分成了不同的模块，一个模块下可以包含多个包
 ### 局部变量类型推断
 
 > **当然这个var的使用是有限制的，仅适用于局部变量，增强for循环的索引，以及普通for循环的本地变量；**
-> 
+>
 > **它不能使用于方法形参，构造方法形参，方法返回类型等。**
 
 ```java
@@ -532,13 +535,15 @@ public class Test{
 
 ### 其他
 
-在之前jdk版本中作为预览功能的Record类，模式匹配的instanceof，打包工具jpackage，已成为正式版。jdk16对GC，jvm运行时内存等内容有一些变化，例如：**ZGC并发栈处理**，**弹性meta space**。
+在之前jdk版本中作为预览功能的Record类，模式匹配的instanceof，打包工具jpackage，已成为正式版。jdk16对GC，jvm运行时内存等内容有一些变化，例如：
+**ZGC并发栈处理**，**弹性meta space**。
 
 ## Java17 LTS
 
 > SpringBoot 3.x之后默认JDK版本为17。
 
-java17是一个LTS（long term support）长期支持的版本，根据计划来看java17会支持到2029年（java8会支持到2030年，OMG），同时Oracle提议下一个LTS版本是java21，在2023年9月发布，这样讲LST版本的发布周期由之前的3年变为了2年。这里只介绍一些跟开发关联度较大的特性，除此之外JDK17还更新了一些其他新特性，感兴趣的同学可以从这里查看：[Oracle Releases Java 17](https://www.oracle.com/news/announcement/oracle-releases-java-17-2021-09-14/)
+java17是一个LTS（long term
+support）长期支持的版本，根据计划来看java17会支持到2029年（java8会支持到2030年，OMG），同时Oracle提议下一个LTS版本是java21，在2023年9月发布，这样讲LST版本的发布周期由之前的3年变为了2年。这里只介绍一些跟开发关联度较大的特性，除此之外JDK17还更新了一些其他新特性，感兴趣的同学可以从这里查看：[Oracle Releases Java 17](https://www.oracle.com/news/announcement/oracle-releases-java-17-2021-09-14/)
 
 ### switch语法的变化(预览)
 
@@ -590,7 +595,8 @@ public class Switch01{
 
 ### Sealed Classes
 
-在jdk15中已经添加了Sealed Classes，只不过当时是作为预览版，经历了2个版本之后，在jdk17中Sealed Classes已经成为正式版了。Sealed Classes的作用是可以限制一个类或者接口可以由哪些子类继承或者实现。
+在jdk15中已经添加了Sealed Classes，只不过当时是作为预览版，经历了2个版本之后，在jdk17中Sealed Classes已经成为正式版了。Sealed
+Classes的作用是可以限制一个类或者接口可以由哪些子类继承或者实现。
 
 ### 伪随机数的变化
 
@@ -605,7 +611,8 @@ public class Switch01{
 
 AOT（Ahead-of-Time）是java9中新增的功能，可以先将应用中中的字节码编译成机器码。
 
-Graal编译器作为使用java开发的JIT（just-in-time ）即时编译器在java10中加入（注意这里的JIT不是之前java中的JIT，在JEP 317中有说明https://openjdk.java.net/jeps/317）。
+Graal编译器作为使用java开发的JIT（just-in-time ）即时编译器在java10中加入（注意这里的JIT不是之前java中的JIT，在JEP
+317中有说明https://openjdk.java.net/jeps/317）。
 
 ## Java18
 
@@ -619,7 +626,8 @@ Graal编译器作为使用java开发的JIT（just-in-time ）即时编译器在j
 
 ### 简单的web服务器
 
-可以通过jwebserver命令启动jdk18中提供的静态web服务器，可以利用该工具查看一些原型，做简单的测试。在命令提示符中输入jwebserver命令后会启动，然后在浏览器中输入:[http://127.0.0.1:8000/](http://127.0.0.1:8000/) 即可看到当前命令提示符路径下的文件了。
+可以通过jwebserver命令启动jdk18中提供的静态web服务器，可以利用该工具查看一些原型，做简单的测试。在命令提示符中输入jwebserver命令后会启动，然后在浏览器中输入:[http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+即可看到当前命令提示符路径下的文件了。
 
 ### 将被移除的方法
 
@@ -635,7 +643,9 @@ Graal编译器作为使用java开发的JIT（just-in-time ）即时编译器在j
 
 #### 简介
 
-该特性在java19中是预览版，虚拟线程是一种用户态下的线程，类似go语言中的goroutines 和Erlang中的processes，虚拟线程并非比线程快，而是提高了应用的吞吐量，相比于传统的线程是由操作系统调度来看，虚拟线程是我们自己程序调度的线程。如果你对之前java提供的线程API比较熟悉了，那么在学习虚拟线程的时候会比较轻松，传统线程能运行的代码，虚拟线程也可以运行。虚拟线程的出现，并没有修改java原有的并发模型，也不会替代原有的线程。**虚拟线程主要作用是提升服务器端的吞吐量。**
+该特性在java19中是预览版，虚拟线程是一种用户态下的线程，类似go语言中的goroutines
+和Erlang中的processes，虚拟线程并非比线程快，而是提高了应用的吞吐量，相比于传统的线程是由操作系统调度来看，虚拟线程是我们自己程序调度的线程。如果你对之前java提供的线程API比较熟悉了，那么在学习虚拟线程的时候会比较轻松，传统线程能运行的代码，虚拟线程也可以运行。虚拟线程的出现，并没有修改java原有的并发模型，也不会替代原有的线程。
+**虚拟线程主要作用是提升服务器端的吞吐量。**
 
 #### 吞吐量的瓶颈
 
@@ -645,7 +655,8 @@ Graal编译器作为使用java开发的JIT（just-in-time ）即时编译器在j
 2. 并发量：同一时刻处理的请求数量
 3. 吞吐量：单位时间内处理的数据数量
 
-比如一个服务器应用程序的延迟是50ms，处理10个并发请求，则吞吐量是200请求/秒（10 / 0.05），如果吞吐量要达到2000请求/秒，则处理的并发请求数量是100。按照1个请求对应一个线程的比例来看，要想提高吞吐量，线程数量也要增加。
+比如一个服务器应用程序的延迟是50ms，处理10个并发请求，则吞吐量是200请求/秒（10 /
+0.05），如果吞吐量要达到2000请求/秒，则处理的并发请求数量是100。按照1个请求对应一个线程的比例来看，要想提高吞吐量，线程数量也要增加。
 
 java中的线程是在操作系统线程（OS thread）进行了一层包装，而操作系统中线程是重量级资源，在硬件配置确定的前提下，我们就不能创建更多的线程了，此时线程数量就限制了系统性能，为了解决该问题，虚拟线程就出现了。
 
@@ -703,7 +714,8 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
 平台线程（platform thread）：指java中的线程，比如通过Executors.newFixedThreadPool()创建出来的线程，我们称之为平台线程。
 
-虚拟线程并不会直接分配给cpu去执行，而是通过调度器分配给平台线程，平台线程再被调度器管理。java中虚拟线程的调度器采用了工作窃取的模式进行FIFO的操作，调度器的并行数默认是jvm获取的处理器数量（通过该方法获取的数量Runtime.getRuntime().availableProcessors()），调度器并非分时（time sharing）的。在使用虚拟线程编写程序时，不能控制虚拟线程何时分配给平台线程，也不能控制平台线程何时分配给cpu。
+虚拟线程并不会直接分配给cpu去执行，而是通过调度器分配给平台线程，平台线程再被调度器管理。java中虚拟线程的调度器采用了工作窃取的模式进行FIFO的操作，调度器的并行数默认是jvm获取的处理器数量（通过该方法获取的数量Runtime.getRuntime()
+.availableProcessors()），调度器并非分时（time sharing）的。在使用虚拟线程编写程序时，不能控制虚拟线程何时分配给平台线程，也不能控制平台线程何时分配给cpu。
 
 #### 携带器
 
@@ -721,7 +733,8 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 response.send(future1.get() + future2.get());
 ```
 
-有些阻塞操作并不会导致虚拟线程解除挂载，这样会同时阻塞携带器和操作系统线程，例如：操作系统基本的文件操作，java中的Object.wait()方法。下面两种情况不会导致虚拟线程的解除挂载：
+有些阻塞操作并不会导致虚拟线程解除挂载，这样会同时阻塞携带器和操作系统线程，例如：操作系统基本的文件操作，java中的Object.wait()
+方法。下面两种情况不会导致虚拟线程的解除挂载：
 
 1. 执行synchronized同步代码（会导致携带器阻塞，所以建议使用ReentrantLock替换掉synchronized）
 2. 执行本地方法或外部函数
@@ -730,7 +743,8 @@ response.send(future1.get() + future2.get());
 
 从内存空间上来说，虚拟线程的栈空间可以看作是一个大块的栈对象，它被存储在了java堆中，相比于单独存储对象，堆中存储虚拟线程的栈会造成一些空间的浪费，这点在后续的java版本中应该会得到改善，当然这样也是有一些好处的，就是可以重复利用这部分栈空间，不用多次申请开辟新的内存地址。虚拟线程的栈空间最大可以达到平台线程的栈空间容量。
 
-**虚拟线程并不是GC root，其中的引用不会出现stop-world，当虚拟线程被阻塞之后比如BlockingQueue.take()，平台线程既不能获取到虚拟线程，也不能获取到queue队列，这样该平台线程可能会被回收掉，虚拟线程在运行或阻塞时不会被GC**
+**虚拟线程并不是GC root，其中的引用不会出现stop-world，当虚拟线程被阻塞之后比如BlockingQueue.take()
+，平台线程既不能获取到虚拟线程，也不能获取到queue队列，这样该平台线程可能会被回收掉，虚拟线程在运行或阻塞时不会被GC**
 
 - 通过Thread构造方法创建的线程都是平台线程
 - 虚拟线程是守护线程，不能通过setDaemon方法改成非守护线程
@@ -810,7 +824,8 @@ try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 }  
 ```
 
-现在平台线程和虚拟线程都是Thread的对象，那该如何区分该对象是平台线程还是虚拟线程？可以利用Thread中的isVirtual()方法进行判断，返回true表示虚拟线程：
+现在平台线程和虚拟线程都是Thread的对象，那该如何区分该对象是平台线程还是虚拟线程？可以利用Thread中的isVirtual()
+方法进行判断，返回true表示虚拟线程：
 
 ```java
 //创建任务
@@ -873,7 +888,8 @@ Thread.ofVirtual().inheritInheritableThreadLocals(false);
 
 #### LockSupport对虚拟线程的支持
 
-LockSupport是支持虚拟线程的，当调用park()方法时，虚拟线程会解除挂载，这样平台线程可以执行其他的操作，当调用unpark()方法时，虚拟线程会被调度器重新挂载到平台线程，再继续工作。
+LockSupport是支持虚拟线程的，当调用park()方法时，虚拟线程会解除挂载，这样平台线程可以执行其他的操作，当调用unpark()
+方法时，虚拟线程会被调度器重新挂载到平台线程，再继续工作。
 
 #### java.io包下类的变化
 

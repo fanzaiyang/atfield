@@ -3,9 +3,9 @@ package cn.fanzy.atfield.upload.service.impl;
 
 import cn.fanzy.atfield.upload.model.FileUploadResponse;
 import cn.fanzy.atfield.upload.model.MinioBucketPolicy;
-import cn.fanzy.atfield.upload.utils.*;
 import cn.fanzy.atfield.upload.property.UploadProperty;
-import cn.fanzy.atfield.upload.service.AtFieldUploadService;
+import cn.fanzy.atfield.upload.service.UploadService;
+import cn.fanzy.atfield.upload.utils.*;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
  * @date 2023/12/18
  */
 @Slf4j
-public class AtFieldUploadServiceImpl implements AtFieldUploadService {
+public class UploadServiceImpl implements UploadService {
     private UploadProperty.MinioServerConfig config;
     private MinioClient client;
 
@@ -108,7 +108,7 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
     }
 
     @Override
-    public AtFieldUploadService bucket(String bucket) {
+    public UploadService bucket(String bucket) {
         if (StrUtil.isBlank(bucket)) {
             log.warn("参数为空，使用默认存储桶。");
             return this;
@@ -343,7 +343,7 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
             List<MinioBucketPolicy.Statement> statementList = bean.getStatement();
             // 查看该文件是够已经设置为该策略
             Optional<MinioBucketPolicy.Statement> any = statementList.stream().filter(item -> item.getAction().contains(BreezeBucketPolicyEnum.GetObject.getAction()) &&
-                    item.getResource().contains(resource)).findAny();
+                                                                                              item.getResource().contains(resource)).findAny();
             if (any.isPresent()) {
                 log.debug("该文件已设置该策略，忽略设置。");
                 return;
@@ -437,8 +437,8 @@ public class AtFieldUploadServiceImpl implements AtFieldUploadService {
         }
         setBucketPolicy(objectName, MinioBucketEffectEnum.Allow);
         return config.getEndpoint().endsWith("/") ? config.getEndpoint() : (config.getEndpoint() + '/')
-                + this.bucket +
-                (objectName.startsWith("/") ? objectName : ("/" + objectName));
+                                                                           + this.bucket +
+                                                                           (objectName.startsWith("/") ? objectName : ("/" + objectName));
     }
 
     @Override

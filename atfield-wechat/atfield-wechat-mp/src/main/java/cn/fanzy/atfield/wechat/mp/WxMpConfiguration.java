@@ -83,7 +83,7 @@ public class WxMpConfiguration {
     }
 
     public static WxMpService getMpService(String appid) {
-        if(StrUtil.isBlank(appid)){
+        if (StrUtil.isBlank(appid)) {
             return getMpService();
         }
         WxMpService wxService = mpServices.get(appid);

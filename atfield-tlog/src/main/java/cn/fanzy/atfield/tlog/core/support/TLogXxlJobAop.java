@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Pointcut;
 
 /**
  * XXlJOb的handler切面
+ *
  * @author Bryan.Zhang
  * @since 1.3.5
  */
@@ -23,10 +24,10 @@ public class TLogXxlJobAop {
 
     @Around("cut()")
     public Object around(ProceedingJoinPoint jp) throws Throwable {
-        try{
+        try {
             tLogRPCHandler.processProviderSide(new TLogLabelBean());
             return jp.proceed();
-        }finally {
+        } finally {
             tLogRPCHandler.cleanThreadLocal();
         }
     }

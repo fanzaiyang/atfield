@@ -13,6 +13,7 @@ import java.io.Serial;
 public class LoginDenyException extends GlobalException {
     @Serial
     private static final long serialVersionUID = -5686055647674402230L;
+
     public LoginDenyException() {
     }
 
@@ -21,6 +22,6 @@ public class LoginDenyException extends GlobalException {
     }
 
     public LoginDenyException(String code, String message) {
-        super(code,message);
+        super(code, message);
     }
 }

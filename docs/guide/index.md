@@ -23,7 +23,7 @@ order: 1
 1. 微风Cloud依赖版本
 
 | 依赖                                                                      | 版本         |
-| ----------------------------------------------------------------------- | ---------- |
+|-------------------------------------------------------------------------|------------|
 | [spring-boot](https://spring.io/projects/spring-boot)                   | 2.7.7      |
 | [spring-cloud](https://spring.io/projects/spring-cloud)                 | 2021.0.5   |
 | [spring-cloud-alibaba](https://spring.io/projects/spring-cloud-alibaba) | 2021.0.1.0 |
@@ -39,7 +39,7 @@ order: 1
 ![GitHub](https://img.shields.io/github/license/fanzaiyang/breeze-spring-cloud.png) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png) ![Maven Central](https://img.shields.io/maven-central/v/cn.fanzy.breeze/breeze-spring-cloud.png)
 
 | 名称                                       | 说明                                                                             |
-| ---------------------------------------- | ------------------------------------------------------------------------------ |
+|------------------------------------------|--------------------------------------------------------------------------------|
 | breeze-core                              | 微风Cloud组件库的核心模块，封装了常用工具类等。                                                     |
 | breeze-web-spring-boot-starter           | web组件：封装了异常、缓存、验证码、过滤器等。                                                       |
 | breeze-minio-spring-boot-starter         | MinIO组件：封装了[minio](https://min.io/)对象存储功能，方便在项目任何位置，使用。                        |
@@ -56,7 +56,8 @@ order: 1
 # 组件使用说明
 
 2. 替换pom中的parent **「推荐」**
-   * 最新版本号：![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
+    *
+    最新版本号：![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 ```xml
 <parent>

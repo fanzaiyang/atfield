@@ -24,7 +24,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableConfigurationProperties({CorsProperties.class})
 @ConditionalOnProperty(prefix = "atfield.web.cors", name = {"enable"}, havingValue = "true")
-public class CorsAutoConfiguration implements WebMvcConfigurer{
+public class CorsAutoConfiguration implements WebMvcConfigurer {
     private final CorsProperties corsProperties;
 
     @Override

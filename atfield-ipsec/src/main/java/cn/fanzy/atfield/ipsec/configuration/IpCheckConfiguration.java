@@ -1,12 +1,12 @@
 package cn.fanzy.atfield.ipsec.configuration;
 
-import cn.fanzy.atfield.ipsec.service.IpCheckService;
-import cn.fanzy.atfield.ipsec.service.impl.IpCheckServiceImpl;
-import cn.fanzy.atfield.ipsec.service.impl.IpStorageServiceImpl;
 import cn.fanzy.atfield.ipsec.advice.IpCheckAdvice;
 import cn.fanzy.atfield.ipsec.interceptor.IpCheckInterceptor;
 import cn.fanzy.atfield.ipsec.property.IpProperty;
+import cn.fanzy.atfield.ipsec.service.IpCheckService;
 import cn.fanzy.atfield.ipsec.service.IpStorageService;
+import cn.fanzy.atfield.ipsec.service.impl.IpCheckServiceImpl;
+import cn.fanzy.atfield.ipsec.service.impl.IpStorageServiceImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class IpCheckConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         if (property.getGlobal().getEnable() == null ||
-                !property.getGlobal().getEnable()) {
+            !property.getGlobal().getEnable()) {
             return;
         }
         String[] patterns = property.getGlobal().getIncludePathPatterns();

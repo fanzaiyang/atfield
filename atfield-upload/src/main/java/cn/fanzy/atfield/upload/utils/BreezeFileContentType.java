@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 public enum BreezeFileContentType {
-    DEFAULT("default","application/octet-stream"),
+    DEFAULT("default", "application/octet-stream"),
     JPG("jpg", "image/jpeg"),
     TIFF("tiff", "image/tiff"),
     GIF("gif", "image/gif"),
@@ -35,13 +35,13 @@ public enum BreezeFileContentType {
         this.contentType = contentType;
     }
 
-    public static String getContentType(String fileType){
-        if(StrUtil.isEmpty(fileType)){
+    public static String getContentType(String fileType) {
+        if (StrUtil.isEmpty(fileType)) {
             return DEFAULT.getContentType();
         }
 
         for (BreezeFileContentType value : BreezeFileContentType.values()) {
-            if(fileType.equalsIgnoreCase(value.getFileType())){
+            if (fileType.equalsIgnoreCase(value.getFileType())) {
                 return value.getContentType();
             }
         }

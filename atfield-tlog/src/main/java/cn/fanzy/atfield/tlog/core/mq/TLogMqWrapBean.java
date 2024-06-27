@@ -1,10 +1,10 @@
 package cn.fanzy.atfield.tlog.core.mq;
 
-import cn.fanzy.atfield.tlog.core.rpc.TLogLabelBean;
 import cn.fanzy.atfield.tlog.common.context.SpanIdGenerator;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
 import cn.fanzy.atfield.tlog.common.spring.TLogSpringAware;
 import cn.fanzy.atfield.tlog.common.utils.LocalhostUtil;
+import cn.fanzy.atfield.tlog.core.rpc.TLogLabelBean;
 import cn.hutool.core.util.StrUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

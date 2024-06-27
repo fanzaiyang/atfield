@@ -17,6 +17,7 @@ import java.io.IOException;
 
 /**
  * RestTemplate的拦截器
+ *
  * @author Bryan.Zhang
  * @since 1.3.6
  */
@@ -27,7 +28,7 @@ public class TLogRestTemplateInterceptor implements ClientHttpRequestInterceptor
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         String traceId = TLogContext.getTraceId();
-        if(StrUtil.isNotBlank(traceId)) {
+        if (StrUtil.isNotBlank(traceId)) {
             String appName = TLogSpringAware.getProperty("spring.application.name");
 
             request.getHeaders().add(TLogConstants.TLOG_TRACE_KEY, traceId);

@@ -26,7 +26,6 @@ import java.util.Enumeration;
  * 10bits 机器IP二进制最后10位,例如机器的IP为192.168.1.108,二进制表示:11000000 10101000 00000001 01101100,截取最后10位 01 01101100,转为十进制364,设置workerId为364.
  * 12bits 同一个毫秒内的自增量
  * </pre>UNIQUE
- *
  */
 public class UniqueIdGenerator {
 
@@ -81,7 +80,7 @@ public class UniqueIdGenerator {
 
     private static InetAddress getLocalAddress() {
         try {
-            for (Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements();) {
+            for (Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces(); interfaces.hasMoreElements(); ) {
                 NetworkInterface networkInterface = interfaces.nextElement();
                 if (networkInterface.isLoopback() || networkInterface.isVirtual() || !networkInterface.isUp()) {
                     continue;

@@ -24,6 +24,7 @@ public class DefaultCaptchaEmailSenderService extends CaptchaEmailSenderService 
     private final CaptchaProperty property;
     @Value("${spring.mail.username}")
     private String from;
+
     @Override
     public void sendCode(String target, CaptchaCode codeInfo) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 分片上传接口
  */
-public interface AtFieldPartUploadService {
+public interface UploadPartService {
     /**
      * <h2>上传之前文件校验</h2>
      * <ul>
@@ -34,14 +34,15 @@ public interface AtFieldPartUploadService {
      */
     FilePartUploadVo getPreSignedObjectUrl(String identifier, int partNumber, String minioConfigName);
 
-    List<PartSummary> queryListPart(String uploadId,String objectName,String minioConfigName);
+    List<PartSummary> queryListPart(String uploadId, String objectName, String minioConfigName);
 
     /**
      * 根据文件的MD5合并文件
-     * @param identifier 文件MD5
+     *
+     * @param identifier      文件MD5
      * @param minioConfigName minio配置文件名
      * @return 合并结果
      */
     FileUploadResponse mergeChunk(String identifier, String minioConfigName);
-    
+
 }

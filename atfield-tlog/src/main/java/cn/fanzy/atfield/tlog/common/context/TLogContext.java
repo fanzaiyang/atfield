@@ -63,15 +63,15 @@ public class TLogContext {
         preIvkAppTL.remove();
     }
 
-    public static String getPreIvkHost(){
+    public static String getPreIvkHost() {
         return preIvkHostTL.get();
     }
 
-    public static void putPreIvkHost(String preIvkHost){
+    public static void putPreIvkHost(String preIvkHost) {
         preIvkHostTL.set(preIvkHost);
     }
 
-    public static void removePreIvkHost(){
+    public static void removePreIvkHost() {
         preIvkHostTL.remove();
     }
 
@@ -103,15 +103,15 @@ public class TLogContext {
         TLogContext.enableInvokeTimePrint = enableInvokeTimePrint;
     }
 
-    public static String getCurrIp(){
+    public static String getCurrIp() {
         return currIpTL.get();
     }
 
-    public static void putCurrIp(String currIp){
+    public static void putCurrIp(String currIp) {
         currIpTL.set(currIp);
     }
 
-    public static void removeCurrIp(){
+    public static void removeCurrIp() {
         currIpTL.remove();
     }
 

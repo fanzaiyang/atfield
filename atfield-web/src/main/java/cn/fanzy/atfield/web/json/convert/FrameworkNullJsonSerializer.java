@@ -59,7 +59,7 @@ public class FrameworkNullJsonSerializer {
                               SerializerProvider serializerProvider) throws IOException {
             if (covert.isEnable()) {
                 if (covert.getValue() == null ||
-                        StrUtil.equalsIgnoreCase(covert.getValue(), "null")) {
+                    StrUtil.equalsIgnoreCase(covert.getValue(), "null")) {
                     jsonGenerator.writeNull();
                 } else {
                     jsonGenerator.writeString(covert.getValue());
@@ -193,7 +193,7 @@ public class FrameworkNullJsonSerializer {
             }
             // Date => null
             if (Objects.equals(field.getType(), Date.class) || Objects.equals(field.getType(), java.sql.Date.class) ||
-                    Objects.equals(field.getType(), LocalDate.class)) {
+                Objects.equals(field.getType(), LocalDate.class)) {
                 new NullDateJsonSerializer(convert.getDate())
                         .serialize(value, jsonGenerator, serializerProvider);
                 return;

@@ -17,8 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public abstract class CaptchaEmailCreatorService implements CaptchaCreatorService {
     public abstract CaptchaCodeInfo generateCode(CaptchaProperty captchaProperty);
+
     @Override
-    public CaptchaCodeInfo generate(CaptchaProperty captchaProperty){
+    public CaptchaCodeInfo generate(CaptchaProperty captchaProperty) {
         return generateCode(captchaProperty);
     }
 

@@ -15,6 +15,7 @@ public interface LogCallbackService {
      * @param param 参数
      */
     void before(PrintLogInfo param);
+
     /**
      * 执行结束后的回调
      *

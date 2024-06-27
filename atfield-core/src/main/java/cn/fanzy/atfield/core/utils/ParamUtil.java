@@ -51,6 +51,7 @@ public class ParamUtil {
      *     2. 请求头
      *     3. 请求体body
      * </pre>
+     *
      * @param request 要求
      * @param key     钥匙
      * @return {@link Object}
@@ -85,6 +86,7 @@ public class ParamUtil {
         return null;
 
     }
+
     /**
      * 获取参数值
      * <pre>
@@ -92,13 +94,15 @@ public class ParamUtil {
      *     2. 请求头
      *     3. 请求体body
      * </pre>
-     * @param key     钥匙
+     *
+     * @param key 钥匙
      * @return {@link Object}
      */
     public static Object getParamValue(String key) {
-        return getParamValue(new ServletWebRequest(SpringUtils.getRequest()),key);
+        return getParamValue(new ServletWebRequest(SpringUtils.getRequest()), key);
 
     }
+
     /**
      * 从请求中得到上传的文件Map
      *

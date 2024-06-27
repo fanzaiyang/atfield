@@ -17,7 +17,7 @@ public class JsonProperty {
     /**
      * 模型
      */
-    private Model model = new Model("200", "操作成功！", "-1", "操作失败！",false,1024);
+    private Model model = new Model("200", "操作成功！", "-1", "操作失败！", false, 1024);
     /**
      * 转换
      */

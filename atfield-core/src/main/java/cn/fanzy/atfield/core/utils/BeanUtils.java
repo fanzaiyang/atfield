@@ -11,7 +11,7 @@ import cn.hutool.core.bean.BeanUtil;
 public class BeanUtils extends BeanUtil {
 
     public static Object[] toArray(Object obj) {
-        ByteRation.of(1000,ByteCalcUnit.Bytes).getGb();
+        ByteRation.of(1000, ByteCalcUnit.Bytes).getGb();
         return beanToMap(obj).values().toArray();
     }
 }

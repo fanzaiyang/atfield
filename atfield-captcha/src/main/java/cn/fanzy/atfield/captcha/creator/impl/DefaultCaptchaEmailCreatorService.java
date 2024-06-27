@@ -22,7 +22,7 @@ public class DefaultCaptchaEmailCreatorService extends CaptchaEmailCreatorServic
         return CaptchaCodeInfo.builder()
                 .code(code)
                 .expireSeconds(
-                        property.getExpireSeconds()==null?
+                        property.getExpireSeconds() == null ?
                                 captchaProperty.getExpireSeconds() :
                                 property.getExpireSeconds()
                 )

@@ -3,8 +3,8 @@ package cn.fanzy.atfield.upload.configuration;
 import cn.fanzy.atfield.core.exception.NonePropertyException;
 import cn.fanzy.atfield.upload.controller.AtFieldUploadController;
 import cn.fanzy.atfield.upload.property.UploadProperty;
-import cn.fanzy.atfield.upload.service.AtFieldUploadService;
-import cn.fanzy.atfield.upload.service.impl.AtFieldUploadServiceImpl;
+import cn.fanzy.atfield.upload.service.UploadService;
+import cn.fanzy.atfield.upload.service.impl.UploadServiceImpl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
@@ -29,21 +29,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @ImportAutoConfiguration({AtFieldUploadController.class, UploadPartConfiguration.class})
 @EnableConfigurationProperties({UploadProperty.class})
-public class UploadSingleConfiguration {
+public class UploadConfiguration {
     private final UploadProperty properties;
 
     private static Set<String> keySet;
 
-    public static Map<String, AtFieldUploadService> serviceMap = new ConcurrentHashMap<>();
+    public static Map<String, UploadService> serviceMap = new ConcurrentHashMap<>();
 
     /**
      * 实例
      *
-     * @return {@link AtFieldUploadService}
+     * @return {@link UploadService}
      */
-    public static AtFieldUploadService instance() {
-        if(CollUtil.isEmpty(keySet)){
-            throw new NonePropertyException("501","请在配置文件中添加上传配置。【atfield.file】");
+    public static UploadService instance() {
+        if (CollUtil.isEmpty(keySet)) {
+            throw new NonePropertyException("501", "请在配置文件中添加上传配置。【atfield.file】");
         }
         return instance(CollUtil.get(keySet, 0));
     }
@@ -52,9 +52,9 @@ public class UploadSingleConfiguration {
      * 实例
      *
      * @param name 名字
-     * @return {@link AtFieldUploadService}
+     * @return {@link UploadService}
      */
-    public static AtFieldUploadService instance(String name) {
+    public static UploadService instance(String name) {
         if (StrUtil.isBlank(name)) {
             return instance();
         }
@@ -72,7 +72,7 @@ public class UploadSingleConfiguration {
         }
         keySet = properties.getServers().keySet();
         for (String key : keySet) {
-            AtFieldUploadService service = new AtFieldUploadServiceImpl();
+            UploadService service = new UploadServiceImpl();
             service.setConfig(properties.getServers().get(key));
             serviceMap.put(key, service);
         }

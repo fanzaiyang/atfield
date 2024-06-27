@@ -1,8 +1,8 @@
 package cn.fanzy.atfield.tlog.core.enhance.log4j2;
 
-import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.fanzy.atfield.tlog.common.constant.TLogConstants;
 import cn.fanzy.atfield.tlog.common.context.TLogContext;
+import cn.fanzy.atfield.tlog.core.context.AspectLogContext;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import org.apache.logging.log4j.ThreadContext;
@@ -26,7 +26,7 @@ import org.apache.logging.log4j.util.TriConsumer;
  * @since 1.1.5
  */
 @Plugin(name = "AspectLogLog4j2MDCConverter", category = PatternConverter.CATEGORY)
-@ConverterKeys({ "X", "mdc", "MDC", "TX"})
+@ConverterKeys({"X", "mdc", "MDC", "TX"})
 @PerformanceSensitive("allocation")
 public final class AspectLogLog4j2MDCConverter extends LogEventPatternConverter {
 
@@ -109,13 +109,13 @@ public final class AspectLogLog4j2MDCConverter extends LogEventPatternConverter 
                     return;
                 }
                 appendSelectedKeys(keys, contextData, toAppendTo);
-            } else if (contextData != null){
+            } else if (contextData != null) {
                 // otherwise they just want a single key output
                 Object value = contextData.getValue(key);
-                if (key.equals(TLogConstants.MDC_KEY)){
-                    if (ObjectUtil.isNull(value)){
+                if (key.equals(TLogConstants.MDC_KEY)) {
+                    if (ObjectUtil.isNull(value)) {
                         value = ThreadContext.get(TLogConstants.MDC_KEY);
-                        if (ObjectUtil.isNull(value)){
+                        if (ObjectUtil.isNull(value)) {
                             value = AspectLogContext.getLogValue();
                         }
                     }

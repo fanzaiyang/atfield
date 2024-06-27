@@ -21,7 +21,7 @@ public class BreezeMinioMultipartClient extends MinioAsyncClient {
             HashMultimap<String, String> headers = HashMultimap.create();
             headers.put("Content-Type", "application/octet-stream");
             CompletableFuture<CreateMultipartUploadResponse> future = super.createMultipartUploadAsync(bucketName, region, objectName, headers, null);
-            log.info("生成uploadId:{},objectName:{},bucketName:{}", future.get().result().uploadId(),future.get().result().objectName(),future.get().result().bucketName());
+            log.info("生成uploadId:{},objectName:{},bucketName:{}", future.get().result().uploadId(), future.get().result().objectName(), future.get().result().bucketName());
             return future.get().result().uploadId();
         } catch (Exception e) {
             throw new RuntimeException(e);

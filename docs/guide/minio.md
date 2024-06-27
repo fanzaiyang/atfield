@@ -8,7 +8,8 @@ order: 4
 
 ## 组件说明
 
-MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.5.1`的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
+MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java-client-api-reference)`8.5.1`
+的封装，使其能快速集成到spring boot中使用。该组件可以在SpringBoot中只需要简单的配置，就可以做到集成一个到多个MinIO服务。
 
 ## 快速开始
 
@@ -29,7 +30,7 @@ MinIO组件是对minio官方sdk[minio](http://docs.minio.org.cn/docs/master/java
 2. 修改配置
 
 > ⚠️**注意：**
-> 
+>
 > 该组件是需要你配置minio相关服务和密钥的，否则是无法使用的。故而，此组件配置文件是必须的。
 
 ```yaml
@@ -132,15 +133,15 @@ class BreezeMinioTests {
 ## 组件方法
 
 > 组件提供大量的重载方法，方便开发者上传下载文件，此外MinIO的sdk也可以个性使用。
-> 
+>
 > 注意：你需要在你的Spring上下文中使用。
 
 * BreezeMinioConfiguration.instance()
-  
+
   获取配置文件中第一个MinIO服务。大多数情况下，一个项目中就一个MinIO服务。
 
 * BreezeMinioConfiguration.instance(name)
-  
+
   根据名称获取指定的MinIO服务，这里的name是配置文件中的节点。
 
 * BreezeMinioService方法一览
@@ -338,11 +339,11 @@ public interface BreezeMinioService {
 ```
 
 * 关于上传的一些说明
-  
-  * 上传响应结果
-  
+
+    * 上传响应结果
+
   | 字段         | 类型     | 说明                   |
-  | ---------- | ------ | -------------------- |
+    | ---------- | ------ | -------------------- |
   | etag       | String | 标识,MinIO SDK上传后返回此字段 |
   | endpoint   | String | MinIO地址              |
   | bucket     | String | 文件保存的存储桶             |
@@ -350,18 +351,18 @@ public interface BreezeMinioService {
   | fileName   | String | 上传文件的原始名称            |
   | fileMbSize | double | 文件大小，单位：Mb，保留两位小数。   |
   | previewUrl | String | 临时预览地址，7天有效          |
-  
-  * 上传的objectName
-    
-    在不指定objectName时，系统默认生成的objectName是yyyy/MM/dd/[objectId].[文件类型]
-  
-  * contentType
-    
-    强烈建议指定文件的contentType，在不指定的情况下，系统根据上传文件的扩展名，进行匹配。目前支持图片类匹配，若匹配不到，默认使用`application/octet-stream`。
-  
-  * 存储桶
-    
-    在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
+
+    * 上传的objectName
+
+      在不指定objectName时，系统默认生成的objectName是yyyy/MM/dd/[objectId].[文件类型]
+
+    * contentType
+
+      强烈建议指定文件的contentType，在不指定的情况下，系统根据上传文件的扩展名，进行匹配。目前支持图片类匹配，若匹配不到，默认使用`application/octet-stream`。
+
+    * 存储桶
+
+      在上传或下载时，是可以指定存储桶的，而非必须使用配置文件中配置好的存储桶。配置文件的存储桶只作为默认存储桶。
 
 ## 分片上传
 
@@ -374,7 +375,7 @@ public interface BreezeMinioService {
 对于前端开发者而言，需要做一下工作。
 
 > **注意：**
-> 
+>
 > 后台返回的数据中，包含各个分片上传状态和具体的每一片上传地址，前端需要针对不同分片上传不同地址。
 
 * 计算文件md5，可以使用npm包`spark-md5`，对于ts用户可能还需要安装`@types/spark-md5`
@@ -382,104 +383,104 @@ public interface BreezeMinioService {
 * 计算好md5后需要把md5传给后台，校验文件上传进度。
 
 * 根据前端返回数据，进行下一步工作。
-  
-  * 秒传：当后台返回完成时，直接完成即可。
-  
-  * 断点续传：后台返回的分片数据中有部分标识为完成的前端不用再对此分片进行操作，直接完成即可。
+
+    * 秒传：当后台返回完成时，直接完成即可。
+
+    * 断点续传：后台返回的分片数据中有部分标识为完成的前端不用再对此分片进行操作，直接完成即可。
 
 #### 接口设计
 
 1. **根据文件唯一值初始化上传任务**
-   
+
    主要流程是查询数据库记录，判断是否存在文件对象。
-   
-   * 接口地址：/breeze/minio/multipart/init
-   
-   * 请求方式：POST  JSON
-   
-   * 请求参数：
-     
-     | 字段              | 数据类型   | 必填  | 说明                                         |
-     | --------------- | ------ | --- | ------------------------------------------ |
-     | identifier      | string | 是   | 文件唯一值MD5                                   |
-     | fileName        | string | 是   | 文件名称                                       |
-     | fileSize        | long   | 是   | 文件大小byte                                   |
-     | chunkSize       | long   | 是   | 每个分片大小byte                                 |
-     | objectName      | string | 否   | 上传到minio上文件的唯一名称，默认地址：yyyy/MM/dd/uuid.文件格式 |
-     | bucketName      | string | 否   | 上传到minio上的哪个存储桶                            |
-     | totalChunks     | int    | 否   | 总分片个数，后台根据大小大小和每片大小后台计算。                   |
-     | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。                |
-   
-   * 响应参数
-     
-     | 字段           | 数据类型                | 说明                      |
-     | ------------ | ------------------- | ----------------------- |
-     | identifier   | string              | 文件唯一标识                  |
-     | finished     | boolean             | 是否上传完成，true-是，false-未完成 |
-     | bucketName   | string              | 文件存在的存储桶                |
-     | objectName   | string              | 文件唯一名称                  |
-     | totalChunks  | int                 | 总分片数                    |
-     | chunkSize    | long                | 每片大小byte                |
-     | partList     | List of PartFile    | 已上传和分片上传地址的分片           |
-     | finishedFile | BreezeMinioResponse | 已上传完成的文件信息(秒传)          |
-     
-     PartFile说明
-     
-     | 字段                | 数据类型    | 说明                                |
-     | ----------------- | ------- | --------------------------------- |
-     | currentPartNumber | int     | 当前分片序号                            |
-     | uploadUrl         | string  | 前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
-     | finished          | boolean | 是否已上传完成                           |
-     | etag              | string  | 当前分片唯一值                           |
-     | size              | Long    | 当前分片大小                            |
-     
-     BreezeMinioResponse同合并后的响应对象。
+
+    * 接口地址：/breeze/minio/multipart/init
+
+    * 请求方式：POST JSON
+
+    * 请求参数：
+
+      | 字段              | 数据类型   | 必填  | 说明                                         |
+           | --------------- | ------ | --- | ------------------------------------------ |
+      | identifier      | string | 是   | 文件唯一值MD5                                   |
+      | fileName        | string | 是   | 文件名称                                       |
+      | fileSize        | long   | 是   | 文件大小byte                                   |
+      | chunkSize       | long   | 是   | 每个分片大小byte                                 |
+      | objectName      | string | 否   | 上传到minio上文件的唯一名称，默认地址：yyyy/MM/dd/uuid.文件格式 |
+      | bucketName      | string | 否   | 上传到minio上的哪个存储桶                            |
+      | totalChunks     | int    | 否   | 总分片个数，后台根据大小大小和每片大小后台计算。                   |
+      | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。                |
+
+    * 响应参数
+
+      | 字段           | 数据类型                | 说明                      |
+           | ------------ | ------------------- | ----------------------- |
+      | identifier   | string              | 文件唯一标识                  |
+      | finished     | boolean             | 是否上传完成，true-是，false-未完成 |
+      | bucketName   | string              | 文件存在的存储桶                |
+      | objectName   | string              | 文件唯一名称                  |
+      | totalChunks  | int                 | 总分片数                    |
+      | chunkSize    | long                | 每片大小byte                |
+      | partList     | List of PartFile    | 已上传和分片上传地址的分片           |
+      | finishedFile | BreezeMinioResponse | 已上传完成的文件信息(秒传)          |
+
+      PartFile说明
+
+      | 字段                | 数据类型    | 说明                                |
+           | ----------------- | ------- | --------------------------------- |
+      | currentPartNumber | int     | 当前分片序号                            |
+      | uploadUrl         | string  | 前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
+      | finished          | boolean | 是否已上传完成                           |
+      | etag              | string  | 当前分片唯一值                           |
+      | size              | Long    | 当前分片大小                            |
+
+      BreezeMinioResponse同合并后的响应对象。
 
 2. 获取分片预签名上传地址
-   
-   * 接口地址：/breeze/minio/multipart/presigned
-   
-   * 请求方式：GET
-   
-   * 请求参数：
-     
-     | 字段              | 数据类型   | 必填  | 说明                          |
-     | --------------- | ------ | --- | --------------------------- |
-     | identifier      | string | 是   | 文件唯一标识md5                   |
-     | partNumber      | int    | 是   | 分片索引，1开始                    |
-     | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。 |
-   
-   * 响应参数PartFile
-     
-     | 字段                | 数据类型    | 说明                                 |
-     | ----------------- | ------- | ---------------------------------- |
-     | currentPartNumber | int     | 当前分片序号                             |
-     | uploadUrl         | string  | 当前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
-     | finished          | boolean | 是否已上传完成                            |
+
+    * 接口地址：/breeze/minio/multipart/presigned
+
+    * 请求方式：GET
+
+    * 请求参数：
+
+      | 字段              | 数据类型   | 必填  | 说明                          |
+           | --------------- | ------ | --- | --------------------------- |
+      | identifier      | string | 是   | 文件唯一标识md5                   |
+      | partNumber      | int    | 是   | 分片索引，1开始                    |
+      | minioConfigName | string | 否   | 后台配置多个minio服务，且需要指定某个需要此字段。 |
+
+    * 响应参数PartFile
+
+      | 字段                | 数据类型    | 说明                                 |
+           | ----------------- | ------- | ---------------------------------- |
+      | currentPartNumber | int     | 当前分片序号                             |
+      | uploadUrl         | string  | 当前分片未上传完成是，此字段不为空，作为前端上传地址，请求方式PUT |
+      | finished          | boolean | 是否已上传完成                            |
 
 3. 合并分片
-   
-   * 请求地址：/breeze/minio/multipart/merge
-   
-   * 请求方式：GET
-   
-   * 请求参数：
-     
-     | 字段         | 数据类型   | 必填  | 说明        |
-     | ---------- | ------ | --- | --------- |
-     | identifier | string | 是   | 文件唯一标识MD5 |
-   
-   * 响应参数
-     
-     | 字段         | 数据类型   | 说明             |
-     | ---------- | ------ | -------------- |
-     | etag       | string | 文件唯一标识，minio返回 |
-     | endpoint   | string | minio地址        |
-     | bucket     | string | 存储桶            |
-     | objectName | string | 对象名            |
-     | fileName   | string | 文件名            |
-     | fileMbSize | double | 文件大小Mb         |
-     | previewUrl | string | 预览地址           |
+
+    * 请求地址：/breeze/minio/multipart/merge
+
+    * 请求方式：GET
+
+    * 请求参数：
+
+      | 字段         | 数据类型   | 必填  | 说明        |
+           | ---------- | ------ | --- | --------- |
+      | identifier | string | 是   | 文件唯一标识MD5 |
+
+    * 响应参数
+
+      | 字段         | 数据类型   | 说明             |
+           | ---------- | ------ | -------------- |
+      | etag       | string | 文件唯一标识，minio返回 |
+      | endpoint   | string | minio地址        |
+      | bucket     | string | 存储桶            |
+      | objectName | string | 对象名            |
+      | fileName   | string | 文件名            |
+      | fileMbSize | double | 文件大小Mb         |
+      | previewUrl | string | 预览地址           |
 
 ### 后端使用
 
@@ -487,7 +488,8 @@ public interface BreezeMinioService {
 
 > 断点续传和秒传需要数据库支持。
 
-这里的数据库表名可以自定义，需要在配置文件中声明表名`breeze.minio.api.table-name`，组件默认表名是：`sys_multipart_file_info`
+这里的数据库表名可以自定义，需要在配置文件中声明表名`breeze.minio.api.table-name`
+，组件默认表名是：`sys_multipart_file_info`
 
 ```sql
 CREATE TABLE `sys_multipart_file_info` (
@@ -549,21 +551,21 @@ public class UploadController {
 ```
 
 2. 方式二，使用组件的controller。**「推荐」**
-   
+
    该方式可以通过配置文件修改接口地址，默认组件上传的两个接口地址分别是：
-   
-   * 初始化：/breeze/minio/multipart/init
-   
-   * 获取分片上传地址：/breeze/minio/multipart/presigned
-   
-   * 合并：/breeze/minio/multipart/merge
+
+    * 初始化：/breeze/minio/multipart/init
+
+    * 获取分片上传地址：/breeze/minio/multipart/presigned
+
+    * 合并：/breeze/minio/multipart/merge
 
 3. 当与admin组件配合使用时建议使用admin组件<u>附件模块</u> **「推荐」**
 
 ### 前端使用
 
 > 前端demo代码地址：[vue-upload-demo](https://gitee.com/it-xiaofan/breeze-spring-cloud-demo/tree/main/vue-upload-demo)
-> 
+>
 > 前端分片建议每片**大于等于5Mb**。对于小文件上传不建议使用分片上传。
 
 前端接入步骤
@@ -576,26 +578,28 @@ b(计算文件MD5)-->c(调用上传初始化接口)-->d(前端文件分割+并�
 ```
 
 * 步骤说明
-  
-  * 使用SparkMd5计算文件md5
-  
-  * 调用上传初始化接口需要传递md5、文件名、每片大小等参数。
-  
-  * 接口会返回该文件上传状态
-    
-    * 响应结果finished是true时，说明该文件已上传完成，前端可立即显示完成状态。「秒传原理」
-    
-    * 响应结果finished时false时，前端需要解析partList集合字段，该字段是所有分片上传情况。
-      
-      * 若partList集合中数据finished是true时，说明该片段已上传完成。「断点续传」
-      
-      * 若partList集合中数据finished是false时，说明该片段未上传，上传地址是uploadUrl字段。
-      
-      * uploadUrl是有有效期的，为了保险起见，可以在分片上传时再次调用获取分片上传地址接口 **「获取分片预签名上传地址」**。
-    
-    * 等待所有分片上传完成。
-  
-  * 调用合并分片接口，完成最好的上传。
+
+    * 使用SparkMd5计算文件md5
+
+    * 调用上传初始化接口需要传递md5、文件名、每片大小等参数。
+
+    * 接口会返回该文件上传状态
+
+        * 响应结果finished是true时，说明该文件已上传完成，前端可立即显示完成状态。「秒传原理」
+
+        * 响应结果finished时false时，前端需要解析partList集合字段，该字段是所有分片上传情况。
+
+            * 若partList集合中数据finished是true时，说明该片段已上传完成。「断点续传」
+
+            * 若partList集合中数据finished是false时，说明该片段未上传，上传地址是uploadUrl字段。
+
+            * uploadUrl是有有效期的，为了保险起见，可以在分片上传时再次调用获取分片上传地址接口 **「获取分片预签名上传地址」
+              **。
+
+        * 等待所有分片上传完成。
+
+    * 调用合并分片接口，完成最好的上传。
+
 1. **计算文件MD5**
 
 安装计算MD5的npm包[spark-md5](https://www.npmjs.com/package/spark-md5)。
@@ -608,7 +612,7 @@ npm install --save @types/spark-md5
 ```
 
 > 注意：
-> 
+>
 > 当文件比较大时，直接计算md5会导致内存不足，浏览器奔溃。需要对文件进行分割，逐步计算。
 
 使用`spark-md5`计算文件md5的工具类如下：
@@ -668,9 +672,9 @@ console.log(`文件MD5值：${identifier}`);
 ```
 
 2. **vue代码，使用了ElementPlus的上传组件，其它上传组件同理。**
-   
+
    vue模板
-   
+
    ```vue
    <template>
      <main>
@@ -693,9 +697,9 @@ console.log(`文件MD5值：${identifier}`);
      </main>
    </template>
    ```
-   
+
    script代码
-   
+
    ```ts
    <script setup lang="ts">
    import {UploadFilled} from '@element-plus/icons-vue'
@@ -901,9 +905,9 @@ console.log(`文件MD5值：${identifier}`);
    }
    </script>
    ```
-   
+
    axios请求代码
-   
+
    ```ts
    import axios from 'axios'
    // @ts-ignore
@@ -956,5 +960,5 @@ console.log(`文件MD5值：${identifier}`);
 插件[promise-queue-plus](https://github.com/cnwhy/promise-queue-plus)用于控制分片上传的并发数，以及对上传错误的分片进行重试。
 
 2. 关于后端批量生成的预签名上传地址
-   
+
    预签名地址是有有效期的，使用批量生成的预签名地址若长时间不用会失效，未了保险起见，前端可以在分片上传时，再次请求后端获取预签名地址的接口。

@@ -29,7 +29,7 @@ public enum CaptchaType implements ICaptchaType {
 
     public static ICaptchaType getType(String value) {
         for (CaptchaType type : CaptchaType.values()) {
-            if(StrUtil.equalsIgnoreCase(type.getValue(),value)){
+            if (StrUtil.equalsIgnoreCase(type.getValue(), value)) {
                 return type;
             }
         }
@@ -37,11 +37,11 @@ public enum CaptchaType implements ICaptchaType {
     }
 
     @Override
-    public String getCaptchaName(){
-        return switch (this.name().toLowerCase()){
-            case "image"->"图片验证码";
-            case "mobile"->"手机验证码";
-            case "email"->"邮件验证码";
+    public String getCaptchaName() {
+        return switch (this.name().toLowerCase()) {
+            case "image" -> "图片验证码";
+            case "mobile" -> "手机验证码";
+            case "email" -> "邮件验证码";
             default -> throw new IllegalStateException("Unexpected value: " + this.name().toLowerCase());
         };
     }

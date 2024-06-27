@@ -43,6 +43,7 @@ public @interface LockForm {
      * @return long
      */
     long leaseTime() default 0;
+
     /**
      * 时间单位，默认：秒
      *

@@ -3,7 +3,8 @@ title: Admin组件
 order: 5
 ---
 
-该组件是集成授权组件、web组件、MinIO组件、Swagger3的一个快速搭建信息系统的组件，配合前端[breeze-admin-web-arco](https://gitee.com/it-xiaofan/breeze-admin-web-arco)使用。
+该组件是集成授权组件、web组件、MinIO组件、Swagger3的一个快速搭建信息系统的组件，配合前端[breeze-admin-web-arco](https://gitee.com/it-xiaofan/breeze-admin-web-arco)
+使用。
 
 ## 组件说明
 
@@ -34,7 +35,7 @@ order: 5
 ```
 
 2. 配置说明
-   
+
    不需要修改任何配置即可使用
 
 ```yaml
@@ -62,7 +63,7 @@ breeze:
 ```
 
 3. 使用
-   
+
    启用项目，访问文档地址(/doc.html)：http://localhost:PORT/doc.html
 
 ### 附件管理

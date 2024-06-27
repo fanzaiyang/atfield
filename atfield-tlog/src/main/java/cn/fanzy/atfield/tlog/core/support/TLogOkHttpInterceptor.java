@@ -16,13 +16,14 @@ import java.io.IOException;
 
 /**
  * OkHttp的拦截器
+ *
  * @author Bryan.Zhang
  * @since 1.3.0
  */
 public class TLogOkHttpInterceptor implements Interceptor {
-    
+
     private final Logger log = LoggerFactory.getLogger(TLogOkHttpInterceptor.class);
-    
+
     @Override
     public Response intercept(final Chain chain) throws IOException {
         Builder builder = chain.request().newBuilder();

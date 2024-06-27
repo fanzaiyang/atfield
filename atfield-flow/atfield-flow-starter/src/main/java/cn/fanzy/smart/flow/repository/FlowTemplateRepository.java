@@ -1,12 +1,14 @@
 package cn.fanzy.smart.flow.repository;
 
-import cn.fanzy.atfield.core.utils.IdUtil;
+import cn.fanzy.atfield.core.utils.IdUtils;
 import cn.fanzy.smart.flow.model.Pages;
 import cn.fanzy.smart.flow.model.entity.FlowTemplateInfoEntity;
 import cn.fanzy.smart.flow.utils.SqlConstants;
 import cn.fanzy.smart.flow.utils.SqlUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.db.*;
+import cn.hutool.db.Entity;
+import cn.hutool.db.Page;
+import cn.hutool.db.PageResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -47,7 +49,7 @@ public class FlowTemplateRepository {
      * @return {@link String}
      */
     public String createFlowTemplate(FlowTemplateInfoEntity entity) {
-        entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtil.getSnowflakeNextIdStr()));
+        entity.setId(StrUtil.blankToDefault(entity.getId(), IdUtils.getSnowflakeNextIdStr()));
         entity.setDelFlag(entity.getDelFlag() == null ? 0 : entity.getDelFlag());
         entity.setCreateTime(LocalDateTime.now());
         entity.setUpdateTime(LocalDateTime.now());
@@ -110,8 +112,8 @@ public class FlowTemplateRepository {
         try {
             PageResult<Entity> page = SqlUtil.getDb()
                     .page(Entity.create(SqlConstants.TB_FLOW_TEMPLATE_INFO),
-                            new Page(pageNo-1, pageSize));
-            if(page==null){
+                            new Page(pageNo - 1, pageSize));
+            if (page == null) {
                 return null;
             }
             List<FlowTemplateInfoEntity> list = page.stream().map(item -> item.toBean(FlowTemplateInfoEntity.class)).toList();

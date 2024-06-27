@@ -35,7 +35,7 @@ public class MinioBucketPolicy {
         @JsonProperty(value = "Effect")
         private String Effect;
         @JsonProperty(value = "Principal")
-        private Map<String,Object> Principal=new HashMap<>();
+        private Map<String, Object> Principal = new HashMap<>();
         @JsonProperty(value = "Resource")
         private List<String> Resource;
         @JsonProperty(value = "Action")

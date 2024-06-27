@@ -26,21 +26,23 @@ public class LocalhostUtil {
 
     public static String localhostName;
 
-    public static String getHostIp(){
-        try{
-            if (hostIp.equals(TLogConstants.UNKNOWN)){
+    public static String getHostIp() {
+        try {
+            if (hostIp.equals(TLogConstants.UNKNOWN)) {
                 hostIp = getLocalhostStr();
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return hostIp;
     }
 
-    public static String getHostName(){
-        try{
-            if (hostName.equals(TLogConstants.UNKNOWN)){
+    public static String getHostName() {
+        try {
+            if (hostName.equals(TLogConstants.UNKNOWN)) {
                 hostName = getLocalHostName();
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return hostName;
     }
 
@@ -56,8 +58,8 @@ public class LocalhostUtil {
         final LinkedHashSet<InetAddress> localAddressList = localAddressList(address -> {
             // 非loopback地址，指127.*.*.*的地址
             return !address.isLoopbackAddress()
-                    // 需为IPV4地址
-                    && address instanceof Inet4Address;
+                   // 需为IPV4地址
+                   && address instanceof Inet4Address;
         });
 
         if (CollUtil.isNotEmpty(localAddressList)) {

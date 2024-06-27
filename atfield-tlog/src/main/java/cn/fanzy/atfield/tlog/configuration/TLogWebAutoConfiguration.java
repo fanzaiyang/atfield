@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 public class TLogWebAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(TLogWebConfig.class)
-    public TLogWebConfig tLogWebConfig(){
+    public TLogWebConfig tLogWebConfig() {
         return new TLogWebConfig();
     }
 

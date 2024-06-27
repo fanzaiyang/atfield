@@ -68,7 +68,7 @@ public class TLogWebInvokeTimeInterceptor extends AbsTLogWebHandlerMethodInterce
     private boolean isJson(HttpServletRequest request) {
         if (request.getContentType() != null) {
             return request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE) ||
-                    request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE);
+                   request.getContentType().equals(MediaType.APPLICATION_JSON_UTF8_VALUE);
         }
         return false;
     }

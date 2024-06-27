@@ -1,6 +1,5 @@
 package cn.fanzy.atfield.satoken.login.utils;
 
-import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.satoken.login.property.LoginProperty;
 import cn.hutool.core.text.StrPool;
 

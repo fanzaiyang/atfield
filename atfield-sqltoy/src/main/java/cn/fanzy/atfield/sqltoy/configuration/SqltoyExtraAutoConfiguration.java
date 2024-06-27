@@ -44,9 +44,10 @@ public class SqltoyExtraAutoConfiguration {
     @Qualifier("logicDelFilterInterceptor")
     @Bean("logicDelFilterInterceptor")
     @ConditionalOnMissingBean
-    public LogicDelFilterInterceptor logicDelFilterInterceptor(SqltoyExtraProperties properties){
+    public LogicDelFilterInterceptor logicDelFilterInterceptor(SqltoyExtraProperties properties) {
         return new LogicDelFilterInterceptor(properties);
     }
+
     @Bean
     public Repository repository(SqltoyExtraProperties properties) {
         return new RepositoryImpl(properties);

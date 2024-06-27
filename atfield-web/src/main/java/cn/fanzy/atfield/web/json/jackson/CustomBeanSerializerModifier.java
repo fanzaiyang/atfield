@@ -1,4 +1,5 @@
 package cn.fanzy.atfield.web.json.jackson;
+
 import cn.fanzy.atfield.web.json.property.JsonProperty;
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.SerializationConfig;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 public class CustomBeanSerializerModifier extends BeanSerializerModifier {
     private final JsonProperty properties;
+
     public CustomBeanSerializerModifier(JsonProperty properties) {
         this.properties = properties;
     }
@@ -97,6 +99,6 @@ public class CustomBeanSerializerModifier extends BeanSerializerModifier {
     private boolean isDateType(BeanPropertyWriter writer) {
         Class<?> clazz = writer.getType().getRawClass();
         return clazz.equals(Date.class) || clazz.equals(LocalDate.class) || clazz.equals(java.sql.Date.class)
-                || clazz.equals(LocalDateTime.class);
+               || clazz.equals(LocalDateTime.class);
     }
 }

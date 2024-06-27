@@ -11,7 +11,7 @@ import cn.hutool.core.util.RandomUtil;
  * @author fanzaiyang
  * @date 2023/12/08
  */
-public interface CaptchaCreatorService{
+public interface CaptchaCreatorService {
 
     CaptchaCode generate(CaptchaProperty captchaProperty);
 
@@ -23,6 +23,7 @@ public interface CaptchaCreatorService{
      * @return boolean
      */
     boolean isSupported(ICaptchaType type);
+
     default String getRandomCode(int length, boolean containLetter, boolean containNumber) {
         if (containLetter && containNumber) {
             // 包含字符和数字

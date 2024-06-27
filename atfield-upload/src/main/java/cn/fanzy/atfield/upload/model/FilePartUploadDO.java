@@ -11,6 +11,7 @@ import java.util.Date;
 
 /**
  * 分片存储到数据中的实体类
+ *
  * @author fanzaiyang
  */
 @Data

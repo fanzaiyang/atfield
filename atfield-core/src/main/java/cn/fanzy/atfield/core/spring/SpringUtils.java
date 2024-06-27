@@ -140,7 +140,7 @@ public class SpringUtils extends SpringUtil {
             return false;
         }
         return StrUtil.equalsIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE) ||
-                StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
+               StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**

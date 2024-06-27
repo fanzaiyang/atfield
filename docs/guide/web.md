@@ -10,7 +10,7 @@ WEB组件`breeze-web-spring-boot-starter`包含web项目常用配置。
 ## 🧾功能清单
 
 | 功能名称     | 功能说明                                            |
-| -------- | ----------------------------------------------- |
+|----------|-------------------------------------------------|
 | 缓存管理     | 默认实现了内存，Redis缓存。开发者可快速使用缓存。                     |
 | 全局异常     | 重写了SpringBoot默认异常处理机制，拦截日常中常用的异常。封装成结构化数据，返回前端。 |
 | 全局响应     | 封装全局响应类。规范所有响应结果。开发者可通过配置设置成功失败code。            |
@@ -124,9 +124,9 @@ breeze:
 全局异常默认情况捕获Spring上下文中的所有异常和过滤器中发生的异常，以及定制了默认的错误页面。
 
 > 默认情况下开启了全局异常拦截。
-> 
+>
 > ⚠️注意
-> 
+>
 > 所有的异常返回到前端的HTTP状态码，均为：200，不需要前端处理catch响应内容。
 
 1. 配置文件说明
@@ -162,7 +162,7 @@ breeze:
 * HttpMessageNotReadableException 400
 * IllegalArgumentException 400 参数解析失败
 * HttpRequestMethodNotSupportedException 405 请求方式错误，查看POST、GET...
-* HttpMediaTypeNotSupportedException 415 
+* HttpMediaTypeNotSupportedException 415
 * NullPointerException 500
 * ServletException 500
 * IOException 500
@@ -183,7 +183,8 @@ breeze:
 
 ### 扩展自定义异常拦截
 
-~~只需要在你写的异常拦截类上加上`@AutoConfigureBefore(BreezeWebExceptionConfiguration.class)`或者`@Order(Ordered.HIGHEST_PRECEDENCE)`顺序要在`BreezeWebExceptionConfiguration.class`之前。~~
+~~只需要在你写的异常拦截类上加上`@AutoConfigureBefore(BreezeWebExceptionConfiguration.class)`
+或者`@Order(Ordered.HIGHEST_PRECEDENCE)`顺序要在`BreezeWebExceptionConfiguration.class`之前。~~
 
 示例：
 
@@ -229,7 +230,7 @@ public class BreezeAuthExceptionConfiguration {
 > 该模块定义了返回前端实体类，实体类属性说明：
 
 | 属性      | 类型      | 说明                               |
-| ------- | ------- | -------------------------------- |
+|---------|---------|----------------------------------|
 | id      | String  | 请求链路唯一ID                         |
 | code    | Int     | 返回错误码，默认：200标识成功。                |
 | message | String  | 返回的消息                            |
@@ -252,15 +253,15 @@ breeze:
 ## JSON转换
 
 > 该模块用于处理返回前端的json中null。
-> 
+>
 > * null字符串->""
-> 
+>
 > * null数字->0
-> 
+>
 > * null集合->[]
-> 
+>
 > * null布尔->false
-> 
+>
 > * null实体->{}
 
 该默认默认启用，关闭需要在配置文件中添加如下配置`breeze.web.json.enable=false`
@@ -291,7 +292,7 @@ breeze:
 > 使用前需要你引入`redisson-spring-boot-starter`或`breeze-auth-redis`中的一个即可。
 
 * 加入依赖「**推荐**」
-  
+
   ```xml
   <dependency>
       <groupId>cn.fanzy.breeze</groupId>
@@ -300,7 +301,7 @@ breeze:
   ```
 
 * 方法处加注解`@LockDistributed("KEY_NAME")`
-  
+
   ```java
   @LockDistributed("test_unlock")
   @GetMapping("/unlock")
@@ -318,7 +319,7 @@ breeze:
 默认限流：1秒1000并发。可通过注解修改。
 
 * 加入依赖
-  
+
   ```xml
   <dependency>
       <groupId>cn.fanzy.breeze</groupId>
@@ -327,7 +328,7 @@ breeze:
   ```
 
 * 方法处加注解`@RateLimit`即可。
-  
+
   ```java
   /**
    * 表示该接口：1秒内，并发请求10次。
@@ -341,7 +342,7 @@ breeze:
   ```
 
 * IP进行限流
-  
+
   @RateLimit(rateInterval = 100,rate = 1,**useIp = true**)
 
 ## IP检查
@@ -406,11 +407,11 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
 ```
 
 2. 自定义注解的检查
-   
+
    在注解`@BreezeIpCheck(handler=CustomIpHandler.class)`添加你的实现类。该类必须实现接口`BreezeIpCheckService`，示例：
-   
-   * 添加注解到方法
-   
+
+    * 添加注解到方法
+
    ```java
    @BreezeIpCheck(handler = CustomIpCheckHandler.class)
    @GetMapping("/user/2")
@@ -418,9 +419,9 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
       return JsonContent.success("");
     }
    ```
-   
-   * 实现接口
-   
+
+    * 实现接口
+
    ```java
    public class CustomIpCheckHandler implements BreezeIpCheckService {
        @Override
@@ -434,7 +435,7 @@ public class BreezeIpDefaultGlobalCheckService implements BreezeIpGlobalCheckSer
 ## 字段脱敏
 
 > 很多时候我们希望返回给前端的数据中某个字段需要进行脱敏处理，这时你可以使用该功能实现你的需求。
-> 
+>
 > 该功能支持：身份证号、密码、手机号、真实姓名、银行卡脱敏。
 
 ### 使用方法
@@ -481,18 +482,18 @@ public class SysUser {
 
 ### HttpUtil
 
-* redirect(String url) 
-  * 携带指定的信息重定向到指定的地址
-* out(HttpServletResponse response, Object data) 
-  * 将指定的信息按照json格式输出到指定的响应
+* redirect(String url)
+    * 携带指定的信息重定向到指定的地址
+* out(HttpServletResponse response, Object data)
+    * 将指定的信息按照json格式输出到指定的响应
 * stack(HttpServletRequest request)
-  * 打印请求中携带的查询参数和请求头信息
+    * 打印请求中携带的查询参数和请求头信息
 * getRequestId
-  * 获取链路的TraceId，引入了三方[Tog](https://tlog.yomahub.com/)组件。
+    * 获取链路的TraceId，引入了三方[Tog](https://tlog.yomahub.com/)组件。
 * download(File file, HttpServletResponse response)有多个重载方法
-  * 将文件放到响应流，用于前端下载。
+    * 将文件放到响应流，用于前端下载。
 * extract(ServletWebRequest request, String key)
-  * 请请求中获取指定的参数。
+    * 请请求中获取指定的参数。
 
 ### SpringUtils
 
@@ -501,15 +502,15 @@ spring上下文工具类，帮助你快速获取Bean、HttpServletResponse、Htt
 SpringUtils继承自hutool提供的`SpringUtil`。出了hutool自带方法外，此类支持：
 
 * getClientIp()
-  * 获取客户端IP地址。
+    * 获取客户端IP地址。
 * isJson(HttpServletRequest request)
-  * 判断请求是否时json方式
+    * 判断请求是否时json方式
 * getCurrentProcessId
-  * 获取系统进程PID
+    * 获取系统进程PID
 * getRequestParams
-  * 获取前端的请求参数query+body
+    * 获取前端的请求参数query+body
 * getRequestMethod
-  * 获取当前请求方式：GET、POST、...
+    * 获取当前请求方式：GET、POST、...
 
 ## 验证码
 
@@ -565,7 +566,7 @@ private BreezeCodeProcessor codeProcessor;
 ```
 
 > ⚠️注意：
-> 
+>
 > 在生成验证码和验证验证码的请求中，请求参数中的clientId，mobile,email参数由code-key属性,image_code参数由code-value属性决定。在某些极端情况下，可以通过这两个配置修改请求参数。
 
 ### 图形验证码
@@ -597,7 +598,7 @@ public JsonContent<String> imageCode(HttpServletRequest request,String clientId)
 在需要校验验证码的方法上添加注解`@BreezeCodeChecker`，示例：
 
 > 注意：
-> 
+>
 > 你需要在此请求中携带验证码的key和value值。
 
 ```java
@@ -619,7 +620,8 @@ processor.validate(new ServletWebRequest(request,null),BreezeCodeType.IMAGE);
 
 #### 自定义实现
 
-针对于图形验证码，组件对图形验证码的生成做一个默认实现，如果生成的图形验证码的内容不满足用户需要，用户可以自定义一个名为 `breezeImageCodeGenerator` 的实例注入到spring中即可。
+针对于图形验证码，组件对图形验证码的生成做一个默认实现，如果生成的图形验证码的内容不满足用户需要，用户可以自定义一个名为 `breezeImageCodeGenerator`
+的实例注入到spring中即可。
 
 ```java
 @Slf4j
@@ -688,14 +690,15 @@ spring.mail.properties.mail.smtp.starttls.required=true
 ```
 
 > 注意：
-> 
+>
 > 如果不加入以上配置，在使用邮件验证码时会提示 【验证码处理器不存在】，且不能正确发送邮件验证码。
 
 邮件验证码的发送代码与图形验证码的发送方法基本一致，只需要将BreezeCodeType.IMAGE改成BreezeCodeType.EMAIL即可。
 
 ### 短信验证码
 
-由于短信验证码的特殊性，不同的短信提供商有不同的发送接口，因此在使用短信验证码功能之前，需要完成自己的名为 BreezeSmsSendHandler短信发送器,并将其注入到spring上下文之中。
+由于短信验证码的特殊性，不同的短信提供商有不同的发送接口，因此在使用短信验证码功能之前，需要完成自己的名为
+BreezeSmsSendHandler短信发送器,并将其注入到spring上下文之中。
 
 ```java
 @Slf4j
@@ -777,7 +780,7 @@ public class BreezeAdminSwaggerConfig {
 ### 简单模式
 
 > 如果不需要非常复杂的接口分组可以使用这种方式。
-> 
+>
 > 当配置了`breeze.web.swagger.packages-to-scan`后该功能生效。可以与以上两种方式共存。
 
 ```yml
@@ -790,7 +793,7 @@ breeze:
 ### OpenAPI3规范
 
 | swagger2           | OpenAPI 3                                                       | 注解位置                         |
-| ------------------ | --------------------------------------------------------------- | ---------------------------- |
+|--------------------|-----------------------------------------------------------------|------------------------------|
 | @Api               | @Tag(name = “接口类描述”)                                            | Controller 类上                |
 | @ApiOperation      | @Operation(summary =“接口方法描述”)                                   | Controller 方法上               |
 | @ApiImplicitParams | @Parameters                                                     | Controller 方法上               |

@@ -17,6 +17,6 @@ public class LoginCaptchaServiceImpl implements LoginCaptchaService {
 
     @Override
     public void check(Map<String, Object> requestParams, HttpServletRequest request) {
-        captchaService.verify(property.getCaptchaType(),request);
+        captchaService.verify(property.getCaptchaType(), request);
     }
 }

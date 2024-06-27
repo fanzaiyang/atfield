@@ -32,6 +32,7 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     public SaParamFunction<Object> saParamFunction() {
         return r -> StpUtil.checkLogin();
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。

@@ -16,9 +16,9 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * @project spider-starter
  * @author fanzaiyang
  * @version 1.0.0
+ * @project spider-starter
  */
 @Schema(description = "中国行政地区表")
 @EqualsAndHashCode(callSuper = true)
@@ -88,11 +88,15 @@ public class SysRegionDO extends BaseEntity implements Serializable {
     @Column(name = "status", comment = "状态;1-有效，0-无效", length = 5L, defaultValue = "1", type = java.sql.Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
     private Integer status;
 
-    /** default constructor */
+    /**
+     * default constructor
+     */
     public SysRegionDO() {
     }
 
-    /** pk constructor */
+    /**
+     * pk constructor
+     */
     public SysRegionDO(Integer id) {
         this.id = id;
     }

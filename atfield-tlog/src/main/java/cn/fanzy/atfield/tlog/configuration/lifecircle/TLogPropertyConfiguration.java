@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.tlog.configuration.lifecircle;
 
-import cn.fanzy.atfield.tlog.configuration.TLogCommonAutoConfiguration;
 import cn.fanzy.atfield.tlog.common.spring.TLogPropertyInit;
+import cn.fanzy.atfield.tlog.configuration.TLogCommonAutoConfiguration;
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;

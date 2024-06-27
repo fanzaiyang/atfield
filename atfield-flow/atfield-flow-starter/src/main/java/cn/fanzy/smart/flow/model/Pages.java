@@ -33,7 +33,7 @@ public class Pages<T> implements Serializable {
         this.pageSize = pageSize;
         this.total = total;
         this.data = data;
-        this.totalPage=PageUtil.totalPage(total, pageSize);
+        this.totalPage = PageUtil.totalPage(total, pageSize);
     }
 
     public static <T> Pages<T> of(int pageNo, int pageSize, int total, List<T> data) {

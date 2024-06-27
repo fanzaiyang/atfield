@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.captcha.sender;
 
-import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 import cn.fanzy.atfield.captcha.bean.CaptchaCode;
+import cn.fanzy.atfield.captcha.enums.ICaptchaType;
 
 /**
  * 创建验证码的服务

@@ -28,19 +28,19 @@ public class TLogPropertyInit implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (StrUtil.isNotBlank(pattern)){
+        if (StrUtil.isNotBlank(pattern)) {
             TLogLabelGenerator.setLabelPattern(pattern);
         }
 
-        if (ObjectUtil.isNotNull(enableInvokeTimePrint)){
+        if (ObjectUtil.isNotNull(enableInvokeTimePrint)) {
             TLogContext.setEnableInvokeTimePrint(enableInvokeTimePrint);
         }
 
-        if (StrUtil.isNotBlank(idGenerator)){
-            try{
+        if (StrUtil.isNotBlank(idGenerator)) {
+            try {
                 TLogIdGenerator tLogIdGenerator = (TLogIdGenerator) TLogSpringAware.registerBean(Class.forName(idGenerator));
                 TLogIdGeneratorLoader.setIdGenerator(tLogIdGenerator);
-            }catch (Exception e){
+            } catch (Exception e) {
                 throw new RuntimeException("Id生成器包路径不正确");
             }
         }

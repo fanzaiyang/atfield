@@ -17,40 +17,40 @@ import org.springframework.core.env.Environment;
  * @author Bryan.Zhang
  * @since 1.2.0
  */
-public class TLogSpringAware implements ApplicationContextAware{
+public class TLogSpringAware implements ApplicationContextAware {
 
-	private static final Logger log = LoggerFactory.getLogger(TLogSpringAware.class);
+    private static final Logger log = LoggerFactory.getLogger(TLogSpringAware.class);
 
-	@Getter
-	private static ApplicationContext applicationContext = null;
+    @Getter
+    private static ApplicationContext applicationContext = null;
 
-	private static Environment environment = null;
+    private static Environment environment = null;
 
-	@Override
-	public void setApplicationContext(ApplicationContext ac) throws BeansException {
-		applicationContext = ac;
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext ac) throws BeansException {
+        applicationContext = ac;
+    }
 
-	public static <T> T getBean(String name) {
-		return (T) applicationContext.getBean(name);
-	}
+    public static <T> T getBean(String name) {
+        return (T) applicationContext.getBean(name);
+    }
 
-	public static <T> T getBean(Class<T> clazz) {
-		return applicationContext.getBean(clazz);
-	}
+    public static <T> T getBean(Class<T> clazz) {
+        return applicationContext.getBean(clazz);
+    }
 
-	public static <T> T registerBean(Class<T> c){
-		DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)applicationContext.getAutowireCapableBeanFactory();
-		BeanDefinition beanDefinition = new GenericBeanDefinition();
-		beanDefinition.setBeanClassName(c.getName());
-		beanFactory.registerBeanDefinition(c.getName(),beanDefinition);
-		return getBean(c.getName());
-	}
+    public static <T> T registerBean(Class<T> c) {
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+        BeanDefinition beanDefinition = new GenericBeanDefinition();
+        beanDefinition.setBeanClassName(c.getName());
+        beanFactory.registerBeanDefinition(c.getName(), beanDefinition);
+        return getBean(c.getName());
+    }
 
-	public static String getProperty(String key){
-		if (environment == null){
-			environment = getBean(Environment.class);
-		}
-		return environment.getProperty(key);
-	}
+    public static String getProperty(String key) {
+        if (environment == null) {
+            environment = getBean(Environment.class);
+        }
+        return environment.getProperty(key);
+    }
 }

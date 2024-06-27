@@ -13,6 +13,7 @@ import java.io.Serial;
 public class LoginOverRetryException extends GlobalException {
     @Serial
     private static final long serialVersionUID = -5686055647674402230L;
+
     public LoginOverRetryException() {
     }
 
@@ -21,6 +22,6 @@ public class LoginOverRetryException extends GlobalException {
     }
 
     public LoginOverRetryException(String code, String message) {
-        super(code,message);
+        super(code, message);
     }
 }

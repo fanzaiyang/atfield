@@ -10,7 +10,7 @@ public class TLogCommonAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(TLogSpringAware.class)
-    public TLogSpringAware tLogSpringAware(){
+    public TLogSpringAware tLogSpringAware() {
         return new TLogSpringAware();
     }
 }

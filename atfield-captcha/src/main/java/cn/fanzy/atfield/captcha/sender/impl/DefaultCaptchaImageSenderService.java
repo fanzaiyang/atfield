@@ -22,7 +22,7 @@ public class DefaultCaptchaImageSenderService extends CaptchaImageSenderService 
     @Override
     public void sendCode(String target, CaptchaCode codeInfo) {
         try {
-            CaptchaImageCodeInfo code= (CaptchaImageCodeInfo) codeInfo;
+            CaptchaImageCodeInfo code = (CaptchaImageCodeInfo) codeInfo;
             log.debug("【图形验证码发送器】向客户端 {} 发送验证码，验证码的内容为 {} ", target, codeInfo.getCode());
             ImageIO.write(code.getImage(), "PNG", SpringUtils.getResponse().getOutputStream());
         } catch (IOException e) {

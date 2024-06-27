@@ -19,7 +19,8 @@ public class TLogLogstashLogbackProvider extends AbstractJsonProvider<ILoggingEv
             try {
                 jsonGenerator.writeFieldName(key);
                 jsonGenerator.writeString(value);
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         });
     }
 }

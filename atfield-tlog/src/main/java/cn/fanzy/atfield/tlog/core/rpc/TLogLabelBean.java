@@ -44,8 +44,8 @@ public class TLogLabelBean implements Serializable {
         this.spanId = spanId;
     }
 
-    public void putExtData(String key, Object value){
-        if (ObjectUtil.isNull(extData)){
+    public void putExtData(String key, Object value) {
+        if (ObjectUtil.isNull(extData)) {
             extData = new HashMap<>();
         }
         extData.put(key, value);

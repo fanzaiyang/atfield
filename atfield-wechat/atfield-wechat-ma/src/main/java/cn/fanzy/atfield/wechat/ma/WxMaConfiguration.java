@@ -64,7 +64,7 @@ public class WxMaConfiguration {
     }
 
     public static WxMaService getMaService(String appid) {
-        if(StrUtil.isBlank(appid)){
+        if (StrUtil.isBlank(appid)) {
             return getMaService();
         }
         WxMaService wxService = maServices.get(appid);

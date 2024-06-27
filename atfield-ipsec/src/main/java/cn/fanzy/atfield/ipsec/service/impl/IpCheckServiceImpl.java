@@ -1,8 +1,8 @@
 package cn.fanzy.atfield.ipsec.service.impl;
 
-import cn.fanzy.atfield.ipsec.service.IpCheckService;
 import cn.fanzy.atfield.ipsec.bean.IpStorageBean;
 import cn.fanzy.atfield.ipsec.exception.IpInvalidException;
+import cn.fanzy.atfield.ipsec.service.IpCheckService;
 import cn.fanzy.atfield.ipsec.util.IpUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

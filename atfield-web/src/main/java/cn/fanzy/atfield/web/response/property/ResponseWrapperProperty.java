@@ -27,5 +27,5 @@ public class ResponseWrapperProperty implements Serializable {
     /**
      * 是否全局生效，默认：False,只注解生效
      */
-    private Boolean global=false;
+    private Boolean global = false;
 }
