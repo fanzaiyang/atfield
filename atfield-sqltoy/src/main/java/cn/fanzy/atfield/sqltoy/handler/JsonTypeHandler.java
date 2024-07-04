@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import org.sagacity.sqltoy.plugins.TypeHandler;
@@ -15,6 +16,7 @@ import java.sql.Types;
  * @date 2024/02/21
  */
 public class JsonTypeHandler extends TypeHandler {
+
     @Override
     public boolean setValue(Integer dbType, PreparedStatement pst, int paramIndex, int jdbcType, Object value) throws SQLException {
         if (jdbcType == Types.ARRAY) {
@@ -31,7 +33,7 @@ public class JsonTypeHandler extends TypeHandler {
             config.setDateFormat("yyyy-MM-dd HH:mm:ss");
             config.setIgnoreNullValue(true);
             config.setWriteLongAsString(true);
-            return JSONUtil.parseArray(jdbcValue.toString(), config);
+            return JSONUtil.parseArray(StrUtil.blankToDefault(jdbcValue.toString(), "[]"), config);
         }
         return super.toJavaType(javaTypeName, genericType, jdbcValue);
     }
