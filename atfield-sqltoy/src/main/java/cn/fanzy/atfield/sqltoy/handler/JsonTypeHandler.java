@@ -28,7 +28,7 @@ public class JsonTypeHandler extends TypeHandler {
 
     @Override
     public Object toJavaType(String javaTypeName, Class genericType, Object jdbcValue) throws Exception {
-        if (javaTypeName.equalsIgnoreCase("java.util.List") && genericType != null) {
+        if ("java.util.List".equalsIgnoreCase(javaTypeName) && genericType != null) {
             JSONConfig config = new JSONConfig();
             config.setDateFormat("yyyy-MM-dd HH:mm:ss");
             config.setIgnoreNullValue(true);
