@@ -33,7 +33,8 @@ public class JsonTypeHandler extends TypeHandler {
             config.setDateFormat("yyyy-MM-dd HH:mm:ss");
             config.setIgnoreNullValue(true);
             config.setWriteLongAsString(true);
-            return JSONUtil.parseArray(StrUtil.blankToDefault(jdbcValue.toString(), "[]"), config);
+            String value = StrUtil.blankToDefault(jdbcValue.toString(), "[]");
+            return JSONUtil.toBean(value, config, genericType);
         }
         return super.toJavaType(javaTypeName, genericType, jdbcValue);
     }
