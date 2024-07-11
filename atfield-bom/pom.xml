@@ -21,6 +21,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>atfield-core</artifactId>
                 <version>${revision}</version>
