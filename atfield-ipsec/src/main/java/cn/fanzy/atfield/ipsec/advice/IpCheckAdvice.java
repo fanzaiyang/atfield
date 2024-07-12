@@ -19,6 +19,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * IP 检查建议
+ *
+ * @author fanzaiyang
+ * @date 2024/07/12
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Aspect
