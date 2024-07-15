@@ -5,6 +5,7 @@ import cn.fanzy.atfield.ipsec.exception.IpInvalidException;
 import cn.fanzy.atfield.ipsec.service.IpCheckService;
 import cn.fanzy.atfield.ipsec.util.IpUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +22,7 @@ public class IpCheckServiceImpl implements IpCheckService {
     @Override
     public void check(String clientIp, IpStorageBean storage) {
 
+        log.info("::IpCheck::clientIp:{},storage:{}", clientIp, JSONUtil.toJsonStr(storage));
         // 拒绝优先,检查ip是否在拒绝访问名单中
         if (CollUtil.isNotEmpty(storage.getDeniedIpList()) &&
             IpUtil.isContains(clientIp, storage.getDeniedIpList())) {
