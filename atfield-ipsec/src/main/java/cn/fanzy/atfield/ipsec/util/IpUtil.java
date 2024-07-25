@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.ipsec.util;
 
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.net.Ipv4Util;
 import cn.hutool.core.util.StrUtil;
 
@@ -31,8 +32,11 @@ public class IpUtil extends Ipv4Util {
      * @return boolean
      */
     public static boolean isContains(String ip, Set<String> ipList) {
+        if(CollUtil.isEmpty(ipList)){
+            return false;
+        }
         // 简单匹配
-        if (ipList.isEmpty() || ipList.contains(ip) || ipList.contains("*")) {
+        if (ipList.contains(ip) || ipList.contains("*")) {
             return true;
         }
         for (String itemIp : ipList) {
