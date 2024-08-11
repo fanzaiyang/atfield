@@ -28,7 +28,7 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     private final SaTokenExtraProperty property;
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(SaParamFunction.class)
     public SaParamFunction<Object> saParamFunction() {
         return r -> StpUtil.checkLogin();
     }
