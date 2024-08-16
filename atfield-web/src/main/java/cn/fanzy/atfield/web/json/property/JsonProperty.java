@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.math.RoundingMode;
+
 /**
  * 基础层JSON配置
  *
@@ -65,6 +67,16 @@ public class JsonProperty {
         private ArrayCovert array = new ArrayCovert(true);
         private ObjectCovert object = new ObjectCovert(true, "");
         private DateCovert date = new DateCovert(true, "");
+
+        /**
+         * cale of the BigDecimal value to be returned.
+         */
+        private Integer scale;
+
+        /**
+         * RoundingMode.HALF_UP, RoundingMode.HALF_EVEN, RoundingMode.UP, RoundingMode.DOWN, RoundingMode.FLOOR, RoundingMode.CEILING
+         */
+        private RoundingMode roundingMode;
 
         @Data
         @AllArgsConstructor

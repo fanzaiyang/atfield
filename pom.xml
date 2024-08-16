@@ -206,4 +206,11 @@
             <email>zaiyangnihao@163.com</email>
         </developer>
     </developers>
+    <repositories>
+        <repository>
+            <id>yinfengMaven</id>
+            <name>nexus repository</name>
+            <url>http://maven.yinfengnet.com/repository/maven-public/</url>
+        </repository>
+    </repositories>
 </project>

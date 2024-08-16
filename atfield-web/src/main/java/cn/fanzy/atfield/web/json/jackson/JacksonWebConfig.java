@@ -56,6 +56,7 @@ public class JacksonWebConfig implements WebMvcConfigurer {
                 CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getDate(), "yyyy-MM-dd"),
                 CharSequenceUtil.blankToDefault(webMvcProperties.getFormat().getTime(), "HH:mm:ss"),
                 property));
+
         converters.add(1, converter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
 
