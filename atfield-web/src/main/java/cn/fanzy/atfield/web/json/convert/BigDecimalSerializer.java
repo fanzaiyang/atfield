@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 /**
  * BigDecimal序列化器
