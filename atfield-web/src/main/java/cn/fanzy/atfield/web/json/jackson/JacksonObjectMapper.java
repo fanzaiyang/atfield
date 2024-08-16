@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.web.json.jackson;
 
-import cn.fanzy.atfield.web.json.convert.BigDecimalSerializer;
-import cn.fanzy.atfield.web.json.convert.DoubleSerializer;
+import cn.fanzy.atfield.web.json.convert.AtFieldBigDecimalSerializer;
+import cn.fanzy.atfield.web.json.convert.AtFieldDoubleSerializer;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -20,6 +20,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 import java.io.Serial;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,11 +46,15 @@ public class JacksonObjectMapper extends ObjectMapper {
         // 收到未知属性时不报异常
         this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
         SimpleModule simpleModule = new SimpleModule();
+        // long 转换为字符串
+        simpleModule.addSerializer(BigInteger.class, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
         simpleModule.addSerializer(Long.class, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
-        simpleModule.addSerializer(BigDecimal.class,new BigDecimalSerializer(properties));
-        simpleModule.addSerializer(Double.class,new DoubleSerializer(properties));
-        simpleModule.addSerializer(Double.TYPE,new DoubleSerializer(properties));
+
+        // 浮点型处理
+        simpleModule.addSerializer(BigDecimal.class,new AtFieldBigDecimalSerializer(properties));
+        simpleModule.addSerializer(Double.class,new AtFieldDoubleSerializer(properties));
+        simpleModule.addSerializer(Double.TYPE,new AtFieldDoubleSerializer(properties));
         //反序列化的时候如果多了其他属性,不抛出异常
         this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 日期禁止时间戳

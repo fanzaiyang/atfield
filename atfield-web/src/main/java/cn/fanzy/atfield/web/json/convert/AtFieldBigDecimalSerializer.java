@@ -16,22 +16,25 @@ import java.math.BigDecimal;
  * @date 2024/08/16
  */
 @RequiredArgsConstructor
-public class DoubleSerializer extends JsonSerializer<Double> {
+public class AtFieldBigDecimalSerializer extends JsonSerializer<BigDecimal> {
     private final JsonProperty properties;
 
     @Override
-    public void serialize(Double value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(BigDecimal value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         if (value != null) {
             JsonProperty.Convert convert = properties.getConvert();
             if (convert != null && convert.getScale() != null && convert.getRoundingMode() != null) {
-                BigDecimal newValue = BigDecimal.valueOf(value).setScale(convert.getScale(), convert.getRoundingMode());
+                value = value.setScale(convert.getScale(), convert.getRoundingMode());
                 if(convert.isNumberToString()){
-                    jsonGenerator.writeString(newValue.toString());
+                    jsonGenerator.writeString(value.toString());
                 }else{
-                    jsonGenerator.writeNumber(newValue);
-                }               
+                    jsonGenerator.writeNumber(value);
+                }
+            }else {
+                jsonGenerator.writeNumber(value);
             }
-
+        }else {
+            jsonGenerator.writeNull();
         }
     }
 }
