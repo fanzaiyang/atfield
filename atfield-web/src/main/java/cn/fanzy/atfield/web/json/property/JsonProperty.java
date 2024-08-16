@@ -69,7 +69,7 @@ public class JsonProperty {
         private DateCovert date = new DateCovert(true, "");
 
         /**
-         * cale of the BigDecimal value to be returned.
+         * cale of the BigDecimal/Double value to be returned.
          */
         private Integer scale;
 
@@ -77,6 +77,11 @@ public class JsonProperty {
          * RoundingMode.HALF_UP, RoundingMode.HALF_EVEN, RoundingMode.UP, RoundingMode.DOWN, RoundingMode.FLOOR, RoundingMode.CEILING
          */
         private RoundingMode roundingMode;
+
+        /**
+         * BigDecimal/Double to String,默认：false
+         */
+        private boolean numberToString = false;
 
         @Data
         @AllArgsConstructor

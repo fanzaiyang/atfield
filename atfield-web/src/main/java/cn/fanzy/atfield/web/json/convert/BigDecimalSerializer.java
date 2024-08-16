@@ -26,7 +26,11 @@ public class BigDecimalSerializer extends JsonSerializer<BigDecimal> {
             JsonProperty.Convert convert = properties.getConvert();
             if (convert != null && convert.getScale() != null && convert.getRoundingMode() != null) {
                 value = value.setScale(convert.getScale(), convert.getRoundingMode());
-                jsonGenerator.writeNumber(value);
+                if(convert.isNumberToString()){
+                    jsonGenerator.writeString(value.toString());
+                }else{
+                    jsonGenerator.writeNumber(value);
+                }
             }
 
         }
