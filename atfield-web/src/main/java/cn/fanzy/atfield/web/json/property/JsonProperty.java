@@ -83,6 +83,8 @@ public class JsonProperty {
          */
         private boolean numberToString = false;
 
+        private boolean longToString = true;
+
         @Data
         @AllArgsConstructor
         public static class StringCovert {
