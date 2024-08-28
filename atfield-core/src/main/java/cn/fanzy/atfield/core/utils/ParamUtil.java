@@ -2,6 +2,8 @@ package cn.fanzy.atfield.core.utils;
 
 import cn.fanzy.atfield.core.spring.RequestWrapper;
 import cn.fanzy.atfield.core.spring.SpringUtils;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -12,9 +14,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -135,4 +135,80 @@ public class ParamUtil {
         return fileList;
     }
 
+    /**
+     * 得到begin日期
+     *
+     * @param valueList 值列表
+     * @return {@link String }
+     */
+    public static String getBeginDate(List<String> valueList) {
+        if (CollUtil.size(valueList) == 2) {
+            return valueList.get(0);
+        }
+        return null;
+    }
+
+    public static String getBeginTime(List<String> valueList) {
+        if (CollUtil.size(valueList) == 2) {
+            return valueList.get(0).length() == 10 ? valueList.get(0) + " 00:00:00" : valueList.get(0);
+        }
+        return null;
+    }
+
+    public static String getEndTime(List<String> valueList) {
+        if (CollUtil.size(valueList) == 2) {
+            return valueList.get(1).length() == 10 ? valueList.get(1) + " 23:59:59" : valueList.get(1);
+        }
+        return null;
+    }
+    public static Date getBeginTimeD(List<String> valueList) {
+        String beginTime = getBeginTime(valueList);
+        if(StrUtil.isNotBlank(beginTime)){
+            return DateUtil.parse(beginTime,"yyyy-MM-dd HH:mm:ss");
+        }
+        return null;
+    }
+    public static Date getEndTimeD(List<String> valueList) {
+        String endTime = getEndTime(valueList);
+        if(StrUtil.isNotBlank(endTime)){
+            return DateUtil.parse(endTime,"yyyy-MM-dd HH:mm:ss");
+        }
+        return null;
+    }
+    /**
+     * 得到结束日期
+     *
+     * @param valueList 值列表
+     * @return {@link String }
+     */
+    public static String getEndDate(List<String> valueList) {
+        if (CollUtil.size(valueList) == 2) {
+            return valueList.get(1);
+        }
+        return null;
+    }
+
+    /**
+     * 得到日期范围地图
+     *
+     * @param valueList 值列表
+     * @return {@link Map }<{@link String }, {@link Object }>
+     */
+    public static Map<String, Object> getDateRangeMap(List<String> valueList) {
+        Map<String, Object> map = new HashMap<>();
+        if (valueList != null && CollUtil.size(valueList) == 2) {
+            map.put("beginDate", valueList.get(0));
+            map.put("endDate", valueList.get(1));
+        }
+        return map;
+    }
+
+    public static Map<String, Object> getDateTimeRangeMap(List<String> valueList) {
+        Map<String, Object> map = new HashMap<>();
+        if (valueList != null && CollUtil.size(valueList) == 2) {
+            map.put("beginDate", valueList.get(0).length() == 10 ? valueList.get(0) + " 00:00:00" : valueList.get(0));
+            map.put("endDate", valueList.get(1).length() == 10 ? valueList.get(1) + " 23:59:59" : valueList.get(1));
+        }
+        return map;
+    }
 }
