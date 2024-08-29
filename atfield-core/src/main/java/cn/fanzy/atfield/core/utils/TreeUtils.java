@@ -32,10 +32,10 @@ public class TreeUtils extends TreeUtil {
      * 构建树 默认为：id，parentId，name，orderNumber 根节点是：-1
      *
      * @param data List数据
-     * @param <T>  类型
+     * @param <E>  类型
      * @return List树结构
      */
-    public static <T> List<Tree<String>> buildTree(List<T> data) {
+    public static <E> List<Tree<String>> buildTree(List<E> data) {
         List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", "-1");
         return build(nodeList, "-1");
     }
@@ -45,11 +45,11 @@ public class TreeUtils extends TreeUtil {
      * 默认为：id，parentId，name，orderNumber
      *
      * @param data   数据
-     * @param <T>    类型
+     * @param <E>    类型
      * @param rootId 根id,默认-1
      * @return List
      */
-    public static <T> List<Tree<String>> buildTree(List<T> data, String rootId) {
+    public static <E> List<Tree<String>> buildTree(List<E> data, String rootId) {
         TimeInterval timer = DateUtil.timer();
         rootId = StrUtil.blankToDefault(rootId, "-1");
         List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", rootId);
@@ -69,22 +69,22 @@ public class TreeUtils extends TreeUtil {
      * @param nameKey   名字的关键，默认：name
      * @param weightKey 顺序的关键，默认：orderNumber
      * @param rootId    根id,默认-1
-     * @param <T>       类型
+     * @param <E>       类型
      * @return List
      */
-    public static <T> List<Tree<String>> buildTree(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
+    public static <E> List<Tree<String>> buildTree(List<E> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         rootId = StrUtil.blankToDefault(rootId, "-1");
         List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, rootId);
         return build(nodeList, rootId);
     }
 
-    private static <T> List<TreeNode<String>> buildNodeList(List<T> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
+    private static <E> List<TreeNode<String>> buildNodeList(List<E> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         if (CollUtil.isEmpty(data)) {
             return new ArrayList<>();
         }
         List<TreeNode<String>> nodeList = CollUtil.newArrayList();
         for (int i = 0; i < data.size(); i++) {
-            T datum = data.get(i);
+            E datum = data.get(i);
             Map<String, Object> object = BeanUtil.beanToMap(datum);
             TreeNode<String> node = new TreeNode<>();
             node.setId(object.getOrDefault(StrUtil.blankToDefault(idKey, "id"), "") + "");
@@ -122,6 +122,9 @@ public class TreeUtils extends TreeUtil {
      * @return 合成好的树
      */
     public static <E> List<E> makeTree(List<E> list, Predicate<E> rootCheck, BiFunction<E, E, Boolean> parentCheck, BiConsumer<E, List<E>> setSubChildren) {
+        if (CollUtil.isEmpty(list)) {
+            return new ArrayList<>();
+        }
         return list.stream().filter(rootCheck)
                 .peek(x -> setSubChildren.accept(x, makeChildren(x, list, parentCheck, setSubChildren)))
                 .collect(Collectors.toList());
