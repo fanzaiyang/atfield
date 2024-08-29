@@ -112,6 +112,28 @@ public class TreeUtils extends TreeUtil {
     }
 
     /**
+     * 将list合成树 -> E必须继承{@link TreeElement}
+     *
+     * @param list           需要合成树的List
+     * @param setSubChildren E中设置下级数据方法，如：Menu::setSubMenus
+     * @return {@link List }<{@link E }>
+     */
+    public static <E extends TreeElement<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
+        if (CollUtil.isEmpty(list)) {
+            return new ArrayList<>();
+        }
+        List<String> idList = list.stream().map(TreeElement::getId).toList();
+        return list.stream().filter(a -> !idList.contains(a.getParentId()))
+                .peek(x -> setSubChildren.accept(x,
+                                makeChildren(x, list,
+                                        (a, b) -> StrUtil.equalsIgnoreCase(a.getId(), b.getParentId()),
+                                        setSubChildren)
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 将list合成树
      *
      * @param list           需要合成树的List
