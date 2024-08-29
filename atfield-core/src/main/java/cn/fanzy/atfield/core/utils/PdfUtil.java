@@ -94,9 +94,7 @@ public class PdfUtil {
     public static void exportPdf(String html, String outFileName) {
         try {
             File file = FileUtil.file(outFileName);
-            execute(html, PageSize.A4,
-                    new PdfWriter(file),
-                    getConverterProperties(null, null));
+            execute(html, PageSize.A4, new PdfWriter(file), getConverterProperties(null, null));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -134,7 +132,6 @@ public class PdfUtil {
             pdfDocument.setDefaultPageSize(pageSize == null ? PageSize.A4 : pageSize);
             //添加水印
             //  pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, new WaterMarkEventHandler(waterMark));
-
             HtmlConverter.convertToPdf(html, pdfDocument, properties);
         } catch (Exception e) {
             throw new RuntimeException(e);
