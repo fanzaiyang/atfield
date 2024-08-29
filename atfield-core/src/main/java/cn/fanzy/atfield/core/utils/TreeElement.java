@@ -1,12 +1,17 @@
 package cn.fanzy.atfield.core.utils;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author fanzaiyang
  * @date 2024/08/28
  */
-public abstract class TreeElement<E> {
+public abstract class TreeElement<E> implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -2254859224968094447L;
 
     /**
      * 节点ID
