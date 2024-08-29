@@ -223,6 +223,13 @@ public class TreeUtils extends TreeUtil {
     /**
      * 层序遍历
      * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     *7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
      *     TreeUtils.forLevelOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
      * @param tree           需要遍历的树
@@ -267,7 +274,7 @@ public class TreeUtils extends TreeUtil {
      * 对树所有子节点按comparator排序
      * <pre>
      *     TreeUtils.sort(treeList, Comparator.comparing(OrgTreeVo::getId), OrgTreeVo::getChildren);
-     *      TreeUtils.sort(treeList, (x,y)->y.getRank().compareTo(x.getRank()), MenuVo::getSubMenus);
+     *     TreeUtils.sort(treeList, (x,y)->y.getRank().compareTo(x.getRank()), MenuVo::getSubMenus);
      * </pre>
      * @param tree        需要排序的树
      * @param comparator  排序规则Comparator，如：Comparator.comparing(MenuVo::getRank)按Rank正序 ,(x,y)->y.getRank().compareTo(x.getRank())，按Rank倒序
