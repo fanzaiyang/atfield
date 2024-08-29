@@ -6,7 +6,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.TimeInterval;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
@@ -36,7 +35,7 @@ public class TreeUtils extends TreeUtil {
      * @return List树结构
      */
     public static <E> List<Tree<String>> buildTree(List<E> data) {
-        List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", "-1");
+        List<cn.hutool.core.lang.tree.TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", "-1");
         return build(nodeList, "-1");
     }
 
@@ -52,7 +51,7 @@ public class TreeUtils extends TreeUtil {
     public static <E> List<Tree<String>> buildTree(List<E> data, String rootId) {
         TimeInterval timer = DateUtil.timer();
         rootId = StrUtil.blankToDefault(rootId, "-1");
-        List<TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", rootId);
+        List<cn.hutool.core.lang.tree.TreeNode<String>> nodeList = buildNodeList(data, "id", "parentId", "name", "orderNumber", rootId);
         List<Tree<String>> build = build(nodeList, rootId);
         long end = System.currentTimeMillis();
         log.debug("list转tree耗时(秒):{}", timer.intervalSecond());
@@ -74,19 +73,19 @@ public class TreeUtils extends TreeUtil {
      */
     public static <E> List<Tree<String>> buildTree(List<E> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         rootId = StrUtil.blankToDefault(rootId, "-1");
-        List<TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, rootId);
+        List<cn.hutool.core.lang.tree.TreeNode<String>> nodeList = buildNodeList(data, idKey, parentKey, nameKey, weightKey, rootId);
         return build(nodeList, rootId);
     }
 
-    private static <E> List<TreeNode<String>> buildNodeList(List<E> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
+    private static <E> List<cn.hutool.core.lang.tree.TreeNode<String>> buildNodeList(List<E> data, String idKey, String parentKey, String nameKey, String weightKey, String rootId) {
         if (CollUtil.isEmpty(data)) {
             return new ArrayList<>();
         }
-        List<TreeNode<String>> nodeList = CollUtil.newArrayList();
+        List<cn.hutool.core.lang.tree.TreeNode<String>> nodeList = CollUtil.newArrayList();
         for (int i = 0; i < data.size(); i++) {
             E datum = data.get(i);
             Map<String, Object> object = BeanUtil.beanToMap(datum);
-            TreeNode<String> node = new TreeNode<>();
+            cn.hutool.core.lang.tree.TreeNode<String> node = new cn.hutool.core.lang.tree.TreeNode<>();
             node.setId(object.getOrDefault(StrUtil.blankToDefault(idKey, "id"), "") + "");
             node.setParentId(object.getOrDefault(StrUtil.blankToDefault(parentKey, "parentId"), "") + "");
             node.setName(object.getOrDefault(StrUtil.blankToDefault(nameKey, "name"), "") + "");
@@ -100,7 +99,7 @@ public class TreeUtils extends TreeUtil {
             nodeList.add(node);
         }
         // 这里是修改根结点
-        Set<String> nodeIdSet = nodeList.stream().map(TreeNode::getId).collect(Collectors.toSet());
+        Set<String> nodeIdSet = nodeList.stream().map(cn.hutool.core.lang.tree.TreeNode::getId).collect(Collectors.toSet());
         rootId = StrUtil.blankToDefault(rootId, StrUtil.blankToDefault(rootId, "-1"));
         String finalRootId = rootId;
         nodeList.forEach(item -> {
@@ -112,7 +111,7 @@ public class TreeUtils extends TreeUtil {
     }
 
     /**
-     * 将list合成树 -> E必须继承{@link TreeElement}
+     * 将list合成树 -> E必须继承{@link TreeNode}
      * <pre>
      *     TreeUtils.makeTree(BeanUtil.copyToList(list, OrgTreeVo.class), OrgTreeVo::setChildren);
      * </pre>
@@ -120,11 +119,11 @@ public class TreeUtils extends TreeUtil {
      * @param setSubChildren E中设置下级数据方法，如：Menu::setSubMenus
      * @return {@link List }<{@link E }>
      */
-    public static <E extends TreeElement<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
+    public static <E extends TreeNode<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        List<String> idList = list.stream().map(TreeElement::getId).toList();
+        List<String> idList = list.stream().map(TreeNode::getId).toList();
         return list.stream().filter(a -> !idList.contains(a.getParentId()))
                 .peek(x -> setSubChildren.accept(x,
                                 makeChildren(x, list,
@@ -160,7 +159,7 @@ public class TreeUtils extends TreeUtil {
     }
 
     /**
-     * 将树打平成tree -> E必须继承{@link TreeElement}
+     * 将树打平成tree -> E必须继承{@link TreeNode}
      * <pre>
      *     TreeUtils.flat(treeList,  x -> x.setChildren(null))
      * </pre>
@@ -169,12 +168,12 @@ public class TreeUtils extends TreeUtil {
      * @param <E>            泛型实体对象
      * @return 打平后的数据
      */
-    public static <E extends TreeElement<E>> List<E> flat(List<E> tree, Consumer<E> setSubChildren) {
+    public static <E extends TreeNode<E>> List<E> flat(List<E> tree, Consumer<E> setSubChildren) {
         List<E> res = new ArrayList<>();
         forPostOrder(tree, item -> {
             setSubChildren.accept(item);
             res.add(item);
-        }, TreeElement::getChildren);
+        }, TreeNode::getChildren);
         return res;
     }
 

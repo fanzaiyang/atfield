@@ -8,7 +8,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024/08/28
  */
-public abstract class TreeElement<E> implements Serializable {
+public abstract class TreeNode<E> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2254859224968094447L;
