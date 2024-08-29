@@ -1,4 +1,4 @@
-package cn.fanzy.atfield.core.utils;
+package cn.fanzy.atfield.core.model;
 
 import java.io.Serial;
 import java.io.Serializable;
