@@ -202,6 +202,13 @@ public class TreeUtils extends TreeUtil {
     /**
      * 前序遍历
      * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     *7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
      *     TreeUtils.forPreOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
      * @param tree           需要遍历的树
@@ -253,6 +260,13 @@ public class TreeUtils extends TreeUtil {
     /**
      * 后序遍历
      * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     *7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
      *     TreeUtils.forPostOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
      * @param tree           需要遍历的树
