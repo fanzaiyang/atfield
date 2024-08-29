@@ -214,6 +214,7 @@ public class HtmlImageGenerator {
                 // 字体来源资源文件
                 log.info("字体来源资源文件：{}", fontPath);
                 InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream(fontPath.replaceAll("classpath:", ""));
+                assert resourceAsStream != null;
                 Font font = Font.createFont(Font.TRUETYPE_FONT, resourceAsStream);
                 return font.deriveFont(20f);
             }
