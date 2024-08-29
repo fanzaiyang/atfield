@@ -52,5 +52,17 @@
             <artifactId>aspectjweaver</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.4</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>5.0.5</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 </project>
