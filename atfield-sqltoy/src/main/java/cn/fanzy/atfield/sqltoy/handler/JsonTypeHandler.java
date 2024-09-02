@@ -39,15 +39,17 @@ public class JsonTypeHandler extends TypeHandler {
             String value = StrUtil.blankToDefault(jdbcValue.toString(), "[]");
             return JSONUtil.toList(value, genericType == null ? Object.class : genericType);
         }
-        if (ClassUtil.isNormalClass(clazz) && !StrUtil.startWith(javaTypeName, "java.")) {
-            return JSONUtil.toBean(jdbcValue.toString(), clazz);
-        }
+
         if (jdbcValue instanceof String) {
             if (jdbcValue.toString().startsWith("{") && jdbcValue.toString().endsWith("}")) {
                 return JSONUtil.toBean(jdbcValue.toString(), clazz);
             }
             if (jdbcValue.toString().startsWith("[") && jdbcValue.toString().endsWith("]")) {
                 return JSONUtil.toList(jdbcValue.toString(), genericType == null ? Object.class : genericType);
+            }
+        }else{
+            if (ClassUtil.isNormalClass(clazz) && !StrUtil.startWith(javaTypeName, "java.")) {
+                return JSONUtil.toBean(jdbcValue.toString(), clazz);
             }
         }
 
