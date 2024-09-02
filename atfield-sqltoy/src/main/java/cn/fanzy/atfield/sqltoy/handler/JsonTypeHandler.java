@@ -32,14 +32,14 @@ public class JsonTypeHandler extends TypeHandler {
 
     @Override
     public Object toJavaType(String javaTypeName, Class genericType, Object jdbcValue) throws Exception {
-        log.info("转为Java类型：javaTypeName:{}", jdbcValue);
+        log.info("转为Java类型：javaTypeName:{}", javaTypeName);
 
         Class<?> clazz = Class.forName(javaTypeName);
         if (Collection.class.isAssignableFrom(clazz) || clazz.isArray()) {
             String value = StrUtil.blankToDefault(jdbcValue.toString(), "[]");
             return JSONUtil.toList(value, genericType == null ? Object.class : genericType);
         }
-        if (ClassUtil.isNormalClass(clazz)) {
+        if (ClassUtil.isNormalClass(clazz) && !StrUtil.startWith(javaTypeName, "java.")) {
             return JSONUtil.toBean(jdbcValue.toString(), clazz);
         }
         if (jdbcValue instanceof String) {
