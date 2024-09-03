@@ -1,7 +1,5 @@
 package cn.fanzy.atfield.sqltoy.entity;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +21,13 @@ public class ParamBatchDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 4582477467794940501L;
 
-    @NotEmpty(message = "参数不能为空!")
+    /**
+     * 目前ID
+     */
     private List<String> targets;
-    @NotNull(message = "下一状态不能为空!")
+
+    /**
+     * 下一状态
+     */
     private Integer nextStatus;
 }
