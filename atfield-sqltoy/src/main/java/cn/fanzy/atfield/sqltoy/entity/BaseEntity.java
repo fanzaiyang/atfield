@@ -8,6 +8,7 @@ import org.sagacity.sqltoy.config.annotation.Column;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
@@ -24,6 +25,9 @@ public class BaseEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2668694369032220300L;
+
+    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
+    private Long revision;
 
     /**
      * 删除标志;1-已删除，0-未删除
