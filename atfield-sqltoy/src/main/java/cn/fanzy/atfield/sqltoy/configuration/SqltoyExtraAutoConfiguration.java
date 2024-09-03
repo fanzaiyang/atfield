@@ -51,11 +51,13 @@ public class SqltoyExtraAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public Repository repository(SqltoyExtraProperties properties) {
         return new RepositoryImpl(properties);
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public SqlToyRepository sqlToyRepository() {
         return new SqlToyRepositoryImpl();
     }
