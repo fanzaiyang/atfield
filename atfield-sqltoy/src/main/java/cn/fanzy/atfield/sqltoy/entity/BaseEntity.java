@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.sagacity.sqltoy.config.annotation.Column;
-import org.sagacity.sqltoy.config.annotation.DataVersion;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
@@ -38,13 +36,6 @@ public class BaseEntity implements Serializable {
      */
     @Column(name = "tenant_id", comment = "租户号", length = 36L, type = java.sql.Types.VARCHAR, nativeType = "VARCHAR", nullable = true)
     private String tenantId;
-
-    /**
-     * 数据版本
-     */
-    @DataVersion(startDate = true)
-    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
-    private Long revision;
 
     /**
      * 创建者

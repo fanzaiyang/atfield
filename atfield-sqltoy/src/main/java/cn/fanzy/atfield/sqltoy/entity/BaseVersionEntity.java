@@ -1,3 +1,4 @@
+
 package cn.fanzy.atfield.sqltoy.entity;
 
 import lombok.AllArgsConstructor;
@@ -5,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.sagacity.sqltoy.config.annotation.Column;
+import org.sagacity.sqltoy.config.annotation.DataVersion;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,7 +14,7 @@ import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
- * 公共字段实体类
+ * DataVersion基本实体
  *
  * @author fanzaiyang
  * @date 2023/12/14
@@ -21,7 +23,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class IBaseEntity implements Serializable {
+public class BaseVersionEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2668694369032220300L;
@@ -31,6 +33,19 @@ public class IBaseEntity implements Serializable {
      */
     @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
     private Integer delFlag;
+
+    /**
+     * 租户 ID
+     */
+    @Column(name = "tenant_id", comment = "租户号", length = 36L, type = Types.VARCHAR, nativeType = "VARCHAR", nullable = true)
+    private String tenantId;
+
+    /**
+     * 数据版本
+     */
+    @DataVersion(startDate = true)
+    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
+    private Long revision;
 
     /**
      * 创建者
