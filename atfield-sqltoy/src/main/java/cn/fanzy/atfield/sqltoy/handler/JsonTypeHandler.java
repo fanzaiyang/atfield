@@ -22,8 +22,7 @@ public class JsonTypeHandler extends TypeHandler {
 
     @Override
     public boolean setValue(Integer dbType, PreparedStatement pst, int paramIndex, int jdbcType, Object value) throws SQLException {
-        if (jdbcType == Types.ARRAY ||
-            jdbcType == Types.JAVA_OBJECT) {
+        if (jdbcType == Types.ARRAY || jdbcType == Types.JAVA_OBJECT) {
             pst.setString(paramIndex, JSONUtil.toJsonStr(value));
             return true;
         }
@@ -47,7 +46,7 @@ public class JsonTypeHandler extends TypeHandler {
             if (jdbcValue.toString().startsWith("[") && jdbcValue.toString().endsWith("]")) {
                 return JSONUtil.toList(jdbcValue.toString(), genericType == null ? Object.class : genericType);
             }
-        }else{
+        } else {
             if (ClassUtil.isNormalClass(clazz) && !StrUtil.startWith(javaTypeName, "java.")) {
                 return JSONUtil.toBean(jdbcValue.toString(), clazz);
             }

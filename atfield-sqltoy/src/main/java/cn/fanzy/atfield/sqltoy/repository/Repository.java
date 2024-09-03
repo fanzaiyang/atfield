@@ -29,6 +29,12 @@ public interface Repository extends LightDao {
      */
     boolean wrapTreeTableRoute(final Serializable entity, String pidField);
 
+    /**
+     * 包装树表路由
+     *
+     * @param entities 实体
+     * @return boolean
+     */
     boolean wrapTreeTableRoute(final List<Serializable> entities);
 
     /**

@@ -16,7 +16,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sagacity.version>5.6.10</sagacity.version>
+        <sagacity.version>5.6.22</sagacity.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -28,6 +28,11 @@
             <dependency>
                 <groupId>com.sagframe</groupId>
                 <artifactId>sagacity-sqltoy-spring-starter</artifactId>
+                <version>${sagacity.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sagframe</groupId>
+                <artifactId>sqltoy-plus-core</artifactId>
                 <version>${sagacity.version}</version>
             </dependency>
             <dependency>
@@ -47,6 +52,10 @@
         <dependency>
             <groupId>com.sagframe</groupId>
             <artifactId>sagacity-sqltoy-spring-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sagframe</groupId>
+            <artifactId>sqltoy-plus-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

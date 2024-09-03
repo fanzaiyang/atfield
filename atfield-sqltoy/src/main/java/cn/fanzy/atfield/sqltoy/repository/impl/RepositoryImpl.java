@@ -1,6 +1,7 @@
-package cn.fanzy.atfield.sqltoy.repository;
+package cn.fanzy.atfield.sqltoy.repository.impl;
 
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
+import cn.fanzy.atfield.sqltoy.repository.Repository;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.LightDaoImpl;
