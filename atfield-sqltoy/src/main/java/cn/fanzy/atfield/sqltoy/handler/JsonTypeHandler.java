@@ -1,6 +1,5 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
-import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +8,6 @@ import org.sagacity.sqltoy.plugins.TypeHandler;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Collection;
 
 /**
  * JSON 类型处理程序
@@ -19,6 +17,7 @@ import java.util.Collection;
  */
 @Slf4j
 public class JsonTypeHandler extends TypeHandler {
+
 
     @Override
     public boolean setValue(Integer dbType, PreparedStatement pst, int paramIndex, int jdbcType, Object value) throws SQLException {
@@ -31,25 +30,15 @@ public class JsonTypeHandler extends TypeHandler {
 
     @Override
     public Object toJavaType(String javaTypeName, Class genericType, Object jdbcValue) throws Exception {
-        log.info("转为Java类型：javaTypeName:{}", javaTypeName);
-
-        Class<?> clazz = Class.forName(javaTypeName);
-        if (Collection.class.isAssignableFrom(clazz) || clazz.isArray()) {
-            String value = StrUtil.blankToDefault(jdbcValue.toString(), "[]");
-            return JSONUtil.toList(value, genericType == null ? Object.class : genericType);
+        // 没有泛型信息，直接使用默认的转换
+        if (StrUtil.startWith(javaTypeName, "java.") && genericType == null) {
+            return super.toJavaType(javaTypeName, null, jdbcValue);
         }
-
-        if (jdbcValue instanceof String) {
-            if (jdbcValue.toString().startsWith("{") && jdbcValue.toString().endsWith("}")) {
-                return JSONUtil.toBean(jdbcValue.toString(), clazz);
-            }
-            if (jdbcValue.toString().startsWith("[") && jdbcValue.toString().endsWith("]")) {
-                return JSONUtil.toList(jdbcValue.toString(), genericType == null ? Object.class : genericType);
-            }
-        } else {
-            if (ClassUtil.isNormalClass(clazz) && !StrUtil.startWith(javaTypeName, "java.")) {
-                return JSONUtil.toBean(jdbcValue.toString(), clazz);
-            }
+        if (jdbcValue.toString().startsWith("{") && jdbcValue.toString().endsWith("}")) {
+            return JSONUtil.toBean(jdbcValue.toString(), Class.forName(javaTypeName));
+        }
+        if (jdbcValue.toString().startsWith("[") && jdbcValue.toString().endsWith("]")) {
+            return JSONUtil.toList(jdbcValue.toString(), genericType == null ? Object.class : genericType);
         }
 
         return super.toJavaType(javaTypeName, genericType, jdbcValue);
