@@ -1,38 +1,32 @@
-
 package cn.fanzy.atfield.sqltoy.entity;
 
+import cn.fanzy.atfield.core.model.BaseTreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.sagacity.sqltoy.config.annotation.Column;
-import org.sagacity.sqltoy.config.annotation.DataVersion;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
- * DataVersion基本实体
+ * 基本实体
  *
  * @author fanzaiyang
  * @date 2023/12/14
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseVersionEntity implements Serializable {
+public abstract class BaseTenantTreeEntity<E> extends BaseTreeNode<E> {
 
     @Serial
     private static final long serialVersionUID = -2668694369032220300L;
-
-    /**
-     * 删除标志;1-已删除，0-未删除
-     */
-    @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
-    private Integer delFlag;
 
     /**
      * 租户 ID
@@ -41,11 +35,10 @@ public class BaseVersionEntity implements Serializable {
     private String tenantId;
 
     /**
-     * 数据版本
+     * 删除标志;1-已删除，0-未删除
      */
-    @DataVersion(startDate = true)
-    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
-    private Long revision;
+    @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
+    private Integer delFlag;
 
     /**
      * 创建者

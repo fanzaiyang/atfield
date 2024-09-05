@@ -8,7 +8,6 @@ import org.sagacity.sqltoy.config.annotation.Column;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Types;
 import java.time.LocalDateTime;
 
 /**
@@ -26,20 +25,11 @@ public class BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = -2668694369032220300L;
 
-    @Column(name = "revision", comment = "乐观锁", type = Types.BIGINT, nativeType = "LONG", nullable = true)
-    private Long revision;
-
     /**
      * 删除标志;1-已删除，0-未删除
      */
     @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = java.sql.Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
     private Integer delFlag;
-
-    /**
-     * 租户 ID
-     */
-    @Column(name = "tenant_id", comment = "租户号", length = 36L, type = java.sql.Types.VARCHAR, nativeType = "VARCHAR", nullable = true)
-    private String tenantId;
 
     /**
      * 创建者

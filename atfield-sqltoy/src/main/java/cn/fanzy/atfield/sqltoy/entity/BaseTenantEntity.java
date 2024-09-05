@@ -21,22 +21,22 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class IBaseEntity implements Serializable {
+public class BaseTenantEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2668694369032220300L;
-
-    /**
-     * 删除标志;1-已删除，0-未删除
-     */
-    @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
-    private Integer delFlag;
 
     /**
      * 租户 ID
      */
     @Column(name = "tenant_id", comment = "租户号", length = 36L, type = Types.VARCHAR, nativeType = "VARCHAR", nullable = true)
     private String tenantId;
+
+    /**
+     * 删除标志;1-已删除，0-未删除
+     */
+    @Column(name = "del_flag", comment = "删除标志;1-已删除，0-未删除", length = 5L, defaultValue = "0", type = Types.SMALLINT, nativeType = "SMALLINT", nullable = true)
+    private Integer delFlag;
 
     /**
      * 创建者
