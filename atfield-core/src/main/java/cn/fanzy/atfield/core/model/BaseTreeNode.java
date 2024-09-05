@@ -1,16 +1,21 @@
 package cn.fanzy.atfield.core.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * tree 节点
+ * 基础树节点
  *
  * @author fanzaiyang
  * @date 2024/08/28
  */
-public abstract class TreeNode<E> implements Serializable {
+@Getter
+@Setter
+public abstract class BaseTreeNode<E> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2254859224968094447L;
@@ -41,21 +46,4 @@ public abstract class TreeNode<E> implements Serializable {
      */
     public abstract boolean isLeaf();
 
-    /**
-     * 获取字节点列表
-     *
-     * @return {@link List }<{@link E }>
-     */
-    public List<E> getChildren() {
-        return this.children;
-    }
-
-    /**
-     * 设置字节点列表
-     *
-     * @param children 子节点列表
-     */
-    public void setChildren(List<E> children) {
-        this.children = children;
-    }
 }

@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.core.utils;
 
 
-import cn.fanzy.atfield.core.model.TreeNode;
+import cn.fanzy.atfield.core.model.BaseTreeNode;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
@@ -112,19 +112,20 @@ public class TreeUtils extends TreeUtil {
     }
 
     /**
-     * 将list合成树 -> E必须继承{@link TreeNode}
+     * 将list合成树 -> E必须继承{@link BaseTreeNode}
      * <pre>
      *     TreeUtils.makeTree(BeanUtil.copyToList(list, OrgTreeVo.class), OrgTreeVo::setChildren);
      * </pre>
+     *
      * @param list           需要合成树的List
      * @param setSubChildren E中设置下级数据方法，如：Menu::setSubMenus
      * @return {@link List }<{@link E }>
      */
-    public static <E extends TreeNode<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
+    public static <E extends BaseTreeNode<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        List<String> idList = list.stream().map(TreeNode::getId).toList();
+        List<String> idList = list.stream().map(BaseTreeNode::getId).toList();
         return list.stream().filter(a -> !idList.contains(a.getParentId()))
                 .peek(x -> setSubChildren.accept(x,
                                 makeChildren(x, list,
@@ -143,6 +144,7 @@ public class TreeUtils extends TreeUtil {
      *     (a, b) -> StrUtil.equalsIgnoreCase(a.getId(), b.getParentId()),
      *     OrgTreeVo::setChildren);
      * </pre>
+     *
      * @param list           需要合成树的List
      * @param rootCheck      判断E中为根节点的条件，如：x->x.getPId()==-1L , x->x.getParentId()==null,x->x.getParentMenuId()==0
      * @param parentCheck    判断E中为父节点条件，如：(x,y)->x.getId().equals(y.getPId())
@@ -160,21 +162,22 @@ public class TreeUtils extends TreeUtil {
     }
 
     /**
-     * 将树打平成tree -> E必须继承{@link TreeNode}
+     * 将树打平成tree -> E必须继承{@link BaseTreeNode}
      * <pre>
      *     TreeUtils.flat(treeList,  x -> x.setChildren(null))
      * </pre>
+     *
      * @param tree           需要打平的树
      * @param setSubChildren 将下级数据置空方法，如：x->x.setSubMenus(null)
      * @param <E>            泛型实体对象
      * @return 打平后的数据
      */
-    public static <E extends TreeNode<E>> List<E> flat(List<E> tree, Consumer<E> setSubChildren) {
+    public static <E extends BaseTreeNode<E>> List<E> flat(List<E> tree, Consumer<E> setSubChildren) {
         List<E> res = new ArrayList<>();
         forPostOrder(tree, item -> {
             setSubChildren.accept(item);
             res.add(item);
-        }, TreeNode::getChildren);
+        }, BaseTreeNode::getChildren);
         return res;
     }
 
@@ -183,6 +186,7 @@ public class TreeUtils extends TreeUtil {
      * <pre>
      *     TreeUtils.flat(treeList, OrgTreeVo::getChildren, x -> x.setChildren(null))
      * </pre>
+     *
      * @param tree           需要打平的树
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
      * @param setSubChildren 将下级数据置空方法，如：x->x.setSubMenus(null)
@@ -205,12 +209,13 @@ public class TreeUtils extends TreeUtil {
      *        0
      *     1       2
      *  3    4  5     6
-     *7  8 9
+     * 7  8 9
      * 前序：0137849256
      * 后序：3718495260
      * 层序：0123456789
      *     TreeUtils.forPreOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
+     *
      * @param tree           需要遍历的树
      * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
@@ -233,12 +238,13 @@ public class TreeUtils extends TreeUtil {
      *        0
      *     1       2
      *  3    4  5     6
-     *7  8 9
+     * 7  8 9
      * 前序：0137849256
      * 后序：3718495260
      * 层序：0123456789
      *     TreeUtils.forLevelOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
+     *
      * @param tree           需要遍历的树
      * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
@@ -263,12 +269,13 @@ public class TreeUtils extends TreeUtil {
      *        0
      *     1       2
      *  3    4  5     6
-     *7  8 9
+     * 7  8 9
      * 前序：0137849256
      * 后序：3718495260
      * 层序：0123456789
      *     TreeUtils.forPostOrder(treeList, x -> System.out.println(x.getName()), OrgTreeVo::getChildren);
      * </pre>
+     *
      * @param tree           需要遍历的树
      * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
@@ -290,6 +297,7 @@ public class TreeUtils extends TreeUtil {
      *     TreeUtils.sort(treeList, Comparator.comparing(OrgTreeVo::getId), OrgTreeVo::getChildren);
      *     TreeUtils.sort(treeList, (x,y)->y.getRank().compareTo(x.getRank()), MenuVo::getSubMenus);
      * </pre>
+     *
      * @param tree        需要排序的树
      * @param comparator  排序规则Comparator，如：Comparator.comparing(MenuVo::getRank)按Rank正序 ,(x,y)->y.getRank().compareTo(x.getRank())，按Rank倒序
      * @param getChildren 获取下级数据方法，如：MenuVo::getSubMenus
