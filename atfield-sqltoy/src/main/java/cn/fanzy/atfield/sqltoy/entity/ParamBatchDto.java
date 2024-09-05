@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.sqltoy.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024-07-01
  */
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
