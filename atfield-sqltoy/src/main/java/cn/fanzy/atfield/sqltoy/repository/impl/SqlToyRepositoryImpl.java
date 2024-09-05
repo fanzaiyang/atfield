@@ -1,11 +1,13 @@
 package cn.fanzy.atfield.sqltoy.repository.impl;
 
 import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
+import cn.fanzy.atfield.sqltoy.mp.IPage;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import com.sagframe.sagacity.sqltoy.plus.conditions.Wrappers;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.model.MapKit;
+import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
 import java.io.Serializable;
@@ -72,5 +74,16 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
             wrapTreeTableRoute(entity);
         }
         return true;
+    }
+
+    @Override
+    public <T extends Serializable> IPage<T> convert(Page<T> sourcePage) {
+        IPage<T> iPage = new cn.fanzy.atfield.sqltoy.mp.Page<>();
+        iPage.setTotal(sourcePage.getRecordCount());
+        iPage.setCurrent(sourcePage.getPageNo());
+        iPage.setSize(sourcePage.getPageSize());
+        iPage.setRecords(sourcePage.getRows());
+        iPage.setPages(sourcePage.getTotalPage());
+        return iPage;
     }
 }

@@ -1,7 +1,9 @@
 package cn.fanzy.atfield.sqltoy.repository;
 
 import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
+import cn.fanzy.atfield.sqltoy.mp.IPage;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDao;
+import org.sagacity.sqltoy.model.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -69,4 +71,12 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @return boolean
      */
     boolean wrapTreeTableRoute(final List<Serializable> entities);
+
+    /**
+     * 转换为mp的IPage
+     *
+     * @param sourcePage 源页面
+     * @return {@link IPage }<{@link T }>
+     */
+    <T extends Serializable> IPage<T> convert(Page<T> sourcePage);
 }

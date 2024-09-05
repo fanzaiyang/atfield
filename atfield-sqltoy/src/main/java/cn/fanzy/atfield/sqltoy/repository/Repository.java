@@ -1,6 +1,8 @@
 package cn.fanzy.atfield.sqltoy.repository;
 
+import cn.fanzy.atfield.sqltoy.mp.IPage;
 import org.sagacity.sqltoy.dao.LightDao;
+import org.sagacity.sqltoy.model.Page;
 
 import java.io.Serializable;
 import java.util.List;
@@ -55,4 +57,11 @@ public interface Repository extends LightDao {
      */
     <T> Long remove(Class<T> clazz, Object... ids);
 
+    /**
+     * 转换为mp的IPage
+     *
+     * @param sourcePage 源页面
+     * @return {@link IPage }<{@link T }>
+     */
+    <T extends Serializable> IPage<T> convert(Page<T> sourcePage);
 }

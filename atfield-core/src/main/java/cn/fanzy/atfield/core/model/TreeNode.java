@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * tree 节点
+ *
  * @author fanzaiyang
  * @date 2024/08/28
  */
@@ -27,6 +29,12 @@ public abstract class TreeNode<E> implements Serializable {
      */
     public abstract String getParentId();
 
+    /**
+     * 是叶子节点
+     *
+     * @return boolean
+     */
+    public abstract boolean isLeaf();
 
     /**
      * 获取字节点列表

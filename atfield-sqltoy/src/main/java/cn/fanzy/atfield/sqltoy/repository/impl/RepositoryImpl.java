@@ -1,11 +1,13 @@
 package cn.fanzy.atfield.sqltoy.repository.impl;
 
+import cn.fanzy.atfield.sqltoy.mp.IPage;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.Repository;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.dao.impl.LightDaoImpl;
 import org.sagacity.sqltoy.model.EntityUpdate;
+import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
 
 import java.io.Serializable;
@@ -56,5 +58,16 @@ public class RepositoryImpl extends LightDaoImpl implements Repository {
                 .set(properties.getLogicDeleteField(), properties.getLogicDeleteValue())
                 .where(meta.getIdArgWhereSql())
                 .values(ids));
+    }
+
+    @Override
+    public <T extends Serializable> IPage<T> convert(Page<T> sourcePage) {
+        IPage<T> iPage = new cn.fanzy.atfield.sqltoy.mp.Page<>();
+        iPage.setTotal(sourcePage.getRecordCount());
+        iPage.setCurrent(sourcePage.getPageNo());
+        iPage.setSize(sourcePage.getPageSize());
+        iPage.setRecords(sourcePage.getRows());
+        iPage.setPages(sourcePage.getTotalPage());
+        return iPage;
     }
 }

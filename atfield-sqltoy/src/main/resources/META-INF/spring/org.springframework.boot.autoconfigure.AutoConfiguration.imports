@@ -1,1 +1,2 @@
 cn.fanzy.atfield.sqltoy.configuration.SqltoyExtraAutoConfiguration
+com.sagframe.sagacity.sqltoy.plus.SqlToyPlusConfiguration
