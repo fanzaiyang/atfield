@@ -28,7 +28,7 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -2668694369032220300L;
 
     @Column(name = "revision", comment = "版本号", length = 36L, type = Types.INTEGER, nativeType = "INT", nullable = true)
-    private Integer revision;
+    private Long revision;
 
     @Column(name = "tenant_id", comment = "租户号", length = 36L, type = Types.VARCHAR, nativeType = "VARCHAR", nullable = true)
     private String tenantId;
