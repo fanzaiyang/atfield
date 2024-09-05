@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.core.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,41 +10,52 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024/08/28
  */
-public interface TreeNode<E> extends Serializable {
+public abstract class TreeNode<E> implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -2254859224968094447L;
+
+    /**
+     * 下级节点列表
+     */
+    private List<E> children;
 
     /**
      * 节点ID
      *
      * @return {@link String }
      */
-    String getId();
+    public abstract String getId();
 
     /**
      * 父节点
      *
      * @return {@link String }
      */
-    String getParentId();
+    public abstract String getParentId();
 
     /**
      * 是叶子节点
      *
      * @return boolean
      */
-    boolean isLeaf();
+    public abstract boolean isLeaf();
 
     /**
      * 获取字节点列表
      *
      * @return {@link List }<{@link E }>
      */
-    List<E> getChildren();
+    public List<E> getChildren() {
+        return this.children;
+    }
 
     /**
      * 设置字节点列表
      *
      * @param children 子节点列表
      */
-    void setChildren(List<E> children);
+    public void setChildren(List<E> children) {
+        this.children = children;
+    }
 }
