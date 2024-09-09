@@ -34,6 +34,9 @@ public class JsonTypeHandler extends TypeHandler {
         if (StrUtil.startWith(javaTypeName, "java.") && genericType == null) {
             return super.toJavaType(javaTypeName, null, jdbcValue);
         }
+        if (jdbcValue == null) {
+            return super.toJavaType(javaTypeName, genericType, null);
+        }
         if (jdbcValue.toString().startsWith("{") && jdbcValue.toString().endsWith("}")) {
             return JSONUtil.toBean(jdbcValue.toString(), Class.forName(javaTypeName));
         }
