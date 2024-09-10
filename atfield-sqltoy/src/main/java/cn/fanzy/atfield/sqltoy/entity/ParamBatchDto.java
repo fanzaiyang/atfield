@@ -25,7 +25,7 @@ public class ParamBatchDto implements Serializable {
     private static final long serialVersionUID = 4582477467794940501L;
 
     /**
-     * 目前ID
+     * 目标ID集合
      */
     @NotBlank(message = "目标ID集合不能为空！")
     private List<String> targets;
