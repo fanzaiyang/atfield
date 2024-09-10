@@ -9,6 +9,7 @@ import cn.fanzy.atfield.sqltoy.repository.Repository;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import cn.fanzy.atfield.sqltoy.repository.impl.RepositoryImpl;
 import cn.fanzy.atfield.sqltoy.repository.impl.SqlToyRepositoryImpl;
+import com.sagframe.sagacity.sqltoy.plus.EnableSqlToyPlus;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.PropertySource;
  * @author fanzaiyang
  * @date 2024/01/09
  */
+@EnableSqlToyPlus
 @RequiredArgsConstructor
 @Configuration
 @PropertySource("classpath:atfield-sqltoy.properties")
