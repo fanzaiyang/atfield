@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.sagacity.sqltoy.plugins.TypeHandler;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Collection;
 
 /**
  * JSON 类型处理程序
@@ -18,11 +20,14 @@ import java.sql.Types;
 @Slf4j
 public class JsonTypeHandler extends TypeHandler {
 
-
     @Override
     public boolean setValue(Integer dbType, PreparedStatement pst, int paramIndex, int jdbcType, Object value) throws SQLException {
-        if (jdbcType == Types.ARRAY || jdbcType == Types.JAVA_OBJECT) {
-            pst.setString(paramIndex, JSONUtil.toJsonStr(value));
+        if (jdbcType == Types.JAVA_OBJECT) {
+            pst.setString(paramIndex, JSONUtil.toJsonStr(value == null ? "{}" : value));
+            return true;
+        }
+        if (jdbcType == Types.ARRAY) {
+            pst.setString(paramIndex, JSONUtil.toJsonStr(value == null ? "[]" : value));
             return true;
         }
         return false;
@@ -34,13 +39,21 @@ public class JsonTypeHandler extends TypeHandler {
         if (StrUtil.startWith(javaTypeName, "java.") && genericType == null) {
             return super.toJavaType(javaTypeName, null, jdbcValue);
         }
-        if (jdbcValue == null) {
+        // 泛型信息不为空，且jdbcValue为空，则使用默认的转换
+        if (jdbcValue == null || StrUtil.isBlank(jdbcValue.toString())) {
+            Class<?> clazz = Class.forName(javaTypeName);
+            if (Collection.class.isAssignableFrom(clazz) || clazz.isArray()) {
+                return JSONUtil.toList("[]", genericType == null ? Object.class : genericType);
+            }
+            if (ClassUtil.isNormalClass(clazz)) {
+                return JSONUtil.toBean("{}", clazz);
+            }
             return super.toJavaType(javaTypeName, genericType, null);
         }
-        if (jdbcValue.toString().startsWith("{") && jdbcValue.toString().endsWith("}")) {
+        if (JSONUtil.isTypeJSONObject(jdbcValue.toString())) {
             return JSONUtil.toBean(jdbcValue.toString(), Class.forName(javaTypeName));
         }
-        if (jdbcValue.toString().startsWith("[") && jdbcValue.toString().endsWith("]")) {
+        if (JSONUtil.isTypeJSONArray(jdbcValue.toString())) {
             return JSONUtil.toList(jdbcValue.toString(), genericType == null ? Object.class : genericType);
         }
 
