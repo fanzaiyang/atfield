@@ -23,4 +23,11 @@ public class BCryptUtils extends BCrypt {
     public static boolean isEncoded(String encodedPassword) {
         return BCRYPT_PATTERN.matcher(encodedPassword).matches();
     }
+
+    public static String encode(String password) {
+        if (isEncoded(password)) {
+            return password;
+        }
+        return hashpw(password, BCrypt.gensalt());
+    }
 }
