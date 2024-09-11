@@ -24,10 +24,17 @@ public class BCryptUtils extends BCrypt {
         return BCRYPT_PATTERN.matcher(encodedPassword).matches();
     }
 
+    /**
+     * 生成密文，使用长度为10的加盐方式
+     * <p>如果传入的密码已经是密文，则直接返回</p>
+     *
+     * @param password 需要加密的明文
+     * @return {@link String }
+     */
     public static String encode(String password) {
         if (isEncoded(password)) {
             return password;
         }
-        return hashpw(password, BCrypt.gensalt());
+        return hashpw(password);
     }
 }
