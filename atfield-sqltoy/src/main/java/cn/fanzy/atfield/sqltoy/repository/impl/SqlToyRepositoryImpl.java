@@ -59,7 +59,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     @Override
     public boolean wrapTreeTableRoute(Serializable entity) {
         return super.wrapTreeTableRoute(new TreeTableModel(entity)
-                .pidField("-1"));
+                .pidField("parentId"));
     }
 
     @Override
