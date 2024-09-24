@@ -2,6 +2,7 @@ package cn.fanzy.atfield.core.utils;
 
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.itextpdf.io.font.PdfEncodings;
@@ -59,6 +60,31 @@ public class PdfUtil {
     }
 
     /**
+     * 导出 PDF
+     *
+     * @param html        HTML格式
+     * @param outFileName 输出文件名
+     * @param fontProgram font 程序
+     * @param response    响应
+     */
+    public static void exportPdf(String html, String outFileName, String fontProgram, HttpServletResponse response) {
+        exportPdf(html, outFileName, response, PageSize.A4, fontProgram, null);
+    }
+
+    /**
+     * 导出 PDF
+     *
+     * @param html        HTML格式
+     * @param outFileName 输出文件名
+     * @param fontProgram font 程序
+     * @param encoding    编码
+     * @param response    响应
+     */
+    public static void exportPdf(String html, String outFileName, String fontProgram, String encoding,HttpServletResponse response) {
+        exportPdf(html, outFileName, response, PageSize.A4, fontProgram, encoding);
+    }
+
+    /**
      * 将html字符串转换为pdf并下载到客户端
      *
      * @param html        html字符串
@@ -98,10 +124,40 @@ public class PdfUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
+    /**
+     * 导出 PDF
+     *
+     * @param html        HTML格式
+     * @param outFileName 输出文件名
+     * @param fontProgram font 程序
+     */
+    public static void exportPdf(String html, String outFileName, String fontProgram) {
+        try {
+            File file = FileUtil.file(outFileName);
+            execute(html, PageSize.A4, new PdfWriter(file), getConverterProperties(fontProgram, null));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 导出 PDF
+     *
+     * @param html        HTML格式
+     * @param outFileName 输出文件名
+     * @param fontProgram font 程序
+     * @param encoding    编码
+     */
+    public static void exportPdf(String html, String outFileName, String fontProgram, String encoding) {
+        try {
+            File file = FileUtil.file(outFileName);
+            execute(html, PageSize.A4, new PdfWriter(file), getConverterProperties(fontProgram, encoding));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * 将html字符串转换为pdf并保存到指定文件
      *
@@ -157,6 +213,9 @@ public class PdfUtil {
      */
     public static ConverterProperties getConverterProperties(String fontProgram, String encoding) {
         ConverterProperties properties = new ConverterProperties();
+        if (StrUtil.isBlank(fontProgram)) {
+            return properties;
+        }
         FontProvider fontProvider = new FontProvider();
         PdfFont pdfFont = null;
         try {
