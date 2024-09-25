@@ -34,9 +34,9 @@ public class ResourceUtils extends org.springframework.util.ResourceUtils {
             return FileUtil.getInputStream(relativeFilePath);
         }
         ClassPathResource resource = new ClassPathResource(
-                StrUtil.startWith(relativeFilePath, "classpath:") ?
+                StrUtil.startWith(relativeFilePath, CLASSPATH_URL_PREFIX) ?
                         relativeFilePath :
-                        "classpath:" + relativeFilePath
+                        CLASSPATH_URL_PREFIX + relativeFilePath
         );
         try {
             return resource.getInputStream();
