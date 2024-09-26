@@ -30,7 +30,6 @@ import java.util.Map;
 @Slf4j
 public class ServletUtil extends JakartaServletUtil {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * 携带指定的信息重定向到指定的地址
@@ -59,7 +58,8 @@ public class ServletUtil extends JakartaServletUtil {
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         try {
-            response.getWriter().write(MAPPER.writeValueAsString(data));
+            response.getWriter().write(SpringUtils.getBean(ObjectMapper.class)
+                    .writeValueAsString(data));
             response.getWriter().flush();
             response.getWriter().close();
         } catch (Exception e) {
