@@ -35,7 +35,7 @@ public class DateUtils extends DateUtil {
     public static String getBeginTime(List<String> valueList) {
         if (CollUtil.size(valueList) == 2) {
             return DateUtil.parse(
-                    valueList.get(0).length() == 10 ? valueList.get(1) + " 00:00:00" : valueList.get(0)
+                    valueList.get(0).length() == 10 ? valueList.get(0) + " 00:00:00" : valueList.get(0)
             ).toString("yyyy-MM-dd HH:mm:ss");
         }
         return null;
@@ -64,7 +64,7 @@ public class DateUtils extends DateUtil {
     public static String getEndTime(List<String> valueList) {
         if (CollUtil.size(valueList) == 2) {
             return DateUtil.parse(
-                    valueList.get(1).length() == 10 ? valueList.get(1) + " 00:00:00" : valueList.get(1)
+                    valueList.get(1).length() == 10 ? valueList.get(1) + " 23:59:59" : valueList.get(1)
             ).toString("yyyy-MM-dd HH:mm:ss");
         }
         return null;
