@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(FreeMarkerConfigurer.class)
+@ConditionalOnClass(value = {Template.class, FreeMarkerConfigurer.class})
 public class FreemarkerUtils extends FreeMarkerTemplateUtils {
     private static FreeMarkerConfigurer configurer;
 
