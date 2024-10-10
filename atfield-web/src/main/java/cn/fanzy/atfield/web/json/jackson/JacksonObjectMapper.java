@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.web.json.jackson;
 
-import cn.fanzy.atfield.web.json.convert.AtFieldBigDecimalSerializer;
-import cn.fanzy.atfield.web.json.convert.AtFieldDoubleSerializer;
+import cn.fanzy.atfield.web.json.convert.BigDecimalSerializer;
+import cn.fanzy.atfield.web.json.convert.DoubleSerializer;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -54,9 +54,9 @@ public class JacksonObjectMapper extends ObjectMapper {
         }
 
         // 浮点型处理
-        simpleModule.addSerializer(BigDecimal.class,new AtFieldBigDecimalSerializer(properties));
-        simpleModule.addSerializer(Double.class,new AtFieldDoubleSerializer(properties));
-        simpleModule.addSerializer(Double.TYPE,new AtFieldDoubleSerializer(properties));
+        simpleModule.addSerializer(BigDecimal.class,new BigDecimalSerializer(properties));
+        simpleModule.addSerializer(Double.class,new DoubleSerializer(properties));
+        simpleModule.addSerializer(Double.TYPE,new DoubleSerializer(properties));
         //反序列化的时候如果多了其他属性,不抛出异常
         this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 日期禁止时间戳

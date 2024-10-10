@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * @date 2024/08/16
  */
 @RequiredArgsConstructor
-public class AtFieldDoubleSerializer extends JsonSerializer<Double> {
+public class DoubleSerializer extends JsonSerializer<Double> {
     private final JsonProperty properties;
 
     @Override
