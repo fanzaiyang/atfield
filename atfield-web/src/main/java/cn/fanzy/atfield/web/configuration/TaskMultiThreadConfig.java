@@ -1,6 +1,5 @@
 package cn.fanzy.atfield.web.configuration;
 
-import cn.fanzy.atfield.web.json.property.JsonProperty;
 import cn.fanzy.atfield.web.task.TaskMultiProperty;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
