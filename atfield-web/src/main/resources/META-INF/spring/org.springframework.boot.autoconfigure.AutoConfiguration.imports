@@ -2,4 +2,5 @@ cn.fanzy.atfield.web.configuration.JsonModelAutoConfiguration
 cn.fanzy.atfield.web.configuration.JsonConvertAutoConfiguration
 cn.fanzy.atfield.web.configuration.CustomWebAutoConfiguration
 cn.fanzy.atfield.web.configuration.CorsAutoConfiguration
+cn.fanzy.atfield.web.configuration.TaskMultiThreadConfig
 cn.fanzy.atfield.web.json.jackson.JacksonWebConfig
