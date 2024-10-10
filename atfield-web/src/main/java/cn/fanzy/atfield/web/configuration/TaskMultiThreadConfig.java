@@ -15,7 +15,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 任务多线程配置
- *
+ * <pre>
+ *     定时任务未执行完毕时，后续任务可能会受到影响,多个定时任务并发执行可能导致资源竞争
+ * </pre>
  * @author fanzaiyang
  * @date 2024/10/10
  */
