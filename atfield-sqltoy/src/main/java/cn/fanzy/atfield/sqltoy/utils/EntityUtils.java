@@ -12,7 +12,7 @@ import org.sagacity.sqltoy.config.EntityManager;
  */
 public class EntityUtils {
 
-    public static void test(){
+    public static void test() {
         SqlToyContext bean = SpringUtils.getBean(SqlToyContext.class);
         EntityManager entityManager = bean.getEntityManager();
         entityManager.getAllEntities();

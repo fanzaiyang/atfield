@@ -25,15 +25,15 @@ public class BigDecimalSerializer extends JsonSerializer<BigDecimal> {
             JsonProperty.Convert convert = properties.getConvert();
             if (convert != null && convert.getScale() != null && convert.getRoundingMode() != null) {
                 value = value.setScale(convert.getScale(), convert.getRoundingMode());
-                if(convert.isNumberToString()){
+                if (convert.isNumberToString()) {
                     jsonGenerator.writeString(value.toString());
-                }else{
+                } else {
                     jsonGenerator.writeNumber(value);
                 }
-            }else {
+            } else {
                 jsonGenerator.writeNumber(value);
             }
-        }else {
+        } else {
             jsonGenerator.writeNull();
         }
     }

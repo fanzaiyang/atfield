@@ -32,6 +32,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param param       参数
      */
     void handleUpdateTreeStatus(Class<?> entityClass, ParamBatchDto param);
+
     /**
      * 处理更新删除
      *
@@ -47,6 +48,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param param       参数
      */
     void handleUpdateTreeDelete(Class<?> entityClass, ParamBatchDto param);
+
     /**
      * 换行树表路由
      *

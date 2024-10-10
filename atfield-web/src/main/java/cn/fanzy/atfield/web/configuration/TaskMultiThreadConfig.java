@@ -18,6 +18,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * <pre>
  *     定时任务未执行完毕时，后续任务可能会受到影响,多个定时任务并发执行可能导致资源竞争
  * </pre>
+ *
  * @author fanzaiyang
  * @date 2024/10/10
  */
@@ -54,7 +55,7 @@ public class TaskMultiThreadConfig {
         // DiscardOldestPolicy:抛弃旧的任务、暂不支持；会导致被丢弃的任务无法再次被执行
         // DiscardPolicy:抛弃当前任务、暂不支持；会导致被丢弃的任务无法再次被执行
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        executor.setThreadNamePrefix(StrUtil.blankToDefault(property.getThreadNamePrefix(),"task-thread-"));
+        executor.setThreadNamePrefix(StrUtil.blankToDefault(property.getThreadNamePrefix(), "task-thread-"));
         //执行初始化会自动执行afterPropertiesSet()初始化
         executor.initialize();
         return executor;

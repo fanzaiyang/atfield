@@ -6,7 +6,6 @@ import cn.fanzy.atfield.web.advice.SaTokenExceptionAdvice;
 import cn.fanzy.atfield.web.filter.ReplaceStreamFilter;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @RequiredArgsConstructor
 @Configuration
-@AutoConfigureBefore(JsonConvertAutoConfiguration.class)
 @EnableConfigurationProperties({JsonProperty.class})
 @ImportAutoConfiguration({
         ReplaceStreamFilter.class,

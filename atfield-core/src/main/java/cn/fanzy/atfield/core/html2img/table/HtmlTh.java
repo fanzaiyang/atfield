@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author  wyq
+ * @author wyq
  * @since 2021/8/26 15:00
  */
 @Target(ElementType.FIELD)
@@ -17,6 +17,7 @@ public @interface HtmlTh {
 
     //标题 th 的样式
     String thStyle() default "border:solid #add9c0; border-width:0px 1px 1px 0px;padding:4px;text-align:center;";
+
     //td 的样式
     String tdStyle() default "border:solid #add9c0; border-width:0px 1px 1px 0px;padding:4px;text-align:center;";
 }

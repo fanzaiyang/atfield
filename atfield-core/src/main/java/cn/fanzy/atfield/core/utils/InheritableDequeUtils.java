@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * InheritableThreadLocal with Deque工具类
  * 双端队列
+ *
  * @author fanzaiyang
  * @date 2024/09/29
  */

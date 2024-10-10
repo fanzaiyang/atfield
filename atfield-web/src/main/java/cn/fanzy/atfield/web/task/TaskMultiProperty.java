@@ -34,15 +34,15 @@ public class TaskMultiProperty {
      *     队列最大长度，一般需要设置值: 大于等于notifyScheduledMainExecutor.maxNum；默认为Integer.MAX_VALUE
      * </pre>
      */
-    private Integer queueCapacity=50;
+    private Integer queueCapacity = 50;
 
     /**
      * 保持活动秒数,默认：60s
      */
-    private Integer keepAliveSeconds=60;
+    private Integer keepAliveSeconds = 60;
 
     /**
      * 线程名称前缀,默认：task-thread-
      */
-    private String threadNamePrefix="task-thread-";
+    private String threadNamePrefix = "task-thread-";
 }

@@ -1,4 +1,3 @@
-
 package cn.fanzy.atfield.tlog.common.exception;
 
 import java.io.Serial;

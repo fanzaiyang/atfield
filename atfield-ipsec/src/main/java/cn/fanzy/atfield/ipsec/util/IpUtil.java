@@ -32,7 +32,7 @@ public class IpUtil extends Ipv4Util {
      * @return boolean
      */
     public static boolean isContains(String ip, Set<String> ipList) {
-        if(CollUtil.isEmpty(ipList)){
+        if (CollUtil.isEmpty(ipList)) {
             return false;
         }
         // 简单匹配

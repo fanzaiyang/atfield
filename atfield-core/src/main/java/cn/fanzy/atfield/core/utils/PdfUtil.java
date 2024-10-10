@@ -80,7 +80,7 @@ public class PdfUtil {
      * @param encoding    编码
      * @param response    响应
      */
-    public static void exportPdf(String html, String outFileName, String fontProgram, String encoding,HttpServletResponse response) {
+    public static void exportPdf(String html, String outFileName, String fontProgram, String encoding, HttpServletResponse response) {
         exportPdf(html, outFileName, response, PageSize.A4, fontProgram, encoding);
     }
 
@@ -158,6 +158,7 @@ public class PdfUtil {
             throw new RuntimeException(e);
         }
     }
+
     /**
      * 将html字符串转换为pdf并保存到指定文件
      *

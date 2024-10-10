@@ -161,20 +161,23 @@ public class ParamUtil {
         }
         return null;
     }
+
     public static Date getBeginTimeD(List<String> valueList) {
         String beginTime = getBeginTime(valueList);
-        if(StrUtil.isNotBlank(beginTime)){
-            return DateUtil.parse(beginTime,"yyyy-MM-dd HH:mm:ss");
+        if (StrUtil.isNotBlank(beginTime)) {
+            return DateUtil.parse(beginTime, "yyyy-MM-dd HH:mm:ss");
         }
         return null;
     }
+
     public static Date getEndTimeD(List<String> valueList) {
         String endTime = getEndTime(valueList);
-        if(StrUtil.isNotBlank(endTime)){
-            return DateUtil.parse(endTime,"yyyy-MM-dd HH:mm:ss");
+        if (StrUtil.isNotBlank(endTime)) {
+            return DateUtil.parse(endTime, "yyyy-MM-dd HH:mm:ss");
         }
         return null;
     }
+
     /**
      * 得到结束日期
      *

@@ -47,16 +47,16 @@ public class JacksonObjectMapper extends ObjectMapper {
         this.configure(FAIL_ON_UNKNOWN_PROPERTIES, false);
         SimpleModule simpleModule = new SimpleModule();
         // long 转换为字符串
-        if(properties.getConvert().isLongToString()){
+        if (properties.getConvert().isLongToString()) {
             simpleModule.addSerializer(BigInteger.class, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
             simpleModule.addSerializer(Long.class, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
             simpleModule.addSerializer(Long.TYPE, com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
         }
 
         // 浮点型处理
-        simpleModule.addSerializer(BigDecimal.class,new BigDecimalSerializer(properties));
-        simpleModule.addSerializer(Double.class,new DoubleSerializer(properties));
-        simpleModule.addSerializer(Double.TYPE,new DoubleSerializer(properties));
+        simpleModule.addSerializer(BigDecimal.class, new BigDecimalSerializer(properties));
+        simpleModule.addSerializer(Double.class, new DoubleSerializer(properties));
+        simpleModule.addSerializer(Double.TYPE, new DoubleSerializer(properties));
         //反序列化的时候如果多了其他属性,不抛出异常
         this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 日期禁止时间戳

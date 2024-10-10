@@ -8,7 +8,7 @@
 
 2. dependencyManagement **「推荐」**
     *
-    最新版本号：![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
+   最新版本号：![GitHub release (latest by date)](https://img.shields.io/github/v/release/fanzaiyang/breeze-spring-cloud.png)
 
 ```xml
 <dependencyManagement>

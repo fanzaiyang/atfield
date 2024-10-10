@@ -4,7 +4,6 @@ import cn.fanzy.atfield.cache.CacheService;
 import cn.fanzy.atfield.core.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Set;

@@ -25,16 +25,16 @@ public class DoubleSerializer extends JsonSerializer<Double> {
             JsonProperty.Convert convert = properties.getConvert();
             if (convert != null && convert.getScale() != null && convert.getRoundingMode() != null) {
                 BigDecimal newValue = BigDecimal.valueOf(value).setScale(convert.getScale(), convert.getRoundingMode());
-                if(convert.isNumberToString()){
+                if (convert.isNumberToString()) {
                     jsonGenerator.writeString(newValue.toString());
-                }else{
+                } else {
                     jsonGenerator.writeNumber(newValue);
-                }               
-            }else {
+                }
+            } else {
                 jsonGenerator.writeNumber(value);
             }
 
-        }else {
+        } else {
             jsonGenerator.writeNull();
         }
     }
