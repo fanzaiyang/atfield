@@ -52,20 +52,20 @@ public class TLogRecordAdvice {
         String bizNo = SpElUtils.parse(annotation.bizNo(), joinPoint);
         if (StrUtil.isBlank(bizNo)) {
             bizNo = LogRecordContext.getBizNo();
-            String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
-            LogRecordInfo record = new LogRecordInfo();
-            record.setAppName(annotation.appName());
-
-            record.setOperatorId(logOperatorService.getUserId(null));
-            record.setOperatorName(logOperatorService.getUserName(null));
-
-            record.setOperateType(operateType);
-            record.setContent(content);
-            record.setOperateTime(LocalDateTime.now());
-            record.setBizNo(bizNo);
-            record.setOperatorIp(SpringUtils.getClientIp());
-            record.setExtra(annotation.extra());
-            logRecordService.write(record);
         }
+        String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
+        LogRecordInfo record = new LogRecordInfo();
+        record.setAppName(annotation.appName());
+
+        record.setOperatorId(logOperatorService.getUserId(null));
+        record.setOperatorName(logOperatorService.getUserName(null));
+
+        record.setOperateType(operateType);
+        record.setContent(content);
+        record.setOperateTime(LocalDateTime.now());
+        record.setBizNo(bizNo);
+        record.setOperatorIp(SpringUtils.getClientIp());
+        record.setExtra(annotation.extra());
+        logRecordService.write(record);
     }
 }
