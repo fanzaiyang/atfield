@@ -7,7 +7,9 @@ import cn.fanzy.atfield.tlog.print.annotation.LogRecord;
 import cn.fanzy.atfield.tlog.print.bean.LogRecordInfo;
 import cn.fanzy.atfield.tlog.print.callback.LogOperatorService;
 import cn.fanzy.atfield.tlog.print.callback.LogRecordService;
+import cn.fanzy.atfield.tlog.print.context.LogRecordContext;
 import cn.fanzy.atfield.tlog.print.utils.SpElUtils;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -48,19 +50,22 @@ public class TLogRecordAdvice {
         }
         String content = SpElUtils.parse(annotation.content(), joinPoint);
         String bizNo = SpElUtils.parse(annotation.bizNo(), joinPoint);
-        String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
-        LogRecordInfo record = new LogRecordInfo();
-        record.setAppName(annotation.appName());
+        if (StrUtil.isBlank(bizNo)) {
+            bizNo = LogRecordContext.getBizNo();
+            String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
+            LogRecordInfo record = new LogRecordInfo();
+            record.setAppName(annotation.appName());
 
-        record.setOperatorId(logOperatorService.getUserId(null));
-        record.setOperatorName(logOperatorService.getUserName(null));
+            record.setOperatorId(logOperatorService.getUserId(null));
+            record.setOperatorName(logOperatorService.getUserName(null));
 
-        record.setOperateType(operateType);
-        record.setContent(content);
-        record.setOperateTime(LocalDateTime.now());
-        record.setBizNo(bizNo);
-        record.setOperatorIp(SpringUtils.getClientIp());
-        record.setExtra(annotation.extra());
-        logRecordService.write(record);
+            record.setOperateType(operateType);
+            record.setContent(content);
+            record.setOperateTime(LocalDateTime.now());
+            record.setBizNo(bizNo);
+            record.setOperatorIp(SpringUtils.getClientIp());
+            record.setExtra(annotation.extra());
+            logRecordService.write(record);
+        }
     }
 }

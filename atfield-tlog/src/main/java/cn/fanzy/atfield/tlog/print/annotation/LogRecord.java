@@ -19,7 +19,7 @@ public @interface LogRecord {
      *
      * @return {@link String }
      */
-    String bizNo() default "";
+    String bizNo() default "{{#bizNo}}";
 
     /**
      * 模块名称

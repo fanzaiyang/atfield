@@ -2,6 +2,7 @@ package cn.fanzy.atfield.tlog.configuration;
 
 
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
+import cn.fanzy.atfield.tlog.print.advice.TLogRecordAdvice;
 import cn.fanzy.atfield.tlog.print.advice.TLogWebInvokeTimeAdvice;
 import cn.fanzy.atfield.tlog.print.callback.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -42,5 +43,12 @@ public class TLogPrintAutoConfiguration {
     public TLogWebInvokeTimeAdvice tLogWebInvokeTimeAdvice(TLogProperty property, LogCallbackService callbackService,
                                                            LogOperatorService logOperatorService) {
         return new TLogWebInvokeTimeAdvice(property, callbackService, logOperatorService);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public TLogRecordAdvice tLogRecordAdvice(LogOperatorService logOperatorService,
+                                             LogRecordService logRecordService) {
+        return new TLogRecordAdvice(logOperatorService, logRecordService);
     }
 }

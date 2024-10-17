@@ -95,4 +95,13 @@ public class LogRecordContext {
             GLOBAL_VARIABLE_MAP.set(new HashMap<>());
         }
     }
+
+    public static void setBizNo(String bizNo) {
+        putVariable("bizNo", bizNo);
+    }
+
+    public static String getBizNo() {
+        Object bizNo = getVariable("bizNo");
+        return bizNo == null ? "" : bizNo.toString();
+    }
 }
