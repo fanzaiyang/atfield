@@ -29,13 +29,6 @@ public @interface LogRecord {
     String appName() default "";
 
     /**
-     * 业务名称
-     *
-     * @return String
-     */
-    String moduleName() default "";
-
-    /**
      * 操作人
      *
      * @return {@link String }
@@ -47,7 +40,7 @@ public @interface LogRecord {
      *
      * @return {@link String }
      */
-    String operateType() default "";
+    String operateType();
 
 
     /**
@@ -55,7 +48,7 @@ public @interface LogRecord {
      *
      * @return boolean
      */
-    boolean success() default true;
+    String content();
 
     /**
      * 额外

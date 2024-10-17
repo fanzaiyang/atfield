@@ -9,7 +9,7 @@ import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
 import cn.fanzy.atfield.tlog.print.annotation.Log;
 import cn.fanzy.atfield.tlog.print.bean.PrintLogInfo;
 import cn.fanzy.atfield.tlog.print.callback.LogCallbackService;
-import cn.fanzy.atfield.tlog.print.callback.LogUserCallbackService;
+import cn.fanzy.atfield.tlog.print.callback.LogOperatorService;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.date.StopWatch;
 import cn.hutool.core.text.AntPathMatcher;
@@ -52,7 +52,7 @@ public class TLogWebInvokeTimeAdvice {
 
     private final LogCallbackService callbackService;
 
-    private final LogUserCallbackService userCallbackService;
+    private final LogOperatorService userCallbackService;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
               "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +

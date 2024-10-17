@@ -3,10 +3,7 @@ package cn.fanzy.atfield.tlog.configuration;
 
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
 import cn.fanzy.atfield.tlog.print.advice.TLogWebInvokeTimeAdvice;
-import cn.fanzy.atfield.tlog.print.callback.DefaultLogCallbackServiceImpl;
-import cn.fanzy.atfield.tlog.print.callback.DefaultLogUserCallbackServiceImpl;
-import cn.fanzy.atfield.tlog.print.callback.LogCallbackService;
-import cn.fanzy.atfield.tlog.print.callback.LogUserCallbackService;
+import cn.fanzy.atfield.tlog.print.callback.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,14 +27,20 @@ public class TLogPrintAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public LogUserCallbackService logUserCallbackService() {
-        return new DefaultLogUserCallbackServiceImpl();
+    public LogOperatorService logUserCallbackService() {
+        return new DefaultLogOperatorServiceImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public LogRecordService logRecordService() {
+        return new DefaultLogRecordServiceImpl();
     }
 
     @Bean
     @ConditionalOnMissingBean
     public TLogWebInvokeTimeAdvice tLogWebInvokeTimeAdvice(TLogProperty property, LogCallbackService callbackService,
-                                                           LogUserCallbackService logUserCallbackService) {
-        return new TLogWebInvokeTimeAdvice(property, callbackService, logUserCallbackService);
+                                                           LogOperatorService logOperatorService) {
+        return new TLogWebInvokeTimeAdvice(property, callbackService, logOperatorService);
     }
 }

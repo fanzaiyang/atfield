@@ -9,7 +9,7 @@ import cn.fanzy.atfield.tlog.print.bean.PrintLogInfo;
  * @author fanzaiyang
  * @date 2023/12/05
  */
-public interface LogUserCallbackService {
+public interface LogOperatorService {
 
     /**
      * 获取用户id

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class DefaultLogUserCallbackServiceImpl implements LogUserCallbackService {
+public class DefaultLogOperatorServiceImpl implements LogOperatorService {
     @Override
     public String getUserId(PrintLogInfo param) {
         return "anonymousUser";
