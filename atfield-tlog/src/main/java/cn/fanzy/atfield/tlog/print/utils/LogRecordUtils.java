@@ -4,8 +4,6 @@ import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.tlog.print.bean.LogRecordInfo;
 import cn.fanzy.atfield.tlog.print.callback.LogOperatorService;
 import cn.fanzy.atfield.tlog.print.callback.LogRecordService;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 
 import java.time.LocalDateTime;
 
@@ -38,12 +36,6 @@ public class LogRecordUtils {
         record.setOperatorIp(SpringUtils.getClientIp());
         SpringUtils.getBean(LogRecordService.class)
                 .write(record);
-    }
-
-    public static <T> String diff(T source, T target) {
-        JSONObject sourceEntries = JSONUtil.parseObj(source);
-        JSONObject targetEntries = JSONUtil.parseObj(target);
-
     }
 
 }
