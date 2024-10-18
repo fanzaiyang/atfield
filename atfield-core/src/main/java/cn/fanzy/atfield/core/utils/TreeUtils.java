@@ -29,6 +29,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TreeUtils extends TreeUtil {
     /**
+     * 根父 ID
+     */
+    public static final String ROOT_PARENT_ID = "-1";
+
+    /**
      * 构建树 默认为：id，parentId，name，orderNumber 根节点是：-1
      *
      * @param data List数据
