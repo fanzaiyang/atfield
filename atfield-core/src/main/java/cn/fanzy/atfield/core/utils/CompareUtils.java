@@ -2,6 +2,7 @@ package cn.fanzy.atfield.core.utils;
 
 import cn.fanzy.atfield.core.annotation.Compare;
 import cn.fanzy.atfield.core.model.CompareNode;
+import cn.fanzy.atfield.core.model.ComparedNode;
 import cn.hutool.core.util.StrUtil;
 
 import java.lang.reflect.Field;
@@ -15,25 +16,100 @@ import java.util.*;
  */
 public class CompareUtils {
 
+    /**
+     * 比较
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link List }<{@link String }>
+     */
     public static <T> List<String> compare(T source, T target) {
         return compare(source, target, null);
     }
 
+    /**
+     * 比较 STR
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link String }
+     */
     public static <T> String compareStr(T source, T target) {
         List<String> compare = compare(source, target);
         return StrUtil.join("；", compare);
     }
 
+    /**
+     * 比较 STR
+     *
+     * @param source  源
+     * @param target  目标
+     * @param segment 段
+     * @return {@link String }
+     */
     public static <T> String compareStr(T source, T target, String segment) {
         List<String> compare = compare(source, target);
         return StrUtil.join(segment, compare);
     }
 
+    /**
+     * 比较 STR
+     *
+     * @param source              源
+     * @param target              目标
+     * @param ignoreCompareFields 忽略比较字段
+     * @param segment             段
+     * @return {@link String }
+     */
     public static <T> String compareStr(T source, T target, List<String> ignoreCompareFields, String segment) {
         List<String> compare = compare(source, target, ignoreCompareFields);
         return StrUtil.join(segment, compare);
     }
 
+    /**
+     * 比较节点
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link List }<{@link ComparedNode }>
+     */
+    public static <T> List<ComparedNode> compareNode(T source, T target) {
+        return compareNode(source, target, null);
+    }
+
+    /**
+     * 比较节点
+     *
+     * @param source              源
+     * @param target              目标
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link ComparedNode }>
+     */
+    public static <T> List<ComparedNode> compareNode(T source, T target, List<String> ignoreCompareFields) {
+        if (Objects.isNull(source) && Objects.isNull(target)) {
+            return List.of();
+        }
+        Map<String, CompareNode> sourceMap = getFiledValueMap(source);
+        Map<String, CompareNode> targetMap = getFiledValueMap(target);
+        if (sourceMap.isEmpty() && targetMap.isEmpty()) {
+            return List.of();
+        }
+        // 如果源数据为空
+        if (sourceMap.isEmpty()) {
+            return doEmptyNode(targetMap, ignoreCompareFields);
+        }
+        // 如果源数据不为空，则显示属性变化情况
+        return doCompareNode(sourceMap, targetMap, ignoreCompareFields);
+    }
+
+    /**
+     * 比较
+     *
+     * @param source              源
+     * @param target              目标
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link String }>
+     */
     public static <T> List<String> compare(T source, T target, List<String> ignoreCompareFields) {
         if (Objects.isNull(source) && Objects.isNull(target)) {
             return List.of();
@@ -51,6 +127,13 @@ public class CompareUtils {
         return doCompare(sourceMap, targetMap, ignoreCompareFields);
     }
 
+    /**
+     * 做空
+     *
+     * @param targetMap           目标地图
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link String }>
+     */
     private static List<String> doEmpty(Map<String, CompareNode> targetMap, List<String> ignoreCompareFields) {
         List<String> list = new ArrayList<>();
         Collection<CompareNode> values = targetMap.values();
@@ -69,6 +152,72 @@ public class CompareUtils {
         return list;
     }
 
+    /**
+     * do empty node （执行空节点）
+     *
+     * @param targetMap           目标地图
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link ComparedNode }>
+     */
+    private static List<ComparedNode> doEmptyNode(Map<String, CompareNode> targetMap, List<String> ignoreCompareFields) {
+        List<ComparedNode> list = new ArrayList<>();
+        Collection<CompareNode> values = targetMap.values();
+        for (CompareNode node : values) {
+            Object o = Optional.ofNullable(node.getFieldValue()).orElse("");
+            if (Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(node.getFieldKey())) {
+                continue;
+            }
+            if (StrUtil.isBlank(o.toString())) {
+                continue;
+            }
+            list.add(ComparedNode.builder()
+                    .fieldKey(node.getFieldKey()).fieldName(node.getFieldName())
+                    .fieldValue("空")
+                    .newFieldValue(node.getFieldValue())
+                    .build());
+        }
+        return list;
+    }
+
+    /**
+     * do compare node
+     *
+     * @param sourceMap           源映射
+     * @param targetMap           目标地图
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link ComparedNode }>
+     */
+    private static List<ComparedNode> doCompareNode(Map<String, CompareNode> sourceMap, Map<String, CompareNode> targetMap, List<String> ignoreCompareFields) {
+        List<ComparedNode> list = new ArrayList<>();
+        Set<String> keys = sourceMap.keySet();
+        for (String key : keys) {
+            CompareNode sn = sourceMap.get(key);
+            CompareNode tn = targetMap.get(key);
+            if (Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(sn.getFieldKey())) {
+                continue;
+            }
+            String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
+            String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
+            // 只有两者属性值不一致时, 才显示变化情况
+            if (!StrUtil.equals(sv, tv)) {
+                list.add(ComparedNode.builder()
+                        .fieldKey(sn.getFieldKey()).fieldName(sn.getFieldName())
+                        .fieldValue(sv)
+                        .newFieldValue(tv)
+                        .build());
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 进行比较
+     *
+     * @param sourceMap           源映射
+     * @param targetMap           目标地图
+     * @param ignoreCompareFields 忽略比较字段
+     * @return {@link List }<{@link String }>
+     */
     private static List<String> doCompare(Map<String, CompareNode> sourceMap, Map<String, CompareNode> targetMap, List<String> ignoreCompareFields) {
         List<String> list = new ArrayList<>();
         Set<String> keys = sourceMap.keySet();
@@ -91,6 +240,12 @@ public class CompareUtils {
     }
 
 
+    /**
+     * 获取字段值映射
+     *
+     * @param t t
+     * @return {@link Map }<{@link String }, {@link CompareNode }>
+     */
     private static <T> Map<String, CompareNode> getFiledValueMap(T t) {
         if (Objects.isNull(t)) {
             return Collections.emptyMap();
