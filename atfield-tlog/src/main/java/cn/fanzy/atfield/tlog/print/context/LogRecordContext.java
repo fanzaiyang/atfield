@@ -41,12 +41,18 @@ public class LogRecordContext {
     }
 
     public static Object getVariable(String key) {
+        if (VARIABLE_MAP_STACK.get() == null) {
+            return null;
+        }
         Map<String, Object> variableMap = VARIABLE_MAP_STACK.get().peek();
         return variableMap == null ? null : variableMap.get(key);
     }
 
     public static Object getMethodOrGlobal(String key) {
         Object result = null;
+        if (VARIABLE_MAP_STACK.get() == null) {
+            return null;
+        }
         Map<String, Object> variableMap = VARIABLE_MAP_STACK.get().peek();
         if (!CollectionUtils.isEmpty(variableMap) && (result = variableMap.get(key)) != null) {
             return result;
@@ -59,6 +65,9 @@ public class LogRecordContext {
     }
 
     public static Map<String, Object> getVariables() {
+        if (VARIABLE_MAP_STACK.get() == null) {
+            return null;
+        }
         Deque<Map<String, Object>> mapStack = VARIABLE_MAP_STACK.get();
         return mapStack == null ? new HashMap<>() : mapStack.peek();
     }
