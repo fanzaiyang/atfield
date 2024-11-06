@@ -89,7 +89,7 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return segment.replaceFirst("(?i)\\sgroup\\sby\\s", sqlPart + ") group by ");
         }
         if (StrUtil.containsIgnoreCase(segment, "order by")) {
-            return segment.replaceFirst("(?i)\\order\\sby\\s", sqlPart + ") order by ");
+            return segment.replaceFirst("(?i)\\sorder\\sby\\s", sqlPart + ") order by ");
         }
         if (StrUtil.containsIgnoreCase(segment, "limit")) {
             return segment.replaceFirst("(?i)\\slimit\\s", sqlPart + ") limit ");
