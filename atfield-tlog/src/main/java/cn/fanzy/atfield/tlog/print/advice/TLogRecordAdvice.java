@@ -50,15 +50,21 @@ public class TLogRecordAdvice {
         }
         String content = SpElUtils.parse(annotation.content(), joinPoint);
         String bizNo = SpElUtils.parse(annotation.bizNo(), joinPoint);
+        String operator = SpElUtils.parse(annotation.operator(), joinPoint);
         if (StrUtil.isBlank(bizNo)) {
             bizNo = LogRecordContext.getBizNo();
         }
         String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
         LogRecordInfo record = new LogRecordInfo();
         record.setAppName(annotation.appName());
+        if (StrUtil.isNotBlank(operator)) {
+            record.setOperatorId(operator);
+            record.setOperatorName(operator);
+        } else {
+            record.setOperatorId(logOperatorService.getUserId(null));
+            record.setOperatorName(logOperatorService.getUserName(null));
+        }
 
-        record.setOperatorId(logOperatorService.getUserId(null));
-        record.setOperatorName(logOperatorService.getUserName(null));
 
         record.setOperateType(operateType);
         record.setContent(content);
