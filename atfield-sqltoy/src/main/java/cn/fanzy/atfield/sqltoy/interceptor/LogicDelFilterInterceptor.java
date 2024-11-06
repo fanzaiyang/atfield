@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.sqltoy.interceptor;
 
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.SqlToyContext;
@@ -49,7 +50,9 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
         }
 
         String where = " where ";
-        String sqlPart = where.concat(logicDelColumn).concat("='").concat(properties.getLogicNotDeleteValue())
+        String sqlPart = where
+                .concat(logicDelColumn).concat("='")
+                .concat(properties.getLogicNotDeleteValue())
                 .concat("' and ");
         if (operateType.equals(OperateType.load) ||
             operateType.equals(OperateType.loadAll) ||
@@ -65,18 +68,33 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
                 int onTenantIndex = sql.indexOf(") tv on (");
                 int end = onTenantIndex + ") tv on (".length();
                 String aliasName = sql.substring(end, sql.indexOf(".", end)).trim();
-                sqlPart = sqlPart.replaceFirst(where, "").
+                sqlPart = sqlPart
+                        .replaceFirst(where, "").
                         replaceFirst(logicDelColumn, aliasName + "." + logicDelColumn);
                 sql = sql.replaceFirst("\\)\\s+tv\\s+on\\s+\\(", ") tv on (".concat(sqlPart));
                 sqlToyResult.setSql(sql);
             } else {
-                sql = sql.replaceFirst("(?i)\\swhere\\s", sqlPart);
+                sql = getConcatSql(sql, sqlPart);
                 sqlToyResult.setSql(sql);
             }
         }
 
         return sqlToyResult;
 
+    }
 
+    private String getConcatSql(String sql, String sqlPart) {
+        String segment = sql.replaceFirst("(?i)\\swhere\\s", sqlPart + " (");
+        if (StrUtil.containsIgnoreCase(segment, "group by")) {
+            return segment.replaceFirst("(?i)\\sgroup\\sby\\s", sqlPart + ") group by ");
+        }
+        if (StrUtil.containsIgnoreCase(segment, "order by")) {
+            return segment.replaceFirst("(?i)\\order\\sby\\s", sqlPart + ") order by ");
+        }
+        if (StrUtil.containsIgnoreCase(segment, "limit")) {
+            return segment.replaceFirst("(?i)\\slimit\\s", sqlPart + ") limit ");
+        }
+
+        return segment + " ) ";
     }
 }
