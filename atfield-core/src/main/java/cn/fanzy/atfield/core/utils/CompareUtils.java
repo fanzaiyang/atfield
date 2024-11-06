@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 比较 Utils
@@ -274,4 +275,28 @@ public class CompareUtils {
         }
         return map;
     }
+
+    /**
+     * 获取 HTML
+     *
+     * @param nodeList 节点列表
+     * @return {@link String }
+     */
+    public static String getHtml(List<ComparedNode> nodeList) {
+        return nodeList.stream().map(ComparedNode::getHtml)
+                .collect(Collectors.joining("；"));
+    }
+
+    /**
+     * 获取文本
+     *
+     * @param nodeList 节点列表
+     * @return {@link String }
+     */
+    public static String getText(List<ComparedNode> nodeList) {
+        return nodeList.stream().map(ComparedNode::getText)
+                .collect(Collectors.joining("；"));
+    }
 }
+
+
