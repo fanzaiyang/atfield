@@ -20,6 +20,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * tlog-web调用时间adive
@@ -53,6 +54,10 @@ public class TLogRecordAdvice {
         String operator = SpElUtils.parse(annotation.operator(), joinPoint);
         if (StrUtil.isBlank(bizNo)) {
             bizNo = LogRecordContext.getBizNo();
+        }
+        if (StrUtil.isBlank(operator)) {
+            operator = LogRecordContext.getVariable("operator") == null ? "" :
+                    Objects.requireNonNull(LogRecordContext.getVariable("operator")).toString();
         }
         String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
         LogRecordInfo record = new LogRecordInfo();
