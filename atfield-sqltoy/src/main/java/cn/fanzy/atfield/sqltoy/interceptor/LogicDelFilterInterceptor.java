@@ -84,20 +84,34 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
     }
 
     private String getConcatSql(String sql, String sqlPart) {
-        String segment = sql.replaceFirst("(?i)\\swhere\\s", sqlPart + " (");
-        if (StrUtil.containsIgnoreCase(segment, "group by")) {
-            return segment.replaceFirst("(?i)\\sgroup\\sby\\s", ") group by ");
+        if (StrUtil.containsIgnoreCase(sql, "where")) {
+            String segment = sql.replaceFirst("(?i)\\swhere\\s", sqlPart + " (");
+            if (StrUtil.containsIgnoreCase(segment, "group by")) {
+                return segment.replaceFirst("(?i)\\sgroup\\sby\\s", ") group by ");
+            }
+            if (StrUtil.containsIgnoreCase(segment, "order by")) {
+                return segment.replaceFirst("(?i)\\sorder\\sby\\s", ") order by ");
+            }
+            if (StrUtil.containsIgnoreCase(segment, "having")) {
+                return segment.replaceFirst("(?i)\\shaving\\s", ") having ");
+            }
+            if (StrUtil.containsIgnoreCase(segment, "limit")) {
+                return segment.replaceFirst("(?i)\\slimit\\s", ") limit ");
+            }
+            return segment + " ) ";
         }
-        if (StrUtil.containsIgnoreCase(segment, "order by")) {
-            return segment.replaceFirst("(?i)\\sorder\\sby\\s", ") order by ");
+        if (StrUtil.containsIgnoreCase(sql, "group by")) {
+            return sql.replaceFirst("(?i)\\sgroup\\sby\\s", " where " + sqlPart + " group by ");
         }
-        if (StrUtil.containsIgnoreCase(segment, "having")) {
-            return segment.replaceFirst("(?i)\\shaving\\s", ") having ");
+        if (StrUtil.containsIgnoreCase(sql, "order by")) {
+            return sql.replaceFirst("(?i)\\sorder\\sby\\s", " where " + sqlPart + " order by ");
         }
-        if (StrUtil.containsIgnoreCase(segment, "limit")) {
-            return segment.replaceFirst("(?i)\\slimit\\s", ") limit ");
+        if (StrUtil.containsIgnoreCase(sql, "having")) {
+            return sql.replaceFirst("(?i)\\shaving\\s", " where " + sqlPart + " having ");
         }
-
-        return segment + " ) ";
+        if (StrUtil.containsIgnoreCase(sql, "limit")) {
+            return sql.replaceFirst("(?i)\\slimit\\s", " where " + sqlPart + " limit ");
+        }
+        return sql + " where " + sqlPart;
     }
 }
