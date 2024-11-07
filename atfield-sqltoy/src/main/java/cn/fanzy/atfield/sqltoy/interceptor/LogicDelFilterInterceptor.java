@@ -86,13 +86,13 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
     private String getConcatSql(String sql, String sqlPart) {
         String segment = sql.replaceFirst("(?i)\\swhere\\s", sqlPart + " (");
         if (StrUtil.containsIgnoreCase(segment, "group by")) {
-            return segment.replaceFirst("(?i)\\sgroup\\sby\\s", sqlPart + ") group by ");
+            return segment.replaceFirst("(?i)\\sgroup\\sby\\s", ") group by ");
         }
         if (StrUtil.containsIgnoreCase(segment, "order by")) {
-            return segment.replaceFirst("(?i)\\sorder\\sby\\s", sqlPart + ") order by ");
+            return segment.replaceFirst("(?i)\\sorder\\sby\\s", ") order by ");
         }
         if (StrUtil.containsIgnoreCase(segment, "limit")) {
-            return segment.replaceFirst("(?i)\\slimit\\s", sqlPart + ") limit ");
+            return segment.replaceFirst("(?i)\\slimit\\s", ") limit ");
         }
 
         return segment + " ) ";
