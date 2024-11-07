@@ -101,17 +101,17 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return segment + " ) ";
         }
         if (StrUtil.containsIgnoreCase(sql, "group by")) {
-            return sql.replaceFirst("(?i)\\sgroup\\sby\\s", " where " + sqlPart + " 1=1 group by ");
+            return sql.replaceFirst("(?i)\\sgroup\\sby\\s", sqlPart + " 1=1 group by ");
         }
         if (StrUtil.containsIgnoreCase(sql, "order by")) {
-            return sql.replaceFirst("(?i)\\sorder\\sby\\s", " where " + sqlPart + " 1=1 order by ");
+            return sql.replaceFirst("(?i)\\sorder\\sby\\s", sqlPart + " 1=1 order by ");
         }
         if (StrUtil.containsIgnoreCase(sql, "having")) {
-            return sql.replaceFirst("(?i)\\shaving\\s", " where " + sqlPart + " 1=1 having ");
+            return sql.replaceFirst("(?i)\\shaving\\s", sqlPart + " 1=1 having ");
         }
         if (StrUtil.containsIgnoreCase(sql, "limit")) {
-            return sql.replaceFirst("(?i)\\slimit\\s", " where " + sqlPart + " 1=1 limit ");
+            return sql.replaceFirst("(?i)\\slimit\\s", sqlPart + " 1=1 limit ");
         }
-        return sql + " where " + sqlPart + " 1=1";
+        return sql + sqlPart + " 1=1";
     }
 }
