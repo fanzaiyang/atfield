@@ -23,6 +23,7 @@
         <module>atfield-sqltoy</module>
         <module>atfield-satoken</module>
         <module>atfield-wechat</module>
+        <module>atfield-leaf</module>
     </modules>
 
     <properties>
