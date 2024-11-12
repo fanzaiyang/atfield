@@ -138,7 +138,8 @@ public class IdGenDaoImpl implements IdGenDao {
         repository.executeSql(
                 """
                         update @value(:tableName) set max_id = :maxId where biz_tag = :tag
-                        """, MapKit.keys("tableName", "tag", "maxId").values(property.getTableName(), tag, maxId)
+                        """, MapKit.keys("tableName", "tag", "maxId")
+                        .values(property.getTableName(), tag, maxId)
         );
     }
 
