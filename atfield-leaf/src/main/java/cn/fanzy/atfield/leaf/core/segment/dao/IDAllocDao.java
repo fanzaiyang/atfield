@@ -49,4 +49,6 @@ public interface IDAllocDao {
      * @return {@link List }<{@link String }>
      */
     List<String> getAllTags();
+
+    void createOrUpdateTable();
 }

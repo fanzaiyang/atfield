@@ -1,11 +1,16 @@
 package cn.fanzy.atfield.leaf.core.segment.dao.impl;
 
+import cn.fanzy.atfield.leaf.core.common.TableInfo;
 import cn.fanzy.atfield.leaf.core.segment.dao.IDAllocDao;
 import cn.fanzy.atfield.leaf.core.segment.model.LeafAlloc;
 import cn.fanzy.atfield.leaf.property.LeafIdProperty;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagacity.sqltoy.model.ColumnMeta;
 import org.sagacity.sqltoy.model.MapKit;
 
 import java.util.List;
@@ -16,6 +21,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024/11/11
  */
+@Slf4j
 @RequiredArgsConstructor
 public class IDAllocDaoImpl implements IDAllocDao {
 
@@ -77,5 +83,54 @@ public class IDAllocDaoImpl implements IDAllocDao {
                 MapKit.map("tableName", property.getTableName()),
                 LeafAlloc.class);
         return allocList.stream().map(LeafAlloc::getBizTag).toList();
+    }
+
+    @Override
+    public void createOrUpdateTable() {
+        Assert.notBlank(property.getTableSchema(), "配置文件中必须配置leaf.id.table-schema!");
+        Assert.notBlank(property.getTableName(), "配置文件中必须配置leaf.id.table-name!");
+        List<TableInfo> list = sqlToyRepository.findBySql("""
+                        select table_name from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA= :schema and TABLE_NAME= :tableName
+                        """,
+                MapKit.keys("schema", "tableName")
+                        .values(property.getTableSchema(), property.getTableName()),
+                TableInfo.class);
+        if (CollUtil.isEmpty(list)) {
+            // 数据中不存在表，创建表, max_id, step, update_time
+            sqlToyRepository.executeSql(
+                    """
+                            CREATE TABLE @value(:schema).`@value(:tableName)` (
+                              `id` int(11) NOT NULL AUTO_INCREMENT,
+                              `biz_tag` VARCHAR (128) NOT NULL DEFAULT '',
+                              `max_id` BIGINT (20) NOT NULL DEFAULT '1',
+                              `step` INT (11) NOT NULL,
+                              `description` VARCHAR (256) DEFAULT NULL,
+                              `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                              PRIMARY KEY ( `biz_tag` )
+                            ) ENGINE = InnoDB
+                             COMMENT = '分布式ID数据表'
+                            """,
+                    MapKit.keys("schema", "tableName")
+                            .values(property.getTableSchema(), property.getTableName())
+            );
+            log.info("创建数据表成功！Schema：{}，表名：{}", property.getTableName(), property.getTableName());
+            return;
+        }
+        // 检查表是否存在各个字段:biz_tag,max_id, step, update_time
+
+        List<ColumnMeta> columns = sqlToyRepository.getTableColumns(null, property.getTableSchema(), property.getTableName());
+        List<String> colFields = columns.stream().map(item -> item.getColName().toLowerCase()).toList();
+        Assert.isTrue(colFields.contains("biz_tag"), "数据表中必须包含biz_tag字段!");
+        Assert.isTrue(colFields.contains("max_id"), "数据表中必须包含max_id字段!");
+        Assert.isTrue(colFields.contains("step"), "数据表中必须包含step字段!");
+        Assert.isTrue(colFields.contains("update_time"), "数据表中必须包含update_time字段!");
+        for (ColumnMeta column : columns) {
+            if (StrUtil.equalsIgnoreCase(column.getColName(), "max_id")) {
+                Assert.isTrue(StrUtil.equalsIgnoreCase(column.getTypeName(), "bigint"), "数据表中max_id字段类型必须为bigint!");
+            }
+            if (StrUtil.equalsIgnoreCase(column.getColName(), "step")) {
+                Assert.isTrue(StrUtil.equalsIgnoreCase(column.getTypeName(), "int"), "数据表中step字段类型必须为int!");
+            }
+        }
     }
 }

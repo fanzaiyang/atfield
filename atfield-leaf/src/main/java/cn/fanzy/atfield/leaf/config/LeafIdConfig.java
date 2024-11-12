@@ -36,4 +36,5 @@ public class LeafIdConfig {
     public SegmentService segmentService() {
         return new SegmentService(idGenerator());
     }
+
 }

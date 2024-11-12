@@ -69,6 +69,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
+                <artifactId>atfield-leaf</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>atfield-tlog</artifactId>
                 <version>${revision}</version>
             </dependency>

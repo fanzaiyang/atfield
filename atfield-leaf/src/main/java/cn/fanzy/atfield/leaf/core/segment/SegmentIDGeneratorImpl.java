@@ -69,6 +69,8 @@ public class SegmentIDGeneratorImpl implements IDGenerator {
     @Override
     public boolean init() {
         log.info("Init ...");
+        // 表结构检查
+        dao.createOrUpdateTable();
         // 确保加载到kv后才初始化成功
         updateCacheFromDb();
         initOK = true;
