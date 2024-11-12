@@ -115,7 +115,6 @@ public class IDAllocDaoImpl implements IDAllocDao {
             sqlToyRepository.executeSql(
                     """
                             CREATE TABLE #[@value(:schema).]`@value(:tableName)` (
-                              `id` int(11) NOT NULL AUTO_INCREMENT,
                               `biz_tag` VARCHAR (128) NOT NULL DEFAULT '',
                               `max_id` BIGINT (20) NOT NULL DEFAULT '1',
                               `step` INT (11) NOT NULL,
