@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.leaf.service;
 
 import cn.fanzy.atfield.leaf.gen.RedisIdGenerator;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,7 @@ public class SegmentService {
     }
 
     public void close() {
-        redisIdGenerator.close();
+        ThreadUtil.execute(redisIdGenerator::close);
     }
 
     /**
