@@ -44,7 +44,7 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
     }
 
     @Override
-    public void close() {
+    public void flush() {
         updateCacheFromDb();
     }
 

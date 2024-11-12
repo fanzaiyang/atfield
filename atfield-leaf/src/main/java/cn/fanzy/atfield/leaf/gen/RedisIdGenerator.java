@@ -32,5 +32,5 @@ public interface RedisIdGenerator {
     /**
      * 关闭
      */
-    void close();
+    void flush();
 }

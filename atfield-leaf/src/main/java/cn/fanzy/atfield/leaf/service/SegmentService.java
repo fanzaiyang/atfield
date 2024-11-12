@@ -46,7 +46,7 @@ public class SegmentService {
      * 刷新异步
      */
     public void flushAsync() {
-        ThreadUtil.execute(redisIdGenerator::close);
+        ThreadUtil.execute(redisIdGenerator::flush);
     }
 
 
@@ -54,7 +54,7 @@ public class SegmentService {
      * 冲洗
      */
     public void flush() {
-        redisIdGenerator.close();
+        redisIdGenerator.flush();
     }
     /**
      * 下一个主键
