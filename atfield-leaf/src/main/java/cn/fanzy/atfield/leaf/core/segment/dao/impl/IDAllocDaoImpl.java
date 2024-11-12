@@ -97,13 +97,12 @@ public class IDAllocDaoImpl implements IDAllocDao {
                 schema = connection.getSchema();
                 catgelog = connection.getCatalog();
                 property.setTableSchema(StrUtil.blankToDefault(schema, catgelog));
-                log.info("获取当前数据库schema：{}", schema);
-                property.setTableSchema(schema);
+                log.info("获取当前数据库schema：{}", property.getTableSchema());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         }
-
+        Assert.notBlank(property.getTableSchema(), "获取table-schema失败!");
         Assert.notBlank(property.getTableName(), "配置文件中必须配置leaf.id.table-name!");
         List<TableInfo> list = sqlToyRepository.findBySql("""
                         select table_name from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA= :schema and TABLE_NAME= :tableName
@@ -115,7 +114,7 @@ public class IDAllocDaoImpl implements IDAllocDao {
             // 数据中不存在表，创建表, max_id, step, update_time
             sqlToyRepository.executeSql(
                     """
-                            CREATE TABLE @value(:schema).`@value(:tableName)` (
+                            CREATE TABLE #[@value(:schema).]`@value(:tableName)` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `biz_tag` VARCHAR (128) NOT NULL DEFAULT '',
                               `max_id` BIGINT (20) NOT NULL DEFAULT '1',
