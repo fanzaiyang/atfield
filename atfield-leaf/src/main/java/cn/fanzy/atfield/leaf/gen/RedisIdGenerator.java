@@ -28,4 +28,9 @@ public interface RedisIdGenerator {
      * 初始化
      */
     void init();
+
+    /**
+     * 关闭
+     */
+    void close();
 }

@@ -40,6 +40,10 @@ public class SegmentService {
         return redisIdGenerator.previousId(key);
     }
 
+    public void close() {
+        redisIdGenerator.close();
+    }
+
     /**
      * 下一个主键
      *

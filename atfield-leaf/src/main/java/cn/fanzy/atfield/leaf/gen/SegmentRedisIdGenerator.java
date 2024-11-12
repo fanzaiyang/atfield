@@ -43,6 +43,11 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
         updateCacheFromDb();
     }
 
+    @Override
+    public void close() {
+        updateCacheFromDb();
+    }
+
     private void check(String tag) {
         LeafAlloc alloc = LocalStorage.get(getCacheKey(tag), LeafAlloc.class);
         if (alloc == null) {
