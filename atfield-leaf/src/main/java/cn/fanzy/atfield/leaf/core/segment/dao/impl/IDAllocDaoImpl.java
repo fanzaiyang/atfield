@@ -2,6 +2,7 @@ package cn.fanzy.atfield.leaf.core.segment.dao.impl;
 
 import cn.fanzy.atfield.leaf.core.segment.dao.IDAllocDao;
 import cn.fanzy.atfield.leaf.core.segment.model.LeafAlloc;
+import cn.fanzy.atfield.leaf.property.LeafIdProperty;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +20,14 @@ import java.util.List;
 public class IDAllocDaoImpl implements IDAllocDao {
 
     private final SqlToyRepository sqlToyRepository;
+    private final LeafIdProperty property;
 
 
     @Override
     public List<LeafAlloc> getAllLeafAllocs() {
-        return sqlToyRepository.findBySql("""
-                        SELECT biz_tag, max_id, step, update_time FROM leaf_alloc
-                        """,
-                MapKit.map(),
+        return sqlToyRepository.findBySql(
+                "SELECT biz_tag, max_id, step, update_time FROM @value(:tableName)",
+                MapKit.map("tableName", property.getTableName()),
                 LeafAlloc.class);
     }
 
@@ -34,9 +35,10 @@ public class IDAllocDaoImpl implements IDAllocDao {
     public LeafAlloc getLeafAlloc(String tag) {
         List<LeafAlloc> leafAllocList = sqlToyRepository.findBySql(
                 """
-                        SELECT biz_tag, max_id, step FROM leaf_alloc WHERE biz_tag = :tag
+                        SELECT biz_tag, max_id, step FROM @value(:tableName) WHERE biz_tag = :tag
                         """,
-                MapKit.map("tag", tag)
+                MapKit.keys("tableName", "tag")
+                        .values(property.getTableName(), tag)
                 , LeafAlloc.class
         );
         if (CollUtil.isEmpty(leafAllocList)) {
@@ -49,9 +51,10 @@ public class IDAllocDaoImpl implements IDAllocDao {
     public LeafAlloc updateMaxIdAndGetLeafAlloc(String tag) {
         sqlToyRepository.executeSql(
                 """
-                        UPDATE leaf_alloc SET max_id = max_id + step WHERE biz_tag = :tag
+                        UPDATE @value(:tableName) SET max_id = max_id + step WHERE biz_tag = :tag
                         """,
-                MapKit.map("tag", tag)
+                MapKit.keys("tableName", "tag")
+                        .values(property.getTableName(), tag)
         );
         return getLeafAlloc(tag);
     }
@@ -59,19 +62,19 @@ public class IDAllocDaoImpl implements IDAllocDao {
     @Override
     public LeafAlloc updateMaxIdByCustomStepAndGetLeafAlloc(LeafAlloc leafAlloc) {
         sqlToyRepository.executeSql("""
-                        UPDATE leaf_alloc SET max_id = max_id + @value(:step) WHERE biz_tag = :key
+                        UPDATE @value(:tableName) SET max_id = max_id + @value(:step) WHERE biz_tag = :key
                         """,
-                MapKit.keys("step", "key")
-                        .values(leafAlloc.getStep(), leafAlloc.getKey()));
-        return getLeafAlloc(tag);
+                MapKit.keys("tableName", "step", "key")
+                        .values(property.getTableName(), leafAlloc.getStep(), leafAlloc.getKey()));
+        return getLeafAlloc(leafAlloc.getBizTag());
     }
 
     @Override
     public List<String> getAllTags() {
         List<LeafAlloc> allocList = sqlToyRepository.findBySql("""
-                        SELECT distinct biz_tag FROM leaf_alloc
+                        SELECT distinct biz_tag FROM @value(:tableName)
                         """,
-                MapKit.map(),
+                MapKit.map("tableName", property.getTableName()),
                 LeafAlloc.class);
         return allocList.stream().map(LeafAlloc::getBizTag).toList();
     }
