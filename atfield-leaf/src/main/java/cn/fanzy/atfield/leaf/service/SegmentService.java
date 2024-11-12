@@ -2,14 +2,17 @@ package cn.fanzy.atfield.leaf.service;
 
 import cn.fanzy.atfield.leaf.gen.RedisIdGenerator;
 import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 public class SegmentService {
 
     private final RedisIdGenerator redisIdGenerator;
+
+    public SegmentService(RedisIdGenerator redisIdGenerator) {
+        this.redisIdGenerator = redisIdGenerator;
+        redisIdGenerator.init();
+    }
 
     /**
      * 下一个主键
