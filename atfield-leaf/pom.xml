@@ -38,6 +38,10 @@
             <groupId>cn.fanzy.atfield</groupId>
             <artifactId>atfield-sqltoy</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.fanzy.atfield</groupId>
+            <artifactId>atfield-redis</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

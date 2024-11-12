@@ -1,121 +1,74 @@
 package cn.fanzy.atfield.leaf.service;
 
-import cn.fanzy.atfield.leaf.core.IDGenerator;
-import cn.fanzy.atfield.leaf.core.common.Result;
-import cn.fanzy.atfield.leaf.core.common.Status;
-import cn.fanzy.atfield.leaf.core.segment.SegmentIDGeneratorImpl;
-import cn.fanzy.atfield.leaf.core.segment.model.LeafAlloc;
-import cn.fanzy.atfield.leaf.core.segment.model.SegmentBuffer;
-import cn.fanzy.atfield.leaf.model.SegmentBufferView;
+import cn.fanzy.atfield.leaf.gen.RedisIdGenerator;
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Slf4j
+@RequiredArgsConstructor
 public class SegmentService {
 
-    private final IDGenerator idGenerator;
+    private final RedisIdGenerator redisIdGenerator;
 
-    public SegmentService(IDGenerator idGenerator) {
-        this.idGenerator = idGenerator;
-        if (idGenerator.init()) {
-            log.info("Segment Service Init Successfully");
-        } else {
-            throw new RuntimeException("Segment Service Init Fail");
-        }
+    /**
+     * 下一个主键
+     * <pre>
+     *     ID+1
+     * </pre>
+     *
+     * @param key 钥匙
+     * @return long
+     */
+    public long nextId(String key) {
+        return redisIdGenerator.nextId(key);
     }
 
     /**
-     * 获取段主键
+     * 以前主键
+     * <pre>
+     *     现有的ID-1
+     * </pre>
      *
      * @param key 钥匙
+     * @return long
+     */
+    public long previousId(String key) {
+        return redisIdGenerator.previousId(key);
+    }
+
+    /**
+     * 下一个主键
+     *
+     * @param key    钥匙
+     * @param length 长度
      * @return {@link String }
      */
-    public String getSegmentId(String key) {
-        return get(key, getId(key));
+    public String nextId(String key, int length) {
+        long nextId = nextId(key);
+        return StrUtil.padPre(String.valueOf(nextId), length, "0");
     }
 
-    /**
-     * 获取主键
-     *
-     * @param key 钥匙
-     * @return {@link Result }
-     */
-    public Result getId(String key) {
-        return idGenerator.get(key);
+    public String nextId(String key, int length, String prefix) {
+        long nextId = nextId(key);
+        return prefix + StrUtil.padPre(String.valueOf(nextId), length, "0");
     }
 
 
     /**
-     * 获取主键generator
+     * 以前主键
      *
-     * @return {@link SegmentIDGeneratorImpl }
+     * @param key    钥匙
+     * @param length 长度
+     * @return {@link String }
      */
-    public SegmentIDGeneratorImpl getIdGenerator() {
-        return (SegmentIDGeneratorImpl) idGenerator;
+    public String previousId(String key, int length) {
+        long previousId = previousId(key);
+        return StrUtil.padPre(String.valueOf(previousId), length, "0");
     }
 
-    /**
-     * 获取缓存
-     *
-     * @return {@link Map }<{@link String }, {@link SegmentBufferView }>
-     */
-    public Map<String, SegmentBufferView> getCache() {
-        Map<String, SegmentBufferView> data = new HashMap<>();
-        SegmentIDGeneratorImpl segmentIDGen = getIdGenerator();
-        if (segmentIDGen == null) {
-            throw new IllegalArgumentException("You should config leaf.segment.enable=true first");
-        }
-        Map<String, SegmentBuffer> cache = segmentIDGen.getCache();
-        for (Map.Entry<String, SegmentBuffer> entry : cache.entrySet()) {
-            SegmentBufferView sv = new SegmentBufferView();
-            SegmentBuffer buffer = entry.getValue();
-            sv.setInitOk(buffer.isInitOk());
-            sv.setKey(buffer.getKey());
-            sv.setPos(buffer.getCurrentPos());
-            sv.setNextReady(buffer.isNextReady());
-            sv.setMax0(buffer.getSegments()[0].getMax());
-            sv.setValue0(buffer.getSegments()[0].getValue().get());
-            sv.setStep0(buffer.getSegments()[0].getStep());
-
-            sv.setMax1(buffer.getSegments()[1].getMax());
-            sv.setValue1(buffer.getSegments()[1].getValue().get());
-            sv.setStep1(buffer.getSegments()[1].getStep());
-
-            data.put(entry.getKey(), sv);
-
-        }
-        return data;
+    public String previousId(String key, int length, String prefix) {
+        long previousId = previousId(key);
+        return prefix + StrUtil.padPre(String.valueOf(previousId), length, "0");
     }
-
-    /**
-     * 获取数据库
-     *
-     * @param model 型
-     * @return {@link List }<{@link LeafAlloc }>
-     */
-    public List<LeafAlloc> getDb() {
-        SegmentIDGeneratorImpl segmentIDGen = getIdGenerator();
-        if (segmentIDGen == null) {
-            throw new IllegalArgumentException("You should config leaf.segment.enable=true first");
-        }
-        List<LeafAlloc> items = segmentIDGen.getAllLeafAllocs();
-        log.info("DB info {}", items);
-        return items;
-    }
-
-    private String get(String key, Result id) {
-        Result result;
-        if (key == null || key.isEmpty()) {
-            throw new RuntimeException("Key is none");
-        }
-        result = id;
-        if (result.getStatus().equals(Status.EXCEPTION)) {
-            throw new RuntimeException(result.toString());
-        }
-        return String.valueOf(result.getId());
-    }
-
 }

@@ -1,4 +1,4 @@
-package cn.fanzy.atfield.leaf.core.common;
+package cn.fanzy.atfield.leaf.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +18,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class TableInfo implements Serializable {
     @Serial
-    private static final long serialVersionUID = -1033632013490785716L;
+    private static final long serialVersionUID = 2926875119247193577L;
 
-    /**
-     * 表名称
-     */
     private String tableName;
 }

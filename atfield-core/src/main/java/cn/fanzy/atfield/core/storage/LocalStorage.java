@@ -33,6 +33,21 @@ public final class LocalStorage {
     }
 
     /**
+     * 获取
+     *
+     * @param key   钥匙
+     * @param clazz 克拉兹
+     * @return {@link T }
+     */
+    public synchronized static <T> T get(String key, Class<T> clazz) {
+        Assert.notNull(key, "key值不能为空");
+        Object object = LOCAL_HOLDER.get(key);
+        if (object == null) {
+            return null;
+        }
+        return (T) object;
+    }
+    /**
      * 根据存储的数据的类型获取存储的数据
      *
      * @param <T>   存储的数据的类型

@@ -8,9 +8,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "leaf.id")
 public class LeafIdProperty {
     /**
+     * 缓存前缀
+     */
+    private String cachePrefix = "__LEAF_ID:";
+    /**
      * 表名称,默认：leaf_alloc
      */
     private String tableName = "leaf_alloc";
+    /**
+     * Table Schema 表 Schema
+     */
     private String tableSchema;
 
     public String getTableName() {
