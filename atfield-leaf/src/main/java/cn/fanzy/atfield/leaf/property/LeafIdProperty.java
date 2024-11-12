@@ -23,4 +23,8 @@ public class LeafIdProperty {
     public String getTableName() {
         return StrUtil.blankToDefault(tableName, "leaf_alloc");
     }
+
+    public String getCachePrefix() {
+        return StrUtil.blankToDefault(cachePrefix, "__LEAF_ID:");
+    }
 }
