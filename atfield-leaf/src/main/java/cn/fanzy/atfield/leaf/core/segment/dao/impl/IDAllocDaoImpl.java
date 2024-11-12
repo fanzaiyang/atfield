@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.model.ColumnMeta;
 import org.sagacity.sqltoy.model.MapKit;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -87,7 +89,21 @@ public class IDAllocDaoImpl implements IDAllocDao {
 
     @Override
     public void createOrUpdateTable() {
-        Assert.notBlank(property.getTableSchema(), "配置文件中必须配置leaf.id.table-schema!");
+        String schema = property.getTableSchema();
+        String catgelog = null;
+        if (StrUtil.isBlank(schema)) {
+            try {
+                Connection connection = sqlToyRepository.getDataSource().getConnection();
+                schema = connection.getSchema();
+                catgelog = connection.getCatalog();
+                property.setTableSchema(StrUtil.blankToDefault(schema, catgelog));
+                log.info("获取当前数据库schema：{}", schema);
+                property.setTableSchema(schema);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         Assert.notBlank(property.getTableName(), "配置文件中必须配置leaf.id.table-name!");
         List<TableInfo> list = sqlToyRepository.findBySql("""
                         select table_name from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA= :schema and TABLE_NAME= :tableName
@@ -118,7 +134,7 @@ public class IDAllocDaoImpl implements IDAllocDao {
         }
         // 检查表是否存在各个字段:biz_tag,max_id, step, update_time
 
-        List<ColumnMeta> columns = sqlToyRepository.getTableColumns(null, property.getTableSchema(), property.getTableName());
+        List<ColumnMeta> columns = sqlToyRepository.getTableColumns(catgelog, property.getTableSchema(), property.getTableName());
         List<String> colFields = columns.stream().map(item -> item.getColName().toLowerCase()).toList();
         Assert.isTrue(colFields.contains("biz_tag"), "数据表中必须包含biz_tag字段!");
         Assert.isTrue(colFields.contains("max_id"), "数据表中必须包含max_id字段!");
