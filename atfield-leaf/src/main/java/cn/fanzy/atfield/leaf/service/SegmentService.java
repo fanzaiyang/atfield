@@ -33,7 +33,7 @@ public class SegmentService {
      * @param key 钥匙
      * @return {@link String }
      */
-    public String getSegmen0tId(String key) {
+    public String getSegmentId(String key) {
         return get(key, getId(key));
     }
 
