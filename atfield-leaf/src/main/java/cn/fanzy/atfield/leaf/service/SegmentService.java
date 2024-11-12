@@ -41,10 +41,21 @@ public class SegmentService {
         return redisIdGenerator.previousId(key);
     }
 
-    public void close() {
+
+    /**
+     * 刷新异步
+     */
+    public void flushAsync() {
         ThreadUtil.execute(redisIdGenerator::close);
     }
 
+
+    /**
+     * 冲洗
+     */
+    public void flush() {
+        redisIdGenerator.close();
+    }
     /**
      * 下一个主键
      *
