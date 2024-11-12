@@ -58,10 +58,6 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
         }
         LocalStorage.clear();
         for (LeafAlloc alloc : allocList) {
-            LocalStorage.put(getCacheKey(alloc.getBizTag()), alloc);
-        }
-
-        for (LeafAlloc alloc : allocList) {
             RAtomicLong atomicLong = client.getAtomicLong(getCacheKey(alloc.getBizTag()));
             long currentValue = atomicLong.get();
             if (currentValue < alloc.getMaxId()) {
@@ -69,6 +65,7 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
             } else if (currentValue > alloc.getMaxId()) {
                 dao.updateMaxId(alloc.getBizTag(), currentValue);
             }
+            LocalStorage.put(getCacheKey(alloc.getBizTag()), alloc);
         }
     }
 
