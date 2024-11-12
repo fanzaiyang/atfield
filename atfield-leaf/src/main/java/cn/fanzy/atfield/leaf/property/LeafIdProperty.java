@@ -10,7 +10,7 @@ public class LeafIdProperty {
     /**
      * 缓存前缀
      */
-    private String cachePrefix = "__LEAF_ID:";
+    private String cachePrefix = "AT_LEAF:";
     /**
      * 表名称,默认：leaf_alloc
      */
@@ -25,6 +25,6 @@ public class LeafIdProperty {
     }
 
     public String getCachePrefix() {
-        return StrUtil.blankToDefault(cachePrefix, "__LEAF_ID:");
+        return StrUtil.blankToDefault(cachePrefix, "AT_LEAF:");
     }
 }
