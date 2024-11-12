@@ -11,18 +11,18 @@ public interface RedisIdGenerator {
     /**
      * 下一个主键
      *
-     * @param key 钥匙
+     * @param tag 钥匙
      * @return long
      */
-    long nextId(String key);
+    long nextId(String tag);
 
     /**
      * 以前主键
      *
-     * @param key 钥匙
+     * @param tag 钥匙
      * @return long
      */
-    long previousId(String key);
+    long previousId(String tag);
 
     /**
      * 初始化

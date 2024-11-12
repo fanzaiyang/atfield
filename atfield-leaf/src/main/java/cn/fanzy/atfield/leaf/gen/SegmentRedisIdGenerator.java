@@ -26,15 +26,15 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
     private final RedissonClient client;
 
     @Override
-    public long nextId(String key) {
-        check(key);
-        return client.getAtomicLong(key).incrementAndGet();
+    public long nextId(String tag) {
+        check(tag);
+        return client.getAtomicLong(getCacheKey(tag)).incrementAndGet();
     }
 
     @Override
-    public long previousId(String key) {
-        check(key);
-        return client.getAtomicLong(key).decrementAndGet();
+    public long previousId(String tag) {
+        check(tag);
+        return client.getAtomicLong(getCacheKey(tag)).decrementAndGet();
     }
 
     @Override
@@ -44,10 +44,10 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
     }
 
     private void check(String tag) {
-        LeafAlloc alloc = LocalStorage.get(property.getCachePrefix() + tag, LeafAlloc.class);
+        LeafAlloc alloc = LocalStorage.get(getCacheKey(tag), LeafAlloc.class);
         if (alloc == null) {
-            alloc = dao.getOrCreateLeafAlloc(property.getCachePrefix() + tag);
-            LocalStorage.put(property.getCachePrefix() + tag, alloc);
+            alloc = dao.getOrCreateLeafAlloc(tag);
+            LocalStorage.put(getCacheKey(tag), alloc);
         }
     }
 
@@ -58,11 +58,11 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
         }
         LocalStorage.clear();
         for (LeafAlloc alloc : allocList) {
-            LocalStorage.put(property.getCachePrefix() + alloc.getBizTag(), alloc);
+            LocalStorage.put(getCacheKey(alloc.getBizTag()), alloc);
         }
 
         for (LeafAlloc alloc : allocList) {
-            RAtomicLong atomicLong = client.getAtomicLong(property.getCachePrefix() + alloc.getBizTag());
+            RAtomicLong atomicLong = client.getAtomicLong(getCacheKey(alloc.getBizTag()));
             long currentValue = atomicLong.get();
             if (currentValue < alloc.getMaxId()) {
                 atomicLong.set(alloc.getMaxId());
@@ -70,5 +70,9 @@ public class SegmentRedisIdGenerator implements RedisIdGenerator {
                 dao.updateMaxId(alloc.getBizTag(), currentValue);
             }
         }
+    }
+
+    private String getCacheKey(String key) {
+        return property.getCachePrefix() + key;
     }
 }
