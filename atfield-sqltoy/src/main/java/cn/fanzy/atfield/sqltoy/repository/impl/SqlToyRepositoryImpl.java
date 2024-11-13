@@ -137,6 +137,11 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     }
 
     @Override
+    public void addCache(String cacheName, String sql) {
+        addCache(cacheName, sql, false);
+    }
+
+    @Override
     public void addCache(String cacheName, String sql, boolean forceUpdate) {
         if (!forceUpdate) {
             boolean existed = getTranslateManager().existCache(cacheName);

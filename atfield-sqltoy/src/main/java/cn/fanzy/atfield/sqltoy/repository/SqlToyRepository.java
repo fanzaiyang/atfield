@@ -124,6 +124,13 @@ public interface SqlToyRepository extends SqlToyHelperDao {
     /**
      * 添加缓存
      *
+     * @param cacheName 缓存名称
+     * @param sql       SQL
+     */
+    void addCache(String cacheName, String sql);
+    /**
+     * 添加缓存
+     *
      * @param cacheName   缓存名称
      * @param sql         SQL
      * @param forceUpdate 强制更新
