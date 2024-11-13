@@ -9,10 +9,28 @@ import cn.hutool.json.JSONUtil;
 import java.util.List;
 
 
+/**
+ * sa 会话实用程序
+ *
+ * @author fanzaiyang
+ * @date 2024/11/13
+ */
 public class SaSessionUtils {
 
+    /**
+     * 设置
+     *
+     * @param key   钥匙
+     * @param value 价值
+     */
     public static void set(String key, Object value) {
         SaSession saSession = StpUtil.getSession();
+        if (value instanceof String) {
+            if (JSONUtil.isTypeJSON(value.toString())) {
+                saSession.set(key, value);
+                return;
+            }
+        }
         saSession.set(key, JSONUtil.toJsonStr(value));
     }
 
