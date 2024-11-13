@@ -5,9 +5,7 @@ import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
 import cn.fanzy.atfield.sqltoy.interceptor.LogicDelFilterInterceptor;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
-import cn.fanzy.atfield.sqltoy.repository.Repository;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
-import cn.fanzy.atfield.sqltoy.repository.impl.RepositoryImpl;
 import cn.fanzy.atfield.sqltoy.repository.impl.SqlToyRepositoryImpl;
 import com.sagframe.sagacity.sqltoy.plus.EnableSqlToyPlus;
 import lombok.RequiredArgsConstructor;
@@ -56,14 +54,7 @@ public class SqltoyExtraAutoConfiguration {
     @Primary
     @Bean
     @ConditionalOnMissingBean
-    public Repository repository(SqltoyExtraProperties properties) {
-        return new RepositoryImpl(properties);
-    }
-
-    @Primary
-    @Bean
-    @ConditionalOnMissingBean
-    public SqlToyRepository sqlToyRepository() {
-        return new SqlToyRepositoryImpl();
+    public SqlToyRepository sqlToyRepository(SqltoyExtraProperties properties) {
+        return new SqlToyRepositoryImpl(properties);
     }
 }
