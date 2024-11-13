@@ -6,7 +6,9 @@ import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.sagframe.sagacity.sqltoy.plus.conditions.Wrappers;
+import com.sagframe.sagacity.sqltoy.plus.conditions.toolkit.StringPool;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.config.model.EntityMeta;
@@ -21,6 +23,8 @@ import org.sagacity.sqltoy.translate.model.TranslateConfigModel;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 基础存储 库实现类
@@ -133,11 +137,27 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     }
 
     @Override
-    public void addCache(String cacheName, String sql) {
+    public void addCache(String cacheName, String sql, boolean forceUpdate) {
+        if (!forceUpdate) {
+            boolean existed = getTranslateManager().existCache(cacheName);
+            if (existed) {
+                return;
+            }
+        }
+        sql = StrUtil.replace(sql, "select", "SELECT");
+        sql = StrUtil.replace(sql, "from", "FROM");
         TranslateConfigModel model = new TranslateConfigModel();
         model.setCache(cacheName);
         model.setType("sql");
         model.setSql(sql);
+        String pattern = "SELECT(.*?)FROM";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(sql);
+        if (m.find()) {
+            String columns = m.group(1);
+            model.setProperties(StrUtil.splitToArray(columns, StringPool.COMMA));
+        }
+
         getTranslateManager().putCache(model);
     }
 
