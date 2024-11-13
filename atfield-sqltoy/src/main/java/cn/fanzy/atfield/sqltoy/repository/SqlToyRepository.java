@@ -4,6 +4,7 @@ import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
 import cn.fanzy.atfield.sqltoy.mp.IPage;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDao;
 import org.sagacity.sqltoy.model.Page;
+import org.sagacity.sqltoy.translate.TranslateManager;
 
 import java.io.Serializable;
 import java.util.List;
@@ -81,4 +82,40 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @return {@link IPage }<{@link T }>
      */
     <T extends Serializable> IPage<T> convert(Page<T> sourcePage);
+
+    /**
+     * 逻辑删除
+     * delFlag字段
+     *
+     * @param clazz 克拉兹
+     * @param ids   主键
+     * @return {@link Long}
+     */
+    <T> Long remove(Class<T> clazz, Object... ids);
+
+    /**
+     * 获取翻译管理器
+     *
+     * @return {@link TranslateManager }
+     */
+    TranslateManager getTranslateManager();
+
+    /**
+     * 添加缓存
+     *
+     * @param cacheName 缓存名称
+     * @param sql       SQL
+     */
+    void addCache(String cacheName, String sql);
+
+    /**
+     * 添加缓存检查器
+     *
+     * @param cacheName      缓存名称
+     * @param sql            SQL
+     * @param increment      增加
+     * @param checkFrequency 检查频率
+     */
+    void addCacheChecker(String cacheName, String sql, Boolean increment, Integer checkFrequency);
+
 }

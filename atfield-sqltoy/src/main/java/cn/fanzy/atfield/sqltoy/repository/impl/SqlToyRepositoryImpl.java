@@ -2,13 +2,19 @@ package cn.fanzy.atfield.sqltoy.repository.impl;
 
 import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
 import cn.fanzy.atfield.sqltoy.mp.IPage;
+import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import com.sagframe.sagacity.sqltoy.plus.conditions.Wrappers;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDaoImpl;
+import lombok.RequiredArgsConstructor;
 import org.sagacity.sqltoy.config.model.EntityMeta;
+import org.sagacity.sqltoy.model.EntityUpdate;
 import org.sagacity.sqltoy.model.MapKit;
 import org.sagacity.sqltoy.model.Page;
 import org.sagacity.sqltoy.model.TreeTableModel;
+import org.sagacity.sqltoy.translate.TranslateManager;
+import org.sagacity.sqltoy.translate.model.CheckerConfigModel;
+import org.sagacity.sqltoy.translate.model.TranslateConfigModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +25,9 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024-07-01
  */
+@RequiredArgsConstructor
 public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyRepository {
+    private final SqltoyExtraProperties properties;
     @Override
     public void handleUpdateStatus(Class<?> entityClass, ParamBatchDto param) {
         update(Wrappers.updateWrapper(entityClass)
@@ -85,5 +93,39 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
         iPage.setRecords(sourcePage.getRows());
         iPage.setPages(sourcePage.getTotalPage());
         return iPage;
+    }
+
+    @Override
+    public <T> Long remove(Class<T> clazz, Object... ids) {
+        EntityMeta meta = getEntityMeta(clazz);
+        return updateByQuery(clazz, EntityUpdate.create()
+                .set(properties.getLogicDeleteField(), properties.getLogicDeleteValue())
+                .where(meta.getIdArgWhereSql())
+                .values(ids));
+    }
+
+    @Override
+    public TranslateManager getTranslateManager() {
+        return getSqlToyContext().getTranslateManager();
+    }
+
+    @Override
+    public void addCache(String cacheName, String sql) {
+        TranslateConfigModel model = new TranslateConfigModel();
+        model.setCache(cacheName);
+        model.setType("sql");
+        model.setSql(sql);
+        getTranslateManager().putCache(model);
+    }
+
+    @Override
+    public void addCacheChecker(String cacheName, String sql, Boolean increment, Integer checkFrequency) {
+        CheckerConfigModel model = new CheckerConfigModel();
+        model.setIncrement(increment == null || increment);
+        model.setCache(cacheName);
+        model.setSql(sql);
+        // 15秒
+        model.setCheckFrequency(checkFrequency == null ? "15" : checkFrequency.toString());
+        getTranslateManager().putCacheUpdater(model);
     }
 }
