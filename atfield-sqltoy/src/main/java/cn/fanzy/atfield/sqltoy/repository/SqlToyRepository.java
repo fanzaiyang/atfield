@@ -8,6 +8,7 @@ import org.sagacity.sqltoy.translate.TranslateManager;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基本存储库
@@ -17,6 +18,26 @@ import java.util.List;
  */
 
 public interface SqlToyRepository extends SqlToyHelperDao {
+    /**
+     * 查找一个
+     *
+     * @param sql   SQL
+     * @param param 参数
+     * @param clazz 克拉兹
+     * @return {@link T }
+     */
+    <T> T findOne(String sql, Map<String, Object> param, Class<T> clazz);
+
+    /**
+     * 查找一个
+     *
+     * @param sql            SQL
+     * @param param          参数
+     * @param clazz          克拉兹
+     * @param multiException 多异常
+     * @return {@link T }
+     */
+    <T> T findOne(String sql, Map<String, Object> param, Class<T> clazz, boolean multiException);
 
     /**
      * 处理更新状态

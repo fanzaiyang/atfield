@@ -4,6 +4,8 @@ import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
 import cn.fanzy.atfield.sqltoy.mp.IPage;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Assert;
 import com.sagframe.sagacity.sqltoy.plus.conditions.Wrappers;
 import com.sagframe.sagacity.sqltoy.plus.dao.SqlToyHelperDaoImpl;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import org.sagacity.sqltoy.translate.model.TranslateConfigModel;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础存储 库实现类
@@ -28,6 +31,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyRepository {
     private final SqltoyExtraProperties properties;
+
+    @Override
+    public <T> T findOne(String sql, Map<String, Object> param, Class<T> clazz) {
+        List<T> list = findBySql(sql, param, clazz);
+        if (CollUtil.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public <T> T findOne(String sql, Map<String, Object> param, Class<T> clazz, boolean multiException) {
+        List<T> list = findBySql(sql, param, clazz);
+        if (CollUtil.isEmpty(list)) {
+            return null;
+        }
+        Assert.isTrue(CollUtil.size(list) == 1, "查询到多个结果！");
+        return list.get(0);
+    }
+
     @Override
     public void handleUpdateStatus(Class<?> entityClass, ParamBatchDto param) {
         update(Wrappers.updateWrapper(entityClass)
