@@ -85,8 +85,8 @@ public class SaTokenExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler(NotBasicAuthException.class)
-    public Object handleNotBasicAuthException(HttpServletRequest request, NotBasicAuthException e) {
+    @ExceptionHandler(NotHttpBasicAuthException.class)
+    public Object handleNotBasicAuthException(HttpServletRequest request, NotHttpBasicAuthException e) {
         String ssid = this.getRequestId(request);
         Json<String> response = new Json<>("401", e.getMessage());
         response.setShowType(ShowType.NOTIFICATION_ERROR);
