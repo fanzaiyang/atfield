@@ -31,11 +31,11 @@ public class SaTokenJwtConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingBean
     public StpLogic getStpLogicJwt() {
         if (SaTokenJwtEnum.stateless.equals(property.getJwtType())) {
-            // Sa-Token 整合 jwt (Simple 简单模式)
+            // Sa-Token 整合 jwt (Stateless 模式)
             return new StpLogicJwtForStateless();
         }
         if (SaTokenJwtEnum.mixin.equals(property.getJwtType())) {
-            // Sa-Token 整合 jwt (Simple 简单模式)
+            // Sa-Token 整合 jwt (Mixin 模式)
             return new StpLogicJwtForMixin();
         }
         if (SaTokenJwtEnum.simple.equals(property.getJwtType())) {
