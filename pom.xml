@@ -41,7 +41,7 @@
         <maven-javadoc-plugin.vesion>3.6.2</maven-javadoc-plugin.vesion>
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <satoken.version>1.38.0</satoken.version>
+        <satoken.version>1.39.0</satoken.version>
         <transmittable.version>2.14.4</transmittable.version>
         <QLExpress.version>3.3.4</QLExpress.version>
     </properties>

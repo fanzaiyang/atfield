@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.satoken.property;
 
+import cn.fanzy.atfield.satoken.enums.SaTokenJwtEnum;
 import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,16 @@ import java.io.Serializable;
 public class SaTokenExtraProperty implements Serializable {
     @Serial
     private static final long serialVersionUID = -164668125373548470L;
+
+    /**
+     * 启用JWT,默认：false
+     */
+    private Boolean jwtEnable;
+
+    /**
+     * JWT
+     */
+    private SaTokenJwtEnum jwtType;
 
     /**
      * 路线
