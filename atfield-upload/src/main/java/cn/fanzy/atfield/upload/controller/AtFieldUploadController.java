@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping
-@ConditionalOnProperty(prefix = "breeze.minio.api", name = {"enable"}, havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "atfield.upload.api", name = {"enable"}, havingValue = "true", matchIfMissing = true)
 @ConditionalOnClass(JdbcTemplate.class)
 public class AtFieldUploadController {
 
     private final UploadPartService uploadService;
 
-    @PostMapping("${breeze.minio.api.init:/breeze/minio/multipart/init}")
+    @PostMapping("${atfield.upload.api.init:/upload/multipart/init}")
     public Object init(@RequestBody ParamFilePartPutDto args) {
         return Resp.convert(uploadService.beforeUpload(args));
     }
 
-    @GetMapping("${breeze.minio.api.presigned:/breeze/minio/multipart/presigned}")
+    @GetMapping("${atfield.upload.api.presigned:/upload/multipart/presigned}")
     public Object getPreSignedObjectUrl(String identifier, Integer partNumber, String minioConfigName) {
         return Resp.convert(uploadService.getPreSignedObjectUrl(identifier, partNumber, minioConfigName));
     }
 
-    @GetMapping("${breeze.minio.api.merge:/breeze/minio/multipart/merge}")
+    @GetMapping("${atfield.upload.api.merge:/upload/multipart/merge}")
     public Object merge(String identifier) {
         return Resp.convert(uploadService.mergeChunk(identifier, null));
     }

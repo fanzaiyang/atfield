@@ -43,7 +43,7 @@ public class UploadConfiguration {
      */
     public static UploadService instance() {
         if (CollUtil.isEmpty(keySet)) {
-            throw new NonePropertyException("501", "请在配置文件中添加上传配置。【atfield.file】");
+            throw new NonePropertyException("501", "请在配置文件中添加上传配置。【atfield.upload】");
         }
         return instance(CollUtil.get(keySet, 0));
     }
