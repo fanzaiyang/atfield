@@ -36,6 +36,7 @@ public class ParamUtil {
         if (map == null) {
             return "";
         }
+
         List<String> paramList = new ArrayList<>();
         for (String key : map.keySet()) {
             paramList.add(StrUtil.format("{}={}", key, JSONUtil.toJsonStr(map.get(key))));
