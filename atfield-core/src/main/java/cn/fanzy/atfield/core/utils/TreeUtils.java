@@ -119,7 +119,7 @@ public class TreeUtils extends TreeUtil {
     /**
      * 将list合成树 -> E必须继承{@link BaseTreeNode}
      * <pre>
-     *     TreeUtils.makeTree(BeanUtil.copyToList(list, OrgTreeVo.class), OrgTreeVo::setChildren);
+     *     TreeUtils.makeTree(list, OrgTreeVo::setChildren);
      * </pre>
      *
      * @param list           需要合成树的List
@@ -226,6 +226,7 @@ public class TreeUtils extends TreeUtil {
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
      * @param <E>            泛型实体对象
      */
+    @Deprecated
     public static <E> void forPreOrder(List<E> tree, Consumer<E> consumer, Function<E, List<E>> getSubChildren) {
         for (E l : tree) {
             consumer.accept(l);
@@ -236,6 +237,33 @@ public class TreeUtils extends TreeUtil {
         }
     }
 
+    /**
+     * 前序遍历
+     * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     * 7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
+     *     TreeUtils.forPreOrder(treeList, OrgTreeVo::getChildren, x -> System.out.println(x.getName()));
+     * </pre>
+     *
+     * @param tree           需要遍历的树
+     * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
+     * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
+     * @param <E>            泛型实体对象
+     */
+    public static <E> void forPreOrder(List<E> tree, Function<E, List<E>> getSubChildren, Consumer<E> consumer) {
+        for (E l : tree) {
+            consumer.accept(l);
+            List<E> es = getSubChildren.apply(l);
+            if (es != null && !es.isEmpty()) {
+                forPreOrder(es, consumer, getSubChildren);
+            }
+        }
+    }
 
     /**
      * 层序遍历
@@ -255,7 +283,38 @@ public class TreeUtils extends TreeUtil {
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
      * @param <E>            泛型实体对象
      */
+    @Deprecated
     public static <E> void forLevelOrder(List<E> tree, Consumer<E> consumer, Function<E, List<E>> getSubChildren) {
+        Queue<E> queue = new LinkedList<>(tree);
+        while (!queue.isEmpty()) {
+            E item = queue.poll();
+            consumer.accept(item);
+            List<E> childList = getSubChildren.apply(item);
+            if (childList != null && !childList.isEmpty()) {
+                queue.addAll(childList);
+            }
+        }
+    }
+
+    /**
+     * 层序遍历
+     * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     * 7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
+     *     TreeUtils.forLevelOrder(treeList, OrgTreeVo::getChildren, x -> System.out.println(x.getName()));
+     * </pre>
+     *
+     * @param tree           需要遍历的树
+     * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
+     * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
+     * @param <E>            泛型实体对象
+     */
+    public static <E> void forLevelOrder(List<E> tree, Function<E, List<E>> getSubChildren, Consumer<E> consumer) {
         Queue<E> queue = new LinkedList<>(tree);
         while (!queue.isEmpty()) {
             E item = queue.poll();
@@ -286,7 +345,36 @@ public class TreeUtils extends TreeUtil {
      * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
      * @param <E>            泛型实体对象
      */
+    @Deprecated
     public static <E> void forPostOrder(List<E> tree, Consumer<E> consumer, Function<E, List<E>> getSubChildren) {
+        for (E item : tree) {
+            List<E> childList = getSubChildren.apply(item);
+            if (childList != null && !childList.isEmpty()) {
+                forPostOrder(childList, consumer, getSubChildren);
+            }
+            consumer.accept(item);
+        }
+    }
+
+    /**
+     * 后序遍历
+     * <pre>
+     *        0
+     *     1       2
+     *  3    4  5     6
+     * 7  8 9
+     * 前序：0137849256
+     * 后序：3718495260
+     * 层序：0123456789
+     *     TreeUtils.forPostOrder(treeList, OrgTreeVo::getChildren, x -> System.out.println(x.getName()));
+     * </pre>
+     *
+     * @param tree           需要遍历的树
+     * @param getSubChildren 设置下级数据方法，如：Menu::getSubMenus
+     * @param consumer       遍历后对单个元素的处理方法，如：x-> System.out.println(x)、 System.out::println打印元素
+     * @param <E>            泛型实体对象
+     */
+    public static <E> void forPostOrder(List<E> tree, Function<E, List<E>> getSubChildren, Consumer<E> consumer) {
         for (E item : tree) {
             List<E> childList = getSubChildren.apply(item);
             if (childList != null && !childList.isEmpty()) {
@@ -309,7 +397,32 @@ public class TreeUtils extends TreeUtil {
      * @param <E>         泛型实体对象
      * @return 排序好的树
      */
+    @Deprecated
     public static <E> List<E> sort(List<E> tree, Comparator<? super E> comparator, Function<E, List<E>> getChildren) {
+        for (E item : tree) {
+            List<E> childList = getChildren.apply(item);
+            if (childList != null && !childList.isEmpty()) {
+                sort(childList, comparator, getChildren);
+            }
+        }
+        tree.sort(comparator);
+        return tree;
+    }
+
+    /**
+     * 对树所有子节点按comparator排序
+     * <pre>
+     *     TreeUtils.sort(treeList, OrgTreeVo::getChildren, Comparator.comparing(OrgTreeVo::getId));
+     *     TreeUtils.sort(treeList, MenuVo::getSubMenus, (x,y)->y.getRank().compareTo(x.getRank()));
+     * </pre>
+     *
+     * @param tree        需要排序的树
+     * @param getChildren 获取下级数据方法，如：MenuVo::getSubMenus
+     * @param comparator  排序规则Comparator，如：Comparator.comparing(MenuVo::getRank)按Rank正序 ,(x,y)->y.getRank().compareTo(x.getRank())，按Rank倒序
+     * @param <E>         泛型实体对象
+     * @return 排序好的树
+     */
+    public static <E> List<E> sort(List<E> tree, Function<E, List<E>> getChildren, Comparator<? super E> comparator) {
         for (E item : tree) {
             List<E> childList = getChildren.apply(item);
             if (childList != null && !childList.isEmpty()) {
