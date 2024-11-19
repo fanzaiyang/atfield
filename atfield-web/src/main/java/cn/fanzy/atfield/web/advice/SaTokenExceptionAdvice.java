@@ -85,6 +85,18 @@ public class SaTokenExceptionAdvice {
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(SaTokenContextException.class)
+    public Object handleSaTokenContextExceptionException(HttpServletRequest request, SaTokenContextException e) {
+        String ssid = this.getRequestId(request);
+        Json<String> response = new Json<>(String.valueOf(e.getCode()), e.getMessage());
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
+        log.error(StrUtil.format("「全局异常」请求{},SaTokenContextException,失败的原因为：{}", ssid, e.getMessage())
+                , e);
+        setErrorStacks(response, e);
+        return response;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(NotHttpBasicAuthException.class)
     public Object handleNotBasicAuthException(HttpServletRequest request, NotHttpBasicAuthException e) {
         String ssid = this.getRequestId(request);
@@ -223,6 +235,25 @@ public class SaTokenExceptionAdvice {
         Json<String> response = new Json<>(String.valueOf(e.getCode()), e.getMessage());
         response.setShowType(ShowType.NOTIFICATION_ERROR);
         log.error(StrUtil.format("「全局异常」请求{},StopMatchException,失败的原因为：{}", ssid, e.getMessage())
+                , e);
+        setErrorStacks(response, e);
+        return response;
+    }
+
+    /**
+     * 处理 SA 令牌异常
+     *
+     * @param request 请求
+     * @param e       e
+     * @return {@link Object }
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(SaTokenException.class)
+    public Object handleSaTokenExceptionException(HttpServletRequest request, SaTokenException e) {
+        String ssid = this.getRequestId(request);
+        Json<String> response = new Json<>(String.valueOf(e.getCode()), e.getMessage());
+        response.setShowType(ShowType.NOTIFICATION_ERROR);
+        log.error(StrUtil.format("「全局异常」请求{},SaTokenException,失败的原因为：{}", ssid, e.getMessage())
                 , e);
         setErrorStacks(response, e);
         return response;
