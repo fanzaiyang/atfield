@@ -7,6 +7,7 @@ import cn.dev33.satoken.stp.StpLogic;
 import cn.fanzy.atfield.satoken.enums.SaTokenJwtEnum;
 import cn.fanzy.atfield.satoken.property.SaTokenExtraProperty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,24 +24,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(SaTokenExtraProperty.class)
-@ConditionalOnProperty(prefix = "atfield.sa-token", name = {"jwtEnable"}, havingValue = "true")
+@ConditionalOnClass(StpLogicJwtForStateless.class)
+@ConditionalOnProperty(prefix = "atfield.sa-token.jwt", name = {"enable"}, havingValue = "true")
 public class SaTokenJwtConfiguration implements WebMvcConfigurer {
     private final SaTokenExtraProperty property;
 
     @Bean
     @ConditionalOnMissingBean
     public StpLogic getStpLogicJwt() {
-        if (SaTokenJwtEnum.stateless.equals(property.getJwtType())) {
+        SaTokenExtraProperty.Jwt jwt = property.getJwt();
+        if (SaTokenJwtEnum.stateless.equals(jwt.getType())) {
             // Sa-Token 整合 jwt (Stateless 模式)
             return new StpLogicJwtForStateless();
         }
-        if (SaTokenJwtEnum.mixin.equals(property.getJwtType())) {
-            // Sa-Token 整合 jwt (Mixin 模式)
-            return new StpLogicJwtForMixin();
-        }
-        if (SaTokenJwtEnum.simple.equals(property.getJwtType())) {
+
+        if (SaTokenJwtEnum.simple.equals(jwt.getType())) {
             // Sa-Token 整合 jwt (Simple 简单模式)
             return new StpLogicJwtForSimple();
+        }
+        if (SaTokenJwtEnum.mixin.equals(jwt.getType())) {
+            // Sa-Token 整合 jwt (Mixin 模式)
+            return new StpLogicJwtForMixin();
         }
         throw new RuntimeException("无效的jwt类型,请检查：atfield.sa-token.jwt-type");
     }

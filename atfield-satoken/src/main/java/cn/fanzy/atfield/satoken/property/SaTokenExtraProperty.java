@@ -25,16 +25,6 @@ public class SaTokenExtraProperty implements Serializable {
     private static final long serialVersionUID = -164668125373548470L;
 
     /**
-     * 启用JWT,默认：false
-     */
-    private Boolean jwtEnable;
-
-    /**
-     * JWT
-     */
-    private SaTokenJwtEnum jwtType;
-
-    /**
      * 路线
      */
     private Route route = new Route();
@@ -42,6 +32,8 @@ public class SaTokenExtraProperty implements Serializable {
      * 注解
      */
     private Annotations annotation = new Annotations();
+
+    private Jwt jwt = new Jwt();
 
     @Data
     @NoArgsConstructor
@@ -101,7 +93,9 @@ public class SaTokenExtraProperty implements Serializable {
      * @since 2022-08-23
      */
     @Data
-    public static class Annotations {
+    public static class Annotations implements Serializable {
+        @Serial
+        private static final long serialVersionUID = -4086998547753462360L;
         /**
          * 是否启用，默认：true
          */
@@ -120,6 +114,27 @@ public class SaTokenExtraProperty implements Serializable {
                 return new String[]{"/**"};
             }
             return addPathPatterns;
+        }
+    }
+
+    @Data
+    public static class Jwt implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 2476817512085118156L;
+        /**
+         * 是否启用，默认：true
+         */
+        private Boolean enable;
+        /**
+         * 拦截路径，默认/**
+         */
+        private SaTokenJwtEnum type;
+
+        public SaTokenJwtEnum getAddPathPatterns() {
+            if (type == null) {
+                return SaTokenJwtEnum.stateless;
+            }
+            return type;
         }
     }
 }

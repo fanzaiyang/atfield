@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.core.exception;
 
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +27,14 @@ public class GlobalException extends RuntimeException {
     public GlobalException() {
     }
 
-    public GlobalException(String message) {
-        this("-1", message);
+    /**
+     * 全局异常
+     *
+     * @param message 消息
+     * @param params  参数
+     */
+    public GlobalException(String message, Object... params) {
+        this("-1", StrUtil.format(message, params));
     }
 
     public GlobalException(String code, String message) {
