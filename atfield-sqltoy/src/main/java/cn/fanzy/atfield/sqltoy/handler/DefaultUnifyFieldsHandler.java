@@ -2,7 +2,6 @@ package cn.fanzy.atfield.sqltoy.handler;
 
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import lombok.RequiredArgsConstructor;
-import org.sagacity.sqltoy.model.IgnoreCaseSet;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 
 import java.util.Date;
@@ -38,11 +37,11 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         return map;
     }
 
-    @Override
-    public IgnoreCaseSet forceUpdateFields() {
-        IgnoreCaseSet map = new IgnoreCaseSet();
-        map.add("updateBy");
-        map.add("updateTime");
-        return map;
-    }
+//    @Override
+//    public IgnoreCaseSet forceUpdateFields() {
+//        IgnoreCaseSet map = new IgnoreCaseSet();
+//        map.add("updateBy");
+//        map.add("updateTime");
+//        return map;
+//    }
 }
