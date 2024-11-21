@@ -1,3 +1,4 @@
 cn.fanzy.atfield.satoken.configuration.SaTokenAnnotationConfiguration
 cn.fanzy.atfield.satoken.configuration.SaTokenRouteConfiguration
 cn.fanzy.atfield.satoken.configuration.LoginExtraConfiguration
+cn.fanzy.atfield.satoken.configuration.SaTokenJwtConfiguration
