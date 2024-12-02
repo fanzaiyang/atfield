@@ -3,6 +3,7 @@ package cn.fanzy.atfield.satoken.configuration;
 import cn.dev33.satoken.fun.SaParamFunction;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.fanzy.atfield.satoken.interceptor.StpContextInterceptor;
 import cn.fanzy.atfield.satoken.property.SaTokenExtraProperty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -39,6 +40,9 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(new SaInterceptor(saParamFunction()))
                 .addPathPatterns(property.getRoute().getAddPathPatterns())
                 .excludePathPatterns(property.getRoute().getExcludePathPatterns());
+        // 注册 StpContext 拦截器，用于在多线程中获取当前登录会话。
+        registry.addInterceptor(new StpContextInterceptor())
+                .addPathPatterns("/**");
     }
 
     @Override

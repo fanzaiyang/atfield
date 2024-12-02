@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.sqltoy.configuration;
 
+import cn.fanzy.atfield.core.model.Operator;
 import cn.fanzy.atfield.sqltoy.entity.AnonymousCurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
@@ -40,8 +41,8 @@ public class SqltoyExtraAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "spring.sqltoy.extra", name = {"unifyField"}, havingValue = "true", matchIfMissing = true)
-    public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo) {
-        return new DefaultUnifyFieldsHandler(currentUserInfo);
+    public IUnifyFieldsHandler unifyFieldsHandler(ICurrentUserInfo currentUserInfo, Operator operator) {
+        return new DefaultUnifyFieldsHandler(currentUserInfo, operator);
     }
 
     @Qualifier("logicDelFilterInterceptor")

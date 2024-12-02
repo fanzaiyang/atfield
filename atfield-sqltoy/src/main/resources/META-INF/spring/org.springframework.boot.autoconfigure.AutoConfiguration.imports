@@ -1,2 +1,4 @@
+cn.fanzy.atfield.sqltoy.configuration.SqltoySaOperatorConfiguration
+cn.fanzy.atfield.sqltoy.configuration.SqltoyAnyOperatorConfiguration
 cn.fanzy.atfield.sqltoy.configuration.SqltoyExtraAutoConfiguration
 com.sagframe.sagacity.sqltoy.plus.SqlToyPlusConfiguration

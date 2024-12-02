@@ -16,6 +16,7 @@ import java.util.List;
  * @date 2024/11/13
  */
 public class SaSessionUtils {
+    public static final String SA_LOGIN_NAME = "sa_login_name";
 
     /**
      * 设置
@@ -44,6 +45,17 @@ public class SaSessionUtils {
     public static <T> T getModel(String key, Class<T> clazz) {
         SaSession saSession = StpUtil.getSession();
         return ObjectUtils.cast(saSession.get(key), clazz);
+    }
+
+    /**
+     * 获取 STR
+     *
+     * @param key 钥匙
+     * @return {@link String }
+     */
+    public static String getStr(String key) {
+        SaSession saSession = StpUtil.getSession();
+        return saSession.getString(key);
     }
 
     /**
