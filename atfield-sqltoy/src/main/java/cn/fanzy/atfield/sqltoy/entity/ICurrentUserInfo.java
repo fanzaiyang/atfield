@@ -9,6 +9,7 @@ import java.util.Map;
  * @author fanzaiyang
  * @date 2024/01/09
  */
+@Deprecated
 public interface ICurrentUserInfo extends Serializable {
     /**
      * 获取用户 ID
