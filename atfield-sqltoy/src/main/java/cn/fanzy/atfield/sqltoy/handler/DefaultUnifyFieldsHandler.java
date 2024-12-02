@@ -42,7 +42,6 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         Map<String, Object> map = new HashMap<>();
         map.put("updateTime", new Date());
 
-        map.put("updateBy", currentUserInfo.getUserId());
         try {
             map.put("updateBy", currentUserInfo.getUserId());
         } catch (Exception e) {
