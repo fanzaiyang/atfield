@@ -147,6 +147,14 @@ public class TLogWebInvokeTimeAdvice {
         }
         StopWatch stopWatch = invokeTimeTL.get();
         stopWatch.stop();
+        String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
+        String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
+        if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
+            userId = operator.getId();
+            userName = operator.getName();
+        }
+        logInfo.setUserId(userId);
+        logInfo.setUserName(userName);
         logInfo.setTraceId(TLogContext.getTraceId());
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(JSONUtil.toJsonStr(obj));
@@ -177,6 +185,14 @@ public class TLogWebInvokeTimeAdvice {
         }
         StopWatch stopWatch = invokeTimeTL.get();
         stopWatch.stop();
+        String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
+        String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
+        if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
+            userId = operator.getId();
+            userName = operator.getName();
+        }
+        logInfo.setUserId(userId);
+        logInfo.setUserName(userName);
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
         logInfo.setResponseTime(LocalDateTime.now());
         logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, property.getPrint().getResponseDataLength()));
