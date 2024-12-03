@@ -89,7 +89,7 @@ public class TLogWebInvokeTimeAdvice {
         String operateType = "";
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
-        if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous")) {
+        if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
             userId = operator.getId();
             userName = operator.getName();
         }
