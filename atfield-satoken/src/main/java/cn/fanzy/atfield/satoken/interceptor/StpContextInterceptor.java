@@ -23,8 +23,8 @@ public class StpContextInterceptor implements HandlerInterceptor {
             if (StpUtil.isLogin()) {
                 StpContext.putLoginId(StpUtil.getLoginIdAsString());
                 String loginName = SaSessionUtils.getStr(SaSessionUtils.SA_LOGIN_NAME);
-                if (StrUtil.isBlank(loginName)) {
-                    StpContext.putLoginName(SaSessionUtils.getStr(SaSessionUtils.SA_LOGIN_NAME));
+                if (StrUtil.isNotBlank(loginName)) {
+                    StpContext.putLoginName(loginName);
                 }
             }
             if (StrUtil.isBlank(StpContext.getLoginId())) {

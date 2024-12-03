@@ -21,13 +21,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-bom</artifactId>
-                <version>${satoken.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>cn.fanzy.atfield</groupId>
                 <artifactId>atfield-bom</artifactId>
                 <version>${revision}</version>

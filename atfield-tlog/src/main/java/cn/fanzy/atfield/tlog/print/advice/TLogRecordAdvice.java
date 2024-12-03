@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.tlog.print.advice;
 
+import cn.fanzy.atfield.core.model.Operator;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
@@ -38,6 +39,7 @@ public class TLogRecordAdvice {
 
     private final LogOperatorService logOperatorService;
     private final LogRecordService logRecordService;
+    private final Operator operator;
 
     @Pointcut("@annotation(cn.fanzy.atfield.tlog.print.annotation.LogRecord)")
     public void cut() {
@@ -51,23 +53,27 @@ public class TLogRecordAdvice {
         }
         String content = SpElUtils.parse(annotation.content(), joinPoint);
         String bizNo = SpElUtils.parse(annotation.bizNo(), joinPoint);
-        String operator = SpElUtils.parse(annotation.operator(), joinPoint);
+        String operatorId = SpElUtils.parse(annotation.operator(), joinPoint);
         if (StrUtil.isBlank(bizNo)) {
             bizNo = LogRecordContext.getBizNo();
         }
-        if (StrUtil.isBlank(operator)) {
-            operator = LogRecordContext.getVariable("operator") == null ? "" :
+        if (StrUtil.isBlank(operatorId)) {
+            operatorId = LogRecordContext.getVariable("operator") == null ? "" :
                     Objects.requireNonNull(LogRecordContext.getVariable("operator")).toString();
         }
         String operateType = SpElUtils.parse(annotation.operateType(), joinPoint);
         LogRecordInfo record = new LogRecordInfo();
         record.setAppName(annotation.appName());
-        if (StrUtil.isNotBlank(operator)) {
-            record.setOperatorId(operator);
-            record.setOperatorName(operator);
+        if (StrUtil.isNotBlank(operatorId)) {
+            record.setOperatorId(operatorId);
+            record.setOperatorName(operatorId);
         } else {
             record.setOperatorId(logOperatorService.getUserId(null));
             record.setOperatorName(logOperatorService.getUserName(null));
+            if (StrUtil.isBlank(record.getOperatorId()) || StrUtil.containsIgnoreCase(record.getOperatorId(), "anonymous")) {
+                record.setOperatorId(operator.getId());
+                record.setOperatorName(operator.getName());
+            }
         }
 
 

@@ -74,11 +74,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>cn.fanzy.atfield</groupId>
-            <artifactId>atfield-satoken</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
     <build>
         <plugins>

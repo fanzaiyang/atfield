@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.tlog.configuration;
 
 
+import cn.fanzy.atfield.core.model.Operator;
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
 import cn.fanzy.atfield.tlog.print.advice.TLogRecordAdvice;
 import cn.fanzy.atfield.tlog.print.advice.TLogWebInvokeTimeAdvice;
@@ -41,14 +42,16 @@ public class TLogPrintAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public TLogWebInvokeTimeAdvice tLogWebInvokeTimeAdvice(TLogProperty property, LogCallbackService callbackService,
-                                                           LogOperatorService logOperatorService) {
-        return new TLogWebInvokeTimeAdvice(property, callbackService, logOperatorService);
+                                                           LogOperatorService logOperatorService,
+                                                           Operator operator) {
+        return new TLogWebInvokeTimeAdvice(property, callbackService, logOperatorService, operator);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public TLogRecordAdvice tLogRecordAdvice(LogOperatorService logOperatorService,
-                                             LogRecordService logRecordService) {
-        return new TLogRecordAdvice(logOperatorService, logRecordService);
+                                             LogRecordService logRecordService,
+                                             Operator operator) {
+        return new TLogRecordAdvice(logOperatorService, logRecordService, operator);
     }
 }

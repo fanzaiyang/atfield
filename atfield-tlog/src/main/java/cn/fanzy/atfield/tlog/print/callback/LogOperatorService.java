@@ -9,6 +9,7 @@ import cn.fanzy.atfield.tlog.print.bean.PrintLogInfo;
  * @author fanzaiyang
  * @date 2023/12/05
  */
+@Deprecated
 public interface LogOperatorService {
 
     /**

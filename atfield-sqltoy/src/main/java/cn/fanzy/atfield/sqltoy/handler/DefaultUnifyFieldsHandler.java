@@ -1,8 +1,6 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
 import cn.fanzy.atfield.core.model.Operator;
-import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
@@ -20,7 +18,6 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
-    private final ICurrentUserInfo currentUserInfo;
     private final Operator operator;
 
     @Override
@@ -30,16 +27,9 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         map.put("createTime", new Date());
         map.put("updateTime", new Date());
         try {
-            map.put("createBy", currentUserInfo.getUserId());
-            map.put("updateBy", currentUserInfo.getUserId());
+            map.put("createBy", operator.getId());
+            map.put("updateBy", operator.getId());
         } catch (Exception ignored) {
-        }
-        if (map.get("createBy") == null || StrUtil.equalsIgnoreCase(map.get("createBy").toString(), "anonymous")) {
-            try {
-                map.put("createBy", operator.getId());
-                map.put("updateBy", operator.getId());
-            } catch (Exception ignored) {
-            }
         }
         map.putIfAbsent("createBy", "anonymous");
         map.putIfAbsent("updateBy", "anonymous");
@@ -50,16 +40,9 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
     public Map<String, Object> updateUnifyFields() {
         Map<String, Object> map = new HashMap<>();
         map.put("updateTime", new Date());
-
         try {
-            map.put("updateBy", currentUserInfo.getUserId());
+            map.put("updateBy", operator.getId());
         } catch (Exception ignored) {
-        }
-        if (map.get("updateBy") == null || StrUtil.equalsIgnoreCase(map.get("updateBy").toString(), "anonymous")) {
-            try {
-                map.put("updateBy", operator.getId());
-            } catch (Exception ignored) {
-            }
         }
         map.putIfAbsent("updateBy", "anonymous");
         return map;

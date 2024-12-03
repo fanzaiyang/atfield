@@ -1,10 +1,10 @@
-package cn.fanzy.atfield.sqltoy.configuration;
+package cn.fanzy.atfield.core.config;
 
 import cn.fanzy.atfield.core.model.Operator;
-import cn.fanzy.atfield.sqltoy.operator.AnonymousOperator;
-import com.sagframe.sagacity.sqltoy.plus.EnableSqlToyPlus;
+import cn.fanzy.atfield.core.operator.AnonymousOperator;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,14 +15,18 @@ import org.springframework.context.annotation.Configuration;
  * @author fanzaiyang
  * @date 2024/01/09
  */
-@EnableSqlToyPlus
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
-@AutoConfigureAfter(SqltoySaOperatorConfiguration.class)
-public class SqltoyAnyOperatorConfiguration {
+public class OperatorAnonymousConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public Operator operator() {
         return new AnonymousOperator();
+    }
+
+    @PostConstruct
+    public void init() {
+        log.info("开启 <operator> Anonymous相关的配置.");
     }
 }

@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.tlog.print.advice;
 
+import cn.fanzy.atfield.core.model.Operator;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.Constants;
@@ -53,13 +54,14 @@ public class TLogWebInvokeTimeAdvice {
     private final LogCallbackService callbackService;
 
     private final LogOperatorService userCallbackService;
+    private final Operator operator;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
-              "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
-              "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
-              "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
-              "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
-              "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
+            "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
+            "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
+            "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
+            "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
+            "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
     public void cut() {
     }
 
@@ -87,7 +89,10 @@ public class TLogWebInvokeTimeAdvice {
         String operateType = "";
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
-
+        if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous")) {
+            userId = operator.getId();
+            userName = operator.getName();
+        }
         UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
         String deviceName = JSONUtil.toJsonStr(ua);
         String clientIp = SpringUtils.getClientIp(request);
