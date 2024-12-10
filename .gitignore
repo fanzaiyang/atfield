@@ -38,3 +38,5 @@ build/
 ### Mac OS ###
 .DS_Store
 
+/docs/node_modules/
+/docs/yarn.lock
