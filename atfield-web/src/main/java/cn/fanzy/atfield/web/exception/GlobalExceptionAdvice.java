@@ -1,10 +1,11 @@
-package cn.fanzy.atfield.web.advice;
+package cn.fanzy.atfield.web.exception;
 
 import cn.fanzy.atfield.core.exception.GlobalException;
 import cn.fanzy.atfield.core.utils.ExceptionUtil;
 import cn.fanzy.atfield.web.json.model.Json;
 import cn.fanzy.atfield.web.json.model.ShowType;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
+import cn.fanzy.atfield.web.response.property.ResponseWrapperProperty;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -48,7 +50,8 @@ import java.sql.SQLSyntaxErrorException;
 @RestControllerAdvice
 @Configuration(proxyBeanMethods = false)
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE)
-@EnableConfigurationProperties(JsonProperty.class)
+@EnableConfigurationProperties({JsonProperty.class, ResponseWrapperProperty.class})
+@ConditionalOnProperty(prefix = "atfield.web.exception", name = {"status-ok"}, havingValue = "true", matchIfMissing = true)
 public class GlobalExceptionAdvice {
     private final JsonProperty property;
 

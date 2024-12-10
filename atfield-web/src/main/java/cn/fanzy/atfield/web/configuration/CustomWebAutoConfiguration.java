@@ -1,8 +1,10 @@
 package cn.fanzy.atfield.web.configuration;
 
-import cn.fanzy.atfield.web.advice.GlobalExceptionAdvice;
 import cn.fanzy.atfield.web.advice.ResponseWrapperAdvice;
-import cn.fanzy.atfield.web.advice.SaTokenExceptionAdvice;
+import cn.fanzy.atfield.web.exception.GlobalExceptionAdvice;
+import cn.fanzy.atfield.web.exception.GlobalExceptionErrorAdvice;
+import cn.fanzy.atfield.web.exception.SaTokenExceptionAdvice;
+import cn.fanzy.atfield.web.exception.SaTokenExceptionErrorAdvice;
 import cn.fanzy.atfield.web.filter.ReplaceStreamFilter;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         ReplaceStreamFilter.class,
         GlobalExceptionAdvice.class,
         ResponseWrapperAdvice.class,
-        SaTokenExceptionAdvice.class})
+        SaTokenExceptionAdvice.class,
+        GlobalExceptionErrorAdvice.class,
+        SaTokenExceptionErrorAdvice.class})
 @PropertySource(
         name = "TLog Default framework Properties",
         value = "classpath:/META-INF/infra-web-default.properties")

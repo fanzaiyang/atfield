@@ -1,10 +1,11 @@
-package cn.fanzy.atfield.web.advice;
+package cn.fanzy.atfield.web.exception;
 
 import cn.dev33.satoken.exception.*;
 import cn.fanzy.atfield.core.utils.ExceptionUtil;
 import cn.fanzy.atfield.web.json.model.Json;
 import cn.fanzy.atfield.web.json.model.ShowType;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
+import cn.fanzy.atfield.web.response.property.ResponseWrapperProperty;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -29,14 +31,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RequiredArgsConstructor
 @RestControllerAdvice
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(JsonProperty.class)
 @AutoConfigureBefore(GlobalExceptionAdvice.class)
 @ConditionalOnClass(SaTokenException.class)
-public class SaTokenExceptionAdvice {
+@EnableConfigurationProperties({ResponseWrapperProperty.class, JsonProperty.class})
+@ConditionalOnProperty(prefix = "atfield.web.exception", name = {"status-ok"}, havingValue = "false")
+public class SaTokenExceptionErrorAdvice {
 
     private final JsonProperty property;
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(ApiDisabledException.class)
     public Object handleApiDisabledException(HttpServletRequest request, ApiDisabledException e) {
         String ssid = this.getRequestId(request);
@@ -48,7 +51,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(BackResultException.class)
     public Object handleBackResultException(HttpServletRequest request, BackResultException e) {
         String ssid = this.getRequestId(request);
@@ -60,7 +63,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(DisableServiceException.class)
     public Object handleDisableServiceException(HttpServletRequest request, DisableServiceException e) {
         String ssid = this.getRequestId(request);
@@ -72,7 +75,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(InvalidContextException.class)
     public Object handleInvalidContextException(HttpServletRequest request, InvalidContextException e) {
         String ssid = this.getRequestId(request);
@@ -84,7 +87,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SaTokenContextException.class)
     public Object handleSaTokenContextExceptionException(HttpServletRequest request, SaTokenContextException e) {
         String ssid = this.getRequestId(request);
@@ -96,7 +99,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotHttpBasicAuthException.class)
     public Object handleNotBasicAuthException(HttpServletRequest request, NotHttpBasicAuthException e) {
         String ssid = this.getRequestId(request);
@@ -108,7 +111,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NotImplException.class)
     public Object handleNotImplException(HttpServletRequest request, NotImplException e) {
         String ssid = this.getRequestId(request);
@@ -120,7 +123,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(NotLoginException.class)
     public Object handleNotLoginException(HttpServletRequest request, NotLoginException e) {
         String ssid = this.getRequestId(request);
@@ -132,7 +135,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NotPermissionException.class)
     public Object handleNotLoginException(HttpServletRequest request, NotPermissionException e) {
         String ssid = this.getRequestId(request);
@@ -144,7 +147,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NotRoleException.class)
     public Object handleNotRoleException(HttpServletRequest request, NotRoleException e) {
         String ssid = this.getRequestId(request);
@@ -156,7 +159,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(NotSafeException.class)
     public Object handleNotSafeException(HttpServletRequest request, NotSafeException e) {
         String ssid = this.getRequestId(request);
@@ -168,7 +171,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(NotWebContextException.class)
     public Object handleNotWebContextException(HttpServletRequest request, NotWebContextException e) {
         String ssid = this.getRequestId(request);
@@ -180,7 +183,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(RequestPathInvalidException.class)
     public Object handleRequestPathInvalidException(HttpServletRequest request, RequestPathInvalidException e) {
         String ssid = this.getRequestId(request);
@@ -192,7 +195,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SaJsonConvertException.class)
     public Object handleSaJsonConvertException(HttpServletRequest request, SaJsonConvertException e) {
         String ssid = this.getRequestId(request);
@@ -204,7 +207,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SaSignException.class)
     public Object handleSaSignException(HttpServletRequest request, SaSignException e) {
         String ssid = this.getRequestId(request);
@@ -216,7 +219,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(SameTokenInvalidException.class)
     public Object handleSameTokenInvalidException(HttpServletRequest request, SameTokenInvalidException e) {
         String ssid = this.getRequestId(request);
@@ -228,7 +231,7 @@ public class SaTokenExceptionAdvice {
         return response;
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(StopMatchException.class)
     public Object handleStopMatchException(HttpServletRequest request, StopMatchException e) {
         String ssid = this.getRequestId(request);
@@ -247,7 +250,7 @@ public class SaTokenExceptionAdvice {
      * @param e       e
      * @return {@link Object }
      */
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SaTokenException.class)
     public Object handleSaTokenExceptionException(HttpServletRequest request, SaTokenException e) {
         String ssid = this.getRequestId(request);
