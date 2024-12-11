@@ -2,6 +2,8 @@ package cn.fanzy.atfield.core.spring;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -140,7 +142,7 @@ public class SpringUtils extends SpringUtil {
             return false;
         }
         return StrUtil.equalsIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE) ||
-               StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
+                StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**
@@ -195,5 +197,94 @@ public class SpringUtils extends SpringUtil {
         }
         return params;
 
+    }
+
+    /**
+     * 获取用户代理
+     * <pre>
+     *     {
+     *     "mobile": false,
+     *     "browser": {
+     *       "name": "MSEdge",
+     *       "pattern": "Edge|Edg",
+     *       "mobile": false,
+     *       "unknown": false
+     *     },
+     *     "version": "131.0.0.0",
+     *     "platform": {
+     *       "name": "Windows",
+     *       "pattern": "windows",
+     *       "mobile": false,
+     *       "ios": false,
+     *       "ipad": false,
+     *       "iphoneOrIPod": false,
+     *       "android": false,
+     *       "unknown": false
+     *     },
+     *     "os": {
+     *       "name": "Windows 10 or Windows Server 2016",
+     *       "pattern": "windows nt 10\\.0",
+     *       "macOS": false,
+     *       "unknown": false
+     *     },
+     *     "osVersion": "10.0",
+     *     "engine": {
+     *       "name": "Webkit",
+     *       "pattern": "webkit",
+     *       "unknown": false
+     *     },
+     *     "engineVersion": "537.36"
+     *   }
+     * </pre>
+     *
+     * @return {@link UserAgent }
+     */
+    public UserAgent getUserAgent() {
+        return UserAgentUtil.parse(getRequest().getHeader("User-Agent"));
+    }
+
+    /**
+     * 获取用户代理
+     * <pre>
+     *     {
+     *     "mobile": false,
+     *     "browser": {
+     *       "name": "MSEdge",
+     *       "pattern": "Edge|Edg",
+     *       "mobile": false,
+     *       "unknown": false
+     *     },
+     *     "version": "131.0.0.0",
+     *     "platform": {
+     *       "name": "Windows",
+     *       "pattern": "windows",
+     *       "mobile": false,
+     *       "ios": false,
+     *       "ipad": false,
+     *       "iphoneOrIPod": false,
+     *       "android": false,
+     *       "unknown": false
+     *     },
+     *     "os": {
+     *       "name": "Windows 10 or Windows Server 2016",
+     *       "pattern": "windows nt 10\\.0",
+     *       "macOS": false,
+     *       "unknown": false
+     *     },
+     *     "osVersion": "10.0",
+     *     "engine": {
+     *       "name": "Webkit",
+     *       "pattern": "webkit",
+     *       "unknown": false
+     *     },
+     *     "engineVersion": "537.36"
+     *   }
+     * </pre>
+     *
+     * @param request 请求
+     * @return {@link UserAgent }
+     */
+    public UserAgent getUserAgent(HttpServletRequest request) {
+        return UserAgentUtil.parse(request.getHeader("User-Agent"));
     }
 }
