@@ -239,7 +239,7 @@ public class SpringUtils extends SpringUtil {
      *
      * @return {@link UserAgent }
      */
-    public UserAgent getUserAgent() {
+    public static UserAgent getUserAgent() {
         return UserAgentUtil.parse(getRequest().getHeader("User-Agent"));
     }
 
@@ -284,7 +284,7 @@ public class SpringUtils extends SpringUtil {
      * @param request 请求
      * @return {@link UserAgent }
      */
-    public UserAgent getUserAgent(HttpServletRequest request) {
+    public static UserAgent getUserAgent(HttpServletRequest request) {
         return UserAgentUtil.parse(request.getHeader("User-Agent"));
     }
 }
