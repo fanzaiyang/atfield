@@ -44,6 +44,8 @@
         <satoken.version>1.39.0</satoken.version>
         <transmittable.version>2.14.4</transmittable.version>
         <QLExpress.version>3.3.4</QLExpress.version>
+        <sagacity.version>5.6.35</sagacity.version>
+        <sqltoy-plus.version>5.6.33</sqltoy-plus.version>
     </properties>
     <dependencyManagement>
         <dependencies>
