@@ -26,13 +26,22 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         map.put("delFlag", 0);
         map.put("createTime", new Date());
         map.put("updateTime", new Date());
+        // 这里兼容了一些老版本的字段命名
+        map.put("createdTime", new Date());
+        map.put("updatedTime", new Date());
         try {
             map.put("createBy", operator.getId());
             map.put("updateBy", operator.getId());
+            // 这里兼容了一些老版本的字段命名
+            map.put("createdBy", operator.getId());
+            map.put("updatedBy", operator.getId());
         } catch (Exception ignored) {
         }
         map.putIfAbsent("createBy", "anonymous");
         map.putIfAbsent("updateBy", "anonymous");
+        // 这里兼容了一些老版本的字段命名
+        map.putIfAbsent("createdBy", "anonymous");
+        map.putIfAbsent("updatedBy", "anonymous");
         return map;
     }
 
@@ -40,11 +49,17 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
     public Map<String, Object> updateUnifyFields() {
         Map<String, Object> map = new HashMap<>();
         map.put("updateTime", new Date());
+        // 这里兼容了一些老版本的字段命名
+        map.put("updatedTime", new Date());
         try {
             map.put("updateBy", operator.getId());
+            // 这里兼容了一些老版本的字段命名
+            map.put("updatedBy", operator.getId());
         } catch (Exception ignored) {
         }
         map.putIfAbsent("updateBy", "anonymous");
+        // 这里兼容了一些老版本的字段命名
+        map.putIfAbsent("updatedBy", "anonymous");
         return map;
     }
 
