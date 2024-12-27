@@ -113,4 +113,39 @@ public enum ByteCalcUnit {
         }
         return BigDecimal.valueOf(radix);
     }
+
+    /**
+     * 获取大小描述
+     *
+     * @param bit 字节大小
+     * @return {@link String }
+     */
+    public static String getText(BigDecimal bit) {
+        if (bit.compareTo(new BigDecimal("100")) < 0) {
+            return bit + "b";
+        }
+        BigDecimal kb = bit.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        if (kb.compareTo(new BigDecimal("100")) < 0) {
+            return kb + "Kb";
+        }
+        BigDecimal mb = kb.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        if (mb.compareTo(new BigDecimal("100")) < 0) {
+            return mb + "Mb";
+        }
+        BigDecimal gb = mb.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        if (gb.compareTo(new BigDecimal("100")) < 0) {
+            return gb + "Mb";
+        }
+        BigDecimal tb = gb.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        if (tb.compareTo(new BigDecimal("100")) < 0) {
+            return tb + "Tb";
+        }
+
+        BigDecimal pb = tb.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        if (pb.compareTo(new BigDecimal("100")) < 0) {
+            return pb + "Pb";
+        }
+        BigDecimal eb = pb.divide(BigDecimal.valueOf(1024), 2, RoundingMode.HALF_UP);
+        return eb + "Eb";
+    }
 }
