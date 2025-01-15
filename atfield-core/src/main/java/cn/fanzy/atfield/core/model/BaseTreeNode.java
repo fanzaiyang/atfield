@@ -46,4 +46,13 @@ public abstract class BaseTreeNode<E> implements Serializable {
      */
     public abstract boolean isLeaf();
 
+    /**
+     * 是否有下级节点
+     *
+     * @return boolean
+     */
+    public boolean hasChildren() {
+        return !isLeaf();
+    }
+
 }
