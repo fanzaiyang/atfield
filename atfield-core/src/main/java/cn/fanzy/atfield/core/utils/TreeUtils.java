@@ -118,6 +118,7 @@ public class TreeUtils extends TreeUtil {
 
     /**
      * 将list合成树 -> E必须继承{@link BaseTreeNode}
+     * 大数据下有性能问题，建议使用 {@link TreeNewBeeUtils}
      * <pre>
      *     TreeUtils.makeTree(list, OrgTreeVo::setChildren);
      * </pre>
@@ -126,14 +127,13 @@ public class TreeUtils extends TreeUtil {
      * @param setSubChildren E中设置下级数据方法，如：Menu::setSubMenus
      * @return {@link List }<{@link E }>
      */
+    @Deprecated(since = "1.1.7")
     public static <E extends BaseTreeNode<E>> List<E> makeTree(List<E> list, BiConsumer<E, List<E>> setSubChildren) {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        TimeInterval timer = DateUtil.timer();
-        timer.start();
         List<String> idList = list.stream().map(BaseTreeNode::getId).toList();
-        List<E> collect = list.stream().filter(a -> !idList.contains(a.getParentId()))
+        return list.stream().filter(a -> !idList.contains(a.getParentId()))
                 .peek(x -> setSubChildren.accept(x,
                                 makeChildren(x, list,
                                         (a, b) -> StrUtil.equalsIgnoreCase(a.getId(), b.getParentId()),
@@ -141,12 +141,11 @@ public class TreeUtils extends TreeUtil {
                         )
                 )
                 .collect(Collectors.toList());
-        log.info("makeTree耗时(秒):{}", timer.intervalSecond());
-        return collect;
     }
 
     /**
      * 将list合成树
+     * 大数据下有性能问题，建议使用 {@link TreeNewBeeUtils}
      * <pre>
      *     TreeUtils.makeTree(list,
      *     a->a.getParentId().equals("-1") ,
@@ -161,17 +160,14 @@ public class TreeUtils extends TreeUtil {
      * @param <E>            泛型实体对象
      * @return 合成好的树
      */
+    @Deprecated(since = "1.1.7")
     public static <E> List<E> makeTree(List<E> list, Predicate<E> rootCheck, BiFunction<E, E, Boolean> parentCheck, BiConsumer<E, List<E>> setSubChildren) {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        TimeInterval timer = DateUtil.timer();
-        timer.start();
-        List<E> collect = list.stream().filter(rootCheck)
+        return list.stream().filter(rootCheck)
                 .peek(x -> setSubChildren.accept(x, makeChildren(x, list, parentCheck, setSubChildren)))
                 .collect(Collectors.toList());
-        log.info("makeTree耗时(秒):{}", timer.intervalSecond());
-        return collect;
     }
 
     /**
@@ -441,6 +437,7 @@ public class TreeUtils extends TreeUtil {
         return tree;
     }
 
+    @Deprecated(since = "1.1.7")
     private static <E> List<E> makeChildren(E parent, List<E> allData, BiFunction<E, E, Boolean> parentCheck, BiConsumer<E, List<E>> children) {
         return allData.stream()
                 .filter(x -> parentCheck.apply(parent, x))
