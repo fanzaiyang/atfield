@@ -59,6 +59,16 @@ public interface UploadService {
      */
     String getBucket();
 
+
+    /**
+     * 设置objectName前缀
+     *
+     * @param prefix 前缀
+     * @return {@link UploadService }
+     */
+    UploadService prefix(String prefix);
+
+    String getPrefix();
     /**
      * 获取存储桶主机
      *

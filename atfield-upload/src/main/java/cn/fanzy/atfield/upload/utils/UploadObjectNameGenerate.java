@@ -12,7 +12,7 @@ import java.util.Date;
  * @author fanzaiyang
  * @since 2022-08-22
  */
-public class BreezeObjectGenerate {
+public class UploadObjectNameGenerate {
 
 
     /**
@@ -30,6 +30,7 @@ public class BreezeObjectGenerate {
      * 对象名称
      *
      * @param fileType 文件类型
+     * @param prefix
      * @return {@link String}
      */
     public static String objectName(String fileType) {

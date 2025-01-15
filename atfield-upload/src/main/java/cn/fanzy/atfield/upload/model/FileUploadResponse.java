@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.upload.model;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -61,5 +62,13 @@ public class FileUploadResponse implements Serializable {
      * 临时预览地址
      */
     private String previewUrl;
+    /**
+     * 预览公共URL
+     * <pre>需要设置公开可读权限。</pre>
+     */
+    private String previewPublicUrl;
 
+    public String getPreviewPublicUrl() {
+        return StrUtil.subBefore(previewUrl, "?", false);
+    }
 }

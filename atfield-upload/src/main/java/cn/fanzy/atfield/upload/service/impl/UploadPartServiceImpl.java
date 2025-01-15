@@ -5,8 +5,8 @@ import cn.fanzy.atfield.upload.model.*;
 import cn.fanzy.atfield.upload.property.UploadProperty;
 import cn.fanzy.atfield.upload.service.UploadPartService;
 import cn.fanzy.atfield.upload.service.UploadService;
-import cn.fanzy.atfield.upload.utils.BreezeFileTypeUtil;
-import cn.fanzy.atfield.upload.utils.BreezeObjectGenerate;
+import cn.fanzy.atfield.upload.utils.UploadFileTypeUtil;
+import cn.fanzy.atfield.upload.utils.UploadObjectNameGenerate;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
@@ -40,7 +40,7 @@ public class UploadPartServiceImpl implements UploadPartService {
                 param.getIdentifier());
         List<FilePartUploadVo> partList = new ArrayList<>();
         if (StrUtil.isBlank(param.getObjectName())) {
-            param.setObjectName(BreezeObjectGenerate.objectName(BreezeFileTypeUtil.getFileType(param.getFileName())));
+            param.setObjectName(UploadObjectNameGenerate.objectName(UploadFileTypeUtil.getFileType(param.getFileName())));
         }
         if (CollUtil.isEmpty(query)) {
             // 不存在，需要新的上传

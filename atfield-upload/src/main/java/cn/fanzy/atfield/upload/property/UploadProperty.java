@@ -58,12 +58,35 @@ public class UploadProperty implements Serializable {
          */
         private String innerEndpoint;
 
+        /**
+         * 前缀 public
+         */
+        private String prefixPublic;
+        /**
+         * 前缀 private
+         */
+        private String prefixPrivate;
+
         public String getInnerEndpoint() {
             if (innerEndpoint == null || innerEndpoint.isEmpty()) {
                 log.warn("未配置内网地址，使用公网地址！");
                 return endpoint;
             }
             return innerEndpoint;
+        }
+
+        public String getPrefixPrivate() {
+            if (StrUtil.isBlank(prefixPrivate)) {
+                return "";
+            }
+            return prefixPrivate.endsWith("/") ? prefixPrivate : prefixPrivate + "/";
+        }
+
+        public String getPrefixPublic() {
+            if (StrUtil.isBlank(prefixPublic)) {
+                return "";
+            }
+            return prefixPublic.endsWith("/") ? prefixPublic : prefixPublic + "/";
         }
     }
 

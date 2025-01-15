@@ -61,7 +61,15 @@ public class UploadServiceImpl implements UploadService {
 
     private MinioClient innerClient;
 
+    /**
+     * 桶
+     */
     private String bucket;
+
+    /**
+     * 前缀
+     */
+    private String prefix = "";
 
     private AmazonS3 amazonS3;
 
@@ -123,6 +131,21 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
+    public UploadService prefix(String prefix) {
+        if (StrUtil.isBlank(prefix)) {
+            return this;
+        }
+        this.prefix = prefix.endsWith("/") ? prefix : prefix + "/";
+        return this;
+    }
+
+    @Override
+    public String getPrefix() {
+        return StrUtil.blankToDefault(prefix, "");
+    }
+
+
+    @Override
     public String getBucketHost() {
         return this.config.getEndpoint();
     }
@@ -153,8 +176,10 @@ public class UploadServiceImpl implements UploadService {
     @Override
     public FileUploadResponse upload(MultipartFile file) {
         try {
-            String type = BreezeFileTypeUtil.getFileType(file);
-            return upload(file.getInputStream(), BreezeObjectGenerate.objectName(type), file.getOriginalFilename(), file.getContentType());
+            String type = UploadFileTypeUtil.getFileType(file);
+            String objectName = UploadObjectNameGenerate.objectName(type);
+            String fileOriginalFilename = file.getOriginalFilename();
+            return upload(file.getInputStream(), objectName, fileOriginalFilename, file.getContentType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -164,8 +189,8 @@ public class UploadServiceImpl implements UploadService {
     public FileUploadResponse upload(MultipartFile file, String objectName) {
         try {
             if (StrUtil.isBlank(objectName)) {
-                String type = BreezeFileTypeUtil.getFileType(file);
-                objectName = BreezeObjectGenerate.objectName(type);
+                String type = UploadFileTypeUtil.getFileType(file);
+                objectName = UploadObjectNameGenerate.objectName(type);
             }
             return upload(file.getInputStream(), objectName, file.getOriginalFilename(), file.getContentType());
         } catch (IOException e) {
@@ -177,8 +202,8 @@ public class UploadServiceImpl implements UploadService {
     public FileUploadResponse upload(MultipartFile file, String objectName, String contentType) {
         try {
             if (StrUtil.isBlank(objectName)) {
-                String type = BreezeFileTypeUtil.getFileType(file);
-                objectName = BreezeObjectGenerate.objectName(type);
+                String type = UploadFileTypeUtil.getFileType(file);
+                objectName = UploadObjectNameGenerate.objectName(type);
             }
             if (StrUtil.isBlank(contentType)) {
                 contentType = file.getContentType();
@@ -191,8 +216,8 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public FileUploadResponse upload(File file) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
-        String objectName = BreezeObjectGenerate.objectName(fileType);
+        String fileType = UploadFileTypeUtil.getFileType(file);
+        String objectName = UploadObjectNameGenerate.objectName(fileType);
         String contentType = BreezeFileContentType.getContentType(fileType);
         return upload(FileUtil.getInputStream(file), objectName, file.getName(), contentType);
     }
@@ -200,9 +225,9 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public FileUploadResponse upload(File file, String objectName) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
+        String fileType = UploadFileTypeUtil.getFileType(file);
         if (StrUtil.isBlank(objectName)) {
-            objectName = BreezeObjectGenerate.objectName(fileType);
+            objectName = UploadObjectNameGenerate.objectName(fileType);
         }
         String contentType = BreezeFileContentType.getContentType(fileType);
         return upload(FileUtil.getInputStream(file), objectName, file.getName(), contentType);
@@ -210,9 +235,9 @@ public class UploadServiceImpl implements UploadService {
 
     @Override
     public FileUploadResponse upload(File file, String objectName, String contentType) {
-        String fileType = BreezeFileTypeUtil.getFileType(file);
+        String fileType = UploadFileTypeUtil.getFileType(file);
         if (StrUtil.isBlank(objectName)) {
-            objectName = BreezeObjectGenerate.objectName(fileType);
+            objectName = UploadObjectNameGenerate.objectName(fileType);
         }
         if (StrUtil.isBlank(contentType)) {
             contentType = BreezeFileContentType.getContentType(fileType);
@@ -226,6 +251,7 @@ public class UploadServiceImpl implements UploadService {
         Assert.notBlank(objectName, "objectName不能为空！");
         Assert.notBlank(contentType, "contentType不能为空！");
         Assert.notNull(inputStream, "文件流不能为空！");
+        objectName = getPrefix() + objectName;
         if (StrUtil.endWithIgnoreCase(contentType, "jpeg")) {
             contentType = contentType.replaceAll("jpeg", "jpg");
         }
