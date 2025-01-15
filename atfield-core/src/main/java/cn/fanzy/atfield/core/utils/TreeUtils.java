@@ -130,8 +130,10 @@ public class TreeUtils extends TreeUtil {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
+        TimeInterval timer = DateUtil.timer();
+        timer.start();
         List<String> idList = list.stream().map(BaseTreeNode::getId).toList();
-        return list.stream().filter(a -> !idList.contains(a.getParentId()))
+        List<E> collect = list.stream().filter(a -> !idList.contains(a.getParentId()))
                 .peek(x -> setSubChildren.accept(x,
                                 makeChildren(x, list,
                                         (a, b) -> StrUtil.equalsIgnoreCase(a.getId(), b.getParentId()),
@@ -139,6 +141,8 @@ public class TreeUtils extends TreeUtil {
                         )
                 )
                 .collect(Collectors.toList());
+        log.info("makeTree耗时(秒):{}", timer.intervalSecond());
+        return collect;
     }
 
     /**
@@ -161,9 +165,13 @@ public class TreeUtils extends TreeUtil {
         if (CollUtil.isEmpty(list)) {
             return new ArrayList<>();
         }
-        return list.stream().filter(rootCheck)
+        TimeInterval timer = DateUtil.timer();
+        timer.start();
+        List<E> collect = list.stream().filter(rootCheck)
                 .peek(x -> setSubChildren.accept(x, makeChildren(x, list, parentCheck, setSubChildren)))
                 .collect(Collectors.toList());
+        log.info("makeTree耗时(秒):{}", timer.intervalSecond());
+        return collect;
     }
 
     /**
