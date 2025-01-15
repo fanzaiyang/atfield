@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.sqltoy.entity;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class ParamBatchDto implements Serializable {
     /**
      * 目标ID集合
      */
-    @NotBlank(message = "目标ID集合不能为空！")
+    @NotEmpty(message = "目标ID集合不能为空！")
     private List<String> targets;
 
     /**
