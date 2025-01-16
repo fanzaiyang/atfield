@@ -72,13 +72,13 @@ public class SslCertUtils {
                 return null;
             }
             X509Certificate certificate = (X509Certificate) serverCertificates[0];
-            String issuerDN = certificate.getIssuerX500Principal().getName();
+            String issuerDN = certificate.getIssuerX500Principal().getName() + ",";
             SslIssuerPrincipal issuer = new SslIssuerPrincipal();
             issuer.setIssuerC(StrUtil.subBetween(issuerDN, "C=", ","));
             issuer.setIssuerO(StrUtil.subBetween(issuerDN, "O=", ","));
             issuer.setIssuerOU(StrUtil.subBetween(issuerDN, "OU=", ","));
             issuer.setIssuerCN(StrUtil.subBetween(issuerDN, "CN=", ","));
-            String subjectDN = certificate.getSubjectX500Principal().getName();
+            String subjectDN = certificate.getSubjectX500Principal().getName() + ",";
             SslSubjectPrincipal subject = new SslSubjectPrincipal();
             subject.setSubjectC(StrUtil.subBetween(subjectDN, "C=", ","));
             subject.setSubjectO(StrUtil.subBetween(subjectDN, "O=", ","));
