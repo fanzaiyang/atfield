@@ -60,7 +60,7 @@ public class SslCertUtils {
         } else if (StrUtil.startWith(httpsUrl, "http://")) {
             httpsUrl = "https://" + StrUtil.subAfter(httpsUrl, "http://", true);
         }
-        log.info("获取SSL证书信息，域名：{}", httpsUrl);
+        log.debug("获取SSL证书信息，域名：{}", httpsUrl);
         trustAllHttpsCertificates();
         try {
             URL url = new URL(httpsUrl);
