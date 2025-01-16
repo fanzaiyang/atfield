@@ -49,6 +49,9 @@ public class SslCertUtils {
      * @return {@link SslCertInfo }
      */
     public static SslCertInfo getSslCertInfo(String httpsUrl) {
+        if (StrUtil.isBlank(httpsUrl)) {
+            return null;
+        }
         // 校验 httpsUrl 是否合法
         if (!StrUtil.startWith(httpsUrl, "https://") && !StrUtil.startWith(httpsUrl, "http://")) {
             httpsUrl = "https://" + httpsUrl;
