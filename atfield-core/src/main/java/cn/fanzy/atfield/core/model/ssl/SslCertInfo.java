@@ -81,7 +81,7 @@ public class SslCertInfo implements Serializable {
     /**
      * 过期天数;不到1天，按照1天计算；未过期时，负数；过期时，正数
      */
-    private long expiredDays;
+    private int expiredDays;
 
     public boolean isExpired() {
         if (notAfter != null) {
@@ -90,13 +90,13 @@ public class SslCertInfo implements Serializable {
         return expired;
     }
 
-    public long getExpiredDays() {
+    public int getExpiredDays() {
         if (isExpired()) {
             // 已过期
-            return DateUtil.betweenDay(notAfter, new Date(), true);
+            return (int) DateUtil.betweenDay(notAfter, new Date(), true);
         }
         if (notAfter != null) {
-            return -DateUtil.betweenDay(new Date(), notAfter, true);
+            return (int) -DateUtil.betweenDay(new Date(), notAfter, true);
         }
         return expiredDays;
     }
