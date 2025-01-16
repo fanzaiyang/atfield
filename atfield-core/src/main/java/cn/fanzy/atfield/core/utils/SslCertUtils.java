@@ -87,10 +87,10 @@ public class SslCertUtils {
             issuer.setIssuerCN(StrUtil.subBetween(issuerDN, "CN=", "|"));
             String subjectDN = certificate.getSubjectX500Principal().getName() + StrPool.COMMA;
             if (StrUtil.contains(subjectDN, ".,")) {
-                issuerDN = StrUtil.replace(subjectDN, ".,", ".|");
+                subjectDN = StrUtil.replace(subjectDN, ".,", ".|");
             }
             if (StrUtil.contains(subjectDN, ",")) {
-                issuerDN = StrUtil.replace(subjectDN, ",", "|");
+                subjectDN = StrUtil.replace(subjectDN, ",", "|");
             }
             SslSubjectPrincipal subject = new SslSubjectPrincipal();
             subject.setSubjectC(StrUtil.subBetween(subjectDN, "C=", "|"));
