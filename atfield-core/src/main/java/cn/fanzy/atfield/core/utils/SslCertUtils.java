@@ -3,7 +3,6 @@ package cn.fanzy.atfield.core.utils;
 import cn.fanzy.atfield.core.model.ssl.SslCertInfo;
 import cn.fanzy.atfield.core.model.ssl.SslIssuerPrincipal;
 import cn.fanzy.atfield.core.model.ssl.SslSubjectPrincipal;
-import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,25 +72,14 @@ public class SslCertUtils {
                 return null;
             }
             X509Certificate certificate = (X509Certificate) serverCertificates[0];
-            String issuerDN = certificate.getIssuerX500Principal().getName() + StrPool.COMMA;
-            if (StrUtil.contains(issuerDN, ".,")) {
-                issuerDN = StrUtil.replace(issuerDN, ".,", ".|");
-            }
-            if (StrUtil.contains(issuerDN, ",")) {
-                issuerDN = StrUtil.replace(issuerDN, ",", "|");
-            }
+            String issuerDN = convertDN(certificate.getIssuerX500Principal().getName());
             SslIssuerPrincipal issuer = new SslIssuerPrincipal();
             issuer.setIssuerC(StrUtil.subBetween(issuerDN, "C=", "|"));
             issuer.setIssuerO(StrUtil.subBetween(issuerDN, "O=", "|"));
             issuer.setIssuerOU(StrUtil.subBetween(issuerDN, "OU=", "|"));
             issuer.setIssuerCN(StrUtil.subBetween(issuerDN, "CN=", "|"));
-            String subjectDN = certificate.getSubjectX500Principal().getName() + StrPool.COMMA;
-            if (StrUtil.contains(subjectDN, ".,")) {
-                subjectDN = StrUtil.replace(subjectDN, ".,", ".|");
-            }
-            if (StrUtil.contains(subjectDN, ",")) {
-                subjectDN = StrUtil.replace(subjectDN, ",", "|");
-            }
+            String subjectDN = convertDN(certificate.getSubjectX500Principal().getName());
+
             SslSubjectPrincipal subject = new SslSubjectPrincipal();
             subject.setSubjectC(StrUtil.subBetween(subjectDN, "C=", "|"));
             subject.setSubjectO(StrUtil.subBetween(subjectDN, "O=", "|"));
@@ -115,6 +103,21 @@ public class SslCertUtils {
         }
     }
 
+    private static String convertDN(String dnStr) {
+        if (!StrUtil.endWith(dnStr, ",")) {
+            dnStr = dnStr + ",";
+        }
+        if (StrUtil.contains(dnStr, ".,")) {
+            dnStr = StrUtil.replace(dnStr, ".,", ".|");
+        }
+        if (StrUtil.contains(dnStr, ", ")) {
+            dnStr = StrUtil.replace(dnStr, ", ", "&");
+        }
+        if (StrUtil.contains(dnStr, ",")) {
+            dnStr = StrUtil.replace(dnStr, ",", "|");
+        }
+        return StrUtil.replace(dnStr, "&", ", ");
+    }
 
     static class TrustAllHttpsCertificates implements TrustManager, javax.net.ssl.X509TrustManager {
 
