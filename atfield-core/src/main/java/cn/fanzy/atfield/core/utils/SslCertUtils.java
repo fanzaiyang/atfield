@@ -82,6 +82,7 @@ public class SslCertUtils {
             subject.setSubjectOU(StrUtil.subBetween(subjectDN, "OU=", ","));
             subject.setSubjectCN(StrUtil.subBetween(subjectDN, "CN=", ","));
             return SslCertInfo.builder()
+                    .domain(url.getHost())
                     .version(certificate.getVersion())
                     .sigAlgName(certificate.getSigAlgName())
                     .sigAlgOID(certificate.getSigAlgOID())

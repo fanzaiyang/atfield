@@ -25,6 +25,10 @@ public class SslCertInfo implements Serializable {
     private static final long serialVersionUID = -7403318798521080266L;
 
     /**
+     * 域名
+     */
+    private String domain;
+    /**
      * 证书签名算法名称
      */
     private String sigAlgName;
