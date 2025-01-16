@@ -96,7 +96,7 @@ public class SslCertInfo implements Serializable {
             return DateUtil.betweenDay(notAfter, new Date(), true);
         }
         if (notBefore != null && notAfter != null) {
-            return DateUtil.betweenDay(notBefore, notAfter, true);
+            return -DateUtil.betweenDay(notBefore, notAfter, true);
         }
         return expiredDays;
     }
