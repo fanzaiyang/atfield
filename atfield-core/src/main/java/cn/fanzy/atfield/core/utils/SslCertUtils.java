@@ -4,6 +4,7 @@ import cn.fanzy.atfield.core.model.ssl.SslCertInfo;
 import cn.fanzy.atfield.core.model.ssl.SslIssuerPrincipal;
 import cn.fanzy.atfield.core.model.ssl.SslSubjectPrincipal;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.net.ssl.*;
 import java.net.URL;
@@ -19,6 +20,7 @@ import java.security.cert.X509Certificate;
  * @author fanzaiyang
  * @date 2025/01/16
  */
+@Slf4j
 public class SslCertUtils {
     /**
      * 信任所有 HTTPS 证书
@@ -58,6 +60,7 @@ public class SslCertUtils {
         } else if (StrUtil.startWith(httpsUrl, "http://")) {
             httpsUrl = "https://" + StrUtil.subAfter(httpsUrl, "http://", true);
         }
+        log.info("获取SSL证书信息，域名：{}", httpsUrl);
         trustAllHttpsCertificates();
         try {
             URL url = new URL(httpsUrl);
