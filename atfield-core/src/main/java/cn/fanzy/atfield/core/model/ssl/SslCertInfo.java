@@ -79,7 +79,7 @@ public class SslCertInfo implements Serializable {
     private boolean expired;
 
     /**
-     * 过期天数;未过期时，负数；过期时，正数
+     * 过期天数;不到1天，按照1天计算；未过期时，负数；过期时，正数
      */
     private long expiredDays;
 
