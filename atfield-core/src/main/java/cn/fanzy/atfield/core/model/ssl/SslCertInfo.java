@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.core.model.ssl;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -67,4 +68,32 @@ public class SslCertInfo implements Serializable {
      * 证书持有者信息
      */
     private SslSubjectPrincipal subjectPrincipal = new SslSubjectPrincipal();
+
+    /**
+     * 是否过期，true：过期；false：未过期
+     */
+    private boolean expired;
+
+    /**
+     * 过期天数;未过期时，负数；过期时，正数
+     */
+    private long expiredDays;
+
+    public boolean isExpired() {
+        if (notAfter != null) {
+            return notAfter.before(new Date());
+        }
+        return expired;
+    }
+
+    public long getExpiredDays() {
+        if (isExpired()) {
+            // 已过期
+            return DateUtil.betweenDay(notAfter, new Date(), true);
+        }
+        if (notBefore != null && notAfter != null) {
+            return DateUtil.betweenDay(notBefore, notAfter, true);
+        }
+        return expiredDays;
+    }
 }
