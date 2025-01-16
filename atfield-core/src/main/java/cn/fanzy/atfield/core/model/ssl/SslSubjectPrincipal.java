@@ -21,16 +21,29 @@ public class SslSubjectPrincipal implements Serializable {
     private static final long serialVersionUID = 597533553737874433L;
 
     /**
-     * 主题 CN
+     * CN=baidu.com
      */
     private String subjectCN;
 
 
+    /**
+     * C=CN
+     */
     private String subjectC;
 
 
+    /**
+     * O=Beijing Baidu Netcom Science Technology Co.\\, Ltd
+     */
     private String subjectO;
 
+    /**
+     * beijing
+     */
+    private String subjectST;
 
-    private String subjectOU;
+    /**
+     * beijing
+     */
+    private String subjectL;
 }

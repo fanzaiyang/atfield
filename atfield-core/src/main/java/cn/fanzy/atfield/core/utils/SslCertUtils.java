@@ -3,6 +3,7 @@ package cn.fanzy.atfield.core.utils;
 import cn.fanzy.atfield.core.model.ssl.SslCertInfo;
 import cn.fanzy.atfield.core.model.ssl.SslIssuerPrincipal;
 import cn.fanzy.atfield.core.model.ssl.SslSubjectPrincipal;
+import cn.hutool.core.text.StrPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,18 +73,31 @@ public class SslCertUtils {
                 return null;
             }
             X509Certificate certificate = (X509Certificate) serverCertificates[0];
-            String issuerDN = certificate.getIssuerX500Principal().getName() + ",";
+            String issuerDN = certificate.getIssuerX500Principal().getName() + StrPool.COMMA;
+            if (StrUtil.contains(issuerDN, ".,")) {
+                issuerDN = StrUtil.replace(issuerDN, ".,", ".|");
+            }
+            if (StrUtil.contains(issuerDN, ",")) {
+                issuerDN = StrUtil.replace(issuerDN, ",", "|");
+            }
             SslIssuerPrincipal issuer = new SslIssuerPrincipal();
-            issuer.setIssuerC(StrUtil.subBetween(issuerDN, "C=", ","));
-            issuer.setIssuerO(StrUtil.subBetween(issuerDN, "O=", ","));
-            issuer.setIssuerOU(StrUtil.subBetween(issuerDN, "OU=", ","));
-            issuer.setIssuerCN(StrUtil.subBetween(issuerDN, "CN=", ","));
-            String subjectDN = certificate.getSubjectX500Principal().getName() + ",";
+            issuer.setIssuerC(StrUtil.subBetween(issuerDN, "C=", "|"));
+            issuer.setIssuerO(StrUtil.subBetween(issuerDN, "O=", "|"));
+            issuer.setIssuerOU(StrUtil.subBetween(issuerDN, "OU=", "|"));
+            issuer.setIssuerCN(StrUtil.subBetween(issuerDN, "CN=", "|"));
+            String subjectDN = certificate.getSubjectX500Principal().getName() + StrPool.COMMA;
+            if (StrUtil.contains(subjectDN, ".,")) {
+                issuerDN = StrUtil.replace(subjectDN, ".,", ".|");
+            }
+            if (StrUtil.contains(subjectDN, ",")) {
+                issuerDN = StrUtil.replace(subjectDN, ",", "|");
+            }
             SslSubjectPrincipal subject = new SslSubjectPrincipal();
-            subject.setSubjectC(StrUtil.subBetween(subjectDN, "C=", ","));
-            subject.setSubjectO(StrUtil.subBetween(subjectDN, "O=", ","));
-            subject.setSubjectOU(StrUtil.subBetween(subjectDN, "OU=", ","));
-            subject.setSubjectCN(StrUtil.subBetween(subjectDN, "CN=", ","));
+            subject.setSubjectC(StrUtil.subBetween(subjectDN, "C=", "|"));
+            subject.setSubjectO(StrUtil.subBetween(subjectDN, "O=", "|"));
+            subject.setSubjectL(StrUtil.subBetween(subjectDN, "L=", "|"));
+            subject.setSubjectCN(StrUtil.subBetween(subjectDN, "CN=", "|"));
+            subject.setSubjectST(StrUtil.subBetween(subjectDN, "ST=", "|"));
             return SslCertInfo.builder()
                     .domain(url.getHost())
                     .version(certificate.getVersion())
