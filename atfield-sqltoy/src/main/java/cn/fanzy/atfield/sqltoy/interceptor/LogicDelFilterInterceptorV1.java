@@ -2,25 +2,15 @@ package cn.fanzy.atfield.sqltoy.interceptor;
 
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.JSQLParserException;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
 import org.sagacity.sqltoy.SqlToyContext;
 import org.sagacity.sqltoy.config.model.EntityMeta;
 import org.sagacity.sqltoy.config.model.OperateType;
 import org.sagacity.sqltoy.config.model.SqlToyConfig;
 import org.sagacity.sqltoy.config.model.SqlToyResult;
 import org.sagacity.sqltoy.plugins.SqlInterceptor;
+import org.sagacity.sqltoy.utils.ReservedWordsUtil;
 import org.sagacity.sqltoy.utils.StringUtil;
 
 /**
@@ -31,7 +21,7 @@ import org.sagacity.sqltoy.utils.StringUtil;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class LogicDelFilterInterceptor implements SqlInterceptor {
+public class LogicDelFilterInterceptorV1 implements SqlInterceptor {
     private final SqltoyExtraProperties properties;
 
     public SqlToyResult decorate(SqlToyContext sqlToyContext, SqlToyConfig sqlToyConfig, OperateType operateType, SqlToyResult sqlToyResult, Class entityClass, Integer dbType) {
@@ -52,48 +42,45 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return sqlToyResult;
         }
         String sql = sqlToyResult.getSql();
-        // 只处理查询类sql
-//        if (!StrUtil.startWith(sql, "select", true)) {
-//            return sqlToyResult;
-//        }
-
-//        logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
+        logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
         int whereIndex = StringUtil.matchIndex(sql, "(?i)\\Wwhere\\W");
         // 如果存在where关键字且逻辑删除字段在where关键字后面
         if (whereIndex > 0 && StringUtil.matches(sql.substring(whereIndex), "(?i)\\W" + logicDelColumn + "(\\s*\\=|\\s+in)")) {
             return sqlToyResult;
         }
 
-        try {
-            Statement statement = CCJSqlParserUtil.parse(sql);
-            // 只处理查询类sql
-            if (!(statement instanceof Select)) {
-                return sqlToyResult;
+        String where = " where ";
+        String sqlPart = where
+                .concat(logicDelColumn).concat("='")
+                .concat(properties.getLogicNotDeleteValue())
+                .concat("' and ");
+        if (operateType.equals(OperateType.load) ||
+                operateType.equals(OperateType.loadAll) ||
+                operateType.equals(OperateType.update) ||
+                operateType.equals(OperateType.updateAll) ||
+                operateType.equals(OperateType.delete) ||
+                operateType.equals(OperateType.deleteAll) ||
+                operateType.equals(OperateType.unique) ||
+                operateType.equals(OperateType.saveOrUpdate) ||
+                operateType.equals(OperateType.singleTable)) {
+
+            if (operateType.equals(OperateType.saveOrUpdate) && sql.indexOf(" when matched then update set ") > 0) {
+                int onTenantIndex = sql.indexOf(") tv on (");
+                int end = onTenantIndex + ") tv on (".length();
+                String aliasName = sql.substring(end, sql.indexOf(".", end)).trim();
+                sqlPart = sqlPart
+                        .replaceFirst(where, "").
+                        replaceFirst(logicDelColumn, aliasName + "." + logicDelColumn);
+                sql = sql.replaceFirst("\\)\\s+tv\\s+on\\s+\\(", ") tv on (".concat(sqlPart));
+                sqlToyResult.setSql(sql);
+            } else {
+                sql = getConcatSql(sql, sqlPart);
+                sqlToyResult.setSql(sql);
             }
-            Select selectStatement = (Select) statement;
-            PlainSelect plainSelect = selectStatement.getPlainSelect();
-            log.info("plainSelect Alias:{}", JSONUtil.toJsonStr(plainSelect.getAlias()));
-            if (plainSelect.getAlias() != null) {
-                log.info("plainSelect Alias name:{},UnquotedName:{}", plainSelect.getAlias().getName(),
-                        plainSelect.getAlias().getUnquotedName());
-            }
-            Expression whereExpression = plainSelect.getWhere();
-            // 逻辑删除条件
-            EqualsTo equalsTo = new EqualsTo();
-            equalsTo.setLeftExpression(new Column(logicDelColumn));
-            equalsTo.setRightExpression(new StringValue(properties.getLogicNotDeleteValue()));
-            if (whereExpression == null) {
-                plainSelect.setWhere(equalsTo);
-                sqlToyResult.setSql(plainSelect.toString());
-                return sqlToyResult;
-            }
-            Expression newCondition = new AndExpression(equalsTo, whereExpression);
-            plainSelect.setWhere(newCondition);
-            sqlToyResult.setSql(plainSelect.toString());
-            return sqlToyResult;
-        } catch (JSQLParserException e) {
-            throw new RuntimeException(e);
         }
+
+        return sqlToyResult;
+
     }
 
     private String getConcatSql(String sql, String sqlPart) {
