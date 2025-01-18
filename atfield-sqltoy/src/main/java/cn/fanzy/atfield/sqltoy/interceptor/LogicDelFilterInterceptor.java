@@ -1,7 +1,6 @@
 package cn.fanzy.atfield.sqltoy.interceptor;
 
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
@@ -52,12 +52,6 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return sqlToyResult;
         }
         String sql = sqlToyResult.getSql();
-        // 只处理查询类sql
-//        if (!StrUtil.startWith(sql, "select", true)) {
-//            return sqlToyResult;
-//        }
-
-//        logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
         int whereIndex = StringUtil.matchIndex(sql, "(?i)\\Wwhere\\W");
         // 如果存在where关键字且逻辑删除字段在where关键字后面
         if (whereIndex > 0 && StringUtil.matches(sql.substring(whereIndex), "(?i)\\W" + logicDelColumn + "(\\s*\\=|\\s+in)")) {
@@ -87,44 +81,12 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
                 sqlToyResult.setSql(plainSelect.toString());
                 return sqlToyResult;
             }
-            Expression newCondition = new AndExpression(equalsTo, whereExpression);
+            Expression newCondition = new AndExpression(equalsTo, new ParenthesedExpressionList(whereExpression));
             plainSelect.setWhere(newCondition);
             sqlToyResult.setSql(plainSelect.toString());
             return sqlToyResult;
         } catch (JSQLParserException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String getConcatSql(String sql, String sqlPart) {
-        if (StrUtil.containsIgnoreCase(sql, "where")) {
-            String segment = sql.replaceFirst("(?i)\\swhere\\s", sqlPart + " (");
-            if (StrUtil.containsIgnoreCase(segment, "group by")) {
-                return segment.replaceFirst("(?i)\\sgroup\\sby\\s", ") group by ");
-            }
-            if (StrUtil.containsIgnoreCase(segment, "order by")) {
-                return segment.replaceFirst("(?i)\\sorder\\sby\\s", ") order by ");
-            }
-            if (StrUtil.containsIgnoreCase(segment, "having")) {
-                return segment.replaceFirst("(?i)\\shaving\\s", ") having ");
-            }
-            if (StrUtil.containsIgnoreCase(segment, "limit")) {
-                return segment.replaceFirst("(?i)\\slimit\\s", ") limit ");
-            }
-            return segment + " ) ";
-        }
-        if (StrUtil.containsIgnoreCase(sql, "group by")) {
-            return sql.replaceFirst("(?i)\\sgroup\\sby\\s", sqlPart + " 1=1 group by ");
-        }
-        if (StrUtil.containsIgnoreCase(sql, "order by")) {
-            return sql.replaceFirst("(?i)\\sorder\\sby\\s", sqlPart + " 1=1 order by ");
-        }
-        if (StrUtil.containsIgnoreCase(sql, "having")) {
-            return sql.replaceFirst("(?i)\\shaving\\s", sqlPart + " 1=1 having ");
-        }
-        if (StrUtil.containsIgnoreCase(sql, "limit")) {
-            return sql.replaceFirst("(?i)\\slimit\\s", sqlPart + " 1=1 limit ");
-        }
-        return sql + sqlPart + " 1=1";
     }
 }
