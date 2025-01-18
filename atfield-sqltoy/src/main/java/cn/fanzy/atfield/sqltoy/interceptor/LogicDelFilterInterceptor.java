@@ -1,10 +1,11 @@
 package cn.fanzy.atfield.sqltoy.interceptor;
 
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
-import cn.hutool.json.JSONUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
@@ -12,7 +13,9 @@ import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import org.sagacity.sqltoy.SqlToyContext;
@@ -21,6 +24,7 @@ import org.sagacity.sqltoy.config.model.OperateType;
 import org.sagacity.sqltoy.config.model.SqlToyConfig;
 import org.sagacity.sqltoy.config.model.SqlToyResult;
 import org.sagacity.sqltoy.plugins.SqlInterceptor;
+import org.sagacity.sqltoy.utils.ReservedWordsUtil;
 import org.sagacity.sqltoy.utils.StringUtil;
 
 /**
@@ -43,21 +47,29 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return sqlToyResult;
         }
         String logicDelColumn = properties.getLogicDeleteField();
-        EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
-        if (entityMeta != null) {
-            logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());
-            if (StringUtil.isBlank(logicDelColumn)) {
-                log.warn("表{}不存在逻辑删除字段{}", entityMeta.getTableName(), properties.getLogicDeleteField());
-                return sqlToyResult;
-            }
-        }
 
+        // 实体类需要EntityMeta获取数据字段
+        if (SqltoyExtraProperties.FieldTypeEnum.ENTITY.equals(properties.getFieldType())) {
+            EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
+            if (!properties.isHumpToUnderline()) {
+                if (entityMeta == null) {
+                    return sqlToyResult;
+                }
+                logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());
+                if (StringUtil.isBlank(logicDelColumn)) {
+                    log.warn("表{}不存在逻辑删除字段{}", entityMeta.getTableName(), properties.getLogicDeleteField());
+                    return sqlToyResult;
+                }
+            }
+            logicDelColumn = StrUtil.toUnderlineCase(logicDelColumn);
+        }
         String sql = sqlToyResult.getSql();
         int whereIndex = StringUtil.matchIndex(sql, "(?i)\\Wwhere\\W");
         // 如果存在where关键字且逻辑删除字段在where关键字后面
         if (whereIndex > 0 && StringUtil.matches(sql.substring(whereIndex), "(?i)\\W" + logicDelColumn + "(\\s*\\=|\\s+in)")) {
             return sqlToyResult;
         }
+        logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
 
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
@@ -67,15 +79,22 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             }
             Select selectStatement = (Select) statement;
             PlainSelect plainSelect = selectStatement.getPlainSelect();
-            log.info("plainSelect Alias:{}", JSONUtil.toJsonStr(plainSelect.getAlias()));
-            if (plainSelect.getAlias() != null) {
-                log.info("plainSelect Alias name:{},UnquotedName:{}", plainSelect.getAlias().getName(),
-                        plainSelect.getAlias().getUnquotedName());
+            String tableAlias = "";
+            FromItem fromItem = plainSelect.getFromItem();
+            if (fromItem != null) {
+                Alias alias = fromItem.getAlias();
+                if (alias != null) {
+                    tableAlias = alias.getName();
+                }
             }
             Expression whereExpression = plainSelect.getWhere();
             // 逻辑删除条件
             EqualsTo equalsTo = new EqualsTo();
-            equalsTo.setLeftExpression(new Column(logicDelColumn));
+            Column column = new Column(logicDelColumn);
+            if (StrUtil.isNotBlank(tableAlias)) {
+                column.setTable(new Table(null, tableAlias));
+            }
+            equalsTo.setLeftExpression(column);
             equalsTo.setRightExpression(new StringValue(properties.getLogicNotDeleteValue()));
             if (whereExpression == null) {
                 plainSelect.setWhere(equalsTo);

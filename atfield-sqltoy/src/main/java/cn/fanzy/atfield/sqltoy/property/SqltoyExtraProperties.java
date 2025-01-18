@@ -34,5 +34,26 @@ public class SqltoyExtraProperties implements Serializable {
      */
     private String logicNotDeleteValue;
 
-    private Boolean unifyField;
+    /**
+     * 字段类型;默认：实体类字段，需要通过注解获取对应的数据库字段
+     * 推荐使用数据库字段
+     */
+    private FieldTypeEnum fieldType = FieldTypeEnum.ENTITY;
+
+    /**
+     * 是否驼峰转为下划线;
+     * 当实体类匹配不到时，使用驼峰转下划线作为数据库字段。
+     */
+    private boolean humpToUnderline = true;
+
+    public static enum FieldTypeEnum {
+        /**
+         * 数据库字段
+         */
+        DATABASE,
+        /**
+         * 实体字段，需要通过注解获取对应的数据库字段
+         */
+        ENTITY
+    }
 }
