@@ -42,15 +42,16 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             log.debug("请配置spring.sqltoy.db-config.logicDeleteField、logicNotDeleteValue、logicTenantColumn");
             return sqlToyResult;
         }
+        String logicDelColumn = properties.getLogicDeleteField();
         EntityMeta entityMeta = sqlToyContext.getEntityMeta(entityClass);
-        if (entityMeta == null) {
-            return sqlToyResult;
+        if (entityMeta != null) {
+            logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());
+            if (StringUtil.isBlank(logicDelColumn)) {
+                log.warn("表{}不存在逻辑删除字段{}", entityMeta.getTableName(), properties.getLogicDeleteField());
+                return sqlToyResult;
+            }
         }
-        String logicDelColumn = entityMeta.getColumnName(properties.getLogicDeleteField());
-        if (StringUtil.isBlank(logicDelColumn)) {
-            log.warn("表{}不存在逻辑删除字段{}", entityMeta.getTableName(), properties.getLogicDeleteField());
-            return sqlToyResult;
-        }
+
         String sql = sqlToyResult.getSql();
         int whereIndex = StringUtil.matchIndex(sql, "(?i)\\Wwhere\\W");
         // 如果存在where关键字且逻辑删除字段在where关键字后面

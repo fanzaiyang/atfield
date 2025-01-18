@@ -20,7 +20,7 @@ public class SqltoyExtraProperties implements Serializable {
     private static final long serialVersionUID = -3478258553323527123L;
 
     /**
-     * 逻辑删除字段
+     * 逻辑删除字段;数据库中的字段
      */
     private String logicDeleteField;
 
