@@ -108,7 +108,7 @@ public class DelFlagContext {
      *
      * @param ignoreValue ignore 值
      */
-    public static void putIgnoreValue(boolean ignoreValue) {
+    public static void putIgnore(boolean ignoreValue) {
         ignoreValueTl.set(ignoreValue);
     }
 
@@ -117,14 +117,14 @@ public class DelFlagContext {
      *
      * @return {@link Boolean }
      */
-    public static Boolean getIgnoreValue() {
+    public static Boolean getIgnore() {
         return ignoreValueTl.get();
     }
 
     /**
      * 删除忽略值
      */
-    public static void removeIgnoreValue() {
+    public static void removeIgnore() {
         ignoreValueTl.remove();
     }
 }
