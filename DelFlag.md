@@ -38,3 +38,60 @@ spring:
     * putDeleteValue方法：临时修改逻辑删除值。
     * putNotDeleteValue方法：临时修改逻辑未删除值。
     * putIgnoreValue方法：临时忽略逻辑删除,此次查询将不包含逻辑删除字段。该值为true时。
+
+## 代码实例
+
+```java
+
+@SpringBootTest
+public class InitDevTests {
+  @Resource
+  private SqlToyRepository repository;
+
+  @Test
+  void handleUpdateDelete() {
+    ParamBatchDto param = new ParamBatchDto();
+    param.setTargets(List.of("1"));
+
+    // 使用DelFlagContext临时修改删除后的值为2,仅支持静态值模式
+    DelFlagContext.putDeleteValue("2");
+    repository.handleUpdateDelete(SysAccountPO.class, param);
+  }
+
+  /**
+   * 根据配置文件(spring.sqltoy.extra.delete-value-strategy)不同，删除后的值不同
+   * 下方为uuid模式的示例。其他模式请参考文档
+   * spring.sqltoy.extra.delete-value-strategy=uuid
+   */
+  @Test
+  void handleUpdateDeleteUuid() {
+    ParamBatchDto param = new ParamBatchDto();
+    param.setTargets(List.of("1"));
+    repository.handleUpdateDelete(SysAccountPO.class, param);
+  }
+
+  /**
+   * spring.sqltoy.extra.delete-value-strategy=custom
+   * 自定义删除值策略，需要实现com.yfwy.mall.platform.sys.CustomDeleteValueStrategy接口
+   * 演示随机数删除值策略
+   */
+  @Test
+  void handleUpdateDeleteCustom() {
+    ParamBatchDto param = new ParamBatchDto();
+    param.setTargets(List.of("1"));
+    repository.handleUpdateDelete(SysAccountPO.class, param);
+  }
+
+  @Test
+  void findList() {
+    // select * from sys_account where del_flag = 0
+    repository.findList(Wrappers.lambdaWrapper(SysAccountPO.class).select(SysAccountPO::getId));
+    DelFlagContext.putIgnore(true);
+    // select * from sys_account
+    repository.findList(Wrappers.lambdaWrapper(SysAccountPO.class).select(SysAccountPO::getId));
+    DelFlagContext.removeIgnore();
+    // select * from sys_account where del_flag = 0
+    repository.findList(Wrappers.lambdaWrapper(SysAccountPO.class).select(SysAccountPO::getId));
+  }
+}
+```
