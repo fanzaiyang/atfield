@@ -39,7 +39,37 @@ spring:
     * putNotDeleteValue方法：临时修改逻辑未删除值。
     * putIgnoreValue方法：临时忽略逻辑删除,此次查询将不包含逻辑删除字段。该值为true时。
 
-## 代码实例
+### 自定义逻辑删除值
+
+* 实现姐接口,下方是使用随机数字
+
+```java
+
+@Slf4j
+@Component
+public class CustomDeleteValueGenerateServiceImpl implements DeleteValueGenerateService {
+
+  @Override
+  public <T> String generate(Class<T> clazz) {
+    return RandomUtil.randomNumbers(6);
+  }
+}
+```
+
+* 测试结果
+
+```java
+
+@Test
+void handleUpdateDeleteCustom() {
+  ParamBatchDto param = new ParamBatchDto();
+  param.setTargets(List.of("1"));
+  repository.handleUpdateDelete(SysAccountPO.class, param);
+  // SQL结果：update sys_account set del_flag = '123456' where id in (1)
+}
+```
+
+### 代码实例
 
 ```java
 
@@ -52,10 +82,10 @@ public class InitDevTests {
   void handleUpdateDelete() {
     ParamBatchDto param = new ParamBatchDto();
     param.setTargets(List.of("1"));
-
     // 使用DelFlagContext临时修改删除后的值为2,仅支持静态值模式
     DelFlagContext.putDeleteValue("2");
     repository.handleUpdateDelete(SysAccountPO.class, param);
+    // SQL结果：update sys_account set del_flag = 2 where id in (1)
   }
 
   /**
@@ -68,6 +98,7 @@ public class InitDevTests {
     ParamBatchDto param = new ParamBatchDto();
     param.setTargets(List.of("1"));
     repository.handleUpdateDelete(SysAccountPO.class, param);
+    // SQL结果：update sys_account set del_flag = '3b7a17a1-d56d-479d-976a-d5775d5d9d5c' where id in (1)
   }
 
   /**
@@ -80,6 +111,7 @@ public class InitDevTests {
     ParamBatchDto param = new ParamBatchDto();
     param.setTargets(List.of("1"));
     repository.handleUpdateDelete(SysAccountPO.class, param);
+    // SQL结果：update sys_account set del_flag = '123456' where id in (1)
   }
 
   @Test
@@ -94,4 +126,5 @@ public class InitDevTests {
     repository.findList(Wrappers.lambdaWrapper(SysAccountPO.class).select(SysAccountPO::getId));
   }
 }
+
 ```
