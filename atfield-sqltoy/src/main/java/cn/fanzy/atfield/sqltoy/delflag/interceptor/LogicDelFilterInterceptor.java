@@ -50,7 +50,7 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             return sqlToyResult;
         }
         // 是否忽略逻辑删除
-        if (DelFlagContext.getIgnoreValue() != null && DelFlagContext.getIgnoreValue()) {
+        if (DelFlagContext.getIgnore() != null && DelFlagContext.getIgnore()) {
             return sqlToyResult;
         }
 
