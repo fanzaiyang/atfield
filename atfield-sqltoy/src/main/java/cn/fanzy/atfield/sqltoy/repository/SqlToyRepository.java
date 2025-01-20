@@ -88,13 +88,25 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      */
     boolean wrapTreeTableRoute(final Serializable entity, String pidField);
 
+
     /**
      * 换行树表路由
      *
-     * @param entities 实体
+     * @param rootList 最上级的节点集合
      * @return boolean
      */
-    boolean wrapTreeTableRoute(final List<Serializable> entities);
+    boolean wrapTreeTableRoute(final List<Serializable> rootList);
+
+    /**
+     * 包装树表路由字段名称
+     * 把fieldName字段包装成路由形式后，赋值给targetFieldName字段
+     *
+     * @param entityClass     实体类
+     * @param fieldName       字段名称
+     * @param targetFieldName 目标字段名称
+     * @return boolean
+     */
+    <T> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName);
 
     /**
      * 转换为mp的IPage
@@ -128,6 +140,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param sql       SQL
      */
     void addCache(String cacheName, String sql);
+
     /**
      * 添加缓存
      *
@@ -136,6 +149,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param forceUpdate 强制更新
      */
     void addCache(String cacheName, String sql, boolean forceUpdate);
+
     /**
      * 添加缓存检查器
      *

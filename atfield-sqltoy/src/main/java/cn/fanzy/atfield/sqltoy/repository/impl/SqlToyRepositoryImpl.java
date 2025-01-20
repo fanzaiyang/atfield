@@ -70,6 +70,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
 
     @Override
     public void handleUpdateTreeStatus(Class<?> entityClass, ParamBatchDto param) {
+        Assert.notNull(param.getNextStatus(), "状态不能为空！");
         EntityMeta entityMeta = getEntityMeta(entityClass);
         String tableName = entityMeta.getTableName();
         executeSql("""
@@ -81,18 +82,19 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
 
     @Override
     public void handleUpdateTreeDelete(Class<?> entityClass, ParamBatchDto param) {
+        String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus().toString();
         EntityMeta entityMeta = getEntityMeta(entityClass);
         String tableName = entityMeta.getTableName();
         executeSql("""
                 update @value(:tableName) set del_flag = :nextStatus where node_route regexp :ids
                 """, MapKit.keys("tableName", "nextStatus", "ids")
-                .values(tableName, param.getNextStatus(),
+                .values(tableName, deleteValue,
                         String.join("|", param.getTargets())));
     }
 
     @Override
     public void handleUpdateDelete(Class<?> entityClass, ParamBatchDto param) {
-        String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus();
+        String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus().toString();
         update(Wrappers.updateWrapper(entityClass)
                 .set("del_flag", deleteValue)
                 .in("id", param.getTargets()));
@@ -115,6 +117,32 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
         for (Serializable entity : entities) {
             wrapTreeTableRoute(entity);
         }
+        return true;
+    }
+
+    @Override
+    public <T> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName) {
+        Assert.notBlank(fieldName, "字段名不能为空!");
+        Assert.notBlank(targetFieldName, "目标字段名不能为空!");
+        EntityMeta entityMeta = getEntityMeta(entityClass);
+        String tableName = entityMeta.getTableName();
+        executeSql(
+                """
+                        UPDATE @value(:tableName) o
+                         INNER JOIN (
+                           SELECT
+                             t.id,
+                             GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level SEPARATOR '/') as full_name
+                           FROM
+                             @value(:tableName) t
+                             LEFT JOIN @value(:tableName) p ON find_in_set(p.id,t.node_route) and p.del_flag=0
+                           GROUP BY
+                             t.id) tr ON tr.id = o.id
+                         SET o.@value(:targetFieldName) = tr.full_name
+                         where o.del_flag=0
+                        """,
+                MapKit.keys("tableName", "fieldName", "targetFieldName")
+                        .values(tableName, fieldName, targetFieldName));
         return true;
     }
 
@@ -200,7 +228,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
             } else if (DeleteValueStrategyEnum.CUSTOM.equals(properties.getDeleteValueStrategy())) {
                 try {
                     DeleteValueGenerateService valueGenerateService = SpringUtils.getBean(DeleteValueGenerateService.class);
-                    deleteValue = valueGenerateService.generate(clazz, ids);
+                    deleteValue = valueGenerateService.generate(clazz);
                     Assert.notBlank(deleteValue, "自定义删除值生成服务未返回有效值");
                 } catch (Exception e) {
                     throw new RuntimeException("自定义删除值生成服务未配置或未实现接口：" + DeleteValueGenerateService.class.getName());
