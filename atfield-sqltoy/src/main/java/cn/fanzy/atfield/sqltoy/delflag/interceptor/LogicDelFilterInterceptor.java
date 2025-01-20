@@ -1,5 +1,6 @@
-package cn.fanzy.atfield.sqltoy.interceptor;
+package cn.fanzy.atfield.sqltoy.delflag.interceptor;
 
+import cn.fanzy.atfield.sqltoy.delflag.context.DelFlagContext;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +40,19 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
     private final SqltoyExtraProperties properties;
 
     public SqlToyResult decorate(SqlToyContext sqlToyContext, SqlToyConfig sqlToyConfig, OperateType operateType, SqlToyResult sqlToyResult, Class entityClass, Integer dbType) {
+
+        String logicDelColumn = StrUtil.blankToDefault(properties.getLogicDeleteField(), DelFlagContext.getDeleteField());
+        String logicNotDelValue = StrUtil.blankToDefault(properties.getLogicNotDeleteValue(), DelFlagContext.getNoDeleteValue());
+
         // 逻辑删除字段
-        if (StringUtil.isBlank(properties.getLogicDeleteField()) ||
-                StringUtil.isBlank(properties.getLogicDeleteField()) ||
-                StringUtil.isBlank(properties.getLogicNotDeleteValue())) {
-            log.debug("请配置spring.sqltoy.db-config.logicDeleteField、logicNotDeleteValue、logicTenantColumn");
+        if (StringUtil.isBlank(logicDelColumn) || StringUtil.isBlank(logicNotDelValue)) {
+            log.debug("请配置spring.sqltoy.extra.logicDeleteField、logicNotDeleteValue");
             return sqlToyResult;
         }
-        String logicDelColumn = properties.getLogicDeleteField();
+        // 是否忽略逻辑删除
+        if (DelFlagContext.getIgnoreValue() != null && DelFlagContext.getIgnoreValue()) {
+            return sqlToyResult;
+        }
 
         // 实体类需要EntityMeta获取数据字段
         if (SqltoyExtraProperties.FieldTypeEnum.ENTITY.equals(properties.getFieldType())) {
@@ -63,21 +69,19 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             }
             logicDelColumn = StrUtil.toUnderlineCase(logicDelColumn);
         }
+        // 处理查询sql
         String sql = sqlToyResult.getSql();
-        int whereIndex = StringUtil.matchIndex(sql, "(?i)\\Wwhere\\W");
-        // 如果存在where关键字且逻辑删除字段在where关键字后面
-        if (whereIndex > 0 && StringUtil.matches(sql.substring(whereIndex), "(?i)\\W" + logicDelColumn + "(\\s*\\=|\\s+in)")) {
-            return sqlToyResult;
-        }
-        logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
 
         try {
             Statement statement = CCJSqlParserUtil.parse(sql);
             // 只处理查询类sql
-            if (!(statement instanceof Select)) {
+            if (!(statement instanceof Select selectStatement)) {
                 return sqlToyResult;
             }
-            Select selectStatement = (Select) statement;
+
+            // 逻辑删除字段转义
+            logicDelColumn = ReservedWordsUtil.convertWord(logicDelColumn, dbType);
+
             PlainSelect plainSelect = selectStatement.getPlainSelect();
             String tableAlias = "";
             FromItem fromItem = plainSelect.getFromItem();
@@ -91,17 +95,21 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             // 逻辑删除条件
             EqualsTo equalsTo = new EqualsTo();
             Column column = new Column(logicDelColumn);
+            // 表别名
             if (StrUtil.isNotBlank(tableAlias)) {
                 column.setTable(new Table(null, tableAlias));
             }
             equalsTo.setLeftExpression(column);
-            equalsTo.setRightExpression(new StringValue(properties.getLogicNotDeleteValue()));
+            equalsTo.setRightExpression(new StringValue(logicNotDelValue));
+            // 查询语句中不存在where条件
             if (whereExpression == null) {
                 plainSelect.setWhere(equalsTo);
                 sqlToyResult.setSql(plainSelect.toString());
                 return sqlToyResult;
             }
-            Expression newCondition = new AndExpression(equalsTo, new ParenthesedExpressionList(whereExpression));
+            // 查询语句中存在where条件
+            // 逻辑删除条件与where条件合并
+            Expression newCondition = new AndExpression(equalsTo, new ParenthesedExpressionList<>(whereExpression));
             plainSelect.setWhere(newCondition);
             sqlToyResult.setSql(plainSelect.toString());
             return sqlToyResult;

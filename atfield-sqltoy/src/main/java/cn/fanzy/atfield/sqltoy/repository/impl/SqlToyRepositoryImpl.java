@@ -1,9 +1,15 @@
 package cn.fanzy.atfield.sqltoy.repository.impl;
 
+import cn.fanzy.atfield.core.spring.SpringUtils;
+import cn.fanzy.atfield.core.utils.IdUtils;
+import cn.fanzy.atfield.sqltoy.delflag.context.DelFlagContext;
+import cn.fanzy.atfield.sqltoy.delflag.enums.DeleteValueStrategyEnum;
+import cn.fanzy.atfield.sqltoy.delflag.service.DeleteValueGenerateService;
 import cn.fanzy.atfield.sqltoy.entity.ParamBatchDto;
 import cn.fanzy.atfield.sqltoy.mp.IPage;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
+import cn.fanzy.atfield.sqltoy.utils.IdWorker;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
@@ -86,8 +92,9 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
 
     @Override
     public void handleUpdateDelete(Class<?> entityClass, ParamBatchDto param) {
+        String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus();
         update(Wrappers.updateWrapper(entityClass)
-                .set("del_flag", param.getNextStatus() == null ? 1 : param.getNextStatus())
+                .set("del_flag", deleteValue)
                 .in("id", param.getTargets()));
     }
 
@@ -125,8 +132,9 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     @Override
     public <T> Long remove(Class<T> clazz, Object... ids) {
         EntityMeta meta = getEntityMeta(clazz);
+        String deleteValue = getLogicDeletedValue(clazz);
         return updateByQuery(clazz, EntityUpdate.create()
-                .set(properties.getLogicDeleteField(), properties.getLogicDeleteValue())
+                .set(properties.getLogicDeleteField(), deleteValue)
                 .where(meta.getIdArgWhereSql())
                 .values(ids));
     }
@@ -175,5 +183,30 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
         // 15秒
         model.setCheckFrequency(checkFrequency == null ? "15" : checkFrequency.toString());
         getTranslateManager().putCacheUpdater(model);
+    }
+
+    @Override
+    public <T> String getLogicDeletedValue(Class<T> clazz) {
+        String deleteValue = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteValue());
+        if (!DeleteValueStrategyEnum.STATIC.equals(properties.getDeleteValueStrategy())) {
+            if (DeleteValueStrategyEnum.UUID.equals(properties.getDeleteValueStrategy())) {
+                deleteValue = IdUtils.randomUUID();
+            } else if (DeleteValueStrategyEnum.UUID_SIMPLE.equals(properties.getDeleteValueStrategy())) {
+                deleteValue = IdUtils.simpleUUID();
+            } else if (DeleteValueStrategyEnum.SNOWFLAKE.equals(properties.getDeleteValueStrategy())) {
+                deleteValue = IdUtils.getSnowflakeNextIdStr();
+            } else if (DeleteValueStrategyEnum.SNOWFLAKE_SIMPLE.equals(properties.getDeleteValueStrategy())) {
+                deleteValue = IdWorker.nextSnowId();
+            } else if (DeleteValueStrategyEnum.CUSTOM.equals(properties.getDeleteValueStrategy())) {
+                try {
+                    DeleteValueGenerateService valueGenerateService = SpringUtils.getBean(DeleteValueGenerateService.class);
+                    deleteValue = valueGenerateService.generate(clazz, ids);
+                    Assert.notBlank(deleteValue, "自定义删除值生成服务未返回有效值");
+                } catch (Exception e) {
+                    throw new RuntimeException("自定义删除值生成服务未配置或未实现接口：" + DeleteValueGenerateService.class.getName());
+                }
+            }
+        }
+        return deleteValue;
     }
 }

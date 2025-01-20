@@ -31,7 +31,8 @@ public class ParamBatchDto implements Serializable {
     private List<String> targets;
 
     /**
-     * 下一状态
+     * 下一状态;不限制类型，由调用方自行处理
+     * 常用：1-启用/激活/删除，0-禁用/失效/未删除
      */
-    private Integer nextStatus;
+    private Object nextStatus;
 }

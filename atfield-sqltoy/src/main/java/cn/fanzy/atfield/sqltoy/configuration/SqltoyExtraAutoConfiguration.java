@@ -1,10 +1,10 @@
 package cn.fanzy.atfield.sqltoy.configuration;
 
 import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.sqltoy.delflag.interceptor.LogicDelFilterInterceptor;
 import cn.fanzy.atfield.sqltoy.entity.AnonymousCurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.entity.ICurrentUserInfo;
 import cn.fanzy.atfield.sqltoy.handler.DefaultUnifyFieldsHandler;
-import cn.fanzy.atfield.sqltoy.interceptor.LogicDelFilterInterceptor;
 import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
 import cn.fanzy.atfield.sqltoy.repository.SqlToyRepository;
 import cn.fanzy.atfield.sqltoy.repository.impl.SqlToyRepositoryImpl;

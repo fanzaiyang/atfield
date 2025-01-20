@@ -146,4 +146,10 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      */
     void addCacheChecker(String cacheName, String sql, Boolean increment, Integer checkFrequency);
 
+    /**
+     * 获取逻辑删除已删除的值
+     *
+     * @return {@link String }
+     */
+    <T> String getLogicDeletedValue(Class<T> clazz);
 }

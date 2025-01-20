@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.sqltoy.property;
 
+import cn.fanzy.atfield.sqltoy.delflag.enums.DeleteValueStrategyEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -34,6 +35,10 @@ public class SqltoyExtraProperties implements Serializable {
      */
     private String logicNotDeleteValue;
 
+    /**
+     * 删除值策略,默认静态值，取logicDeleteValue字段
+     */
+    private DeleteValueStrategyEnum deleteValueStrategy = DeleteValueStrategyEnum.STATIC;
     /**
      * 字段类型;默认：实体类字段，需要通过注解获取对应的数据库字段
      * 推荐使用数据库字段
