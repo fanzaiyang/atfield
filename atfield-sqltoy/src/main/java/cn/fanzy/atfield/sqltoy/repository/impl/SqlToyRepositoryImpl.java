@@ -165,9 +165,10 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     @Override
     public <T> Long remove(Class<T> clazz, Object... ids) {
         EntityMeta meta = getEntityMeta(clazz);
+        String deleteField = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteField());
         String deleteValue = getLogicDeletedValue(clazz);
         return updateByQuery(clazz, EntityUpdate.create()
-                .set(properties.getLogicDeleteField(), deleteValue)
+                .set(deleteField, deleteValue)
                 .where(meta.getIdArgWhereSql())
                 .values(ids));
     }
