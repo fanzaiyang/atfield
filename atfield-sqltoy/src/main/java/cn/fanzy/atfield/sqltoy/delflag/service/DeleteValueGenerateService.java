@@ -11,7 +11,8 @@ public interface DeleteValueGenerateService {
     /**
      * 获取删除值
      *
+     * @param clazz 类
      * @return {@link String }
      */
-    <T> String generate(Class<T> clazz, Object... ids);
+    <T> String generate(Class<T> clazz);
 }

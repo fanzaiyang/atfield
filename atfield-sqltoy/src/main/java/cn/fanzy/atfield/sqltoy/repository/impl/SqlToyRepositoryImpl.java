@@ -83,20 +83,25 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     @Override
     public void handleUpdateTreeDelete(Class<?> entityClass, ParamBatchDto param) {
         String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus().toString();
+        String deleteField = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteField());
         EntityMeta entityMeta = getEntityMeta(entityClass);
         String tableName = entityMeta.getTableName();
+
         executeSql("""
-                update @value(:tableName) set del_flag = :nextStatus where node_route regexp :ids
-                """, MapKit.keys("tableName", "nextStatus", "ids")
-                .values(tableName, deleteValue,
+                update @value(:tableName) set @value(:deleteField) = :nextStatus where node_route regexp :ids
+                """, MapKit.keys("tableName", "deleteField", "nextStatus", "ids")
+                .values(tableName,
+                        deleteField,
+                        deleteValue,
                         String.join("|", param.getTargets())));
     }
 
     @Override
     public void handleUpdateDelete(Class<?> entityClass, ParamBatchDto param) {
+        String deleteField = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteField());
         String deleteValue = param.getNextStatus() == null ? getLogicDeletedValue(entityClass) : param.getNextStatus().toString();
         update(Wrappers.updateWrapper(entityClass)
-                .set("del_flag", deleteValue)
+                .set(deleteField, deleteValue)
                 .in("id", param.getTargets()));
     }
 
@@ -215,7 +220,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
 
     @Override
     public <T> String getLogicDeletedValue(Class<T> clazz) {
-        String deleteValue = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteValue());
+        String deleteValue = StrUtil.blankToDefault(DelFlagContext.getDeleteValue(), properties.getLogicDeleteValue());
         if (!DeleteValueStrategyEnum.STATIC.equals(properties.getDeleteValueStrategy())) {
             if (DeleteValueStrategyEnum.UUID.equals(properties.getDeleteValueStrategy())) {
                 deleteValue = IdUtils.randomUUID();
