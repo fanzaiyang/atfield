@@ -167,9 +167,13 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
         EntityMeta meta = getEntityMeta(clazz);
         String deleteField = StrUtil.blankToDefault(DelFlagContext.getDeleteField(), properties.getLogicDeleteField());
         String deleteValue = getLogicDeletedValue(clazz);
+        String whereSql = meta.getIdArgWhereSql();
+        if (StrUtil.startWithIgnoreCase(whereSql, "where")) {
+            whereSql = whereSql.substring(6);
+        }
         return updateByQuery(clazz, EntityUpdate.create()
                 .set(deleteField, deleteValue)
-                .where(meta.getIdArgWhereSql())
+                .where(whereSql)
                 .values(ids));
     }
 
