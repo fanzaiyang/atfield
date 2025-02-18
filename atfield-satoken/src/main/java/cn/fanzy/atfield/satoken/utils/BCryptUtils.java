@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.satoken.utils;
 
 import cn.dev33.satoken.secure.BCrypt;
+import cn.hutool.core.util.StrUtil;
 
 import java.util.regex.Pattern;
 
@@ -21,6 +22,9 @@ public class BCryptUtils extends BCrypt {
      * @return boolean
      */
     public static boolean isEncoded(String encodedPassword) {
+        if (StrUtil.isBlank(encodedPassword)) {
+            return false;
+        }
         return BCRYPT_PATTERN.matcher(encodedPassword).matches();
     }
 

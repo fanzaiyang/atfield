@@ -52,7 +52,12 @@ public class SpringUtils extends SpringUtil {
      * @return {@link String}
      */
     public static String getClientIp() {
-        return getClientIp(getRequest());
+        try {
+            return getClientIp(getRequest());
+        } catch (Exception e) {
+            return "127.0.0.1";
+        }
+
     }
 
     /**
@@ -142,7 +147,7 @@ public class SpringUtils extends SpringUtil {
             return false;
         }
         return StrUtil.equalsIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE) ||
-                StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
+               StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
     }
 
     /**
