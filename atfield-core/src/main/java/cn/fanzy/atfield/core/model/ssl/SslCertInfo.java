@@ -100,4 +100,11 @@ public class SslCertInfo implements Serializable {
         }
         return expiredDays;
     }
+
+    public int getValidDays() {
+        if (getExpiredDays() <= 0) {
+            return Math.abs(getExpiredDays());
+        }
+        return 0;
+    }
 }
