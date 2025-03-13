@@ -3,6 +3,7 @@ package cn.fanzy.atfield.core.utils;
 import cn.fanzy.atfield.core.annotation.Compare;
 import cn.fanzy.atfield.core.model.CompareNode;
 import cn.fanzy.atfield.core.model.ComparedNode;
+import cn.hutool.core.annotation.Alias;
 import cn.hutool.core.util.StrUtil;
 
 import java.lang.reflect.Field;
@@ -257,21 +258,33 @@ public class CompareUtils {
         }
         Map<String, CompareNode> map = new LinkedHashMap<>();
         for (Field field : fields) {
-            Compare compareAnnotation = field.getAnnotation(Compare.class);
-            if (Objects.isNull(compareAnnotation)) {
-                continue;
-            }
             field.setAccessible(true);
+            String fieldKey = field.getName();
+            String fieldName = null;
+            Alias alias = field.getAnnotation(Alias.class);
+            if (!Objects.isNull(alias)) {
+                fieldName = alias.value();
+            }
+            if (StrUtil.isBlank(fieldName)) {
+                Compare compareAnnotation = field.getAnnotation(Compare.class);
+                if (compareAnnotation != null) {
+                    fieldName = compareAnnotation.value();
+                }
+            }
+            if (StrUtil.isBlank(fieldName)) {
+                fieldName = fieldKey;
+            }
             try {
-                String fieldKey = field.getName();
                 CompareNode node = new CompareNode();
                 node.setFieldKey(fieldKey);
                 node.setFieldValue(field.get(t));
-                node.setFieldName(compareAnnotation.value());
+                node.setFieldName(fieldName);
                 map.put(field.getName(), node);
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
+
+
         }
         return map;
     }

@@ -74,6 +74,12 @@
             <optional>true</optional>
         </dependency>
         <dependency>
+            <groupId>com.sagframe</groupId>
+            <artifactId>sagacity-sqltoy</artifactId>
+            <version>${sagacity.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <optional>true</optional>
