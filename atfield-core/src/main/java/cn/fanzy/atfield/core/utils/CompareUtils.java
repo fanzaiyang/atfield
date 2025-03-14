@@ -9,6 +9,7 @@ import org.sagacity.sqltoy.config.annotation.Column;
 import org.springframework.util.PatternMatchUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -226,7 +227,19 @@ public class CompareUtils {
                 continue;
             }
             String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
+            Object svo = sn.getFieldValue();
+            if (svo instanceof Date) {
+                sv = DateUtils.format((Date) svo, "yyyy-MM-dd HH:mm:ss");
+            } else if (svo instanceof LocalDateTime) {
+                sv = DateUtils.format((LocalDateTime) svo, "yyyy-MM-dd HH:mm:ss");
+            }
             String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
+            Object tvo = tn.getFieldValue();
+            if (tvo instanceof Date) {
+                tv = DateUtils.format((Date) tvo, "yyyy-MM-dd HH:mm:ss");
+            } else if (tvo instanceof LocalDateTime) {
+                tv = DateUtils.format((LocalDateTime) tvo, "yyyy-MM-dd HH:mm:ss");
+            }
             // 只有两者属性值不一致时, 才显示变化情况
             if (!StrUtil.equals(sv, tv)) {
                 list.add(ComparedNode.builder()
@@ -271,7 +284,19 @@ public class CompareUtils {
             }
 
             String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
+            Object svo = sn.getFieldValue();
+            if (svo instanceof Date) {
+                sv = DateUtils.format((Date) svo, "yyyy-MM-dd HH:mm:ss");
+            } else if (svo instanceof LocalDateTime) {
+                sv = DateUtils.format((LocalDateTime) svo, "yyyy-MM-dd HH:mm:ss");
+            }
             String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
+            Object tvo = tn.getFieldValue();
+            if (tvo instanceof Date) {
+                tv = DateUtils.format((Date) tvo, "yyyy-MM-dd HH:mm:ss");
+            } else if (tvo instanceof LocalDateTime) {
+                tv = DateUtils.format((LocalDateTime) tvo, "yyyy-MM-dd HH:mm:ss");
+            }
             // 只有两者属性值不一致时, 才显示变化情况
             if (!StrUtil.equals(sv, tv)) {
                 String html = StrUtil.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
