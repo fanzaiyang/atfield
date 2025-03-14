@@ -20,6 +20,11 @@ import java.util.stream.Collectors;
  */
 public class CompareUtils {
     /**
+     * 默认忽略比较字段
+     */
+    public static final List<String> DEFAULT_IGNORE_COMPARE_FIELDS = List.of("createTime", "updateTime", "createBy", "updateBy");
+
+    /**
      * 比较
      *
      * @param source 源
