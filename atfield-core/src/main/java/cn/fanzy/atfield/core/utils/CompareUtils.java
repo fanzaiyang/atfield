@@ -78,6 +78,10 @@ public class CompareUtils {
         return StrUtil.join(segment, compare);
     }
 
+    public static <T> List<ComparedNode> compareNode(T source, T target) {
+        return compareNode(source, target, null, true);
+    }
+
     /**
      * 比较节点
      *
