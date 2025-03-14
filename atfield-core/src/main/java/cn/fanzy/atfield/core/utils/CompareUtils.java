@@ -223,6 +223,9 @@ public class CompareUtils {
         for (String key : keys) {
             CompareNode sn = sourceMap.get(key);
             CompareNode tn = targetMap.get(key);
+            if (sn == null || tn == null) {
+                continue;
+            }
             if (Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(sn.getFieldKey())) {
                 continue;
             }
