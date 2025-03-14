@@ -5,6 +5,7 @@ import cn.fanzy.atfield.core.model.CompareNode;
 import cn.fanzy.atfield.core.model.ComparedNode;
 import cn.hutool.core.annotation.Alias;
 import cn.hutool.core.util.StrUtil;
+import org.sagacity.sqltoy.config.annotation.Column;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -276,9 +277,6 @@ public class CompareUtils {
             String fieldKey = field.getName();
             String fieldName = null;
             Alias alias = field.getAnnotation(Alias.class);
-            if (ignoreNoAnnotation && alias == null) {
-                continue;
-            }
             if (!Objects.isNull(alias)) {
                 fieldName = alias.value();
             }
@@ -287,6 +285,15 @@ public class CompareUtils {
                 if (compareAnnotation != null) {
                     fieldName = compareAnnotation.value();
                 }
+            }
+            if (StrUtil.isBlank(fieldName)) {
+                Column compareAnnotation = field.getAnnotation(Column.class);
+                if (compareAnnotation != null) {
+                    fieldName = compareAnnotation.comment();
+                }
+            }
+            if (ignoreNoAnnotation && StrUtil.isBlank(fieldName)) {
+                continue;
             }
             if (StrUtil.isBlank(fieldName)) {
                 fieldName = fieldKey;
