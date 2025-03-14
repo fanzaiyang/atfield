@@ -45,7 +45,7 @@ public class ComparedNode implements Serializable {
     private Object newFieldValue;
 
     public String getHtml() {
-        return StrUtil.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
+        return StrUtil.format("<div><strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em></div>",
                 getFieldName(),
                 ObjUtil.isNull(getFieldValue()) ? "空" : getFieldValue(),
                 ObjUtil.isNull(getNewFieldValue()) ? "空" : getNewFieldValue()

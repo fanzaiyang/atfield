@@ -372,7 +372,7 @@ public class CompareUtils {
      */
     public static String getHtml(List<ComparedNode> nodeList) {
         return nodeList.stream().map(ComparedNode::getHtml)
-                .collect(Collectors.joining("；"));
+                .collect(Collectors.joining(""));
 
     }
 
