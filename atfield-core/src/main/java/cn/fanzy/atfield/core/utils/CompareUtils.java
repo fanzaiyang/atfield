@@ -119,6 +119,12 @@ public class CompareUtils {
         return doCompareNode(sourceMap, targetMap, ignoreCompareFields);
     }
 
+    public static <T> List<String> compare(T source, T target, List<String> ignoreCompareFields) {
+
+        // 如果源数据不为空，则显示属性变化情况
+        return compare(source, target, ignoreCompareFields, false);
+    }
+
     /**
      * 比较
      *
