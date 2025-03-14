@@ -1,5 +1,6 @@
 package cn.fanzy.atfield.redis.advice;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.ParamUtil;
@@ -89,6 +90,28 @@ public class LockForFormSubmitAdvice {
         } else if (FormSubmitType.IP_AND_PARAM.equals(annotation.type())) {
             // 基于IP地址和请求参数的重复提交，即1个IP地址+1个请求参数1个锁，防止同一个IP地址和请求参数重复提交
             lockName = lockName + StrPool.COLON + SpringUtils.getClientIp();
+            String paramAscii = ParamUtil.getParamAscii(SpringUtils.getRequestParams());
+            if (StrUtil.isBlank(paramAscii)) {
+                lockName = lockName + StrPool.COLON + "NULL";
+            } else {
+                lockName = lockName + StrPool.COLON + paramAscii;
+            }
+        } else if (FormSubmitType.IP_USER.equals(annotation.type())) {
+            // 基于IP地址和请求参数的重复提交，即1个IP地址+1个用户参数1个锁，防止同一个IP地址和请求参数重复提交
+            String loginId = "";
+            try {
+                loginId = StpUtil.getLoginIdAsString();
+            } catch (Exception ignored) {
+            }
+            lockName = lockName + StrPool.COLON + loginId;
+        } else if (FormSubmitType.IP_USER_PARAM.equals(annotation.type())) {
+            // 基于IP地址和请求参数的重复提交，即1个IP地址+1个用户参数1个锁，防止同一个IP地址和请求参数重复提交
+            String loginId = "";
+            try {
+                loginId = StpUtil.getLoginIdAsString();
+            } catch (Exception ignored) {
+            }
+            lockName = lockName + StrPool.COLON + loginId;
             String paramAscii = ParamUtil.getParamAscii(SpringUtils.getRequestParams());
             if (StrUtil.isBlank(paramAscii)) {
                 lockName = lockName + StrPool.COLON + "NULL";
