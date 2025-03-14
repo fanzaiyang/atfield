@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.core.model;
 
-import cn.fanzy.atfield.core.utils.ObjectUtils;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,11 +46,17 @@ public class ComparedNode implements Serializable {
 
     public String getHtml() {
         return StrUtil.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
-                getFieldName(), ObjectUtils.isEmpty(getFieldValue()) ? "空" : getFieldValue(), getNewFieldValue());
+                getFieldName(),
+                ObjUtil.isNull(getFieldValue()) ? "空" : getFieldValue(),
+                ObjUtil.isNull(getNewFieldValue()) ? "空" : getNewFieldValue()
+        );
     }
 
     public String getText() {
         return StrUtil.format("{} 由 {} 变更为 {}",
-                getFieldName(), ObjectUtils.isEmpty(getFieldValue()) ? "空" : getFieldValue(), getNewFieldValue());
+                getFieldName(),
+                ObjUtil.isNull(getFieldValue()) ? "空" : getFieldValue(),
+                ObjUtil.isNull(getNewFieldValue()) ? "空" : getNewFieldValue()
+        );
     }
 }

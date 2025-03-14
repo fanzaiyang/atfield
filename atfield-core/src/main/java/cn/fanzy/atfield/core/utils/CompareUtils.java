@@ -6,6 +6,7 @@ import cn.fanzy.atfield.core.model.ComparedNode;
 import cn.hutool.core.annotation.Alias;
 import cn.hutool.core.util.StrUtil;
 import org.sagacity.sqltoy.config.annotation.Column;
+import org.springframework.util.PatternMatchUtils;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -247,9 +248,23 @@ public class CompareUtils {
         for (String key : keys) {
             CompareNode sn = sourceMap.get(key);
             CompareNode tn = targetMap.get(key);
-            if (Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(sn.getFieldKey())) {
+            boolean skip = Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(sn.getFieldKey());
+            if (skip) {
                 continue;
             }
+            // 正则匹配
+            if (Objects.nonNull(ignoreCompareFields)) {
+                for (String field : ignoreCompareFields) {
+                    if (PatternMatchUtils.simpleMatch(field, sn.getFieldKey())) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if (skip) {
+                    continue;
+                }
+            }
+
             String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
             String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
             // 只有两者属性值不一致时, 才显示变化情况
