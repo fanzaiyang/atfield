@@ -45,11 +45,11 @@ public class ComparedNode implements Serializable {
 
     public String getHtml() {
         return String.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
-                fieldName, ObjectUtils.isEmpty(fieldValue) ? "空" : fieldValue, newFieldValue);
+                getFieldName(), ObjectUtils.isEmpty(getFieldValue()) ? "空" : getFieldValue(), getNewFieldValue());
     }
 
     public String getText() {
         return String.format("{} 由 {} 变更为 {}",
-                fieldName, ObjectUtils.isEmpty(fieldValue) ? "空" : fieldValue, newFieldValue);
+                getFieldName(), ObjectUtils.isEmpty(getFieldValue()) ? "空" : getFieldValue(), getNewFieldValue());
     }
 }

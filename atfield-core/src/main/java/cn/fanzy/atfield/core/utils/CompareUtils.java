@@ -9,7 +9,6 @@ import org.sagacity.sqltoy.config.annotation.Column;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 比较 Utils
@@ -326,8 +325,12 @@ public class CompareUtils {
      * @return {@link String }
      */
     public static String getHtml(List<ComparedNode> nodeList) {
-        return nodeList.stream().map(ComparedNode::getHtml)
-                .collect(Collectors.joining("；"));
+        String text = "";
+        for (ComparedNode node : nodeList) {
+            text += String.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
+                    node.getFieldName(), ObjectUtils.isEmpty(node.getFieldValue()) ? "空" : node.getFieldValue(), node.getNewFieldValue());
+        }
+        return text;
     }
 
     /**
@@ -337,8 +340,12 @@ public class CompareUtils {
      * @return {@link String }
      */
     public static String getText(List<ComparedNode> nodeList) {
-        return nodeList.stream().map(ComparedNode::getText)
-                .collect(Collectors.joining("；"));
+        String text = "";
+        for (ComparedNode node : nodeList) {
+            text += String.format("{} 由 {} 变更为 {}",
+                    node.getFieldName(), ObjectUtils.isEmpty(node.getFieldValue()) ? "空" : node.getFieldValue(), node.getNewFieldValue());
+        }
+        return text;
     }
 }
 
