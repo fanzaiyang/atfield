@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * @date 2024/10/17
  */
 public class CompareUtils {
-
     /**
      * 比较
      *
@@ -26,7 +25,18 @@ public class CompareUtils {
      * @return {@link List }<{@link String }>
      */
     public static <T> List<String> compare(T source, T target) {
-        return compare(source, target, null);
+        return compare(source, target, null, true);
+    }
+
+    /**
+     * 比较
+     *
+     * @param source 源
+     * @param target 目标
+     * @return {@link List }<{@link String }>
+     */
+    public static <T> List<String> compare(T source, T target, Boolean ignoreNoAnnotation) {
+        return compare(source, target, null, ignoreNoAnnotation == null || ignoreNoAnnotation);
     }
 
     /**
@@ -37,7 +47,7 @@ public class CompareUtils {
      * @return {@link String }
      */
     public static <T> String compareStr(T source, T target) {
-        List<String> compare = compare(source, target);
+        List<String> compare = compare(source, target, true);
         return StrUtil.join("；", compare);
     }
 
@@ -50,7 +60,7 @@ public class CompareUtils {
      * @return {@link String }
      */
     public static <T> String compareStr(T source, T target, String segment) {
-        List<String> compare = compare(source, target);
+        List<String> compare = compare(source, target, true);
         return StrUtil.join(segment, compare);
     }
 
@@ -63,8 +73,8 @@ public class CompareUtils {
      * @param segment             段
      * @return {@link String }
      */
-    public static <T> String compareStr(T source, T target, List<String> ignoreCompareFields, String segment) {
-        List<String> compare = compare(source, target, ignoreCompareFields);
+    public static <T> String compareStr(T source, T target, List<String> ignoreCompareFields, String segment, boolean ignoreNoAnnotation) {
+        List<String> compare = compare(source, target, ignoreCompareFields, ignoreNoAnnotation);
         return StrUtil.join(segment, compare);
     }
 
@@ -75,8 +85,8 @@ public class CompareUtils {
      * @param target 目标
      * @return {@link List }<{@link ComparedNode }>
      */
-    public static <T> List<ComparedNode> compareNode(T source, T target) {
-        return compareNode(source, target, null);
+    public static <T> List<ComparedNode> compareNode(T source, T target, boolean ignoreNoAnnotation) {
+        return compareNode(source, target, null, ignoreNoAnnotation);
     }
 
     /**
@@ -87,12 +97,12 @@ public class CompareUtils {
      * @param ignoreCompareFields 忽略比较字段
      * @return {@link List }<{@link ComparedNode }>
      */
-    public static <T> List<ComparedNode> compareNode(T source, T target, List<String> ignoreCompareFields) {
+    public static <T> List<ComparedNode> compareNode(T source, T target, List<String> ignoreCompareFields, boolean ignoreNoAnnotation) {
         if (Objects.isNull(source) && Objects.isNull(target)) {
             return List.of();
         }
-        Map<String, CompareNode> sourceMap = getFiledValueMap(source);
-        Map<String, CompareNode> targetMap = getFiledValueMap(target);
+        Map<String, CompareNode> sourceMap = getFiledValueMap(source, ignoreNoAnnotation);
+        Map<String, CompareNode> targetMap = getFiledValueMap(target, ignoreNoAnnotation);
         if (sourceMap.isEmpty() && targetMap.isEmpty()) {
             return List.of();
         }
@@ -112,12 +122,12 @@ public class CompareUtils {
      * @param ignoreCompareFields 忽略比较字段
      * @return {@link List }<{@link String }>
      */
-    public static <T> List<String> compare(T source, T target, List<String> ignoreCompareFields) {
+    public static <T> List<String> compare(T source, T target, List<String> ignoreCompareFields, boolean ignoreNoAnnotation) {
         if (Objects.isNull(source) && Objects.isNull(target)) {
             return List.of();
         }
-        Map<String, CompareNode> sourceMap = getFiledValueMap(source);
-        Map<String, CompareNode> targetMap = getFiledValueMap(target);
+        Map<String, CompareNode> sourceMap = getFiledValueMap(source, ignoreNoAnnotation);
+        Map<String, CompareNode> targetMap = getFiledValueMap(target, ignoreNoAnnotation);
         if (sourceMap.isEmpty() && targetMap.isEmpty()) {
             return List.of();
         }
@@ -248,7 +258,7 @@ public class CompareUtils {
      * @param t t
      * @return {@link Map }<{@link String }, {@link CompareNode }>
      */
-    private static <T> Map<String, CompareNode> getFiledValueMap(T t) {
+    private static <T> Map<String, CompareNode> getFiledValueMap(T t, boolean ignoreNoAnnotation) {
         if (Objects.isNull(t)) {
             return Collections.emptyMap();
         }
@@ -262,6 +272,9 @@ public class CompareUtils {
             String fieldKey = field.getName();
             String fieldName = null;
             Alias alias = field.getAnnotation(Alias.class);
+            if (ignoreNoAnnotation && alias == null) {
+                continue;
+            }
             if (!Objects.isNull(alias)) {
                 fieldName = alias.value();
             }
