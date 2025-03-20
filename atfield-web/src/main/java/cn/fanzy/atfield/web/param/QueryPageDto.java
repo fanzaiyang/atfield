@@ -10,13 +10,14 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 基本参数,替换为{@link cn.fanzy.atfield.web.param.QueryPageDto}
+ * param page dto
+ * 基本参数
+ *
  * @author fanzaiyang
  * @since 2022-08-16
  */
-@Deprecated
 @Setter
-public class ParamPageDto implements Serializable {
+public class QueryPageDto implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -1241624388851356884L;

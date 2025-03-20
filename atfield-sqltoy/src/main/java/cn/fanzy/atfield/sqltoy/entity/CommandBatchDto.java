@@ -11,17 +11,16 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 参数批DTO,替换为{@link CommandBatchDto}
+ * 参数批DTO
  *
  * @author fanzaiyang
  * @date 2024-07-01
  */
-@Deprecated
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParamBatchDto implements Serializable {
+public class CommandBatchDto implements Serializable {
     @Serial
     private static final long serialVersionUID = 4582477467794940501L;
 
@@ -32,8 +31,8 @@ public class ParamBatchDto implements Serializable {
     private List<String> targets;
 
     /**
-     * 下一状态;不限制类型，由调用方自行处理
+     * 下一值;不限制类型，由调用方自行处理
      * 常用：1-启用/激活/删除，0-禁用/失效/未删除
      */
-    private Object nextStatus;
+    private Object nextValue;
 }
