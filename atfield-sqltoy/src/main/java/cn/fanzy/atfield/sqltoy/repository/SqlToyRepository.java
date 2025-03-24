@@ -127,6 +127,14 @@ public interface SqlToyRepository extends SqlToyHelperDao {
     <T> Long remove(Class<T> clazz, Object... ids);
 
     /**
+     * 删除
+     *
+     * @param clazz 克拉兹
+     * @param ids   IDS
+     * @return {@link Long }
+     */
+    <T> Long remove(Class<T> clazz, List<String> ids);
+    /**
      * 获取翻译管理器
      *
      * @return {@link TranslateManager }

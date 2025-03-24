@@ -171,10 +171,16 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
         if (StrUtil.startWithIgnoreCase(whereSql.trim(), "where")) {
             whereSql = whereSql.trim().substring(6) + " ";
         }
+
         return updateByQuery(clazz, EntityUpdate.create()
                 .set(deleteField, deleteValue)
                 .where(whereSql)
                 .values(ids));
+    }
+
+    @Override
+    public <T> Long remove(Class<T> clazz, List<String> ids) {
+        return 0L;
     }
 
     @Override
