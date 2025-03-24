@@ -16,12 +16,12 @@ import org.aspectj.lang.JoinPoint;
 public class DefaultLogCallbackServiceImpl implements LogCallbackService {
 
     @Override
-    public void before(PrintLogInfo param, JoinPoint joinPoint) {
+    public void before(PrintLogInfo param, JoinPoint joinPoint, boolean ignore) {
         // todo 自定义打印
     }
 
     @Override
-    public void after(PrintLogInfo param) {
+    public void after(PrintLogInfo param, boolean ignore) {
         // todo 写入到数据库
     }
 }

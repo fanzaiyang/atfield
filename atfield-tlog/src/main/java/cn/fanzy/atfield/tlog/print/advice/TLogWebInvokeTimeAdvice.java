@@ -20,7 +20,6 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +47,7 @@ import java.time.LocalDateTime;
 public class TLogWebInvokeTimeAdvice {
     private final TransmittableThreadLocal<StopWatch> invokeTimeTL = new TransmittableThreadLocal<>();
     private final TransmittableThreadLocal<PrintLogInfo> invokeLogInfo = new TransmittableThreadLocal<>();
-
+    private final TransmittableThreadLocal<Boolean> invokeIgnoreTl = new TransmittableThreadLocal<>();
     private final TLogProperty property;
 
     private final LogCallbackService callbackService;
@@ -67,7 +66,7 @@ public class TLogWebInvokeTimeAdvice {
     }
 
     @Before(value = "cut()")
-    public void before(JoinPoint joinPoint) throws JsonProcessingException {
+    public void before(JoinPoint joinPoint) {
         if (skipSwagger()) {
             return;
         }
@@ -112,6 +111,7 @@ public class TLogWebInvokeTimeAdvice {
             remarks = annotation.remarks();
             isSkip = annotation.ignore();
         }
+        invokeIgnoreTl.set(isSkip);
         PrintLogInfo logInfo = PrintLogInfo.builder()
                 .appName(appName)
                 .moduleName(moduleName)
@@ -131,15 +131,12 @@ public class TLogWebInvokeTimeAdvice {
                 .traceId(traceId)
                 .build();
         invokeLogInfo.set(logInfo);
-        callbackService.before(invokeLogInfo.get(), joinPoint);
-        if (isSkip) {
-            return;
-        }
+        callbackService.before(invokeLogInfo.get(), joinPoint, isSkip);
         log.info(getLogStr(property.getPrint().getPrePattern(), logInfo));
     }
 
     @AfterReturning(returning = "obj", value = "cut()")
-    public void afterReturning(Object obj) throws JsonProcessingException {
+    public void afterReturning(Object obj) {
         if (skipSwagger()) {
             return;
         }
@@ -148,7 +145,12 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         StopWatch stopWatch = invokeTimeTL.get();
-        stopWatch.stop();
+        if (stopWatch == null) {
+            stopWatch = new StopWatch();
+        }
+        if (stopWatch.isRunning()) {
+            stopWatch.stop();
+        }
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
         if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
@@ -169,7 +171,7 @@ public class TLogWebInvokeTimeAdvice {
             }
         }
         logInfo.setSpendMillis(stopWatch.getTotalTimeMillis());
-        callbackService.after(logInfo);
+        callbackService.after(logInfo, invokeIgnoreTl.get() != null && invokeIgnoreTl.get());
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }
@@ -186,6 +188,9 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         StopWatch stopWatch = invokeTimeTL.get();
+        if (stopWatch == null) {
+            stopWatch = new StopWatch();
+        }
         if (stopWatch.isRunning()) {
             stopWatch.stop();
         }
@@ -203,7 +208,7 @@ public class TLogWebInvokeTimeAdvice {
         logInfo.setResponseData(ExceptionUtil.getErrorStackMessage(e, property.getPrint().getResponseDataLength()));
         logInfo.setResponseStatus(PrintLogInfo.ResponseStatus.FAIL);
         logInfo.setResponseMessage(e.getMessage());
-        callbackService.after(logInfo);
+        callbackService.after(logInfo, invokeIgnoreTl.get() != null && invokeIgnoreTl.get());
         if (property.getPrint().getAfterEnable() != null && !property.getPrint().getAfterEnable()) {
             return;
         }

@@ -13,14 +13,17 @@ public interface LogCallbackService {
     /**
      * 执行之前的回调
      *
-     * @param param 参数
+     * @param param     参数
+     * @param joinPoint 加入点
+     * @param ignore    忽视
      */
-    void before(PrintLogInfo param, JoinPoint joinPoint);
+    void before(PrintLogInfo param, JoinPoint joinPoint, boolean ignore);
 
     /**
      * 执行结束后的回调
      *
-     * @param param 对象
+     * @param param  对象
+     * @param ignore 忽视
      */
-    void after(PrintLogInfo param);
+    void after(PrintLogInfo param, boolean ignore);
 }
