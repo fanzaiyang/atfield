@@ -54,6 +54,7 @@ public class TLogWebInvokeTimeAdvice {
     private final LogCallbackService callbackService;
 
     private final LogOperatorService userCallbackService;
+
     private final Operator operator;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
@@ -75,8 +76,9 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         StopWatch stopWatch = new StopWatch();
-        invokeTimeTL.set(stopWatch);
         stopWatch.start();
+        invokeTimeTL.set(stopWatch);
+
         HttpServletRequest request = SpringUtils.getRequest();
         String requestUrl = request.getRequestURI();
         if (StrUtil.isNotBlank(request.getQueryString())) {
@@ -184,7 +186,10 @@ public class TLogWebInvokeTimeAdvice {
             return;
         }
         StopWatch stopWatch = invokeTimeTL.get();
-        stopWatch.stop();
+        if (stopWatch.isRunning()) {
+            stopWatch.stop();
+        }
+
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
         if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
