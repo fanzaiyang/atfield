@@ -57,11 +57,11 @@ public class TLogWebInvokeTimeAdvice {
     private final Operator operator;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
-            "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
-            "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
+              "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.PostMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.DeleteMapping)||" +
+              "@annotation(org.springframework.web.bind.annotation.PutMapping)||" +
+              "@annotation(cn.fanzy.atfield.tlog.print.annotation.Log)")
     public void cut() {
     }
 
@@ -129,7 +129,7 @@ public class TLogWebInvokeTimeAdvice {
                 .traceId(traceId)
                 .build();
         invokeLogInfo.set(logInfo);
-        callbackService.before(invokeLogInfo.get());
+        callbackService.before(invokeLogInfo.get(), joinPoint);
         if (isSkip) {
             return;
         }

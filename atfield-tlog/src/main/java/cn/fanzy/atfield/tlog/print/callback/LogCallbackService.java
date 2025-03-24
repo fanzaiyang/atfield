@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.tlog.print.callback;
 
 import cn.fanzy.atfield.tlog.print.bean.PrintLogInfo;
+import org.aspectj.lang.JoinPoint;
 
 /**
  * 日志回调服务
@@ -14,7 +15,7 @@ public interface LogCallbackService {
      *
      * @param param 参数
      */
-    void before(PrintLogInfo param);
+    void before(PrintLogInfo param, JoinPoint joinPoint);
 
     /**
      * 执行结束后的回调
