@@ -95,7 +95,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param rootList 最上级的节点集合
      * @return boolean
      */
-    boolean wrapTreeTableRoute(final List<Serializable> rootList);
+    <T> boolean wrapTreeTableRoute(final List<T> rootList);
 
     /**
      * 包装树表路由字段名称
@@ -134,6 +134,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @return {@link Long }
      */
     <T> Long remove(Class<T> clazz, List<String> ids);
+
     /**
      * 获取翻译管理器
      *

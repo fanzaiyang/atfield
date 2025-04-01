@@ -118,9 +118,9 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     }
 
     @Override
-    public boolean wrapTreeTableRoute(List<Serializable> entities) {
-        for (Serializable entity : entities) {
-            wrapTreeTableRoute(entity);
+    public <T> boolean wrapTreeTableRoute(List<T> entities) {
+        for (T entity : entities) {
+            wrapTreeTableRoute((Serializable) entity);
         }
         return true;
     }
