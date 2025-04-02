@@ -95,7 +95,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param rootList 最上级的节点集合
      * @return boolean
      */
-    <T> boolean wrapTreeTableRoute(final List<T> rootList);
+    <T extends Serializable> boolean wrapTreeTableRoute(final List<T> rootList);
 
     /**
      * 包装树表路由字段名称
@@ -106,7 +106,7 @@ public interface SqlToyRepository extends SqlToyHelperDao {
      * @param targetFieldName 目标字段名称
      * @return boolean
      */
-    <T> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName);
+    <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName);
 
     /**
      * 转换为mp的IPage

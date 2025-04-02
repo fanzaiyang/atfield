@@ -118,7 +118,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     }
 
     @Override
-    public <T> boolean wrapTreeTableRoute(List<T> entities) {
+    public <T extends Serializable> boolean wrapTreeTableRoute(List<T> entities) {
         for (T entity : entities) {
             wrapTreeTableRoute((Serializable) entity);
         }
@@ -126,7 +126,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     }
 
     @Override
-    public <T> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName) {
+    public <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName) {
         Assert.notBlank(fieldName, "字段名不能为空!");
         Assert.notBlank(targetFieldName, "目标字段名不能为空!");
         EntityMeta entityMeta = getEntityMeta(entityClass);
