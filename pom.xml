@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <revision>1.1.11</revision>
+        <revision>1.1.12</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,10 +41,10 @@
         <maven-javadoc-plugin.vesion>3.6.2</maven-javadoc-plugin.vesion>
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <maven-gpg-plugin.version>3.1.0</maven-gpg-plugin.version>
-        <satoken.version>1.39.0</satoken.version>
+        <satoken.version>1.41.0</satoken.version>
         <transmittable.version>2.14.4</transmittable.version>
         <QLExpress.version>3.3.4</QLExpress.version>
-        <sagacity.version>5.6.35</sagacity.version>
+        <sagacity.version>5.6.42</sagacity.version>
         <sqltoy-plus.version>5.6.33</sqltoy-plus.version>
     </properties>
     <dependencyManagement>
