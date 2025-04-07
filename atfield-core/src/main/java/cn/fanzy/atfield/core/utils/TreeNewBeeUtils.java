@@ -17,6 +17,11 @@ import java.util.stream.Collectors;
  */
 public class TreeNewBeeUtils {
     /**
+     * 根父 ID
+     */
+    public static final String ROOT_PARENT_ID = "-1";
+
+    /**
      * 合成树
      *
      * @param sourceList 源列表
