@@ -46,4 +46,11 @@ public class CommandBatchDto implements Serializable {
         }
         return targetIds;
     }
+
+    public List<String> getTargetIds() {
+        if (CollUtil.isNotEmpty(targetIds)) {
+            return targetIds;
+        }
+        return targets;
+    }
 }
