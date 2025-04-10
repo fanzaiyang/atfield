@@ -1,8 +1,6 @@
 package cn.fanzy.atfield.sqltoy.entity;
 
-import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.json.JSONUtil;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +30,10 @@ public class CommandBatchDto implements Serializable {
      */
     @NotEmpty(message = "目标ID集合不能为空！")
     private List<String> targets;
-
+    /**
+     * 目标ID
+     */
+    private List<String> targetIds;
     /**
      * 下一值;不限制类型，由调用方自行处理
      * 常用：1-启用/激活/删除，0-禁用/失效/未删除
@@ -43,14 +44,6 @@ public class CommandBatchDto implements Serializable {
         if (CollUtil.isNotEmpty(targets)) {
             return targets;
         }
-        try {
-            Object targetIds = SpringUtils.getRequestParams().get("targetIds");
-            if (targetIds == null) {
-                return null;
-            }
-            return JSONUtil.toList(targetIds.toString(), String.class);
-        } catch (Exception e) {
-            return null;
-        }
+        return targetIds;
     }
 }
