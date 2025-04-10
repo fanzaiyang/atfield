@@ -54,6 +54,7 @@ public class Json<T> implements Serializable {
     private boolean success;
     /**
      * 异常返回前台的类型
+     * @see ShowType
      */
     private ShowType showType = ShowType.SILENT;
 
