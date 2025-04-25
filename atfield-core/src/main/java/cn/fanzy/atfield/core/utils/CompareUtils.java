@@ -4,6 +4,7 @@ import cn.fanzy.atfield.core.annotation.Compare;
 import cn.fanzy.atfield.core.model.CompareNode;
 import cn.fanzy.atfield.core.model.ComparedNode;
 import cn.hutool.core.annotation.Alias;
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import org.sagacity.sqltoy.config.annotation.Column;
 import org.springframework.util.PatternMatchUtils;
@@ -229,14 +230,14 @@ public class CompareUtils {
             if (Objects.nonNull(ignoreCompareFields) && ignoreCompareFields.contains(sn.getFieldKey())) {
                 continue;
             }
-            String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
+            Object sv = sn.getFieldValue();
             Object svo = sn.getFieldValue();
             if (svo instanceof Date) {
                 sv = DateUtils.format((Date) svo, "yyyy-MM-dd HH:mm:ss");
             } else if (svo instanceof LocalDateTime) {
                 sv = DateUtils.format((LocalDateTime) svo, "yyyy-MM-dd HH:mm:ss");
             }
-            String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
+            Object tv = tn.getFieldValue();
             Object tvo = tn.getFieldValue();
             if (tvo instanceof Date) {
                 tv = DateUtils.format((Date) tvo, "yyyy-MM-dd HH:mm:ss");
@@ -244,7 +245,7 @@ public class CompareUtils {
                 tv = DateUtils.format((LocalDateTime) tvo, "yyyy-MM-dd HH:mm:ss");
             }
             // 只有两者属性值不一致时, 才显示变化情况
-            if (!StrUtil.equals(sv, tv)) {
+            if (!ObjUtil.equals(sv, tv)) {
                 list.add(ComparedNode.builder()
                         .fieldKey(sn.getFieldKey()).fieldName(sn.getFieldName())
                         .fieldValue(sv)
@@ -286,14 +287,14 @@ public class CompareUtils {
                 }
             }
 
-            String sv = Optional.ofNullable(sn.getFieldValue()).orElse("").toString();
+            Object sv = sn.getFieldValue();
             Object svo = sn.getFieldValue();
             if (svo instanceof Date) {
                 sv = DateUtils.format((Date) svo, "yyyy-MM-dd HH:mm:ss");
             } else if (svo instanceof LocalDateTime) {
                 sv = DateUtils.format((LocalDateTime) svo, "yyyy-MM-dd HH:mm:ss");
             }
-            String tv = Optional.ofNullable(tn.getFieldValue()).orElse("").toString();
+            Object tv = tn.getFieldValue();
             Object tvo = tn.getFieldValue();
             if (tvo instanceof Date) {
                 tv = DateUtils.format((Date) tvo, "yyyy-MM-dd HH:mm:ss");
@@ -301,7 +302,7 @@ public class CompareUtils {
                 tv = DateUtils.format((LocalDateTime) tvo, "yyyy-MM-dd HH:mm:ss");
             }
             // 只有两者属性值不一致时, 才显示变化情况
-            if (!StrUtil.equals(sv, tv)) {
+            if (!ObjUtil.equals(sv, tv)) {
                 String html = StrUtil.format("<strong>{}</strong> 由 <em class=\"sv\">{}<em> 变更为 <em  class=\"tv\">{}</em>",
                         sn.getFieldName(), sv, tv);
                 list.add(html);
