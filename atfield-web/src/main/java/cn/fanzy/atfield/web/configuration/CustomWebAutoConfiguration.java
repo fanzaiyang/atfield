@@ -7,7 +7,10 @@ import cn.fanzy.atfield.web.exception.SaTokenExceptionAdvice;
 import cn.fanzy.atfield.web.exception.SaTokenExceptionErrorAdvice;
 import cn.fanzy.atfield.web.filter.ReplaceStreamFilter;
 import cn.fanzy.atfield.web.json.property.JsonProperty;
+import cn.fanzy.atfield.web.web.CustomWebProperties;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +24,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author fanzaiyang
  * @date 2023/12/06
  */
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties({JsonProperty.class})
+@EnableConfigurationProperties({JsonProperty.class, CustomWebProperties.class})
 @ImportAutoConfiguration({
         ReplaceStreamFilter.class,
         GlobalExceptionAdvice.class,
@@ -35,6 +39,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
         name = "TLog Default framework Properties",
         value = "classpath:/META-INF/infra-web-default.properties")
 public class CustomWebAutoConfiguration implements WebMvcConfigurer {
+    private final CustomWebProperties customWebProperties;
+
     /**
      * 添加资源处理程序
      * 跨域配置会覆盖默认的配置，
@@ -60,5 +66,20 @@ public class CustomWebAutoConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
         registry.addResourceHandler("/favicon.ico")
                 .addResourceLocations("classpath:/static/");
+
+        /** 本地文件上传路径 */
+        if (customWebProperties.getResourceLocations() != null && customWebProperties.getResourceLocations().length > 0) {
+            registry.addResourceHandler(customWebProperties.getAttachContextPath() + "/**")
+                    .addResourceLocations(customWebProperties.getResourceLocations());
+        }
+
+    }
+
+    /**
+     * 配置检查
+     */
+    @PostConstruct
+    public void checkConfig() {
+        log.info("开启 <自定义WEB> 相关的配置");
     }
 }
