@@ -28,7 +28,7 @@ public class CustomWebProperties implements Serializable {
     /**
      * 附件上传路径，默认：/attach
      */
-    private String attachContextPath = "/attach";
+    private String contextPath = "/attach";
 
     /**
      * 资源位置;外部文件夹实例：file:/Users/fanzy/Documents/attach
