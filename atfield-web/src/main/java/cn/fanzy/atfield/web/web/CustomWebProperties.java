@@ -34,4 +34,9 @@ public class CustomWebProperties implements Serializable {
      * 资源位置;外部文件夹实例：file:/Users/fanzy/Documents/attach
      */
     private String[] resourceLocations;
+
+    /**
+     * 公共读取;默认：false
+     */
+    private Boolean publicRead = false;
 }
