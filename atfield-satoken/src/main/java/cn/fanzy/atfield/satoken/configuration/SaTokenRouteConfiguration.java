@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -44,10 +45,13 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-        registry.addInterceptor(new SaInterceptor(saParamFunction()))
+
+        InterceptorRegistration registration = registry.addInterceptor(new SaInterceptor(saParamFunction()))
                 .addPathPatterns(property.getRoute().getAddPathPatterns())
-                .excludePathPatterns(property.getRoute().getExcludePathPatterns())
-                .excludePathPatterns(publicRead ? StrUtil.addSuffixIfNot(contextPath, "/") + "**" : null);
+                .excludePathPatterns(property.getRoute().getExcludePathPatterns());
+        if (publicRead) {
+            registration.addPathPatterns(StrUtil.addSuffixIfNot(contextPath, "/") + "**");
+        }
         // 注册 StpContext 拦截器，用于在多线程中获取当前登录会话。
         registry.addInterceptor(new StpContextInterceptor())
                 .addPathPatterns("/**");
