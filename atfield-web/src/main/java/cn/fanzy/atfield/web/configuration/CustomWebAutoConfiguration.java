@@ -69,7 +69,7 @@ public class CustomWebAutoConfiguration implements WebMvcConfigurer {
 
         /** 本地文件上传路径 */
         if (customWebProperties.getResourceLocations() != null && customWebProperties.getResourceLocations().length > 0) {
-            registry.addResourceHandler(customWebProperties.getAttachContextPath() + "/**")
+            registry.addResourceHandler(customWebProperties.getContextPath() + "/**")
                     .addResourceLocations(customWebProperties.getResourceLocations());
         }
 
