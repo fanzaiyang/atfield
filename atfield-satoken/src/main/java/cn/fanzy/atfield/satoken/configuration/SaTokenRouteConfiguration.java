@@ -5,6 +5,8 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.atfield.satoken.interceptor.StpContextInterceptor;
 import cn.fanzy.atfield.satoken.property.SaTokenExtraProperty;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,10 +15,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * SA 令牌路由配置
@@ -45,13 +48,15 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-
-        InterceptorRegistration registration = registry.addInterceptor(new SaInterceptor(saParamFunction()))
-                .addPathPatterns(property.getRoute().getAddPathPatterns())
-                .excludePathPatterns(property.getRoute().getExcludePathPatterns());
-        if (publicRead) {
-            registration.addPathPatterns(StrUtil.addSuffixIfNot(contextPath, "/") + "**");
+        List<String> excludePathPatterns = CollUtil.toList(property.getRoute().getExcludePathPatterns());
+        if (publicRead && StrUtil.isNotBlank(contextPath)) {
+            String pattern = StrUtil.addSuffixIfNot(contextPath, "/") + "**";
+            excludePathPatterns.add(pattern);
         }
+        registry.addInterceptor(new SaInterceptor(saParamFunction()))
+                .addPathPatterns(property.getRoute().getAddPathPatterns())
+                .excludePathPatterns(ArrayUtil.toArray(excludePathPatterns, String.class));
+
         // 注册 StpContext 拦截器，用于在多线程中获取当前登录会话。
         registry.addInterceptor(new StpContextInterceptor())
                 .addPathPatterns("/**");
