@@ -5,7 +5,6 @@ import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.atfield.satoken.interceptor.StpContextInterceptor;
 import cn.fanzy.atfield.satoken.property.SaTokenExtraProperty;
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,7 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
 
     @Value("${atfield.web.attach.public-read:false}")
     private Boolean publicRead;
-    @Value("${atfield.web.attach.context-path}")
+    @Value("${atfield.web.attach.context-path:/attach}")
     private String contextPath;
 
     @Bean
@@ -45,14 +44,10 @@ public class SaTokenRouteConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
-        String[] excludePathPatterns = property.getRoute().getExcludePathPatterns();
-        if (publicRead && StrUtil.isNotBlank(contextPath)) {
-            ArrayUtil.append(contextPath);
-        }
-
         registry.addInterceptor(new SaInterceptor(saParamFunction()))
                 .addPathPatterns(property.getRoute().getAddPathPatterns())
-                .excludePathPatterns(excludePathPatterns);
+                .excludePathPatterns(property.getRoute().getExcludePathPatterns())
+                .excludePathPatterns(publicRead ? StrUtil.addSuffixIfNot(contextPath, "/") + "**" : null);
         // 注册 StpContext 拦截器，用于在多线程中获取当前登录会话。
         registry.addInterceptor(new StpContextInterceptor())
                 .addPathPatterns("/**");
