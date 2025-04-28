@@ -1,5 +1,7 @@
 package cn.fanzy.atfield.satoken.operator;
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.fanzy.atfield.core.model.Operator;
 import cn.fanzy.atfield.satoken.context.StpContext;
 import cn.hutool.core.util.StrUtil;
@@ -18,7 +20,11 @@ public class SaTokenOperator implements Operator {
         if (StrUtil.isNotBlank(loginId)) {
             return loginId;
         }
-        return "anonymous";
+        try {
+            return StpUtil.getLoginIdAsString();
+        } catch (Exception e) {
+            return "anonymous";
+        }
     }
 
     @Override
@@ -27,10 +33,14 @@ public class SaTokenOperator implements Operator {
         if (StrUtil.isNotBlank(loginName)) {
             return loginName;
         }
-        String operatorId = getId();
-        if (StrUtil.equals("anonymous", operatorId)) {
-            return "匿名用户";
+        try {
+            return StpUtil.getSession().getString(SaSession.USER + "_NAME");
+        } catch (Exception e) {
+            String operatorId = getId();
+            if (StrUtil.equals("anonymous", operatorId)) {
+                return "匿名用户";
+            }
+            return operatorId;
         }
-        return operatorId;
     }
 }
