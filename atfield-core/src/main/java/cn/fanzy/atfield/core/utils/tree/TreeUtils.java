@@ -2,7 +2,6 @@ package cn.fanzy.atfield.core.utils.tree;
 
 import cn.fanzy.atfield.core.model.BaseTreeNode;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 
 import java.util.*;
@@ -29,45 +28,35 @@ public class TreeUtils {
 
     /**
      * 获取根节点
+     * <p>检查pid是否存在于id集合中</p>
      *
      * @param listData           数据
      * @param isChangeOriginData 是否更改源数据；true：会修改参数listData,此方式效率也是最高。
-     * @return {@link List }<{@link T }> 新的集合
+     * @return {@link List }<{@link E }> 新的集合
      */
-    public static <T extends BaseTreeNode<T>> List<T> getRootNodeList(List<T> listData, boolean isChangeOriginData) {
-        // 检查pid是否存在于id集合中
-        Set<String> allIdList = listData.stream()
-                .map(BaseTreeNode::getId).collect(Collectors.toSet());
-        // 更改源数据，效率更改
-        if (isChangeOriginData) {
-            listData.removeIf(data -> allIdList.contains(data.getParentId()));
-            return listData;
-        }
-        return listData.stream().filter(data -> !allIdList.contains(data.getParentId())).toList();
+    public static <E extends BaseTreeNode<E>> List<E> getRootNodeList(List<E> listData, boolean isChangeOriginData) {
+        return getRootNodeList(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, isChangeOriginData);
     }
 
     /**
      * 获取根节点列表
-     * <p>要求传入的类中包含id、parentId字段</p>
+     * <p>检查pid是否存在于id集合中</p>
      *
      * @param listData           列出数据
-     * @param idField            id 字段
-     * @param parentIdField      父 ID 字段
+     * @param idFunc             id func
+     * @param pidFunc            pid func
      * @param isChangeOriginData 是更改源数据
      * @return {@link List }<{@link E }>
      */
-    public static <E> List<E> getRootNodeList(List<E> listData, String idField, String parentIdField, boolean isChangeOriginData) {
-        String finalIdField = StrUtil.blankToDefault(idField, "id");
-        String finalParentIdField = StrUtil.blankToDefault(parentIdField, "parentId");
+    public static <K, E> List<E> getRootNodeList(List<E> listData, Function<E, K> idFunc, Function<E, K> pidFunc, boolean isChangeOriginData) {
         // 检查pid是否存在于id集合中
-        Set<String> allIdList = listData.stream()
-                .map(data -> ReflectUtil.getFieldValue(data, finalIdField).toString()).collect(Collectors.toSet());
+        Set<K> allIdList = listData.stream().map(idFunc).collect(Collectors.toSet());
         // 更改源数据，效率更改
         if (isChangeOriginData) {
-            listData.removeIf(data -> allIdList.contains(ReflectUtil.getFieldValue(data, finalParentIdField).toString()));
+            listData.removeIf(data -> allIdList.contains(pidFunc.apply(data)));
             return listData;
         }
-        return listData.stream().filter(data -> !allIdList.contains(ReflectUtil.getFieldValue(data, finalParentIdField).toString())).toList();
+        return listData.stream().filter(data -> !allIdList.contains(pidFunc.apply(data))).toList();
     }
 
     /**
@@ -94,48 +83,34 @@ public class TreeUtils {
      * @param rootId   指定根ID，如果为空，则自动查询根节点
      */
     public static <E extends BaseTreeNode<E>> void makeTree(List<E> listData, String rootId) {
-        if (CollUtil.isEmpty(listData)) {
-            return;
-        }
-
-        Map<String, List<E>> pIdMap = listData.stream().collect(Collectors.groupingBy(BaseTreeNode::getParentId));
-
-        listData.forEach(data -> {
-            data.setChildren(pIdMap.get(data.getId()));
-        });
         if (StrUtil.isBlank(rootId)) {
-            Set<String> allIdList = listData.stream()
-                    .map(BaseTreeNode::getId).collect(Collectors.toSet());
-            listData.removeIf(data -> allIdList.contains(data.getParentId()));
+            makeTree(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, BaseTreeNode::setChildren, null);
             return;
         }
-        listData.removeIf(data -> !rootId.equals(data.getParentId()));
+        makeTree(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, BaseTreeNode::setChildren, x -> rootId.equals(x.getId()));
     }
 
     /**
      * 制作树
      *
      * @param listData       列出数据
-     * @param idFun          E::getId
-     * @param pidFun         E::getParentId
+     * @param idFunc         E::getId
+     * @param pidFunc        E::getParentId
      * @param setSubChildren E::setChildren
      * @param rootPredicate  判断E中为根节点的条件x->x.getPId()==-1L , x->x.getParentId()==null,x->x.getParentMenuId()==0
      */
-    public static <T, E> void makeTree(List<E> listData, Function<E, T> idFun,
-                                       Function<E, T> pidFun,
-                                       BiConsumer<E, List<E>> setSubChildren,
-                                       Predicate<E> rootPredicate) {
+    public static <K, E> void makeTree(List<E> listData, Function<E, K> idFunc, Function<E, K> pidFunc, BiConsumer<E, List<E>> setSubChildren, Predicate<E> rootPredicate) {
         if (CollUtil.isEmpty(listData)) {
             return;
         }
-        Map<T, List<E>> pIdMap = listData.stream().collect(Collectors.groupingBy(pidFun));
+        Map<K, List<E>> pIdMap = listData.stream().collect(Collectors.groupingBy(pidFunc));
 
         listData.forEach(data -> {
-            setSubChildren.accept(data, pIdMap.get(idFun.apply(data)));
+            setSubChildren.accept(data, pIdMap.get(idFunc.apply(data)));
         });
         if (rootPredicate == null) {
-            Set<T> allIdList = listData.stream().map(idFun).collect(Collectors.toSet());
-            listData.removeIf(data -> allIdList.contains(pidFun.apply(data)));
+            Set<K> allIdList = listData.stream().map(idFunc).collect(Collectors.toSet());
+            listData.removeIf(data -> allIdList.contains(pidFunc.apply(data)));
             return;
         }
         listData.removeIf(rootPredicate);
