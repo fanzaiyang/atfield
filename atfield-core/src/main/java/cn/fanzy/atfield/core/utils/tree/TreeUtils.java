@@ -137,15 +137,28 @@ public class TreeUtils {
      * <p>后序遍历（Post-order Traversal）是先遍历所有的子节点，然后访问根节点。</p>
      *
      * @param treeList 树列表
-     * @param consumer 消费者
+     * @param consumer 消费者 x->System.out.println(x.getId())
      */
     public static <E extends BaseTreeNode<E>> void forPostOrder(List<E> treeList, Consumer<E> consumer) {
+        forPostOrder(treeList, BaseTreeNode::getChildren, consumer);
+    }
+
+    /**
+     * 后续遍历
+     * <p>后序遍历（Post-order Traversal）是先遍历所有的子节点，然后访问根节点。</p>
+     *
+     * @param treeList    树列表
+     * @param getChildren 获取子项 E::getChildren
+     * @param consumer    消费者 x->System.out.println(x.getId())
+     */
+    public static <E> void forPostOrder(List<E> treeList, Function<E, List<E>> getChildren, Consumer<E> consumer) {
         if (CollUtil.isEmpty(treeList)) {
             return;
         }
         for (E node : treeList) {
-            if (CollUtil.isNotEmpty(node.getChildren())) {
-                forPostOrder(node.getChildren(), consumer);
+            List<E> childList = getChildren.apply(node);
+            if (CollUtil.isNotEmpty(childList)) {
+                forPostOrder(childList, getChildren, consumer);
             }
             consumer.accept(node);
         }
@@ -159,13 +172,26 @@ public class TreeUtils {
      * @param consumer 消费者
      */
     public static <E extends BaseTreeNode<E>> void forPreOrder(List<E> treeList, Consumer<E> consumer) {
+        forPreOrder(treeList, BaseTreeNode::getChildren, consumer);
+    }
+
+    /**
+     * 前序遍历
+     * <p>前序遍历（Pre-order Traversal）是访问根节点，然后分别遍历每一个子节点。</p>
+     *
+     * @param treeList    树列表
+     * @param getChildren 获取子项E::getChildren
+     * @param consumer    消费者 x->System.out.println(x.getId())
+     */
+    public static <E> void forPreOrder(List<E> treeList, Function<E, List<E>> getChildren, Consumer<E> consumer) {
         if (CollUtil.isEmpty(treeList)) {
             return;
         }
         for (E node : treeList) {
             consumer.accept(node);
-            if (CollUtil.isNotEmpty(node.getChildren())) {
-                forPreOrder(node.getChildren(), consumer);
+            List<E> childList = getChildren.apply(node);
+            if (CollUtil.isNotEmpty(childList)) {
+                forPreOrder(childList, getChildren, consumer);
             }
         }
     }
@@ -177,13 +203,25 @@ public class TreeUtils {
      * @param consumer 消费者
      */
     public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Consumer<E> consumer) {
+        forLevelOrder(treeList, BaseTreeNode::getChildren, consumer);
+    }
+
+    /**
+     * 层序遍历(广度优先BFS)
+     *
+     * @param treeList    树列表
+     * @param getChildren 获取子项
+     * @param consumer    消费者
+     */
+    public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Function<E, List<E>> getChildren, Consumer<E> consumer) {
         //
         Queue<E> queue = new LinkedList<>(treeList);
         while (!queue.isEmpty()) {
             E item = queue.poll();
             consumer.accept(item);
-            if (CollUtil.isNotEmpty(item.getChildren())) {
-                queue.addAll(item.getChildren());
+            List<E> childList = getChildren.apply(item);
+            if (CollUtil.isNotEmpty(childList)) {
+                queue.addAll(childList);
             }
         }
     }
@@ -195,8 +233,18 @@ public class TreeUtils {
      * @return {@link List }<{@link E }>
      */
     public static <E extends BaseTreeNode<E>> List<E> flatten(List<E> treeList) {
+        return flatten(treeList, BaseTreeNode::getChildren);
+    }
+
+    /**
+     * 把树转化为平铺的列表
+     *
+     * @param treeList 列出数据
+     * @return {@link List }<{@link E }>
+     */
+    public static <E> List<E> flatten(List<E> treeList, Function<E, List<E>> getChildren) {
         List<E> listData = new ArrayList<>();
-        forPreOrder(treeList, listData::add);
+        forPreOrder(treeList, getChildren, listData::add);
         return listData;
     }
 }
