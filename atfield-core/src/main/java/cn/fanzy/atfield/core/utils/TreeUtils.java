@@ -21,11 +21,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 树工具类
+ * 树工具类,请使用：{@link cn.fanzy.atfield.core.utils.tree.TreeUtils}
  *
  * @author fanzaiyang
  * @date 2024/01/23
  */
+@Deprecated
 @Slf4j
 public class TreeUtils extends TreeUtil {
     /**

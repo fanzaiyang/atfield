@@ -10,11 +10,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * 树新 Bee 工具
+ * 新树工具,请使用：{@link cn.fanzy.atfield.core.utils.tree.TreeUtils}
  *
  * @author fanzaiyang
  * @date 2025/01/15
  */
+@Deprecated
 public class TreeNewBeeUtils {
     /**
      * 根父 ID
