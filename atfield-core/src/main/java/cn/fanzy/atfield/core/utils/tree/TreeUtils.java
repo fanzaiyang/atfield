@@ -200,7 +200,7 @@ public class TreeUtils {
      * 层序遍历(广度优先BFS)
      *
      * @param treeList 树列表
-     * @param consumer 消费者
+     * @param consumer    消费者 x->System.out.println(x.getId())
      */
     public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Consumer<E> consumer) {
         forLevelOrder(treeList, BaseTreeNode::getChildren, consumer);
@@ -210,8 +210,8 @@ public class TreeUtils {
      * 层序遍历(广度优先BFS)
      *
      * @param treeList    树列表
-     * @param getChildren 获取子项
-     * @param consumer    消费者
+     * @param getChildren 获取子项E::getChildren
+     * @param consumer    消费者 x->System.out.println(x.getId())
      */
     public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Function<E, List<E>> getChildren, Consumer<E> consumer) {
         //
@@ -229,7 +229,7 @@ public class TreeUtils {
     /**
      * 把树转化为平铺的列表
      *
-     * @param treeList 列出数据
+     * @param treeList 树列表
      * @return {@link List }<{@link E }>
      */
     public static <E extends BaseTreeNode<E>> List<E> flatten(List<E> treeList) {
@@ -239,7 +239,7 @@ public class TreeUtils {
     /**
      * 把树转化为平铺的列表
      *
-     * @param treeList 列出数据
+     * @param treeList 树列表
      * @return {@link List }<{@link E }>
      */
     public static <E> List<E> flatten(List<E> treeList, Function<E, List<E>> getChildren) {
