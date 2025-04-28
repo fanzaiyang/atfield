@@ -158,89 +158,19 @@ public class TreeUtils {
     }
 
     /**
-     * 制作树
-     * <pre>
-     * 1. 要求传入的类中包含id、parentId、children三个字段.
-     * 2. 该方法耗时：5万的数据约200ms.
-     * </pre>
-     *
-     * @param listData 列出数据
-     * @param rootId   指定根ID，如果为空，则自动查询根节点
-     * @return {@link List }<{@link E }>
-     */
-    public static <E> List<E> makeTreeAnyClone(List<E> listData, String rootId) {
-        List<E> treeList = CollUtil.newArrayList(listData);
-        makeTreeAny(treeList, rootId, "", "", "");
-        return treeList;
-    }
-
-    /**
-     * 制作树
-     * <pre>
-     * 1. 要求传入的类中包含id、parentId、children三个字段.
-     * 2. 该方法耗时：5万的数据约200ms.
-     * </pre>
-     *
-     * @param listData 列出数据
-     * @param rootId   指定根ID，如果为空，则自动查询根节点
-     */
-    public static <E> void makeTreeAny(List<E> listData, String rootId) {
-        makeTreeAny(listData, rootId, "", "", "");
-    }
-
-    /**
-     * 制作树（反射）
-     * <pre>
-     * 1. 要求传入的类中包含id、parentId、children三个字段.
-     * 2. 该方法耗时：5万的数据约200ms.
-     * </pre>
-     *
-     * @param listData      列出数据
-     * @param rootId        指定根ID，如果为空，则自动查询根节点
-     * @param idField       id字段,默认：id
-     * @param parentIdField 父ID字段,默认：parentId
-     * @param childrenField children字段,默认：children
-     */
-    public static <E> void makeTreeAny(List<E> listData, String rootId, String idField, String parentIdField, String childrenField) {
-        if (CollUtil.isEmpty(listData)) {
-            return;
-        }
-
-        String finalIdField = StrUtil.blankToDefault(idField, "id");
-        String finalParentIdField = StrUtil.blankToDefault(parentIdField, "parentId");
-        String finalChildrenField = StrUtil.blankToDefault(childrenField, "children");
-
-        Map<String, List<E>> pIdMap = listData.stream()
-                .collect(Collectors.groupingBy(x -> ReflectUtil.getFieldValue(x, finalParentIdField).toString()));
-
-        listData.forEach(data -> {
-            Object dataId = ReflectUtil.getFieldValue(data, finalIdField);
-            ReflectUtil.setFieldValue(data, finalChildrenField, pIdMap.get(dataId.toString()));
-        });
-        if (StrUtil.isBlank(rootId)) {
-            Set<String> allIdList = listData.stream()
-                    .map(data -> ReflectUtil.getFieldValue(data, finalIdField).toString()).collect(Collectors.toSet());
-            listData.removeIf(data -> allIdList.contains(ReflectUtil.getFieldValue(data, finalParentIdField).toString()));
-            return;
-        }
-        listData.removeIf(data -> !rootId.equals(ReflectUtil.getFieldValue(data, finalParentIdField).toString()));
-    }
-
-
-    /**
      * 后续遍历
      * <p>后序遍历（Post-order Traversal）是先遍历所有的子节点，然后访问根节点。</p>
      *
      * @param treeList 树列表
      * @param consumer 消费者
      */
-    public static <E extends BaseTreeNode<E>> void postOrderTraversal(List<E> treeList, Consumer<E> consumer) {
+    public static <E extends BaseTreeNode<E>> void forPostOrder(List<E> treeList, Consumer<E> consumer) {
         if (CollUtil.isEmpty(treeList)) {
             return;
         }
         for (E node : treeList) {
             if (CollUtil.isNotEmpty(node.getChildren())) {
-                postOrderTraversal(node.getChildren(), consumer);
+                forPostOrder(node.getChildren(), consumer);
             }
             consumer.accept(node);
         }
@@ -253,14 +183,14 @@ public class TreeUtils {
      * @param treeList 树列表
      * @param consumer 消费者
      */
-    public static <E extends BaseTreeNode<E>> void preOrderTraversal(List<E> treeList, Consumer<E> consumer) {
+    public static <E extends BaseTreeNode<E>> void forPreOrder(List<E> treeList, Consumer<E> consumer) {
         if (CollUtil.isEmpty(treeList)) {
             return;
         }
         for (E node : treeList) {
             consumer.accept(node);
             if (CollUtil.isNotEmpty(node.getChildren())) {
-                preOrderTraversal(node.getChildren(), consumer);
+                forPreOrder(node.getChildren(), consumer);
             }
         }
     }
@@ -271,7 +201,7 @@ public class TreeUtils {
      * @param treeList 树列表
      * @param consumer 消费者
      */
-    public static <E extends BaseTreeNode<E>> void levelOrderTraversal(List<E> treeList, Consumer<E> consumer) {
+    public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Consumer<E> consumer) {
         //
         Queue<E> queue = new LinkedList<>(treeList);
         while (!queue.isEmpty()) {
@@ -291,7 +221,7 @@ public class TreeUtils {
      */
     public static <E extends BaseTreeNode<E>> List<E> flatten(List<E> treeList) {
         List<E> listData = new ArrayList<>();
-        preOrderTraversal(treeList, listData::add);
+        forPreOrder(treeList, listData::add);
         return listData;
     }
 }
