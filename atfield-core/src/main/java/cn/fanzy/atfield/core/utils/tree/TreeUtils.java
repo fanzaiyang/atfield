@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.core.utils.tree;
 
 import cn.fanzy.atfield.core.model.BaseTreeNode;
+import cn.fanzy.atfield.core.utils.tree.model.ITreeNode;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -88,6 +89,29 @@ public class TreeUtils {
             return;
         }
         makeTree(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, BaseTreeNode::setChildren, x -> rootId.equals(x.getId()));
+    }
+
+    /**
+     * 制作iTree
+     *
+     * @param listData 列出数据
+     */
+    public static <E extends ITreeNode<E>> void makeITree(List<E> listData) {
+        makeITree(listData, null);
+    }
+
+    /**
+     * 制作iTree
+     *
+     * @param listData 列出数据
+     * @param rootId   根 ID
+     */
+    public static <E extends ITreeNode<E>> void makeITree(List<E> listData, String rootId) {
+        if (StrUtil.isBlank(rootId)) {
+            makeTree(listData, ITreeNode::getId, ITreeNode::getParentId, ITreeNode::setChildren, null);
+            return;
+        }
+        makeTree(listData, ITreeNode::getId, ITreeNode::getParentId, ITreeNode::setChildren, x -> rootId.equals(x.getId()));
     }
 
     /**
@@ -200,7 +224,7 @@ public class TreeUtils {
      * 层序遍历(广度优先BFS)
      *
      * @param treeList 树列表
-     * @param consumer    消费者 x->System.out.println(x.getId())
+     * @param consumer 消费者 x->System.out.println(x.getId())
      */
     public static <E extends BaseTreeNode<E>> void forLevelOrder(List<E> treeList, Consumer<E> consumer) {
         forLevelOrder(treeList, BaseTreeNode::getChildren, consumer);
