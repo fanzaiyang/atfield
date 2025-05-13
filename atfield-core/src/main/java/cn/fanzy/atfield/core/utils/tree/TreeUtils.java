@@ -1,6 +1,7 @@
 package cn.fanzy.atfield.core.utils.tree;
 
 import cn.fanzy.atfield.core.model.BaseTreeNode;
+import cn.fanzy.atfield.core.utils.tree.model.ITreeNode;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -62,34 +63,39 @@ public class TreeUtils {
     /**
      * 生成树结构
      * <p>改变原数据</p>
-     * <pre>
-     * 1. 要求传入的类中包含id、parentId、children三个字段
-     * 2. 时间复杂度：O(3n)或O(n)，5万的数据约25ms
-     * </pre>
      *
      * @param listData 列出数据
      */
-    public static <E extends BaseTreeNode<E>> void transformTree(List<E> listData) {
+    public static <E extends ITreeNode<E>> void transformTree(List<E> listData) {
         transformTree(listData, null);
     }
 
     /**
      * 生成树结构
      * <p>改变原数据</p>
-     * <pre>
-     * 1. 要求传入的类中包含id、parentId、children三个字段
-     * 2. 时间复杂度：O(3n)或O(n)，5万的数据约25ms
-     * </pre>
      *
      * @param listData 列出数据
      * @param rootId   指定根ID，如果为空，则自动查询根节点
      */
-    public static <E extends BaseTreeNode<E>> void transformTree(List<E> listData, String rootId) {
+    public static <E extends ITreeNode<E>> void transformTree(List<E> listData, String rootId) {
         if (StrUtil.isBlank(rootId)) {
-            makeTree(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, BaseTreeNode::setChildren, null);
+            makeTree(listData, ITreeNode::getId, ITreeNode::getParentId, ITreeNode::setChildren, null);
             return;
         }
-        makeTree(listData, BaseTreeNode::getId, BaseTreeNode::getParentId, BaseTreeNode::setChildren, x -> rootId.equals(x.getId()));
+        makeTree(listData, ITreeNode::getId, ITreeNode::getParentId, ITreeNode::setChildren, x -> rootId.equals(x.getId()));
+    }
+
+    /**
+     * 制作树
+     * <p>返回新的树列表</p>
+     *
+     * @param listData 列出数据
+     * @return {@link List }<{@link E }>
+     */
+    public static <E extends ITreeNode<E>> List<E> makeTree(List<E> listData) {
+        List<E> treeList = CollUtil.newArrayList(listData);
+        transformTree(treeList, null);
+        return treeList;
     }
 
     /**
@@ -100,7 +106,7 @@ public class TreeUtils {
      * @param rootId   根ID,如果为空，则自动查询根节点
      * @return {@link List }<{@link E }>
      */
-    public static <E extends BaseTreeNode<E>> List<E> makeTree(List<E> listData, String rootId) {
+    public static <E extends ITreeNode<E>> List<E> makeTree(List<E> listData, String rootId) {
         if (CollUtil.isEmpty(listData)) {
             return List.of();
         }

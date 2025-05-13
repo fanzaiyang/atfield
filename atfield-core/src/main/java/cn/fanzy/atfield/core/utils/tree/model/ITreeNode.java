@@ -1,8 +1,9 @@
 package cn.fanzy.atfield.core.utils.tree.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface ITreeNode<T> {
+public interface ITreeNode<T> extends Serializable {
 
     /**
      * 获取 ID

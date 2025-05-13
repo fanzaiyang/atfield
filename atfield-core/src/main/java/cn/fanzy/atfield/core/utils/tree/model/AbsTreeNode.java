@@ -1,10 +1,6 @@
 package cn.fanzy.atfield.core.utils.tree.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,9 +9,7 @@ import java.util.List;
  * @author fanzaiyang
  * @date 2024/08/28
  */
-@Getter
-@Setter
-public abstract class AbsTreeNode<E> implements Serializable {
+public abstract class AbsTreeNode<E> implements ITreeNode<E> {
 
     @Serial
     private static final long serialVersionUID = -2254859224968094447L;
@@ -38,6 +32,26 @@ public abstract class AbsTreeNode<E> implements Serializable {
      * @return {@link String }
      */
     public abstract String getParentId();
+
+    /**
+     * 获取子项
+     *
+     * @return {@link List }<{@link E }>
+     */
+    @Override
+    public List<E> getChildren() {
+        return children;
+    }
+
+    /**
+     * 设置子项
+     *
+     * @param children 孩子
+     */
+    @Override
+    public void setChildren(List<E> children) {
+        this.children = children;
+    }
 
     /**
      * 是叶子节点
