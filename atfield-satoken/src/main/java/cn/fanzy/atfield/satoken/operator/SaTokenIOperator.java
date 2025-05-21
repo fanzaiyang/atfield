@@ -2,7 +2,7 @@ package cn.fanzy.atfield.satoken.operator;
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import cn.fanzy.atfield.satoken.context.StpContext;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 @Slf4j
 @RequiredArgsConstructor
 @ConditionalOnClass(StpContext.class)
-public class SaTokenOperator implements Operator {
+public class SaTokenIOperator implements IOperator {
 
     @Override
     public String getId() {

@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
-    private final Operator operator;
+    private final IOperator IOperator;
 
     @Override
     public Map<String, Object> createUnifyFields() {
@@ -30,11 +30,11 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         map.put("createdTime", new Date());
         map.put("updatedTime", new Date());
         try {
-            map.put("createBy", operator.getId());
-            map.put("updateBy", operator.getId());
+            map.put("createBy", IOperator.getId());
+            map.put("updateBy", IOperator.getId());
             // 这里兼容了一些老版本的字段命名
-            map.put("createdBy", operator.getId());
-            map.put("updatedBy", operator.getId());
+            map.put("createdBy", IOperator.getId());
+            map.put("updatedBy", IOperator.getId());
         } catch (Exception ignored) {
         }
         map.putIfAbsent("createBy", "anonymous");
@@ -52,9 +52,9 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         // 这里兼容了一些老版本的字段命名
         map.put("updatedTime", new Date());
         try {
-            map.put("updateBy", operator.getId());
+            map.put("updateBy", IOperator.getId());
             // 这里兼容了一些老版本的字段命名
-            map.put("updatedBy", operator.getId());
+            map.put("updatedBy", IOperator.getId());
         } catch (Exception ignored) {
         }
         map.putIfAbsent("updateBy", "anonymous");

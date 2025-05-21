@@ -1,12 +1,14 @@
 package cn.fanzy.atfield.sqltoy.entity;
 
 
+import cn.fanzy.atfield.core.model.IOperator;
+
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * iUser 在线信息
- * 请使用{@link cn.fanzy.atfield.core.model.Operator}
+ * 请使用{@link IOperator}
  * @author fanzaiyang
  * @date 2024/01/09
  */

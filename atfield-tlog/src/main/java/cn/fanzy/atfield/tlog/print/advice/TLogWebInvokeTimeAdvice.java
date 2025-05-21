@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.tlog.print.advice;
 
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.core.utils.Constants;
@@ -54,7 +54,7 @@ public class TLogWebInvokeTimeAdvice {
 
     private final LogOperatorService userCallbackService;
 
-    private final Operator operator;
+    private final IOperator IOperator;
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)||" +
               "@annotation(org.springframework.web.bind.annotation.GetMapping)||" +
@@ -91,8 +91,8 @@ public class TLogWebInvokeTimeAdvice {
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
         if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
-            userId = operator.getId();
-            userName = operator.getName();
+            userId = IOperator.getId();
+            userName = IOperator.getName();
         }
         UserAgent ua = UserAgentUtil.parse(request.getHeader("User-Agent"));
         String deviceName = JSONUtil.toJsonStr(ua);
@@ -154,8 +154,8 @@ public class TLogWebInvokeTimeAdvice {
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
         if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
-            userId = operator.getId();
-            userName = operator.getName();
+            userId = IOperator.getId();
+            userName = IOperator.getName();
         }
         logInfo.setUserId(userId);
         logInfo.setUserName(userName);
@@ -198,8 +198,8 @@ public class TLogWebInvokeTimeAdvice {
         String userId = StrUtil.blankToDefault(userCallbackService.getUserId(null), "-");
         String userName = StrUtil.blankToDefault(userCallbackService.getUserName(null), "-");
         if (StrUtil.isBlank(userId) || StrUtil.containsIgnoreCase(userId, "anonymous") || StrUtil.equalsIgnoreCase(userId, "-")) {
-            userId = operator.getId();
-            userName = operator.getName();
+            userId = IOperator.getId();
+            userName = IOperator.getName();
         }
         logInfo.setUserId(userId);
         logInfo.setUserName(userName);

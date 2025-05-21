@@ -1,9 +1,9 @@
 package cn.fanzy.atfield.satoken.configuration;
 
 import cn.fanzy.atfield.core.config.OperatorAnonymousConfiguration;
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import cn.fanzy.atfield.satoken.context.StpContext;
-import cn.fanzy.atfield.satoken.operator.SaTokenOperator;
+import cn.fanzy.atfield.satoken.operator.SaTokenIOperator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,8 @@ public class OperatorSaTokenConfiguration {
     @Primary
     @Bean
     @ConditionalOnMissingBean
-    public Operator operator() {
-        return new SaTokenOperator();
+    public IOperator operator() {
+        return new SaTokenIOperator();
     }
 
     @PostConstruct

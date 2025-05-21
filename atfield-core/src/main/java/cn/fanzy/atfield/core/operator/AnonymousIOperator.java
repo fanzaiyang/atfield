@@ -1,12 +1,12 @@
 package cn.fanzy.atfield.core.operator;
 
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class AnonymousOperator implements Operator {
+public class AnonymousIOperator implements IOperator {
     @Override
     public String getId() {
         return "anonymous";

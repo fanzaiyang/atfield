@@ -6,7 +6,7 @@ package cn.fanzy.atfield.core.model;
  * @author Administrator
  * @date 2024/10/16
  */
-public interface Operator {
+public interface IOperator {
 
     /**
      * 获取用户ID

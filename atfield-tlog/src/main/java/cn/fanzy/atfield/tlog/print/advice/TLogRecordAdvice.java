@@ -1,6 +1,6 @@
 package cn.fanzy.atfield.tlog.print.advice;
 
-import cn.fanzy.atfield.core.model.Operator;
+import cn.fanzy.atfield.core.model.IOperator;
 import cn.fanzy.atfield.core.spring.SpringUtils;
 import cn.fanzy.atfield.core.utils.AopUtil;
 import cn.fanzy.atfield.tlog.configuration.property.TLogProperty;
@@ -39,7 +39,7 @@ public class TLogRecordAdvice {
 
     private final LogOperatorService logOperatorService;
     private final LogRecordService logRecordService;
-    private final Operator operator;
+    private final IOperator IOperator;
 
     @Pointcut("@annotation(cn.fanzy.atfield.tlog.print.annotation.LogRecord)")
     public void cut() {
@@ -71,8 +71,8 @@ public class TLogRecordAdvice {
             record.setOperatorId(logOperatorService.getUserId(null));
             record.setOperatorName(logOperatorService.getUserName(null));
             if (StrUtil.isBlank(record.getOperatorId()) || StrUtil.containsIgnoreCase(record.getOperatorId(), "anonymous")) {
-                record.setOperatorId(operator.getId());
-                record.setOperatorName(operator.getName());
+                record.setOperatorId(IOperator.getId());
+                record.setOperatorName(IOperator.getName());
             }
         }
 

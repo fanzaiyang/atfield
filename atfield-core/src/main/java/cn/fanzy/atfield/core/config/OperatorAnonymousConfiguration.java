@@ -1,7 +1,7 @@
 package cn.fanzy.atfield.core.config;
 
-import cn.fanzy.atfield.core.model.Operator;
-import cn.fanzy.atfield.core.operator.AnonymousOperator;
+import cn.fanzy.atfield.core.model.IOperator;
+import cn.fanzy.atfield.core.operator.AnonymousIOperator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,8 @@ import org.springframework.context.annotation.Configuration;
 public class OperatorAnonymousConfiguration {
     @Bean
     @ConditionalOnMissingBean
-    public Operator operator() {
-        return new AnonymousOperator();
+    public IOperator operator() {
+        return new AnonymousIOperator();
     }
 
     @PostConstruct
