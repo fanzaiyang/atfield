@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <revision>1.1.14</revision>
+        <revision>1.1.15</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,8 +44,8 @@
         <satoken.version>1.41.0</satoken.version>
         <transmittable.version>2.14.4</transmittable.version>
         <QLExpress.version>3.3.4</QLExpress.version>
-        <sagacity.version>5.6.42</sagacity.version>
-        <sqltoy-plus.version>5.6.33</sqltoy-plus.version>
+        <sagacity.version>5.6.46</sagacity.version>
+        <sqltoy-plus.version>5.6.44</sqltoy-plus.version>
     </properties>
     <dependencyManagement>
         <dependencies>
