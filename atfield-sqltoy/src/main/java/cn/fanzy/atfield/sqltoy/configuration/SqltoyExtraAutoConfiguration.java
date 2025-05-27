@@ -41,8 +41,8 @@ public class SqltoyExtraAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "spring.sqltoy.extra", name = {"unifyField"}, havingValue = "true", matchIfMissing = true)
-    public IUnifyFieldsHandler unifyFieldsHandler(IOperator IOperator) {
-        return new DefaultUnifyFieldsHandler(IOperator);
+    public IUnifyFieldsHandler unifyFieldsHandler(IOperator IOperator, SqltoyExtraProperties properties) {
+        return new DefaultUnifyFieldsHandler(IOperator, properties);
     }
 
     @Qualifier("logicDelFilterInterceptor")
