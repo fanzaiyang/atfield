@@ -1,10 +1,14 @@
 package cn.fanzy.atfield.sqltoy.handler;
 
 import cn.fanzy.atfield.core.model.IOperator;
+import cn.fanzy.atfield.sqltoy.property.SqltoyExtraProperties;
+import cn.hutool.core.util.ArrayUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagacity.sqltoy.model.IgnoreCaseSet;
 import org.sagacity.sqltoy.plugins.IUnifyFieldsHandler;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +23,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
     private final IOperator IOperator;
+    private final SqltoyExtraProperties properties;
 
     @Override
     public Map<String, Object> createUnifyFields() {
@@ -63,4 +68,12 @@ public class DefaultUnifyFieldsHandler implements IUnifyFieldsHandler {
         return map;
     }
 
+    @Override
+    public IgnoreCaseSet forceUpdateFields() {
+        IgnoreCaseSet forceUpdateFields = new IgnoreCaseSet();
+        if (ArrayUtil.isNotEmpty(properties.getForceUpdateFields())) {
+            forceUpdateFields.addAll(Arrays.asList(properties.getForceUpdateFields()));
+        }
+        return forceUpdateFields;
+    }
 }

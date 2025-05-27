@@ -51,6 +51,13 @@ public class SqltoyExtraProperties implements Serializable {
      */
     private boolean humpToUnderline = true;
 
+
+    /**
+     * 强制更新字段;
+     * 强制更新字段，当update时，只更新这些字段，其他字段不更新
+     */
+    private String[] forceUpdateFields;
+
     public static enum FieldTypeEnum {
         /**
          * 数据库字段
