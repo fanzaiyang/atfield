@@ -30,6 +30,11 @@ public class QueryPageDto implements Serializable {
      */
     private Integer pageSize;
 
+    /**
+     * 关键字
+     */
+    private String keywords;
+
     public Integer getPageNum() {
         if (pageNum == null || pageNum < 1) {
             String pageNum = SpringUtils.getRequest().getParameter("pageNum");
