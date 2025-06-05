@@ -53,4 +53,8 @@ public class QueryPageDto implements Serializable {
         }
         return pageSize;
     }
+
+    public String getKeywords() {
+        return keywords;
+    }
 }
