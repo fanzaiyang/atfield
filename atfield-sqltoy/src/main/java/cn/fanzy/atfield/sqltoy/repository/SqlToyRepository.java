@@ -109,6 +109,16 @@ public interface SqlToyRepository extends SqlToyHelperDao {
     <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName);
 
     /**
+     * 包装树表路由名称
+     *
+     * @param entityClass     实体类
+     * @param fieldName       字段名称
+     * @param targetFieldName 目标字段名称
+     * @param segment         分隔符
+     * @return boolean
+     */
+    <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName, String segment);
+    /**
      * 转换为mp的IPage
      *
      * @param sourcePage 源页面

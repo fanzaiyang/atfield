@@ -127,8 +127,14 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
 
     @Override
     public <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName) {
+        return wrapTreeTableRouteName(entityClass, fieldName, targetFieldName, "/");
+    }
+
+    @Override
+    public <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName, String segment) {
         Assert.notBlank(fieldName, "字段名不能为空!");
         Assert.notBlank(targetFieldName, "目标字段名不能为空!");
+        Assert.notBlank(segment, "分隔符不能为空!");
         EntityMeta entityMeta = getEntityMeta(entityClass);
         String tableName = entityMeta.getTableName();
         executeSql(
@@ -137,7 +143,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
                          INNER JOIN (
                            SELECT
                              t.id,
-                             GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level SEPARATOR '/') as full_name
+                             GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level SEPARATOR :segment) as full_name
                            FROM
                              @value(:tableName) t
                              LEFT JOIN @value(:tableName) p ON find_in_set(p.id,t.node_route) and p.del_flag=0
@@ -146,8 +152,8 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
                          SET o.@value(:targetFieldName) = tr.full_name
                          where o.del_flag=0
                         """,
-                MapKit.keys("tableName", "fieldName", "targetFieldName")
-                        .values(tableName, fieldName, targetFieldName));
+                MapKit.keys("tableName", "fieldName", "targetFieldName", "segment")
+                        .values(tableName, fieldName, targetFieldName, segment));
         return true;
     }
 
