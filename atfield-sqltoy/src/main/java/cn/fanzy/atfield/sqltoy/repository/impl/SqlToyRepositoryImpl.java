@@ -142,7 +142,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
                          INNER JOIN (
                            SELECT
                              t.id,
-                             GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level SEPARATOR :segment) as full_name
+                             GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level SEPARATOR #[@if(:segment == null) ''] #[@if(:segment != null) :segment]) as full_name
                            FROM
                              @value(:tableName) t
                              LEFT JOIN @value(:tableName) p ON find_in_set(p.id,t.node_route) and p.del_flag=0
