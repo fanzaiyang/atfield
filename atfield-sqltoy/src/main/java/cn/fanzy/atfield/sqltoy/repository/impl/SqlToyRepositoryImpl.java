@@ -134,7 +134,6 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
     public <T extends Serializable> boolean wrapTreeTableRouteName(Class<T> entityClass, String fieldName, String targetFieldName, String segment) {
         Assert.notBlank(fieldName, "字段名不能为空!");
         Assert.notBlank(targetFieldName, "目标字段名不能为空!");
-        Assert.notBlank(segment, "分隔符不能为空!");
         EntityMeta entityMeta = getEntityMeta(entityClass);
         String tableName = entityMeta.getTableName();
         executeSql(
@@ -153,7 +152,7 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
                          where o.del_flag=0
                         """,
                 MapKit.keys("tableName", "fieldName", "targetFieldName", "segment")
-                        .values(tableName, fieldName, targetFieldName, segment));
+                        .values(tableName, fieldName, targetFieldName, StrUtil.blankToDefault(segment, "")));
         return true;
     }
 
