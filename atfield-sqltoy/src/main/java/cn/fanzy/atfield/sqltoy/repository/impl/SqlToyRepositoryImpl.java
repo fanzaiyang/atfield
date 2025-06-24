@@ -143,8 +143,10 @@ public class SqlToyRepositoryImpl extends SqlToyHelperDaoImpl implements SqlToyR
                            SELECT
                              t.id,
                              GROUP_CONCAT(p.@value(:fieldName) ORDER BY p.node_level 
-                            SEPARATOR @if(:segment == null) '' 
-                            @if(:segment != null) '@value(:segment)')
+                            SEPARATOR 
+                            #[@if(:segment == null) ''] 
+                            #[@if(:segment != null) '@value(:segment)']
+                            )
                             as full_name
                            FROM
                              @value(:tableName) t
