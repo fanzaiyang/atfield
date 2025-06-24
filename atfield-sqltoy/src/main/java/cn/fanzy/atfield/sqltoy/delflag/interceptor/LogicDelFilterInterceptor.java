@@ -114,6 +114,7 @@ public class LogicDelFilterInterceptor implements SqlInterceptor {
             sqlToyResult.setSql(plainSelect.toString());
             return sqlToyResult;
         } catch (JSQLParserException e) {
+            log.error("解析sql异常:sql=[{}],异常信息: {}", sql, e.getMessage());
             throw new RuntimeException(e);
         }
     }
